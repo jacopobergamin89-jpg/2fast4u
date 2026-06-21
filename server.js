@@ -336,8 +336,9 @@ function buildView(room, player){
     you:{ id:player.id, name:player.name, colorH:DB.colori[player.colorIdx].h, isHost:player.id===room.hostId },
   };
   if(G.phase==='lobby'){
-    v.players=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, isHost:p.id===room.hostId, connected:p.connected }));
+    v.players=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, isHost:p.id===room.hostId, isBot:!!p.isBot, connected:p.connected }));
     v.canStart = (player.id===room.hostId) && G.players.length>=2;
+    v.canAddBot = (player.id===room.hostId) && G.players.length<8;
     return v;
   }
   if(G.phase==='reveal'){
@@ -415,6 +416,62 @@ function broadcast(room){
   room.G.players.forEach(p=>{ if(p.socketId){ const s=io.sockets.sockets.get(p.socketId); if(s) s.emit('state', buildView(room,p)); } });
 }
 
+/* ============================ BOT (gioco contro il PC) ============================ */
+function botPending(room){
+  const G=room.G; if(!room.started) return false;
+  if(G.phase==='reveal') return G.players.some(p=>p.isBot && !p.ready);
+  if(G.phase==='prep') return curPrep(G).isBot;
+  if(G.phase==='race') return activeRace(G).isBot;
+  return false;
+}
+function botPrep(room,bot){
+  const G=room.G; let safety=10;
+  while(bot.buysLeft>0 && safety-->0){
+    const opts=G.shop.map((card,idx)=>({card,idx})).filter(o=>{
+      const c=o.card, cur=bot.comp[c.comp];
+      if(c.lvl<=cur || c.lvl>G.compMaxLevel) return false;
+      if(!canHaveAtLevel(bot,c.comp,c.lvl)) return false;
+      return priceFor(G,bot,c.comp,c.lvl) <= bot.money-400;
+    });
+    if(!opts.length) break;
+    const w={motore:3,cambio:3,sterzo:3,assetto:3,nos:2,peso:2};
+    opts.sort((a,b)=>{
+      const ga=(DB.valori[a.card.comp][a.card.lvl]-DB.valori[a.card.comp][bot.comp[a.card.comp]])*(w[a.card.comp]||1);
+      const gb=(DB.valori[b.card.comp][b.card.lvl]-DB.valori[b.card.comp][bot.comp[b.card.comp]])*(w[b.card.comp]||1);
+      return gb-ga;
+    });
+    if(actBuy(room,bot,opts[0].idx)) break;
+  }
+  for(let i=bot.hand.length-1;i>=0;i--){ const c=bot.hand[i]; if(c.cat==='pregara' && ((c.eff==='money'&&c.val>0)||(c.eff==='po'&&c.val>0))) actPlayPregara(room,bot,i); }
+  actPrepDone(room,bot);
+}
+function botRace(room,bot){
+  const G=room.G, R=G.R;
+  if(R.phase==='await'){
+    const selfPos=bot.hand.map((c,i)=>({c,i})).filter(o=>o.c.cat==='ingara'&&o.c.target==='self'&&(o.c.eff==='vel'||o.c.eff==='ctrl')&&o.c.val>0);
+    const rivalNeg=bot.hand.map((c,i)=>({c,i})).filter(o=>o.c.cat==='ingara'&&o.c.target==='rival');
+    if(selfPos.length && Math.random()<0.45) actRacePlayCard(room,bot,selfPos[0].i);
+    else if(rivalNeg.length && Math.random()<0.30){ const lead=[...G.players].filter(p=>p.id!==bot.id).sort((a,b)=>R.cars[b.id].pos-R.cars[a.id].pos)[0]; if(lead) actRacePlayCard(room,bot,rivalNeg[0].i,lead.id); }
+    actRoll(room,bot, nosAllowed(G,bot)&&Math.random()<0.5);
+    actConfirmMove(room,bot);
+  } else if(R.phase==='rolled') actConfirmMove(room,bot);
+}
+function botAct(room){
+  const G=room.G;
+  if(G.phase==='reveal'){ G.players.forEach(p=>{ if(p.isBot) p.ready=true; }); if(G.players.every(p=>p.ready)) startRound(room); return; }
+  if(G.phase==='prep'){ const b=curPrep(G); if(b.isBot) botPrep(room,b); return; }
+  if(G.phase==='race'){ const b=activeRace(G); if(b.isBot) botRace(room,b); return; }
+}
+function scheduleBot(room){
+  if(room._botTimer || !botPending(room)) return;
+  room._botTimer=setTimeout(()=>{
+    room._botTimer=null;
+    try{ botAct(room); }catch(e){ console.error('bot error', e); }
+    broadcast(room);
+    scheduleBot(room);
+  }, room._botDelay || (+process.env.BOT_DELAY || 700));
+}
+
 /* ============================ SOCKET ============================ */
 io.on('connection', (socket)=>{
 
@@ -456,13 +513,29 @@ io.on('connection', (socket)=>{
     f.p.colorIdx=colorIdx; broadcast(f.room);
   });
 
+  socket.on('addBot', ()=>{
+    const f=playerBySocket(socket); if(!f||f.room.started) return; const {room,p}=f;
+    if(p.id!==room.hostId || room.G.players.length>=8) return;
+    const ci=freeColorIdx(room); if(ci<0) return;
+    room._botN=(room._botN||0)+1;
+    room.G.players.push({ id:room.G.nextId++, socketId:null, name:'CPU '+room._botN, colorIdx:ci, connected:true, isBot:true });
+    broadcast(room);
+  });
+  socket.on('removeBot', ({id})=>{
+    const f=playerBySocket(socket); if(!f||f.room.started) return; const {room,p}=f;
+    if(p.id!==room.hostId) return;
+    const t=room.G.players.find(x=>x.id===id && x.isBot); if(!t) return;
+    room.G.players=room.G.players.filter(x=>x.id!==id);
+    broadcast(room);
+  });
+
   socket.on('startGame', ()=>{
     const f=playerBySocket(socket); if(!f) return; const {room,p}=f;
     if(p.id!==room.hostId || room.started || room.G.players.length<2) return;
-    startGame(room); broadcast(room);
+    startGame(room); broadcast(room); scheduleBot(room);
   });
 
-  function handle(fn){ return (payload)=>{ const f=playerBySocket(socket); if(!f) return; const err=fn(f.room,f.p,payload||{}); if(err) socket.emit('errorMsg', err); broadcast(f.room); }; }
+  function handle(fn){ return (payload)=>{ const f=playerBySocket(socket); if(!f) return; const err=fn(f.room,f.p,payload||{}); if(err) socket.emit('errorMsg', err); broadcast(f.room); scheduleBot(f.room); }; }
 
   socket.on('setup:ready', handle((room,p)=>actReady(room,p)));
   socket.on('prep:buy', handle((room,p,d)=>actBuy(room,p,d.shopIdx)));
@@ -481,14 +554,14 @@ io.on('connection', (socket)=>{
     if(!room.started){
       // in lobby: rimuovi il giocatore
       room.G.players=room.G.players.filter(x=>x.id!==p.id);
-      if(room.G.players.length===0){ rooms.delete(room.code); return; }
-      if(p.id===room.hostId){ room.hostId=room.G.players[0].id; }
+      if(room.G.players.length===0 || !room.G.players.some(x=>!x.isBot)){ rooms.delete(room.code); return; }
+      if(p.id===room.hostId){ room.hostId=room.G.players.find(x=>!x.isBot).id; }
     }
     broadcast(room);
   });
 });
 
-module.exports = { DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView };
+module.exports = { DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending };
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, ()=>console.log('2FAST4U server in ascolto sulla porta '+PORT));

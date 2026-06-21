@@ -172,6 +172,7 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .dc-top{font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:9px;color:var(--muted-2);margin-bottom:4px}
 .dc-name{font-size:13px;font-weight:500;margin-bottom:3px}
 .dc-desc{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.rmbot{background:#ff3b6b22;color:var(--danger);border:1px solid #ff3b6b44;border-radius:7px;width:26px;height:26px;font-size:16px;line-height:1;cursor:pointer;flex:none}
 .homelogo{display:block;width:100%;max-width:340px;margin:0 auto 14px;border-radius:14px}
 </style>
 </head>
@@ -284,8 +285,11 @@ function renderLobby(v){
   document.getElementById('lob-count').textContent=v.players.length+'/8';
   const host=document.getElementById('lob-players');host.innerHTML='';
   v.players.forEach(p=>{
-    host.innerHTML+=`<div class="prow ${p.connected?'':'poff'}"><span class="pdot" style="background:${p.colorH}"></span><span class="pname">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span>${p.isHost?'<span class="pbadge">Host</span>':''}</div>`;
+    const rm=(v.you.isHost&&p.isBot)?`<button class="rmbot" onclick="socket.emit('removeBot',{id:${p.id}})">×</button>`:'';
+    const badge=p.isBot?'<span class="pbadge" style="background:#1ad6ea22;color:var(--cyan)">CPU</span>':(p.isHost?'<span class="pbadge">Host</span>':'');
+    host.innerHTML+=`<div class="prow ${p.connected?'':'poff'}"><span class="pdot" style="background:${p.colorH}"></span><span class="pname">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span>${badge}${rm}</div>`;
   });
+  if(v.canAddBot)host.innerHTML+=`<button class="btn btn-line btn-sm" style="width:100%;margin-top:2px" onclick="socket.emit('addBot')">+ Aggiungi CPU</button>`;
   // color picker (escludi colori presi da altri)
   const taken=new Set(v.players.filter(p=>p.id!==v.you.id).map(p=>COLORS.findIndex(c=>c.h===p.colorH)));
   const cw=document.getElementById('lob-colors');cw.innerHTML='';
@@ -293,7 +297,7 @@ function renderLobby(v){
   const sb=document.getElementById('lob-start');
   sb.style.display=v.you.isHost?'block':'none';
   sb.disabled=!v.canStart;
-  document.getElementById('lob-hint').textContent=v.you.isHost?(v.canStart?'Quando siete tutti dentro, avvia.':'Servono almeno 2 giocatori.'):'In attesa che l\'host avvii la partita…';
+  document.getElementById('lob-hint').textContent=v.you.isHost?(v.canStart?'Avvia quando siete pronti — o aggiungi una CPU per giocarci contro.':'Aggiungi una CPU o aspetta un altro giocatore per iniziare.'):'In attesa che l\'host avvii la partita…';
 }
 function doStart(){socket.emit('startGame');}
 
