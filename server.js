@@ -121,7 +121,13 @@ function startGame(room){
   G.deck=makeDeck();
   G.players.forEach(p=>{ for(let k=0;k<3;k++) if(G.deck.length) p.hand.push(G.deck.pop()); });
   G.round=0; room.started=true;
-  startRound(room);
+  G.phase='reveal'; G.players.forEach(p=>{ p.ready=false; });
+}
+function actReady(room,p){
+  const G=room.G; if(G.phase!=='reveal') return 'Non in fase di rivelazione.';
+  p.ready=true;
+  if(G.players.every(x=>x.ready)) startRound(room);
+  return null;
 }
 function startRound(room){
   const G=room.G; G.round++;
@@ -334,6 +340,20 @@ function buildView(room, player){
     v.canStart = (player.id===room.hostId) && G.players.length>=2;
     return v;
   }
+  if(G.phase==='reveal'){
+    v.players=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, ready:p.ready, connected:p.connected }));
+    v.readyCount=G.players.filter(p=>p.ready).length;
+    v.total=G.players.length;
+    const p=player;
+    v.reveal={
+      pilot:{ nome:p.pilot.nome, gang:p.pilot.gang, tipo:p.pilot.tipo, tipoLabel:(TIPO_LABEL[p.pilot.tipo]||(p.pilot.tipo==='fortuna'?'Fortuna':'NOS')), ab:p.pilot.ab, partenza:p.pilot.partenza },
+      roll:p.roll,
+      startPos:G.diceOrder.indexOf(p.id)+1,
+      ready:p.ready,
+      hand:p.hand.map(c=>({ cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, dur:c.dur, target:c.target }))
+    };
+    return v;
+  }
   v.players=publicPlayers(G, G.phase==='race');
   v.raceLevel=G.raceLevel; v.entryFee=G.entryFee;
 
@@ -444,6 +464,7 @@ io.on('connection', (socket)=>{
 
   function handle(fn){ return (payload)=>{ const f=playerBySocket(socket); if(!f) return; const err=fn(f.room,f.p,payload||{}); if(err) socket.emit('errorMsg', err); broadcast(f.room); }; }
 
+  socket.on('setup:ready', handle((room,p)=>actReady(room,p)));
   socket.on('prep:buy', handle((room,p,d)=>actBuy(room,p,d.shopIdx)));
   socket.on('prep:playCard', handle((room,p,d)=>actPlayPregara(room,p,d.handIdx)));
   socket.on('prep:bet', handle((room,p,d)=>actSetBet(room,p,d.targetId,d.amount)));
@@ -467,7 +488,7 @@ io.on('connection', (socket)=>{
   });
 });
 
-module.exports = { DB, startGame, startRound, curPrep, activeRace, actBuy, actPlayPregara, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView };
+module.exports = { DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView };
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, ()=>console.log('2FAST4U server in ascolto sulla porta '+PORT));
