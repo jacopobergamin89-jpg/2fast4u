@@ -200,6 +200,25 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .insp-owned .io{font-size:12.5px;color:#cdd3e0;display:flex;align-items:center;gap:7px}
 .insp-owned .io .lvdot{width:9px;height:9px;border-radius:50%;display:inline-block}
 .insp-note{font-size:11px;color:var(--muted-2);margin-top:12px;font-style:italic}
+
+/* --- pista SVG + regole strada --- */
+.track{display:block;overflow-x:auto;overflow-y:hidden;padding:0;margin:0 -16px 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#08060f;scroll-behavior:smooth}
+.track svg{display:block}
+#trackvg .t-lbl{font-family:var(--disp);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:1px}
+#trackvg .t-rul{font-family:var(--mono);font-size:9px}
+#trackvg .t-tok{font-family:var(--disp);font-weight:700}
+.seg-hit{fill:transparent;cursor:pointer}
+.seg-hit:hover{fill:rgba(255,255,255,0.045)}
+.lvchip{font-family:var(--disp);font-size:9px;font-weight:700;color:#08060f;padding:1px 5px;border-radius:5px;letter-spacing:.5px}
+.segrules{display:flex;gap:8px;margin-bottom:12px}
+.sr-card{flex:1;min-width:0;background:var(--asphalt-0);border:1px solid var(--line);border-radius:10px;padding:9px 11px;border-left:3px solid var(--cl,var(--muted))}
+.sr-k{font-family:var(--disp);text-transform:uppercase;letter-spacing:.6px;font-size:9px;color:var(--muted-2);margin-bottom:5px}
+.sr-t{font-weight:600;font-size:13px;display:flex;align-items:center;gap:7px;margin-bottom:6px;flex-wrap:wrap}
+.sr-cas{font-family:var(--mono);font-size:11px;color:var(--muted-2);font-weight:400}
+.sr-line{font-size:11.5px;color:var(--muted);line-height:1.55}
+.sr-nos{font-size:11px;margin-top:4px;font-weight:600}
+.sgr-row{font-size:13px;color:#eef1f8;margin:5px 0}
+@media(max-width:520px){.segrules{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -263,6 +282,7 @@ h1.title em{font-style:italic;color:var(--cyan)}
 <div class="toast" id="toast"></div>
 <div class="modal" id="picker"><div class="box"><div class="mh" id="picker-h">Scegli bersaglio</div><div id="picker-opts"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:4px" onclick="closePicker()">Annulla</button></div></div>
 <div class="modal" id="inspect"><div class="box"><div class="mh">Avversario</div><div id="inspect-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeInspect()">Chiudi</button></div></div>
+<div class="modal" id="segm"><div class="box"><div class="mh">Regole del tratto</div><div id="segm-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeSegRules()">Chiudi</button></div></div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -271,6 +291,7 @@ const LV_COLOR=['var(--muted-2)','var(--lv1)','var(--lv2)','var(--lv3)','var(--l
 let socket=io();
 let ME={id:null,code:null,name:'',colorIdx:0,joined:false};
 let ui={nosArmed:false,lastActive:undefined,lastPhase:null};
+const ACCENT={rettilineo:'#2fe6e0',citta:'#ffb02e',drift:'#ff3d97'};
 let LAST=null;
 
 function esc(s){return(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
@@ -379,17 +400,34 @@ function drawPilot(i){ socket.emit('setup:drawPilot',{cardIndex:i}); }
 
 /* ---------- helpers comuni ---------- */
 function trackHTML(v){
-  let h='<div class="track" id="track">';
-  v.track.forEach(c=>{
-    let cells='';
-    for(let sq=c.from;sq<=c.to;sq++){
-      const here=v.cars.filter(k=>k.pos===sq&&sq>0);
-      const toks=here.map(k=>`<span class="token" style="background:${k.colorH}">${esc(k.ini)}</span>`).join('');
-      cells+=`<div class="cell ${sq===55?'finish':''}"><span class="cnum">${sq}</span>${toks}</div>`;
-    }
-    h+=`<div class="tcard t-${c.t}"><div class="tch"><span class="ty">${c.label} <span class="lvchip" style="background:${LV_COLOR[c.lvl]}">L${c.lvl}</span></span><span>${c.pen.join(' ')||'—'}</span></div><div class="tcells">${cells}</div></div>`;
+  const cellW=30,H=210,yMid=118,half=16;
+  const total=v.track&&v.track.length?v.track[v.track.length-1].to:55;
+  const W=total*cellW;
+  let s=`<svg id="trackvg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  s+=`<rect x="0" y="0" width="${W}" height="${H}" fill="#08060f"/>`;
+  (v.track||[]).forEach((seg,i)=>{
+    const xA=(seg.from-1)*cellW,xB=seg.to*cellW,W2=xB-xA,col=ACCENT[seg.t]||'#2fe6e0';
+    if(seg.t==='citta') s+=buildingsSVG(xA,xB,yMid,half);
+    let d;
+    if(seg.t==='drift'){const a=44;d=`M ${xA},${yMid} C ${(xA+W2*0.18).toFixed(1)},${yMid-a} ${(xA+W2*0.30).toFixed(1)},${yMid-a} ${(xA+W2*0.5).toFixed(1)},${yMid} C ${(xA+W2*0.70).toFixed(1)},${yMid+a} ${(xA+W2*0.82).toFixed(1)},${yMid+a} ${xB},${yMid}`;}
+    else d=`M ${xA},${yMid} L ${xB},${yMid}`;
+    s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="${half*2+10}" stroke-linecap="round" opacity="0.12"/>`;
+    s+=`<path id="seg-${i}" d="${d}" fill="none" stroke="#1b212b" stroke-width="${half*2}" stroke-linecap="round"/>`;
+    s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="3" stroke-dasharray="14 16" stroke-linecap="round" opacity="0.85"/>`;
+    s+=`<text class="t-lbl" x="${(xA+W2/2).toFixed(1)}" y="22" text-anchor="middle" fill="${col}">${seg.label} · L${seg.lvl}</text>`;
+    s+=`<rect class="seg-hit" x="${xA}" y="0" width="${W2}" height="${H}" onclick="openSegRules(${i})"/>`;
   });
-  h+='</div>';return h;
+  for(let c=1;c<=total;c++){const x=((c-0.5)*cellW).toFixed(1);const maj=(c%5===0)||c===1||c===total;s+=`<text class="t-rul" x="${x}" y="${H-6}" text-anchor="middle" fill="${maj?'#69708c':'#3a3f54'}">${c}</text>`;}
+  s+=`<line x1="${W}" y1="${yMid-32}" x2="${W}" y2="${yMid+32}" stroke="#eef1f8" stroke-width="2" stroke-dasharray="4 4" opacity="0.55"/>`;
+  s+='</svg>';
+  return `<div class="track" id="track">${s}</div>`;
+}
+function buildingsSVG(xA,xB,yMid,half){
+  let s='';const top=yMid-half-7,bot=yMid+half+7;const W=xB-xA;const n=Math.max(2,Math.round(W/52));const slot=W/n;
+  for(let k=0;k<n;k++){const bw=Math.max(14,Math.min(34,slot-7));const bx=xA+(slot-bw)/2+k*slot;const ha=22+((k*37)%26),hb=20+((k*53)%30);
+    s+=`<rect x="${bx.toFixed(1)}" y="${(top-ha).toFixed(1)}" width="${bw.toFixed(1)}" height="${ha.toFixed(1)}" rx="2" fill="#0e0a22" stroke="#1c1640" stroke-width="0.5"/>`;
+    s+=`<rect x="${bx.toFixed(1)}" y="${bot.toFixed(1)}" width="${bw.toFixed(1)}" height="${hb.toFixed(1)}" rx="2" fill="#0e0a22" stroke="#1c1640" stroke-width="0.5"/>`;}
+  return s;
 }
 function standingsHTML(v){
   const ranked=[...v.players].sort((a,b)=>b.pos-a.pos);
@@ -398,10 +436,21 @@ function standingsHTML(v){
   return h+'</div>';
 }
 function startTokens(v){
-  const start=v.cars.filter(k=>k.pos===0);
-  if(!start.length)return;
-  const fc=document.querySelector('#track .cell');
-  if(fc)start.forEach(k=>{const t=document.createElement('span');t.className='token';t.style.background=k.colorH;t.textContent=k.ini;fc.appendChild(t);});
+  const svg=document.getElementById('trackvg'); if(!svg||!v.cars)return;
+  v.cars.forEach((k,ci)=>{
+    let pos=k.pos||0,segIdx,lf;
+    if(pos<1){segIdx=0;lf=0;}
+    else{segIdx=(v.track||[]).findIndex(s=>pos>=s.from&&pos<=s.to);if(segIdx<0)segIdx=v.track.length-1;const s=v.track[segIdx];lf=(pos-s.from+0.5)/(s.to-s.from+1);}
+    const path=document.getElementById('seg-'+segIdx);if(!path)return;
+    let pt;try{const L=path.getTotalLength();pt=path.getPointAtLength(Math.max(0,Math.min(1,lf))*L);}catch(e){return;}
+    const same=v.cars.filter((o,oi)=>(o.pos||0)===(k.pos||0)&&oi<ci).length;
+    const oy=same?((same%2?-1:1)*9*Math.ceil(same/2)):0;
+    const isMe=k.id===v.you.id;
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('transform',`translate(${pt.x.toFixed(1)},${(pt.y+oy).toFixed(1)})`);
+    g.innerHTML=`<circle r="${isMe?12:10}" fill="${k.colorH}" stroke="${isMe?'#ffffff':'#08060f'}" stroke-width="${isMe?3:2.5}"/><text class="t-tok" text-anchor="middle" y="3.5" font-size="${isMe?11:10}" fill="#ffffff">${esc(k.ini)}</text>`;
+    svg.appendChild(g);
+  });
 }
 function dieFaces(n){const P={1:[[50,50]],2:[[28,28],[72,72]],3:[[26,26],[50,50],[74,74]],4:[[28,28],[72,28],[28,72],[72,72]],5:[[28,28],[72,28],[50,50],[28,72],[72,72]],6:[[28,24],[72,24],[28,50],[72,50],[28,76],[72,76]]};return (P[n]||[]).map(([x,y])=>`<span class="pip" style="left:${x}%;top:${y}%;transform:translate(-50%,-50%)"></span>`).join('');}
 
@@ -454,7 +503,7 @@ function renderRace(v){
   show('s-race');topMeta('Round '+v.round+' · liv. '+v.raceLevel);
   const host=document.getElementById('s-race');
   let h=`<div class="race-head"><div class="eyebrow" style="margin:0">Gara</div><div class="rh-turn">Turno <b>${v.turn}</b><span style="color:var(--muted-2)">/5</span></div></div>`;
-  h+=trackHTML(v)+standingsHTML(v);
+  h+=trackHTML(v)+segRulesHTML(v)+standingsHTML(v);
   if(v.isYourTurn){
     h+=dashHTML(v);
   }else{
@@ -464,7 +513,7 @@ function renderRace(v){
   startTokens(v);
   // scroll pista al leader
   const lead=Math.max(1,...v.cars.map(c=>c.pos));
-  const cells=document.querySelectorAll('#track .cell');const tg=cells[Math.max(0,lead-1)];const tr=document.getElementById('track');if(tg&&tr)tr.scrollLeft=Math.max(0,tg.offsetLeft-110);
+  const tr=document.getElementById('track');if(tr)tr.scrollLeft=Math.max(0,(lead-0.5)*30-140);
 }
 function actColor(v){const a=v.players.find(p=>p.id===v.activeId);return a?a.colorH:'var(--amber)';}
 function dashHTML(v){
@@ -529,6 +578,35 @@ function openInspect(id){
   document.getElementById('inspect').classList.add('show');
 }
 function closeInspect(){document.getElementById('inspect').classList.remove('show');}
+function segNosText(t){ return t==='rettilineo'?'NOS libero':(t==='citta'?'NOS -1 in questo tratto':'NOS vietato (drift)'); }
+function segPenList(s){ if(!s.pen||!s.pen.length) return ['Nessuna penalità']; return s.pen.map(p=>`${p.stat} ${p.cmp} ${p.thr} → -${p.amt} mov`); }
+function curSegIndex(v){ const me=(v.cars||[]).find(c=>c.id===v.you.id); let pos=me?(me.pos||0):0; if(pos<1)pos=1; let i=(v.track||[]).findIndex(s=>pos>=s.from&&pos<=s.to); return i<0?(v.track.length-1):i; }
+function segCardHTML(kicker,s,now){
+  const col=ACCENT[s.t]||'var(--muted)';const tcls=['rettilineo','citta','drift'].includes(s.t)?s.t:'';
+  let h=`<div class="sr-card" style="--cl:${col}"><div class="sr-k">${kicker}</div>`;
+  h+=`<div class="sr-t"><span class="badge ${tcls}">${s.label}</span><span class="lvchip" style="background:${LV_COLOR[s.lvl]}">L${s.lvl}</span><span class="sr-cas">cas. ${s.from}–${s.to}</span></div>`;
+  segPenList(s).forEach(t=>{h+=`<div class="sr-line">• ${t}</div>`;});
+  h+=`<div class="sr-nos" style="color:${col}">${segNosText(s.t)}</div>`;
+  return h+'</div>';
+}
+function segRulesHTML(v){
+  if(!v.track||!v.track.length) return '';
+  const ci=curSegIndex(v);const cur=v.track[ci];const nxt=v.track[ci+1]||null;
+  let h='<div class="segrules">'+segCardHTML('Dove sei ora',cur,true);
+  if(nxt)h+=segCardHTML('Prossimo tratto',nxt,false);
+  return h+'</div>';
+}
+function openSegRules(i){
+  const v=LAST; if(!v||!v.track||!v.track[i])return;
+  const s=v.track[i];const col=ACCENT[s.t]||'var(--muted)';const tcls=['rettilineo','citta','drift'].includes(s.t)?s.t:'';
+  let h=`<div class="sr-t" style="margin-bottom:9px"><span class="badge ${tcls}">${s.label}</span><span class="lvchip" style="background:${LV_COLOR[s.lvl]}">L${s.lvl}</span><span class="sr-cas">caselle ${s.from}–${s.to}</span></div>`;
+  h+=`<div class="sgr-row" style="color:${col};font-weight:600">${segNosText(s.t)}</div>`;
+  h+=`<div class="sr-k" style="margin-top:10px">Penalità</div>`;
+  segPenList(s).forEach(t=>{h+=`<div class="sgr-row">• ${t}</div>`;});
+  document.getElementById('segm-body').innerHTML=h;
+  document.getElementById('segm').classList.add('show');
+}
+function closeSegRules(){document.getElementById('segm').classList.remove('show');}
 
 /* ---------- RESULTS / WIN ---------- */
 function champHTML(v){

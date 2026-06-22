@@ -331,7 +331,9 @@ function publicPlayers(G,duringRace){
 }
 function trackView(G){
   return G.track.map(c=>{
-    const pen=[]; if(c.pv) pen.push('Vel>'+c.pv.gt); if(c.pc) pen.push('Ctrl<'+c.pc.lt);
+    const pen=[];
+    if(c.pv) pen.push({stat:'Velocità', cmp:'>', thr:c.pv.gt, amt:c.pv.a});
+    if(c.pc) pen.push({stat:'Controllo', cmp:'<', thr:c.pc.lt, amt:c.pc.a});
     return { t:c.t, label:TIPO_LABEL[c.t], lvl:c.lvl, from:c.from, to:c.to, pen };
   });
 }
