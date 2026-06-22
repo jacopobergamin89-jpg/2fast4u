@@ -256,6 +256,11 @@ h1.title em{font-style:italic;color:var(--cyan)}
   #s-race .race-grid3{display:grid;grid-template-columns:0.85fr 1.3fr 0.92fr;gap:14px;align-items:start;margin-top:2px}
   #s-race .race-grid3>div,#s-race .race-grid3>details{min-width:0}
 }
+
+/* --- caratteristiche pilota nel cruscotto --- */
+.dash-top{align-items:flex-start}
+.dash-ab{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.dash-ab .part{font-family:var(--mono);color:var(--ink);font-size:11px;background:var(--asphalt-2);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
 </style>
 </head>
 <body>
@@ -588,7 +593,7 @@ function cardsMenuHTML(v){
 function dashHTML(v){
   const m=v.me;
   let h=`<div class="dash" style="--dc:${v.you.colorH}">`;
-  h+=`<div class="dash-top"><div class="dash-token" style="background:${v.you.colorH}">${ini(v.you.name)}</div><div><div class="dash-name">${esc(v.you.name)}</div><div class="dash-pilot">${esc(m.pilotNome)} · ${m.gang}</div></div></div>`;
+  h+=`<div class="dash-top"><div class="dash-token" style="background:${v.you.colorH}">${ini(v.you.name)}</div><div><div class="dash-name">${esc(v.you.name)}</div><div class="dash-pilot">${esc(m.pilotNome)} · ${m.gang}</div><div class="dash-ab"><span class="badge ${['rettilineo','citta','drift'].includes(m.pilotTipo)?m.pilotTipo:''}" ${!['rettilineo','citta','drift'].includes(m.pilotTipo)?'style="background:#1ad6ea22;color:var(--cyan)"':''}>${m.pilotTipoLabel}</span> ${esc(m.ab)} <span class="part">Partenza +${m.partenza}</span></div></div></div>`;
   h+=`<div class="gauges"><div class="gauge vel"><div class="gl">Velocità</div><div class="gv">${m.vel}</div></div><div class="gauge ctrl"><div class="gl">Controllo</div><div class="gv">${m.ctrl}</div></div><div class="gauge mov"><div class="gl">Mov. base</div><div class="gv">${m.mov}</div></div></div>`;
   const segd=m.segType==='rettilineo'?'Nessuna penalità, NOS libero.':(m.segType==='citta'?'NOS −1. Penalità se Controllo basso.':'NOS vietato. Penalità se Velocità alta o Controllo basso.');
   h+=`<div class="seg-note"><span class="badge ${m.segType}">${m.segLabel}</span><span>${segd} ${!m.firstDone?'· <b style="color:var(--cyan)">1° tiro: +partenza, no NOS</b>':''}</span></div>`;

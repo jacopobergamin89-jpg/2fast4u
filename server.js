@@ -300,7 +300,7 @@ function endRace(room){
     }
     p.bet=null;
   });
-  G.players.forEach(p=>{ while(p.hand.length<3 && G.deck.length) p.hand.push(G.deck.pop()); if(!G.deck.length) G.deck=makeDeck(); });
+  G.players.forEach(p=>{ while(p.hand.length<5 && G.deck.length) p.hand.push(G.deck.pop()); if(!G.deck.length) G.deck=makeDeck(); });
   advanceTrack(room);
   G.winner = G.players.some(p=>p.po>=DB.obiettivo) ? [...G.players].sort((a,b)=>b.po-a.po||b.money-a.money)[0] : null;
   G.lastResults = ranked.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, pos:p._finalPos, po:p._gainPO, money:p._gainMoney, betDelta:p._betDelta }));
@@ -403,7 +403,7 @@ function buildView(room, player){
       const p=player; const car=R.cars[p.id]; const seg=segOf(G,Math.max(1,car.pos));
       const fxVel=fxSum(R,p,'vel'),fxCtrl=fxSum(R,p,'ctrl');
       v.me={
-        pilotNome:p.pilot.nome, gang:p.pilot.gang, ab:p.pilot.ab,
+        pilotNome:p.pilot.nome, gang:p.pilot.gang, ab:p.pilot.ab, pilotTipo:p.pilot.tipo, pilotTipoLabel:(TIPO_LABEL[p.pilot.tipo]||(p.pilot.tipo==='fortuna'?'Fortuna':'NOS')), partenza:p.pilot.partenza,
         vel:statVal(p,'motore')+statVal(p,'cambio')+fxVel, ctrl:statVal(p,'sterzo')+statVal(p,'assetto')+fxCtrl,
         mov:statVal(p,'motore')+statVal(p,'cambio')+statVal(p,'sterzo')+statVal(p,'assetto')+statVal(p,'peso'),
         segType:seg.t, segLabel:TIPO_LABEL[seg.t], firstDone:car.firstDone,
