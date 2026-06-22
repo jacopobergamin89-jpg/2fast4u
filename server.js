@@ -68,23 +68,26 @@ const ROADS = {
        {t:'drift',nm:'Deriva Estrema',pv:{gt:8,a:1},pc:{lt:9,a:2}}, {t:'drift',nm:'Vortice',pv:{gt:15,a:2},pc:{lt:15,a:1}} ]
 };
 const C_INGARA = [
- ['Filtro aria nuovo','vel',1,2,'self'],['Non è la tua giornata','vel',-1,1,'rival'],['Doppio caffè','vel',2,2,'self'],['Le gomme slittano','vel',-1,2,'rival'],
- ['Benzina racing','vel',1,1,'self'],['Ribassamento perfetto','ctrl',2,1,'self'],['Freni che non rispondono','ctrl',-1,1,'rival'],['Marmitta inceppata','ctrl',-2,2,'rival'],
- ['ALT!','dado',1,1,'rival'],['Sospensioni nuove','ctrl',1,1,'self'],['Brutti incubi','partenza',-2,0,'rival'],['Problemi al cambio','vel',-1,2,'rival'],
- ['Pneumatici a terra','vel',-2,1,'rival'],['Centralina sistemata','vel',1,1,'self'],['Nuovo alettone','ctrl',2,2,'self'],['Olio vecchio nel motore','ctrl',-1,2,'rival'],
- ['Sterzo allentato','ctrl',-2,2,'rival'],['Bel colpo di fortuna','partenza',2,0,'self'],['Espansione racing','vel',2,1,'self'],['Frenata d\'emergenza','vel',-2,1,'rival'],
- ['Adrenalina','vel',1,1,'self'],['Cambio che vola','ctrl',2,2,'self'],['Olio vecchio nei freni','ctrl',-1,2,'rival'],['La vecchia fortuna','dado',6,1,'self'],
- ['Nuove minigonne','ctrl',1,2,'self'],['Il sonno aiuta','partenza',2,0,'self'],['Benzina sporca','vel',-1,1,'rival'],['Turbo fortunato','vel',2,1,'self'],
- ['Energy drink','vel',1,1,'self'],['Ammortizzatore scarico','ctrl',-2,1,'rival'],['Il destino provvede','dado',6,1,'self'],['Tratto allagato','dado',1,1,'rival'],
- ['Nuovo volante','ctrl',2,1,'self'],['Brucia le gomme','partenza',1,0,'self'],['Si allenta un bullone','vel',-1,1,'rival'],['Vento a favore','vel',2,2,'self'],
- ['Gomma forata','vel',-2,2,'rival'],['Alettone danneggiato','ctrl',-1,1,'rival'],['Motore che non raffredda','ctrl',-2,1,'rival'],['Spegni la fiamma','dado',1,1,'rival'],
- ['Oggi devi vincere','vel',2,1,'self'],['Il cambio giusto','vel',1,1,'self'],['Occhiali sbagliati','partenza',-1,0,'rival'],['Caffè buono','partenza',1,0,'self'],
- ['Corri Forrest!','vel',2,1,'self'],['Veloce come il vento','vel',1,1,'self']
+ ['Oggi devi vincere','vel',2,1,'self'],['Corri Fooorrreeeesstttttt!!!!','vel',2,1,'self'],['Monti un\'espansione racing','vel',2,1,'self'],['Un colpo di fortuna con il turbo','vel',2,1,'self'],
+ ['Doppio caffe stamattina','vel',2,2,'self'],['Il vento è a favore','vel',2,2,'self'],['Veloce come il vento','vel',1,1,'self'],['Finalmente il giusto cambio','vel',1,1,'self'],
+ ['Hai messo benzina racing: boost temporaneo!','vel',1,1,'self'],['Il meccanico ti sistema la centralina: +1','vel',1,1,'self'],['Senti l\'adrenalina salire: spingi di più!!!','vel',1,1,'self'],['L\'ora del Energy drink','vel',1,1,'self'],
+ ['Hai montato un nuovo filtro aria','vel',1,2,'self'],['Hai montato un nuovo filtro aria','vel',1,2,'self'],['La marmitta si allenta','vel',-1,1,'rival'],['Una curva mal presa ti rallenta','vel',-1,1,'rival'],
+ ['Benzina Sporca','vel',-1,1,'rival'],['Si allenta un bullone','vel',-1,1,'rival'],['Le gomme slittano','vel',-1,2,'rival'],['Problemi al cambio','vel',-1,2,'rival'],
+ ['Perdi pressione nei pneumatici','vel',-2,1,'rival'],['Frenata d\'emergenza','vel',-2,1,'rival'],['Gomma forata','vel',-2,2,'rival'],['Carburatore ingolfato','vel',-2,2,'rival'],
+ ['Ribassamento perfetto','ctrl',2,1,'self'],['Installato il nuovo volante','ctrl',2,1,'self'],['Spettacolo il nuovo alettone','ctrl',2,2,'self'],['Con questo nuovo cambio si vola','ctrl',2,2,'self'],
+ ['Ti prendooooo!!!!','ctrl',1,1,'self'],['Hai istallato le nuove sospensioni','ctrl',1,1,'self'],['Il nuovo alettone fa il suo dovere','ctrl',1,2,'self'],['Spettacolo le nuove minigonne','ctrl',1,2,'self'],
+ ['Freni rispondono male','ctrl',-1,1,'rival'],['Alettone danneggiato','ctrl',-1,1,'rival'],['Ti prendooooo!!!!','ctrl',-1,1,'rival'],['Olio vecchi nel motore','ctrl',-1,2,'rival'],
+ ['Olio vecchio nei freni','ctrl',-1,2,'rival'],['Ammortizzatore scarico','ctrl',-2,1,'rival'],['Il motore non raffredda bene','ctrl',-2,1,'rival'],['Marmitta inceppata','ctrl',-2,2,'rival'],
+ ['Sterzo allentato','ctrl',-2,2,'rival'],['Bel colpo di fortuna','partenza',2,0,'self'],['Il sonno aiuta','partenza',2,0,'self'],['Brucia le gomme','partenza',1,0,'self'],
+ ['Brucia le gomme','partenza',1,0,'self'],['Buono il caffè stamattina','partenza',1,0,'self'],['Non è la tua giornata','partenza',-2,0,'rival'],['Brutti incubi','partenza',-2,0,'rival'],
+ ['Hai messo gli occhiali sbagliati','partenza',-1,0,'rival'],['Oggi va cosi…','partenza',-1,0,'rival'],['Falsa partenza','partenza',-1,0,'rival'],['Sempre la vecchia fortuna','dado',6,1,'self'],
+ ['Il destino provvede','dado',6,1,'self'],['Spegni la fiamma','dado',1,1,'rival'],['ALT','dado',1,1,'rival']
 ];
 const C_PREGARA = [
- ['Vinto a poker','money',500],['Bonus del broker','money',250],['Sponsor in arrivo','money',500],
- ['Multa eccesso velocità','money',-500],['Debiti di gioco','money',-500],['Piccola spesa','money',-250],
- ['+2 Punti Rispetto','po',2],['+1 Punto Rispetto','po',1],['-1 Punto Rispetto','po',-1],['-2 Punti Rispetto','po',-2]
+ ['Bravo, aiuti il prossimo','po',1],['Quando meno se lo aspettano','po',2],['Mi sembra giusto cosi','po',2],
+ ['Beccato','po',-1],['Un piccolo sgarro, ti costa caro','po',-1],['Non puoi andare avanti sempre così','po',-2],
+ ['Arriva bonifica dallo zio del Molise','money',250],['Ieri sera hai vinto a Poker','money',500],['Il tuo cane vince il primo premio','money',500],
+ ['Arrivano le tasse arretrate','money',-250],['Arriva la multa per eccesso velocità','money',-500],['I debiti si pagano','money',-500]
 ];
 
 /* ============================ UTIL ============================ */
