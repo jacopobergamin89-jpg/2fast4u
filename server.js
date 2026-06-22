@@ -2,7 +2,8 @@
    2FAST4U - server multiplayer autorevole (Node + Express + Socket.io)
    Lo stato della partita vive QUI. I client mandano azioni, il server
    valida (turno, regole) e rimanda a ogni giocatore solo cio' che puo'
-   vedere (piloti e scommesse degli altri restano segreti).
+   vedere (la mano In-Gara e le scommesse degli altri restano segrete;
+   pilota e auto di ciascuno sono ispezionabili dagli avversari).
    ===================================================================== */
 const express = require('express');
 const http = require('http');
@@ -116,15 +117,23 @@ function startGame(room){
   const G=room.G;
   G.players.forEach((p,i)=>{ p.roll=d6(); });
   G.diceOrder=[...G.players].sort((a,b)=>b.roll-a.roll||a.id-b.id).map(p=>p.id);
-  const pilots=shuffle(DB.piloti.map(p=>p.id));
-  G.players.forEach((p,idx)=>{ p.pilot=DB.piloti.find(q=>q.id===pilots[idx]); p.money=3000; p.po=0; p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0}; p.lastRank=idx; p.prevRank=idx; p.hand=[]; });
+  G.pilotPool=shuffle(DB.piloti.map(p=>p.id));
+  G.players.forEach((p,idx)=>{ p.pilot=null; p.drew=false; p.money=3000; p.po=0; p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0}; p.lastRank=idx; p.prevRank=idx; p.hand=[]; });
   G.deck=makeDeck();
   G.players.forEach(p=>{ for(let k=0;k<3;k++) if(G.deck.length) p.hand.push(G.deck.pop()); });
   G.round=0; room.started=true;
   G.phase='reveal'; G.players.forEach(p=>{ p.ready=false; });
 }
+function actDrawPilot(room,p){
+  const G=room.G; if(G.phase!=='reveal') return 'Non in fase di pesca.';
+  if(p.drew) return 'Hai già pescato il pilota.';
+  if(!G.pilotPool || !G.pilotPool.length) return 'Mazzo piloti esaurito.';
+  const pid=G.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true;
+  return null;
+}
 function actReady(room,p){
   const G=room.G; if(G.phase!=='reveal') return 'Non in fase di rivelazione.';
+  if(!p.drew) return 'Devi prima pescare il pilota.';
   p.ready=true;
   if(G.players.every(x=>x.ready)) startRound(room);
   return null;
@@ -278,7 +287,7 @@ function endRace(room){
   const ranked=[...G.players].sort((a,b)=>G.R.cars[b.id].pos-G.R.cars[a.id].pos||Math.random()-0.5);
   const N=G.players.length; const base=DB.roadBasePrice[G.raceLevel];
   ranked.forEach((p,i)=>{
-    const po=DB.premiPO[i]||0; const money=(i===N-1)?0:Math.round(base*(DB.premiMult[i]||0));
+    const po=DB.premiPO[i]||0; const money=Math.max(base, Math.round(base*(DB.premiMult[i]||0)));
     p.po=Math.max(0,p.po+po); p.money+=money; p.prevRank=p.lastRank; p.lastRank=i;
     p._gainPO=po; p._gainMoney=money; p._betDelta=0; p._betWin=false; p._finalPos=i+1;
   });
@@ -286,7 +295,7 @@ function endRace(room){
   G.players.forEach(p=>{
     if(p.bet && p.bet.targetId!=null && p.bet.amount>0){
       const t=G.players.find(x=>x.id===p.bet.targetId); const q=DB.quoteScommessa[Math.min(7,t.prevRank)];
-      if(p.bet.targetId===winnerId){ const payout=Math.round(p.bet.amount*q); p.money+=payout; p._betDelta=payout; p._betWin=true; }
+      if(p.bet.targetId===winnerId){ const payout=Math.round(p.bet.amount*q); p.money+=p.bet.amount+payout; p._betDelta=payout; p._betWin=true; }
       else { p._betDelta=-p.bet.amount; }
     }
     p.bet=null;
@@ -315,7 +324,9 @@ function actNextRound(room,p){
 function publicPlayers(G,duringRace){
   return G.players.map(p=>({
     id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, po:p.po, connected:p.connected,
-    pos: duringRace ? G.R.cars[p.id].pos : null
+    pos: duringRace ? G.R.cars[p.id].pos : null,
+    pilot: p.pilot?{ nome:p.pilot.nome, gang:p.pilot.gang, tipo:p.pilot.tipo, tipoLabel:(TIPO_LABEL[p.pilot.tipo]||(p.pilot.tipo==='fortuna'?'Fortuna':'NOS')), ab:p.pilot.ab, partenza:p.pilot.partenza }:null,
+    car: p.pilot?{ stats:statsOf(p), owned:ownedView(p) }:null
   }));
 }
 function trackView(G){
@@ -342,12 +353,14 @@ function buildView(room, player){
     return v;
   }
   if(G.phase==='reveal'){
-    v.players=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, ready:p.ready, connected:p.connected }));
+    v.players=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, ready:p.ready, drew:p.drew, connected:p.connected }));
     v.readyCount=G.players.filter(p=>p.ready).length;
     v.total=G.players.length;
     const p=player;
     v.reveal={
-      pilot:{ nome:p.pilot.nome, gang:p.pilot.gang, tipo:p.pilot.tipo, tipoLabel:(TIPO_LABEL[p.pilot.tipo]||(p.pilot.tipo==='fortuna'?'Fortuna':'NOS')), ab:p.pilot.ab, partenza:p.pilot.partenza },
+      drawn:p.drew,
+      deckSize:(G.pilotPool?G.pilotPool.length:0),
+      pilot:p.drew?{ nome:p.pilot.nome, gang:p.pilot.gang, tipo:p.pilot.tipo, tipoLabel:(TIPO_LABEL[p.pilot.tipo]||(p.pilot.tipo==='fortuna'?'Fortuna':'NOS')), ab:p.pilot.ab, partenza:p.pilot.partenza }:null,
       roll:p.roll,
       startPos:G.diceOrder.indexOf(p.id)+1,
       ready:p.ready,
@@ -458,7 +471,7 @@ function botRace(room,bot){
 }
 function botAct(room){
   const G=room.G;
-  if(G.phase==='reveal'){ G.players.forEach(p=>{ if(p.isBot) p.ready=true; }); if(G.players.every(p=>p.ready)) startRound(room); return; }
+  if(G.phase==='reveal'){ G.players.forEach(p=>{ if(p.isBot){ if(!p.drew && G.pilotPool && G.pilotPool.length){ const pid=G.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true; } p.ready=true; } }); if(G.players.every(p=>p.ready)) startRound(room); return; }
   if(G.phase==='prep'){ const b=curPrep(G); if(b.isBot) botPrep(room,b); return; }
   if(G.phase==='race'){ const b=activeRace(G); if(b.isBot) botRace(room,b); return; }
 }
@@ -537,6 +550,7 @@ io.on('connection', (socket)=>{
 
   function handle(fn){ return (payload)=>{ const f=playerBySocket(socket); if(!f) return; const err=fn(f.room,f.p,payload||{}); if(err) socket.emit('errorMsg', err); broadcast(f.room); scheduleBot(f.room); }; }
 
+  socket.on('setup:drawPilot', handle((room,p)=>actDrawPilot(room,p)));
   socket.on('setup:ready', handle((room,p)=>actReady(room,p)));
   socket.on('prep:buy', handle((room,p,d)=>actBuy(room,p,d.shopIdx)));
   socket.on('prep:playCard', handle((room,p,d)=>actPlayPregara(room,p,d.handIdx)));

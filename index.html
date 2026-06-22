@@ -174,6 +174,32 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .dc-desc{font-size:11px;color:var(--muted);font-family:var(--mono)}
 .rmbot{background:#ff3b6b22;color:var(--danger);border:1px solid #ff3b6b44;border-radius:7px;width:26px;height:26px;font-size:16px;line-height:1;cursor:pointer;flex:none}
 .homelogo{display:block;width:100%;max-width:340px;margin:0 auto 14px;border-radius:14px}
+
+/* --- pesca pilota --- */
+.pdraw{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:10px 0 14px}
+.pdcard{width:66px;height:92px;border-radius:11px;background:linear-gradient(160deg,#1b2030,#0e1220);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer;transition:transform .12s,border-color .12s,box-shadow .12s}
+.pdcard:hover,.pdcard:active{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 8px 22px -10px rgba(26,214,234,.6)}
+.pdcard .qm{font-family:var(--disp);font-size:30px;color:var(--cyan);opacity:.85}
+.pdcard .pdtap{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted-2)}
+/* --- ispezione rivali --- */
+.st-row{cursor:pointer}
+.st-row .insp,.prow .insp{margin-left:8px;opacity:.5;font-size:13px}
+.std-h{font-size:11px;color:var(--muted-2);text-transform:uppercase;letter-spacing:.5px;padding:2px 2px 8px}
+.insp-head{display:flex;align-items:center;gap:9px;font-size:15px;margin-bottom:4px}
+.insp-sec{font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:11px;color:var(--muted);margin:12px 0 7px;border-top:1px solid var(--line);padding-top:10px}
+.insp-pilot .ip-name{font-weight:600}
+.insp-pilot .ip-gang{color:var(--muted-2);font-weight:400;font-size:12px;margin-left:6px}
+.insp-pilot .ip-ab{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.5}
+.insp-pilot .ip-part{font-size:12px;color:var(--muted);margin-top:6px}
+.insp-pilot .ip-part small{color:var(--muted-2)}
+.insp-stats{display:flex;gap:8px;margin-bottom:10px}
+.insp-stats .is{flex:1;background:var(--asphalt-2);border:1px solid var(--line);border-radius:9px;padding:8px 4px;text-align:center}
+.insp-stats .isl{font-size:9.5px;letter-spacing:.5px;color:var(--muted-2);text-transform:uppercase}
+.insp-stats .isv{font-family:var(--disp);font-size:19px;margin-top:2px}
+.insp-owned{display:flex;flex-direction:column;gap:5px}
+.insp-owned .io{font-size:12.5px;color:#cdd3e0;display:flex;align-items:center;gap:7px}
+.insp-owned .io .lvdot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.insp-note{font-size:11px;color:var(--muted-2);margin-top:12px;font-style:italic}
 </style>
 </head>
 <body>
@@ -236,6 +262,7 @@ h1.title em{font-style:italic;color:var(--cyan)}
 <div class="conn" id="conn">disconnesso…</div>
 <div class="toast" id="toast"></div>
 <div class="modal" id="picker"><div class="box"><div class="mh" id="picker-h">Scegli bersaglio</div><div id="picker-opts"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:4px" onclick="closePicker()">Annulla</button></div></div>
+<div class="modal" id="inspect"><div class="box"><div class="mh">Avversario</div><div id="inspect-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeInspect()">Chiudi</button></div></div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -306,8 +333,8 @@ function cardDesc(c){
   if(c.eff==='money')return (c.val>=0?'+':'')+eur(c.val);
   if(c.eff==='po')return (c.val>=0?'+':'')+c.val+' Punti Onore';
   const r=c.target==='rival'?' · su un rivale':'';
-  if(c.eff==='vel')return (c.val>=0?'+':'')+c.val+' Velocità · '+c.dur+'t'+r;
-  if(c.eff==='ctrl')return (c.val>=0?'+':'')+c.val+' Controllo · '+c.dur+'t'+r;
+  if(c.eff==='vel')return (c.val>=0?'+':'')+c.val+' Velocità · '+c.dur+(c.dur===1?' tiro':' tiri')+r;
+  if(c.eff==='ctrl')return (c.val>=0?'+':'')+c.val+' Controllo · '+c.dur+(c.dur===1?' tiro':' tiri')+r;
   if(c.eff==='partenza')return 'Partenza '+(c.val>=0?'+':'')+c.val+r;
   if(c.eff==='dado')return 'Dado fisso = '+c.val+r;
   return '';
@@ -316,15 +343,24 @@ function renderReveal(v){
   show('s-reveal');topMeta('Sala '+v.code+' · setup');
   const r=v.reveal;const host=document.getElementById('s-reveal');
   if(r.ready){
-    let h=`<div class="eyebrow">Si parte</div><h1 class="title">Sei <em>pronto</em></h1><p class="sub">In attesa che tutti scoprano il proprio pilota… <b>${v.readyCount}/${v.total}</b></p>`;
+    let h=`<div class="eyebrow">Si parte</div><h1 class="title">Sei <em>pronto</em></h1><p class="sub">In attesa che tutti peschino il proprio pilota… <b>${v.readyCount}/${v.total}</b></p>`;
     h+=`<div class="panel"><div class="panel-h">Piloti</div><div class="plist">`;
-    v.players.forEach(p=>{h+=`<div class="prow ${p.ready?'':'poff'}"><span class="pdot" style="background:${p.colorH}"></span><span class="pname">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span>${p.ready?'<span class="pbadge" style="background:#34c75922;color:var(--good)">Pronto</span>':'<span style="font-size:11px;color:var(--muted-2)">scopre il pilota…</span>'}</div>`;});
+    v.players.forEach(p=>{h+=`<div class="prow ${p.ready?'':'poff'}"><span class="pdot" style="background:${p.colorH}"></span><span class="pname">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span>${p.ready?'<span class="pbadge" style="background:#34c75922;color:var(--good)">Pronto</span>':'<span style="font-size:11px;color:var(--muted-2)">'+(p.drew?'sta guardando…':'pesca il pilota…')+'</span>'}</div>`;});
     host.innerHTML=h+'</div></div>';return;
   }
-  const rev=ui.pilotRevealed;
-  let h=`<div class="eyebrow">Setup · pesca segreta</div><h1 class="title">Il tuo <em>pilota</em></h1><p class="sub">L'hai pescato a caso: <b>guardalo solo tu</b> e tienilo nascosto agli avversari. Poi premi Pronto.</p>`;
-  h+=`<div class="flipwrap ${rev?'flipped':''}" id="flip" onclick="revealPilot()"><div class="flipinner">
-    <div class="flipface flipback"><div class="qmark">?</div><div class="ftap">tocca per scoprire</div></div>
+  if(!r.drawn){
+    let h=`<div class="eyebrow">Setup · pesca il pilota</div><h1 class="title">Pesca il tuo <em>pilota</em></h1><p class="sub">Scegli una carta coperta dal mazzo. Il pilota è <b>casuale</b>: lo vedrai solo tu e lo terrai nascosto agli avversari.</p>`;
+    const n=Math.max(1,Math.min(r.deckSize||1,10));
+    h+=`<div class="pdraw">`;
+    for(let i=0;i<n;i++){ h+=`<div class="pdcard" onclick="drawPilot(${i})"><span class="qm">?</span><span class="pdtap">pesca</span></div>`; }
+    h+=`</div>`;
+    h+=`<div class="reveal-info"><div class="die" style="width:42px;height:42px;border-radius:9px">${dieFaces(r.roll)}</div><div>Hai tirato <b>${r.roll}</b> · all'officina del 1° round parti <b>${r.startPos}°</b></div></div>`;
+    h+=`<div class="hint">Tocca una carta coperta per pescare (${r.deckSize} piloti nel mazzo).</div>`;
+    host.innerHTML=h;return;
+  }
+  let h=`<div class="eyebrow">Setup · pilota pescato</div><h1 class="title">Il tuo <em>pilota</em></h1><p class="sub">Eccolo. <b>Tienilo nascosto</b> agli avversari (potranno comunque ispezionarlo in gara), poi premi Pronto.</p>`;
+  h+=`<div class="flipwrap flipped"><div class="flipinner">
+    <div class="flipface flipback"><div class="qmark">?</div></div>
     <div class="flipface flipfront" style="--pc:${v.you.colorH}">
       <div class="rp-token" style="background:${v.you.colorH}">${ini(v.you.name)}</div>
       <div class="rp-name">${esc(r.pilot.nome)}</div>
@@ -333,16 +369,13 @@ function renderReveal(v){
       <div class="rp-part">Partenza <b>+${r.pilot.partenza}</b> <small>(solo al 1° tiro di ogni gara)</small></div>
     </div></div></div>`;
   h+=`<div class="reveal-info"><div class="die" style="width:42px;height:42px;border-radius:9px">${dieFaces(r.roll)}</div><div>Hai tirato <b>${r.roll}</b> · all'officina del 1° round parti <b>${r.startPos}°</b></div></div>`;
-  if(rev){
-    h+=`<div class="sec-h">Le tue carte iniziali (${r.hand.length})</div><div class="deal">`;
-    r.hand.forEach((c,i)=>{h+=`<div class="dealcard" style="--i:${i};--hc:${c.cat==='pregara'?'var(--po)':'var(--cyan)'}"><div class="dc-top">${c.cat==='pregara'?'Pre-gara':'In gara'}</div><div class="dc-name">${esc(c.nome)}</div><div class="dc-desc">${cardDesc(c)}</div></div>`;});
-    h+='</div>';
-  }
-  h+=`<button class="btn btn-primary foot" ${rev?'':'disabled'} onclick="socket.emit('setup:ready')">${rev?'Pronto — ho visto il pilota':'Scopri prima il pilota ☝️'}</button>`;
-  if(!rev)h+='<div class="hint">Tocca la carta qui sopra per girarla e vedere chi ti è capitato.</div>';
+  h+=`<div class="sec-h">Le tue carte iniziali (${r.hand.length})</div><div class="deal">`;
+  r.hand.forEach((c,i)=>{h+=`<div class="dealcard" style="--i:${i};--hc:${c.cat==='pregara'?'var(--po)':'var(--cyan)'}"><div class="dc-top">${c.cat==='pregara'?'Pre-gara':'In gara'}</div><div class="dc-name">${esc(c.nome)}</div><div class="dc-desc">${cardDesc(c)}</div></div>`;});
+  h+='</div>';
+  h+=`<button class="btn btn-primary foot" onclick="socket.emit('setup:ready')">Pronto — ho visto il pilota</button>`;
   host.innerHTML=h;
 }
-function revealPilot(){ if(ui.pilotRevealed)return; ui.pilotRevealed=true; renderReveal(LAST); }
+function drawPilot(i){ socket.emit('setup:drawPilot',{cardIndex:i}); }
 
 /* ---------- helpers comuni ---------- */
 function trackHTML(v){
@@ -360,8 +393,8 @@ function trackHTML(v){
 }
 function standingsHTML(v){
   const ranked=[...v.players].sort((a,b)=>b.pos-a.pos);
-  let h='<div class="standings">';
-  ranked.forEach(p=>{h+=`<div class="st-row${p.id===v.activeId?' active':''}"><span class="dot" style="background:${p.colorH}"></span><span class="nm">${esc(p.name)}</span><span class="sq">cas. ${p.pos}/55</span></div>`;});
+  let h='<div class="standings"><div class="std-h">Classifica · tocca un pilota per vederne auto e pilota</div>';
+  ranked.forEach(p=>{h+=`<div class="st-row${p.id===v.activeId?' active':''}" onclick="openInspect(${p.id})"><span class="dot" style="background:${p.colorH}"></span><span class="nm">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span><span class="sq">cas. ${p.pos}/55</span><span class="insp">🔍</span></div>`;});
   return h+'</div>';
 }
 function startTokens(v){
@@ -443,13 +476,13 @@ function dashHTML(v){
   h+=`<div class="seg-note"><span class="badge ${m.segType}">${m.segLabel}</span><span>${segd} ${!m.firstDone?'· <b style="color:var(--cyan)">1° tiro: +partenza, no NOS</b>':''}</span></div>`;
   if(m.fx.length||m.pendPart||m.pendDado){
     h+='<div class="fx">';
-    m.fx.forEach(e=>{h+=`<span class="e ${e.amt>0?'pos':'neg'}">${e.stat==='vel'?'Vel':'Ctrl'} ${e.amt>0?'+':''}${e.amt} (${e.turns}t)</span>`;});
+    m.fx.forEach(e=>{h+=`<span class="e ${e.amt>0?'pos':'neg'}">${e.stat==='vel'?'Vel':'Ctrl'} ${e.amt>0?'+':''}${e.amt} (${e.turns} ${e.turns===1?'tiro':'tiri'})</span>`;});
     if(m.pendPart)h+=`<span class="e ${m.pendPart>0?'pos':'neg'}">Partenza ${m.pendPart>0?'+':''}${m.pendPart}</span>`;
     if(m.pendDado)h+=`<span class="e ${m.pendDado===6?'pos':'neg'}">Dado = ${m.pendDado}</span>`;
     h+='</div>';
   }
   if(!v.rolled){
-    if(m.hand.length){h+='<div class="hand" style="margin-bottom:11px">';m.hand.forEach(c=>{let desc='',col='var(--muted-2)';if(c.eff==='vel'){desc=(c.val>0?'+':'')+c.val+' Velocità · '+c.dur+'t';col=c.val>0?'var(--good)':'var(--danger)';}else if(c.eff==='ctrl'){desc=(c.val>0?'+':'')+c.val+' Controllo · '+c.dur+'t';col=c.val>0?'var(--good)':'var(--danger)';}else if(c.eff==='partenza'){desc='Partenza '+(c.val>0?'+':'')+c.val;col=c.val>0?'var(--good)':'var(--danger)';}else if(c.eff==='dado'){desc='Dado = '+c.val;col=c.val===6?'var(--good)':'var(--danger)';}const tgt=c.target==='self'?'su di te':'su un rivale';h+=`<div class="hcard" style="--hc:${col}"><div class="hi"><div class="hn">${esc(c.nome)}</div><div class="he">${desc} · ${tgt}</div></div><button class="btn btn-line btn-sm" onclick="playCard(${c.idx},'${c.target}')">Gioca</button></div>`;});h+='</div>';}
+    if(m.hand.length){h+='<div class="hand" style="margin-bottom:11px">';m.hand.forEach(c=>{let desc='',col='var(--muted-2)';if(c.eff==='vel'){desc=(c.val>0?'+':'')+c.val+' Velocità · '+c.dur+(c.dur===1?' tiro':' tiri');col=c.val>0?'var(--good)':'var(--danger)';}else if(c.eff==='ctrl'){desc=(c.val>0?'+':'')+c.val+' Controllo · '+c.dur+(c.dur===1?' tiro':' tiri');col=c.val>0?'var(--good)':'var(--danger)';}else if(c.eff==='partenza'){desc='Partenza '+(c.val>0?'+':'')+c.val;col=c.val>0?'var(--good)':'var(--danger)';}else if(c.eff==='dado'){desc='Dado = '+c.val;col=c.val===6?'var(--good)':'var(--danger)';}const tgt=c.target==='self'?'su di te':'su un rivale';h+=`<div class="hcard" style="--hc:${col}"><div class="hi"><div class="hn">${esc(c.nome)}</div><div class="he">${desc} · ${tgt}</div></div><button class="btn btn-line btn-sm" onclick="playCard(${c.idx},'${c.target}')">Gioca</button></div>`;});h+='</div>';}
     let reason='';if(!m.firstDone)reason='1° tiro';else if(m.segType==='drift')reason='drift';else if(m.nosVal<=0)reason='no NOS';
     h+=`<div class="dice-area"><div class="die" id="die">${dieFaces(1)}</div><div class="dice-info"><div class="di-big">Pronto</div>${m.nosOk?'Puoi armare il NOS':'NOS '+(reason?'('+reason+')':'')}</div></div>`;
     h+=`<div class="row" style="margin-bottom:10px"><button class="btn btn-line nos-btn ${ui.nosArmed?'armed':''}" ${m.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato ⚡':'Usa NOS'}${m.nosVal>0?' (+'+m.nosVal+')':''}</button></div>`;
@@ -476,6 +509,26 @@ function playCard(idx,target){
 }
 function pickTarget(idx,tid){closePicker();socket.emit('race:playCard',{handIdx:idx,targetId:tid});}
 function closePicker(){document.getElementById('picker').classList.remove('show');}
+function openInspect(id){
+  const v=LAST; if(!v||!v.players) return;
+  const p=v.players.find(x=>x.id===id); if(!p) return;
+  const box=document.getElementById('inspect-body');
+  let h=`<div class="insp-head"><span class="pdot" style="background:${p.colorH}"></span><b>${esc(p.name)}</b>${p.id===v.you.id?' (tu)':''}</div>`;
+  if(p.pilot){
+    const tc=['rettilineo','citta','drift'].includes(p.pilot.tipo)?p.pilot.tipo:'';
+    h+=`<div class="insp-sec">Pilota</div><div class="insp-pilot"><div class="ip-name">${esc(p.pilot.nome)}<span class="ip-gang">${esc(p.pilot.gang)}</span></div><div class="ip-ab"><span class="badge ${tc}" ${!tc?'style="background:#1ad6ea22;color:var(--cyan)"':''}>${p.pilot.tipoLabel}</span> ${esc(p.pilot.ab)}</div><div class="ip-part">Partenza +${p.pilot.partenza} <small>(solo 1° tiro)</small></div></div>`;
+  } else { h+=`<div class="insp-pilot" style="color:var(--muted-2)">Pilota non ancora pescato.</div>`; }
+  if(p.car){
+    const s=p.car.stats;
+    h+=`<div class="insp-sec">Auto</div><div class="insp-stats"><div class="is"><div class="isl">VEL</div><div class="isv" style="color:var(--cyan)">${s.vel}</div></div><div class="is"><div class="isl">CTRL</div><div class="isv" style="color:var(--amber)">${s.ctrl}</div></div><div class="is"><div class="isl">MOV</div><div class="isv">${s.mov}</div></div><div class="is"><div class="isl">NOS</div><div class="isv">${s.nos}</div></div></div><div class="insp-owned">`;
+    p.car.owned.forEach(o=>{h+=`<div class="io"><span class="lvdot" style="background:${LV_COLOR[o.lvl]}"></span>${o.name} L${o.lvl} (${o.val>=0?'+':''}${o.val})</div>`;});
+    h+=`</div>`;
+  }
+  h+=`<div class="insp-note">La mano In-Gara di ${esc(p.name)} resta segreta.</div>`;
+  box.innerHTML=h;
+  document.getElementById('inspect').classList.add('show');
+}
+function closeInspect(){document.getElementById('inspect').classList.remove('show');}
 
 /* ---------- RESULTS / WIN ---------- */
 function champHTML(v){
@@ -509,7 +562,7 @@ function spectateHTML(v,txt){
   const a=v.players.find(p=>p.id===v.activeId)||{};
   let h=`<div class="eyebrow">Round ${v.round}</div><div class="spectate"><div class="sdot" style="background:${a.colorH||'var(--amber)'}"></div><div class="stitle">${esc(v.activeName||'')}</div><div class="stext">${txt}</div></div>`;
   h+=`<div class="panel"><div class="panel-h">Giocatori</div><div class="plist">`;
-  v.players.forEach(p=>{h+=`<div class="prow"><span class="pdot" style="background:${p.colorH}"></span><span class="pname">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span><span style="font-family:var(--mono);color:var(--po);font-size:12px">${p.po} PO</span></div>`;});
+  v.players.forEach(p=>{h+=`<div class="prow" style="cursor:pointer" onclick="openInspect(${p.id})"><span class="pdot" style="background:${p.colorH}"></span><span class="pname">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span><span style="font-family:var(--mono);color:var(--po);font-size:12px">${p.po} PO</span><span class="insp">🔍</span></div>`;});
   return h+'</div></div>';
 }
 
