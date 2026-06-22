@@ -261,13 +261,43 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .dash-top{align-items:flex-start}
 .dash-ab{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .dash-ab .part{font-family:var(--mono);color:var(--ink);font-size:11px;background:var(--asphalt-2);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+
+.top-right{display:flex;align-items:center;gap:10px}
+.pp-toggle{display:inline-flex;align-items:center;gap:6px;font-family:var(--disp);text-transform:uppercase;letter-spacing:.5px;font-size:11px;color:var(--ink);background:var(--asphalt-2);border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer}
+.pp-toggle:hover{border-color:var(--asphalt-3)}
+.pp-dot{width:12px;height:12px;border-radius:50%;flex:none}
+.ptype{font-family:var(--disp);text-transform:uppercase;letter-spacing:.4px;font-size:9.5px;font-weight:600;color:var(--tc);border:1px solid var(--tc);border-radius:5px;padding:1px 5px;white-space:nowrap}
+.drawer-bd{position:fixed;inset:0;background:#0008;opacity:0;pointer-events:none;transition:opacity .2s;z-index:44}
+.drawer-bd.show{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:300px;max-width:88vw;background:var(--asphalt-1);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .22s ease;z-index:45;display:flex;flex-direction:column;box-shadow:-14px 0 44px -16px #000}
+.drawer.open{transform:translateX(0)}
+.dw-head{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid var(--line);font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:13px}
+.dw-head button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1}
+.dw-list{flex:1;overflow-y:auto;padding:8px}
+.dw-row{width:100%;display:flex;align-items:center;gap:9px;padding:9px;border-radius:9px;background:transparent;border:1px solid transparent;cursor:pointer;text-align:left;color:var(--ink);margin-bottom:3px}
+.dw-row:hover{background:var(--asphalt-0);border-color:var(--line)}
+.dw-row.you{background:#1ad6ea10}
+.dw-pos{font-family:var(--mono);font-size:11px;color:var(--muted-2);width:15px;text-align:center}
+.dw-nm{flex:1;font-size:13px}
+.dw-po{font-family:var(--mono);font-size:12px;color:var(--po);width:30px;text-align:right}
+.dw-foot{padding:10px;border-top:1px solid var(--line)}
+.dw-hint{font-size:11px;color:var(--muted-2);text-align:center;padding:4px}
+.btn-restart{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:12px;color:var(--danger);background:transparent;border:1px solid #ff3b6b55;border-radius:9px;padding:11px;cursor:pointer}
+.btn-restart:hover{background:#ff3b6b14}
+.btn-danger{background:linear-gradient(180deg,#ff5d6e,var(--danger));color:#fff}
+.confirm-text{font-size:13px;color:var(--muted);line-height:1.55;margin:2px 0 16px}
+.confirm-row{display:flex;gap:9px}
+.confirm-row .btn{flex:1}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar">
     <div class="logo">2<b>FAST</b>4<span>U</span> <small>ONLINE</small></div>
-    <div id="topmeta" class="topmeta"></div>
+    <div class="top-right">
+      <button class="pp-toggle" id="drawer-toggle" onclick="toggleDrawer()" style="display:none">👥 Piloti</button>
+      <div id="topmeta" class="topmeta"></div>
+    </div>
   </div>
 
   <!-- HOME -->
@@ -325,6 +355,13 @@ h1.title em{font-style:italic;color:var(--cyan)}
 <div class="modal" id="picker"><div class="box"><div class="mh" id="picker-h">Scegli bersaglio</div><div id="picker-opts"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:4px" onclick="closePicker()">Annulla</button></div></div>
 <div class="modal" id="inspect"><div class="box"><div class="mh">Avversario</div><div id="inspect-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeInspect()">Chiudi</button></div></div>
 <div class="modal" id="segm"><div class="box"><div class="mh">Regole del tratto</div><div id="segm-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeSegRules()">Chiudi</button></div></div>
+<div class="drawer-bd" id="drawer-bd" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer">
+  <div class="dw-head"><span>Classifica · Piloti</span><button onclick="closeDrawer()">✕</button></div>
+  <div class="dw-list" id="drawer-list"></div>
+  <div class="dw-foot" id="drawer-foot"></div>
+</aside>
+<div class="modal" id="confirm"><div class="box"><div class="mh" id="confirm-title">Conferma</div><div id="confirm-text" class="confirm-text"></div><div class="confirm-row"><button class="btn btn-line btn-sm" id="confirm-cancel" onclick="closeConfirm()">Annulla</button><button class="btn btn-sm btn-primary" id="confirm-ok" onclick="doConfirm()">OK</button></div></div></div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -535,7 +572,7 @@ function renderPrep(v){
     v.betTargets.forEach(t=>{const sel=v.myBet&&v.myBet.targetId===t.id;h+=`<div class="bp ${sel?'sel':''}" onclick="setBetTarget(${t.id})"><span style="width:11px;height:11px;border-radius:50%;background:${t.colorH};display:inline-block"></span>${esc(t.name)}${t.you?' (tu)':''} <span class="q">x${t.quote}</span></div>`;});
     h+='</div><div class="row" style="align-items:center;margin-bottom:6px"><input class="nameinput" id="betamt" type="number" min="0" step="50" placeholder="Importo €" value="'+(v.myBet?v.myBet.amount:'')+'" style="flex:2"><button class="btn btn-line btn-sm" style="flex:1" onclick="clearBet()">Nessuna</button></div>';
   }
-  h+='<button class="btn btn-primary foot" onclick="socket.emit(\'prep:done\')">Pronto — passa il turno</button>';
+  h+='<button class="btn btn-primary foot" onclick="prepDone()">Pronto — passa il turno</button>';
   host.innerHTML=h;
   const amt=document.getElementById('betamt');
   if(amt){amt.onchange=()=>sendBet();amt.onblur=()=>sendBet();}
@@ -715,6 +752,52 @@ function spectateHTML(v,txt){
 }
 
 /* ---------- DISPATCH ---------- */
+const TYPE_COLOR={rettilineo:'#2fe6e0',citta:'#ff9e2c',drift:'#ff3b6b',fortuna:'#b07bff',nos:'#34c759'};
+function openDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('drawer-bd').classList.add('show');}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer-bd').classList.remove('show');}
+function toggleDrawer(){document.getElementById('drawer').classList.contains('open')?closeDrawer():openDrawer();}
+function renderDrawer(v){
+  const has=(v.phase==='prep'||v.phase==='race'||v.phase==='results'||v.phase==='win')&&Array.isArray(v.players);
+  const btn=document.getElementById('drawer-toggle');
+  if(btn)btn.style.display=has?'inline-flex':'none';
+  if(!has){closeDrawer();return;}
+  const ranked=[...v.players].sort((a,b)=>b.po-a.po||a.id-b.id);
+  let h='';
+  ranked.forEach((p,i)=>{
+    const tc=p.pilot?(TYPE_COLOR[p.pilot.tipo]||'var(--muted)'):'var(--muted)';
+    const tl=p.pilot?p.pilot.tipoLabel:'\u2014';
+    const me=p.id===v.you.id;
+    h+=`<button class="dw-row${me?' you':''}" onclick="openInspect(${p.id})"><span class="dw-pos">${i+1}</span><span class="pp-dot" style="background:${p.colorH}"></span><span class="dw-nm">${esc(p.name)}${me?' (tu)':''}</span><span class="ptype" style="--tc:${tc}">${esc(tl)}</span><span class="dw-po">${p.po}</span></button>`;
+  });
+  document.getElementById('drawer-list').innerHTML=h;
+  document.getElementById('drawer-foot').innerHTML=v.you.isHost
+    ?`<button class="btn-restart" onclick="confirmRestart()">\u21bb Riavvia partita</button>`
+    :`<div class="dw-hint">Solo l'host pu\u00f2 riavviare la partita.</div>`;
+}
+function confirmRestart(){showConfirm('Riavviare la partita?','Tornerete tutti in lobby con gli stessi giocatori. Punti Onore, soldi e potenziamenti verranno azzerati.','Riavvia',()=>socket.emit('restartGame'),{danger:true});}
+let _confirmCb=null;
+function showConfirm(title,text,okLabel,cb,opts){
+  opts=opts||{};
+  document.getElementById('confirm-title').textContent=title;
+  document.getElementById('confirm-text').textContent=text;
+  const ok=document.getElementById('confirm-ok');
+  ok.textContent=okLabel; ok.className='btn btn-sm '+(opts.danger?'btn-danger':'btn-primary');
+  document.getElementById('confirm-cancel').textContent=opts.cancel||'Annulla';
+  _confirmCb=cb; document.getElementById('confirm').classList.add('show');
+}
+function closeConfirm(){document.getElementById('confirm').classList.remove('show');_confirmCb=null;}
+function doConfirm(){const cb=_confirmCb;closeConfirm();if(cb)cb();}
+function prepDone(){
+  const v=LAST; if(!v){socket.emit('prep:done');return;}
+  const maxBuys=(v.round===1)?2:1;
+  const boughtNothing=v.me&&v.me.buysLeft===maxBuys;
+  const canBuy=Array.isArray(v.shop)&&v.shop.some(c=>c.buyable);
+  if(boughtNothing&&canBuy){
+    showConfirm('Non hai comprato nulla','Hai ancora un acquisto disponibile e i soldi per prendere qualcosa in officina. Vuoi passare lo stesso il turno?','Passa comunque',()=>socket.emit('prep:done'),{cancel:'Torna in officina'});
+    return;
+  }
+  socket.emit('prep:done');
+}
 function render(v){
   LAST=v;
   document.body.classList.toggle('race-mode', v.phase==='race');
@@ -727,6 +810,7 @@ function render(v){
   else if(v.phase==='race')renderRace(v);
   else if(v.phase==='results')renderResults(v);
   else if(v.phase==='win')renderWin(v);
+  renderDrawer(v);
 }
 
 socket.on('state',render);

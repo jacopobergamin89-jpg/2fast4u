@@ -124,6 +124,21 @@ function startGame(room){
   G.round=0; room.started=true;
   G.phase='reveal'; G.players.forEach(p=>{ p.ready=false; });
 }
+function restartGame(room){
+  const G=room.G;
+  if(room._botTimer){ clearTimeout(room._botTimer); room._botTimer=null; }
+  room.started=false;
+  G.phase='lobby';
+  G.round=0; G.R=null; G.lastResults=null; G.winner=null;
+  G.shop=[]; G.track=[]; G.pilotPool=null; G.deck=null; G.order=[]; G.diceOrder=[];
+  G.players.forEach((p,i)=>{
+    p.pilot=null; p.drew=false; p.ready=false;
+    p.money=3000; p.po=0;
+    p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0};
+    p.hand=[]; p.bet=null;
+    p.lastRank=i; p.prevRank=i; p.roll=0;
+  });
+}
 function actDrawPilot(room,p){
   const G=room.G; if(G.phase!=='reveal') return 'Non in fase di pesca.';
   if(p.drew) return 'Hai già pescato il pilota.';
@@ -548,6 +563,12 @@ io.on('connection', (socket)=>{
     const f=playerBySocket(socket); if(!f) return; const {room,p}=f;
     if(p.id!==room.hostId || room.started || room.G.players.length<2) return;
     startGame(room); broadcast(room); scheduleBot(room);
+  });
+
+  socket.on('restartGame', ()=>{
+    const f=playerBySocket(socket); if(!f) return; const {room,p}=f;
+    if(p.id!==room.hostId) return;
+    restartGame(room); broadcast(room);
   });
 
   function handle(fn){ return (payload)=>{ const f=playerBySocket(socket); if(!f) return; const err=fn(f.room,f.p,payload||{}); if(err) socket.emit('errorMsg', err); broadcast(f.room); scheduleBot(f.room); }; }
