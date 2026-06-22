@@ -398,7 +398,7 @@ function buildView(room, player){
 
   if(G.phase==='race'){
     const R=G.R; const active=activeRace(G); v.activeId=active.id; v.activeName=active.name; v.isYourTurn=active.id===player.id;
-    v.turn=R.turn; v.track=trackView(G); v.cars=G.players.map(p=>({ id:p.id, colorH:DB.colori[p.colorIdx].h, ini:ini(p.name), pos:R.cars[p.id].pos }));
+    v.turn=R.turn; v.track=trackView(G); v.cars=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, ini:ini(p.name), pos:R.cars[p.id].pos }));
     if(v.isYourTurn){
       const p=player; const car=R.cars[p.id]; const seg=segOf(G,Math.max(1,car.pos));
       const fxVel=fxSum(R,p,'vel'),fxCtrl=fxSum(R,p,'ctrl');
