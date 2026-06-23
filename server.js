@@ -116,7 +116,7 @@ function buildInitialTrack(G){
   const pool=shuffle(ROADS[1].map(c=>({...c,lvl:1})));
   const rett=pool.find(c=>c.t==='rettilineo'); const cards=[rett];
   pool.filter(c=>c!==rett).slice(0,4).forEach(c=>cards.push(c));
-  layoutTrack(cards); G.track=cards;
+  layoutTrack(cards); G.track=cards; G.trackLevel=1;
 }
 function trackTopLevel(G){ return G.track[G.track.length-1].lvl; }
 function segOf(G,sq){ const s=Math.max(1,sq); return G.track.find(c=>s>=c.from&&s<=c.to)||G.track[G.track.length-1]; }
@@ -167,8 +167,8 @@ function startRound(room){
   if(G.round===1) G.order=[...G.diceOrder];
   else G.order=[...G.players].sort((a,b)=>b.lastRank-a.lastRank||a.id-b.id).map(p=>p.id);
   G.maxBuys=(G.round===1)?2:1;
-  G.compMaxLevel=trackTopLevel(G);
-  G.raceLevel=trackTopLevel(G);
+  G.compMaxLevel=G.trackLevel;
+  G.raceLevel=G.trackLevel;
   G.entryFee=DB.roadBasePrice[G.raceLevel];
   G.raceFirstRollDone=false;
   rebuildShop(room);
@@ -339,11 +339,20 @@ function endRace(room){
 }
 function advanceTrack(room){
   const G=room.G;
+  const L=G.trackLevel;
   const crossed=G.players.map(p=>{ const pos=G.R.cars[p.id].pos; return G.track.filter(c=>c.to<=pos).length; });
   const passedAll=Math.min(...crossed);
-  let change={ passedAll, addedCount:0, oldLevel:null, newLevel:null };
-  if(passedAll>=2){ const removed=G.track.slice(0,passedAll); const newLvl=removed[0].lvl+1; G.track=G.track.slice(passedAll); for(let k=0;k<passedAll;k++) G.track.push(newCardOfLevel(newLvl)); change.addedCount=passedAll; change.oldLevel=removed[0].lvl; change.newLevel=G.track[G.track.length-1].lvl; }
-  else if(passedAll===1){ const removed=G.track[0]; G.track=G.track.slice(1); G.track.push(newCardOfLevel(removed.lvl)); change.addedCount=1; change.oldLevel=removed.lvl; change.newLevel=G.track[G.track.length-1].lvl; }
+  let change={ passedAll, addedCount:0, oldLevel:L, newLevel:L, advanced:false };
+  if(passedAll>=1){
+    const removed=G.track.slice(0,passedAll);
+    const maxPassed=removed.filter(c=>c.lvl>=L).length;          // strade del livello MASSIMO superate da tutti
+    const advance=(maxPassed>=2)&&(L<DB.maxLevelRoads);          // si sale solo superando >=2 strade del livello max
+    if(advance) G.trackLevel=L+1;
+    const fillLvl=advance?(L+1):L;                               // se non si sale, si riempie col livello max attuale
+    G.track=G.track.slice(passedAll);
+    for(let k=0;k<passedAll;k++) G.track.push(newCardOfLevel(fillLvl));
+    change.addedCount=passedAll; change.newLevel=G.trackLevel; change.advanced=advance;
+  }
   layoutTrack(G.track);
   G.lastTrackChange=change;
 }
