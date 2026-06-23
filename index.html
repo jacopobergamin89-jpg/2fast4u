@@ -1197,9 +1197,8 @@ function trackInfoHTML(v){
   const comp=Object.keys(counts).sort().map(l=>`<span class="ti-lv lv${l}">L${l}</span>\u00d7${counts[l]}`).join(' \u00b7 ');
   const c=ti.change||{};
   let note,cls;
-  if(c.passedAll>=2 && c.newLevel>c.oldLevel){ note=`La pista sale al livello ${c.newLevel}: ${c.addedCount} nuove strade in coda per la prossima gara.`; cls='up'; }
-  else if(c.passedAll>=2){ note=`La pista avanza di ${c.addedCount} strade (gi\u00e0 al livello massimo L${c.newLevel}).`; cls='same'; }
-  else if(c.passedAll===1){ note='La pista avanza di 1 strada (stesso livello).'; cls='same'; }
+  if(c.advanced){ note=`La pista sale al livello ${c.newLevel}: ${c.addedCount} nuove strade L${c.newLevel} in coda per la prossima gara.`; cls='up'; }
+  else if(c.passedAll>=1){ note=`La pista avanza di ${c.addedCount} ${c.addedCount===1?'strada':'strade'} (livello massimo L${c.newLevel} invariato).`; cls='same'; }
   else { note='Pista invariata: nessuno ha superato strade in comune.'; cls='none'; }
   return `<div class="panel" style="margin-top:6px"><div class="panel-h">Pista</div><div class="trackinfo"><div class="ti-comp"><span class="ti-lab">Strade gara</span><b>${lv.length}</b> \u00b7 ${comp}</div><div class="ti-note ti-${cls}">${note}</div></div></div>`;
 }
