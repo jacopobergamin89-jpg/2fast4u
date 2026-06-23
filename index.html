@@ -472,6 +472,7 @@ function ini(n){return(n||'?')[0].toUpperCase();}
 function eur(n){return '€'+Math.round(n).toLocaleString('it-IT');}
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
+function flash(msg,kind){const f=document.getElementById('flash');if(!f)return;f.textContent=msg;f.classList.remove('hostile','mine');if(kind)f.classList.add(kind);f.classList.add('show');clearTimeout(f._t);f._t=setTimeout(()=>f.classList.remove('show'),2600);}
 function topMeta(t){document.getElementById('topmeta').textContent=t||'';}
 
 /* ---------- HOME ---------- */
@@ -755,19 +756,24 @@ function _cardNm(idx){const hh=(LAST&&LAST.me&&LAST.me.hand)||[];const c=hh.find
 function _rivNm(tid){const r=(LAST&&LAST.me&&LAST.me.rivals)||[];const x=r.find(y=>y.id===tid);return x?x.name:'rivale';}
 function playCard(idx,target){
   const v=LAST;
+  const rivals=(v.me&&v.me.rivals)||[];
   if(target==='self'){
-    if((v.players||[]).length>2){
+    // bonus: in 2 giocatori solo su di te; con più di 2 puoi scegliere
+    if(rivals.length>=2){
       const opts=document.getElementById('picker-opts');opts.innerHTML='';
       document.getElementById('picker-h').textContent='A chi la dai?';
       opts.innerHTML+=`<div class="opt" onclick="pickTarget(${idx},${v.you.id})"><span class="pdot" style="background:${v.you.colorH}"></span><span class="pname">Su di te</span></div>`;
-      v.me.rivals.forEach(r=>{opts.innerHTML+=`<div class="opt" onclick="pickTarget(${idx},${r.id})"><span class="pdot" style="background:${r.colorH}"></span><span class="pname">${esc(r.name)}</span></div>`;});
+      rivals.forEach(r=>{opts.innerHTML+=`<div class="opt" onclick="pickTarget(${idx},${r.id})"><span class="pdot" style="background:${r.colorH}"></span><span class="pname">${esc(r.name)}</span></div>`;});
       document.getElementById('picker').classList.add('show');return;
     }
     flash('Hai giocato \u00ab'+_cardNm(idx)+'\u00bb su di te','mine');socket.emit('race:playCard',{handIdx:idx});return;
   }
+  // malus: un solo rivale -> diretto; più rivali -> scegli
+  if(!rivals.length){toast('Nessun avversario');return;}
+  if(rivals.length===1){const r=rivals[0];flash('Hai giocato \u00ab'+_cardNm(idx)+'\u00bb su '+r.name,'mine');socket.emit('race:playCard',{handIdx:idx,targetId:r.id});return;}
   const opts=document.getElementById('picker-opts');opts.innerHTML='';
   document.getElementById('picker-h').textContent='Scegli bersaglio';
-  v.me.rivals.forEach(r=>{opts.innerHTML+=`<div class="opt" onclick="pickTarget(${idx},${r.id})"><span class="pdot" style="background:${r.colorH}"></span><span class="pname">${esc(r.name)}</span></div>`;});
+  rivals.forEach(r=>{opts.innerHTML+=`<div class="opt" onclick="pickTarget(${idx},${r.id})"><span class="pdot" style="background:${r.colorH}"></span><span class="pname">${esc(r.name)}</span></div>`;});
   document.getElementById('picker').classList.add('show');
 }
 function pickTarget(idx,tid){const self=(LAST&&tid===LAST.you.id);flash('Hai giocato \u00ab'+_cardNm(idx)+'\u00bb '+(self?'su di te':'su '+_rivNm(tid)),'mine');closePicker();if(self)socket.emit('race:playCard',{handIdx:idx});else socket.emit('race:playCard',{handIdx:idx,targetId:tid});}
