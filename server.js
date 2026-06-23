@@ -87,7 +87,9 @@ const C_PREGARA = [
  ['Bravo, aiuti il prossimo','po',1],['Quando meno se lo aspettano','po',2],['Mi sembra giusto cosi','po',2],
  ['Beccato','po',-1],['Un piccolo sgarro, ti costa caro','po',-1],['Non puoi andare avanti sempre così','po',-2],
  ['Arriva bonifica dallo zio del Molise','money',250],['Ieri sera hai vinto a Poker','money',500],['Il tuo cane vince il primo premio','money',500],
- ['Arrivano le tasse arretrate','money',-250],['Arriva la multa per eccesso velocità','money',-500],['I debiti si pagano','money',-500]
+ ['Arrivano le tasse arretrate','money',-250],['Arriva la multa per eccesso velocità','money',-500],['I debiti si pagano','money',-500],
+ ['Arrivano gli sponsor','prizeUp',2],['La fortuna ti assiste','prizeUp',2],['Pareggiamo le cose','prizeDown',0.5],['Pareggiamo i conti','prizeDown',0.5],
+ ['Anche gli altri puntano su di te','betUp',2],['Il broker ti fa un regalo','betUp',2],['La quota cala all\'ultimo','betDown',0.5]
 ];
 
 /* ============================ UTIL ============================ */
@@ -173,7 +175,7 @@ function startRound(room){
   G.raceFirstRollDone=false;
   rebuildShop(room);
   G.ppIdx=0; G.phase='prep'; G.R=null; G.lastResults=null;
-  G.players.forEach(p=>{ p.bet=null; });
+  G.players.forEach(p=>{ p.bet=null; p.prizeMult=1; p.betMult=1; });
   curPrep(G).buysLeft=G.maxBuys;
 }
 function rebuildShop(room){
@@ -206,12 +208,16 @@ function actBuy(room,p,shopIdx){
   const price=priceFor(G,p,card.comp,card.lvl); if(p.money<price) return 'Denaro insufficiente.';
   p.money-=price; p.comp[card.comp]=card.lvl; p.buysLeft--; G.shop.splice(shopIdx,1); return null;
 }
+function pregaraTarget(c){ if(c.eff==='prizeDown'||c.eff==='betDown') return 'rival'; if((c.eff==='money'||c.eff==='po')&&c.val<0) return 'rival'; return 'self'; }
 function actPlayPregara(room,p,handIdx,targetId){
   const G=room.G; if(G.phase!=='prep'||curPrep(G).id!==p.id) return 'Non è il tuo turno.';
   const c=p.hand[handIdx]; if(!c||c.cat!=='pregara') return 'Carta non valida.';
   let tgt=p;
-  if(c.val<0){ const t=G.players.find(x=>x.id===targetId && x.id!==p.id); if(!t) return 'Scegli un avversario valido.'; tgt=t; }
-  if(c.eff==='money') tgt.money=Math.max(0,tgt.money+c.val); else if(c.eff==='po') tgt.po=Math.max(0,tgt.po+c.val);
+  if(pregaraTarget(c)==='rival'){ const t=G.players.find(x=>x.id===targetId && x.id!==p.id); if(!t) return 'Scegli un avversario valido.'; tgt=t; }
+  if(c.eff==='money') tgt.money=Math.max(0,tgt.money+c.val);
+  else if(c.eff==='po') tgt.po=Math.max(0,tgt.po+c.val);
+  else if(c.eff==='prizeUp'||c.eff==='prizeDown') tgt.prizeMult=(tgt.prizeMult||1)*c.val;
+  else if(c.eff==='betUp'||c.eff==='betDown') tgt.betMult=(tgt.betMult||1)*c.val;
   G.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
 function actSetBet(room,p,targetId,amount){
@@ -316,7 +322,8 @@ function endRace(room){
   const ranked=[...G.players].sort((a,b)=>G.R.cars[b.id].pos-G.R.cars[a.id].pos||Math.random()-0.5);
   const N=G.players.length; const base=DB.roadBasePrice[G.raceLevel];
   ranked.forEach((p,i)=>{
-    const po=DB.premiPO[i]||0; const money=Math.max(base, Math.round(base*(DB.premiMult[i]||0)));
+    const po=DB.premiPO[i]||0; let money=Math.max(base, Math.round(base*(DB.premiMult[i]||0)));
+    money=Math.round(money*(p.prizeMult||1));
     p.po=Math.max(0,p.po+po); p.money+=money; p.prevRank=p.lastRank; p.lastRank=i;
     p._gainPO=po; p._gainMoney=money; p._betDelta=0; p._betWin=false; p._finalPos=i+1;
   });
@@ -324,7 +331,7 @@ function endRace(room){
   G.players.forEach(p=>{
     if(p.bet && p.bet.targetId!=null && p.bet.amount>0){
       const t=G.players.find(x=>x.id===p.bet.targetId); const q=DB.quoteScommessa[Math.min(7,t.prevRank)];
-      if(p.bet.targetId===winnerId){ const payout=Math.round(p.bet.amount*q); p.money+=p.bet.amount+payout; p._betDelta=payout; p._betWin=true; }
+      if(p.bet.targetId===winnerId){ const payout=Math.round(p.bet.amount*q*(p.betMult||1)); p.money+=p.bet.amount+payout; p._betDelta=payout; p._betWin=true; }
       else { p._betDelta=-p.bet.amount; }
     }
     p.bet=null;
@@ -421,7 +428,7 @@ function buildView(room, player){
     v.compMaxLevel=G.compMaxLevel;
     if(v.isYourTurn){
       const p=player;
-      v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length };
+      v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1) };
       v.shop=G.shop.map((card,idx)=>{
         const cur=p.comp[card.comp]; const usable=card.lvl>cur && card.lvl<=G.compMaxLevel; const okLimit=canHaveAtLevel(p,card.comp,card.lvl);
         const price=priceFor(G,p,card.comp,card.lvl); const skip=card.lvl>cur+1;
@@ -429,7 +436,7 @@ function buildView(room, player){
         return { idx, comp:card.comp, name:DB.nomi[card.comp], lvl:card.lvl, val:DB.valori[card.comp][card.lvl], cur, price, skip,
           buyable: usable && okLimit && p.buysLeft>0 && p.money>=price, reason };
       });
-      v.pregara=p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val })).filter(c=>c.cat==='pregara');
+      v.pregara=p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c) })).filter(c=>c.cat==='pregara');
       v.canBet = G.round>=2;
       if(v.canBet){
         v.betTargets=G.players.map(t=>({ id:t.id, name:t.name, colorH:DB.colori[t.colorIdx].h, quote:DB.quoteScommessa[Math.min(7,t.lastRank)], you:t.id===p.id }));
@@ -502,7 +509,7 @@ function botPrep(room,bot){
     });
     if(actBuy(room,bot,opts[0].idx)) break;
   }
-  for(let i=bot.hand.length-1;i>=0;i--){ const c=bot.hand[i]; if(c.cat!=='pregara')continue; if((c.eff==='money'&&c.val>0)||(c.eff==='po'&&c.val>0)) actPlayPregara(room,bot,i); else if(c.val<0){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>b.po-a.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); } }
+  for(let i=bot.hand.length-1;i>=0;i--){ const c=bot.hand[i]; if(c.cat!=='pregara')continue; const self=(c.eff==='money'&&c.val>0)||(c.eff==='po'&&c.val>0)||c.eff==='prizeUp'||c.eff==='betUp'; const rival=(c.val<0)||c.eff==='prizeDown'||c.eff==='betDown'; if(self) actPlayPregara(room,bot,i); else if(rival){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>b.po-a.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); } }
   actPrepDone(room,bot);
 }
 function botRace(room,bot){

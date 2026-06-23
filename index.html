@@ -551,6 +551,7 @@ body:has(#s-home.active) .topbar{display:none}
 .mof-minip .d{width:7px;height:7px;border-radius:2px;background:var(--c,#888)}
 .mof-minip .l{color:var(--muted)}
 .mof-empty3{font-size:10px;color:var(--muted-2)}
+.mof-boost{margin-top:12px;padding:9px 12px;border-radius:11px;background:linear-gradient(90deg,rgba(255,201,30,.16),rgba(43,168,230,.12));border:1px solid var(--amber);color:var(--po);font-family:var(--disp);font-weight:600;font-size:13px;text-align:center;letter-spacing:.02em}
 /* intro video officina */
 .of-intro{position:fixed;inset:0;z-index:300;background:#000;display:flex;align-items:center;justify-content:center;opacity:1;transition:opacity .4s ease}
 .of-intro.hide{opacity:0}
@@ -731,11 +732,24 @@ function doStart(){socket.emit('startGame');}
 function cardDesc(c){
   if(c.eff==='money')return (c.val>=0?'+':'')+eur(c.val);
   if(c.eff==='po')return (c.val>=0?'+':'')+c.val+' Punti Onore';
+  if(c.eff==='prizeUp')return 'Montepremi ×2 (su di te)';
+  if(c.eff==='prizeDown')return 'Montepremi ÷2 (a un rivale)';
+  if(c.eff==='betUp')return 'Scommessa ×2 (su di te)';
+  if(c.eff==='betDown')return 'Scommessa ÷2 (a un rivale)';
   const r=c.target==='rival'?' · su un rivale':'';
   if(c.eff==='vel')return (c.val>=0?'+':'')+c.val+' Velocità · '+c.dur+(c.dur===1?' tiro':' tiri')+r;
   if(c.eff==='ctrl')return (c.val>=0?'+':'')+c.val+' Controllo · '+c.dur+(c.dur===1?' tiro':' tiri')+r;
   if(c.eff==='partenza')return 'Partenza '+(c.val>=0?'+':'')+c.val+r;
   if(c.eff==='dado')return 'Dado fisso = '+c.val+r;
+  return '';
+}
+function pregaraDesc(c){
+  if(c.eff==='money')return (c.val>=0?'+':'')+eur(c.val);
+  if(c.eff==='po')return (c.val>=0?'+':'')+c.val+' PO';
+  if(c.eff==='prizeUp')return 'Montepremi ×2';
+  if(c.eff==='prizeDown')return 'Montepremi ÷2';
+  if(c.eff==='betUp')return 'Scommessa ×2';
+  if(c.eff==='betDown')return 'Scommessa ÷2';
   return '';
 }
 function renderReveal(v){
@@ -870,7 +884,7 @@ function prepMobileHTML(v){
     garage=`<div class="mof-sech"><span class="mof-t">Il tuo garage</span><span class="mof-ln"></span></div><div class="mof-garage">${ofOwnedChips(m.owned,'Ancora nessun pezzo')}</div>`;
     pronto=`<button class="mof-pronto" onclick="prepDone()">Pronto — passa il turno →</button>`;
     if(v.pregara&&v.pregara.length){extra+='<div class="mof-sech"><span class="mof-t">Carte pre-gara</span><span class="mof-ln"></span></div>';
-      v.pregara.forEach(c=>{const neg=c.val<0;const desc=c.eff==='money'?(c.val>=0?'+':'')+eur(c.val):(c.val>=0?'+':'')+c.val+' PO';const oc=neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`;
+      v.pregara.forEach(c=>{const neg=c.target==='rival';const desc=pregaraDesc(c);const oc=neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`;
         extra+=`<div class="mof-pre"><div><b>${esc(c.nome)}</b><span class="mof-pre-d">${desc} · ${neg?'su un avversario':'su di te'}</span></div><button class="mof-gioca" onclick="${oc}">Gioca</button></div>`;});}
     if(v.canBet)extra+='<div class="mof-bet">Apri 👥 <b>Piloti</b> in alto per scommettere e vedere le puntate.</div>';
   }else{
@@ -885,7 +899,9 @@ function prepMobileHTML(v){
     others.forEach(p=>{const ow=(p.car&&p.car.owned?p.car.owned.filter(o=>o.lvl>0):[]);const chips=ow.length?ow.map(o=>{const mm=ofMeta(o.comp);return `<span class="mof-minip" style="--c:${mm.c}"><span class="d"></span>${mm.full} <span class="l">L${o.lvl}</span></span>`;}).join(''):'<span class="mof-empty3">nessun pezzo</span>';
       rail+=`<div class="mof-opp"><div class="mof-opp-top"><div class="mof-oav" style="--c:${p.colorH}">${ini(p.name)}</div><div class="mof-on">${esc(p.name)}</div><div class="mof-opo">${p.po} PO</div></div><div class="mof-oparts">${chips}</div></div>`;});
     rail+='</div>';}
-  return `<div class="mof"><div class="mof-hz"></div>${cassa}<div class="mof-body">${shop}${garage}${pronto}${extra}${rail}</div></div>`;
+  let boost='';
+  if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('×'+m):('÷'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,tg=[]; if(pm!==1)tg.push('🎁 Montepremi '+fmt(pm)); if(bm!==1)tg.push('🎲 Scommessa '+fmt(bm)); if(tg.length)boost='<div class="mof-boost">'+tg.join(' · ')+'</div>'; }
+  return `<div class="mof"><div class="mof-hz"></div>${cassa}<div class="mof-body">${boost}${shop}${garage}${pronto}${extra}${rail}</div></div>`;
 }
 function renderPrep(v){
   show('s-prep');topMeta('Round '+v.round);
@@ -913,7 +929,7 @@ function renderPrep(v){
   let extra='';
   if(v.isYourTurn){
     if(v.pregara&&v.pregara.length){extra+='<div class="of-extra"><div class="of-extra-h">Carte pre-gara in mano</div>';
-      v.pregara.forEach(c=>{const neg=c.val<0;const desc=c.eff==='money'?(c.val>=0?'+':'')+eur(c.val):(c.val>=0?'+':'')+c.val+' PO';const oc=neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`;extra+=`<div class="of-pre"><div><b>${esc(c.nome)}</b> <span class="of-pre-d">${desc} \u00b7 ${neg?'su un avversario':'su di te'}</span></div><button class="btn btn-line btn-sm" onclick="${oc}">Gioca</button></div>`;});
+      v.pregara.forEach(c=>{const neg=c.target==='rival';const desc=pregaraDesc(c);const oc=neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`;extra+=`<div class="of-pre"><div><b>${esc(c.nome)}</b> <span class="of-pre-d">${desc} \u00b7 ${neg?'su un avversario':'su di te'}</span></div><button class="btn btn-line btn-sm" onclick="${oc}">Gioca</button></div>`;});
       extra+='</div>';}
     if(v.canBet)extra+='<div class="of-bet-note">Apri \ud83d\udc65 <b>Piloti</b> in alto a destra per scommettere e vedere le puntate.</div>';
   }
