@@ -101,6 +101,7 @@ function statVal(p,k){ return DB.valori[k][p.comp[k]]; }
 const rooms = new Map();             // code -> room
 const socketToRoom = new Map();      // socket.id -> code
 function genCode(){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s; do{ s=''; for(let i=0;i<4;i++) s+=c[Math.floor(Math.random()*c.length)]; } while(rooms.has(s)); return s; }
+function cleanName(x){x=String(x||'').replace(/[\r\n\t]+/g,' ').replace(/^ {2,}/,' ').replace(/ +$/,'');return x.slice(0,8)||'Giocatore';}
 function freeColorIdx(room){ const used=new Set(room.G.players.map(p=>p.colorIdx)); for(let i=0;i<DB.colori.length;i++) if(!used.has(i)) return i; return -1; }
 function playerBySocket(socket){ const code=socketToRoom.get(socket.id); if(!code) return null; const room=rooms.get(code); if(!room) return null; const p=room.G.players.find(x=>x.socketId===socket.id); return p?{room,p}:null; }
 
@@ -227,7 +228,7 @@ function actPrepDone(room,p){
 /* --- gara --- */
 function startRace(room){
   const G=room.G;
-  G.R={ turnOrder:[...G.order], turn:1, ptr:0, phase:'await', cars:{}, lastBreak:null };
+  G.R={ turnOrder:[...G.order], turn:1, ptr:0, phase:'await', cars:{}, lastBreak:null, log:[], logId:0 };
   G.players.forEach(p=>{ G.R.cars[p.id]={ pos:0, firstDone:false, nosUsed:false, fx:[], pendDado:null, pendPart:0 }; });
   G.phase='race';
 }
@@ -260,6 +261,7 @@ function computeMove(G,p,die,useNos){
   return { lines, total, die, db, useNos, segType:seg.t, vel, ctrl };
 }
 
+function raceLog(G,e){ if(!G.R)return; e.id=++G.R.logId; e.t=G.R.turn; G.R.log.push(e); if(G.R.log.length>60)G.R.log.shift(); }
 function actRacePlayCard(room,p,handIdx,targetId){
   const G=room.G; if(G.phase!=='race') return 'Non in gara.';
   if(activeRace(G).id!==p.id) return 'Non è il tuo turno.';
@@ -271,6 +273,7 @@ function actRacePlayCard(room,p,handIdx,targetId){
   if(c.eff==='vel'||c.eff==='ctrl') tc.fx.push({stat:c.eff,amt:c.val,turns:c.dur});
   else if(c.eff==='partenza') tc.pendPart+=c.val;
   else if(c.eff==='dado') tc.pendDado=c.val;
+  raceLog(G,{kind:'card',who:p.name,target:target.name,targetId:target.id,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur});
   p.hand.splice(handIdx,1); return null;
 }
 function actRoll(room,p,useNos){
@@ -292,6 +295,7 @@ function actConfirmMove(room,p){
   if(b.useNos) car.nosUsed=true;
   car.firstDone=true; G.raceFirstRollDone=true;
   car.pos=Math.min(55,car.pos+b.total);
+  raceLog(G,{kind:'move',who:p.name,seg:TIPO_LABEL[b.segType]||b.segType,mov:b.total,pos:car.pos,die:b.die});
   car.pendPart=0; car.pendDado=null;
   car.fx=car.fx.map(e=>({...e,turns:e.turns-1})).filter(e=>e.turns>0);
   G.R.lastBreak=null; G.R.phase='await';
@@ -417,6 +421,7 @@ function buildView(room, player){
   if(G.phase==='race'){
     const R=G.R; const active=activeRace(G); v.activeId=active.id; v.activeName=active.name; v.isYourTurn=active.id===player.id;
     v.turn=R.turn; v.track=trackView(G); v.cars=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, ini:ini(p.name), pos:R.cars[p.id].pos }));
+    v.log=R.log.slice(-25).map(e=>({...e}));
     if(v.isYourTurn){
       const p=player; const car=R.cars[p.id]; const seg=segOf(G,Math.max(1,car.pos));
       const fxVel=fxSum(R,p,'vel'),fxCtrl=fxSum(R,p,'ctrl');
@@ -511,7 +516,7 @@ io.on('connection', (socket)=>{
   socket.on('createRoom', ({name,colorIdx}, cb)=>{
     const code=genCode();
     const room={ code, hostId:0, started:false, G:{ phase:'lobby', players:[], nextId:0 } };
-    const p={ id:0, socketId:socket.id, name:(name||'Giocatore').slice(0,16), colorIdx: (colorIdx>=0&&colorIdx<8)?colorIdx:0, connected:true };
+    const p={ id:0, socketId:socket.id, name:cleanName(name), colorIdx: (colorIdx>=0&&colorIdx<8)?colorIdx:0, connected:true };
     room.G.players.push(p); room.G.nextId=1; room.hostId=0;
     rooms.set(code, room); socketToRoom.set(socket.id, code); socket.join(code);
     if(cb) cb({ ok:true, code, youId:0 });
@@ -524,7 +529,7 @@ io.on('connection', (socket)=>{
     if(!room){ if(cb) cb({ ok:false, error:'Stanza inesistente.' }); return; }
     if(room.started){
       // tentativo di rientro per nome
-      const ex=room.G.players.find(x=>x.name.toLowerCase()===(name||'').toLowerCase().trim());
+      const ex=room.G.players.find(x=>x.name.toLowerCase()===cleanName(name).toLowerCase());
       if(ex){ ex.socketId=socket.id; ex.connected=true; socketToRoom.set(socket.id, code); socket.join(code); if(cb) cb({ ok:true, code, youId:ex.id, rejoined:true }); broadcast(room); return; }
       if(cb) cb({ ok:false, error:'Partita già iniziata.' }); return;
     }
@@ -533,7 +538,7 @@ io.on('connection', (socket)=>{
     if(room.G.players.some(x=>x.colorIdx===ci)){ ci=freeColorIdx(room); }
     if(ci<0){ if(cb) cb({ ok:false, error:'Nessun colore libero.' }); return; }
     const id=room.G.nextId++;
-    const p={ id, socketId:socket.id, name:(name||'Giocatore').slice(0,16), colorIdx:ci, connected:true };
+    const p={ id, socketId:socket.id, name:cleanName(name), colorIdx:ci, connected:true };
     room.G.players.push(p); socketToRoom.set(socket.id, code); socket.join(code);
     if(cb) cb({ ok:true, code, youId:id });
     broadcast(room);

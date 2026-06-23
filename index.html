@@ -288,12 +288,37 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .confirm-text{font-size:13px;color:var(--muted);line-height:1.55;margin:2px 0 16px}
 .confirm-row{display:flex;gap:9px}
 .confirm-row .btn{flex:1}
+/* ===== v4 gara: viewport lock + classifica agganciata + log ===== */
+.topleft{display:flex;align-items:center;gap:10px;min-width:0}
+.dockpanel{background:var(--asphalt-0);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:14px}
+.dockpanel-h{padding:10px 13px;font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:12px;color:var(--ink);background:var(--asphalt-1);border-bottom:1px solid var(--line)}
+.dockpanel-body{padding:8px}
+.logdrawer{left:0;right:auto;border-left:none;border-right:1px solid var(--line);transform:translateX(-100%);box-shadow:14px 0 44px -16px #000}
+.logdrawer.open{transform:translateX(0)}
+.log-entry{font-size:12.5px;color:var(--ink);padding:7px 9px;border-radius:8px;margin-bottom:3px;background:var(--asphalt-0);border:1px solid transparent;line-height:1.35}
+.log-entry .lg-t{font-family:var(--mono);font-size:10px;color:var(--muted-2);margin-right:6px}
+.log-entry .lg-who{font-weight:600}
+.log-entry.lg-card{background:#b07bff14}
+.log-entry.lg-hit{background:#ff3b6b1f;border-color:#ff3b6b55}
+.log-empty{font-size:12px;color:var(--muted-2);text-align:center;padding:14px 4px}
+@media(min-width:900px){
+  body.race-mode{overflow:hidden}
+  body.race-mode .wrap{height:100vh;min-height:0}
+  body.race-mode #s-race.active{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;padding-bottom:10px}
+  body.race-mode #s-race .race-head,body.race-mode #s-race .track,body.race-mode #s-race .trackcap{flex:none}
+  body.race-mode #s-race .race-grid3{flex:1;min-height:0;overflow:hidden;align-items:stretch}
+  body.race-mode #s-race .race-grid3>div{min-height:0;max-height:100%;overflow-y:auto;padding-right:3px}
+  body.race-mode #s-race .dash{padding:12px}
+  body.race-mode #s-race .gauges .gv{font-size:22px}
+  body.race-mode #s-race .dash .hand{max-height:none;overflow:visible}
+  body.race-mode #s-race .trackcap{margin-bottom:8px}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar">
-    <div class="logo">2<b>FAST</b>4<span>U</span> <small>ONLINE</small></div>
+    <div class="topleft"><div class="logo">2<b>FAST</b>4<span>U</span> <small>ONLINE</small></div><button class="pp-toggle" id="log-toggle" onclick="toggleLog()" style="display:none">📋 Log</button></div>
     <div class="top-right">
       <button class="pp-toggle" id="drawer-toggle" onclick="toggleDrawer()" style="display:none">👥 Piloti</button>
       <div id="topmeta" class="topmeta"></div>
@@ -308,7 +333,7 @@ h1.title em{font-style:italic;color:var(--cyan)}
     <p class="sub">Crea una partita e condividi il codice, oppure entra con il codice di un amico. Ognuno gioca dal proprio dispositivo.</p>
     <div class="panel">
       <div class="field-lab">Il tuo nome</div>
-      <input class="nameinput" id="home-name" maxlength="16" placeholder="Es. Jacopo">
+      <input class="nameinput" id="home-name" maxlength="8" placeholder="Es. Jacopo" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <div class="field-lab">Colore auto</div>
       <div class="swatches" id="home-colors"></div>
     </div>
@@ -355,6 +380,11 @@ h1.title em{font-style:italic;color:var(--cyan)}
 <div class="modal" id="picker"><div class="box"><div class="mh" id="picker-h">Scegli bersaglio</div><div id="picker-opts"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:4px" onclick="closePicker()">Annulla</button></div></div>
 <div class="modal" id="inspect"><div class="box"><div class="mh">Avversario</div><div id="inspect-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeInspect()">Chiudi</button></div></div>
 <div class="modal" id="segm"><div class="box"><div class="mh">Regole del tratto</div><div id="segm-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeSegRules()">Chiudi</button></div></div>
+<div class="drawer-bd logbd" id="log-bd" onclick="closeLog()"></div>
+<aside class="drawer logdrawer" id="logdrawer">
+  <div class="dw-head">📋 Log gara <button onclick="closeLog()">✕</button></div>
+  <div class="dw-list" id="log-list"></div>
+</aside>
 <div class="drawer-bd" id="drawer-bd" onclick="closeDrawer()"></div>
 <aside class="drawer" id="drawer">
   <div class="dw-head"><span>Classifica · Piloti</span><button onclick="closeDrawer()">✕</button></div>
@@ -386,18 +416,22 @@ function renderHomeColors(){
   COLORS.forEach((c,i)=>{h.innerHTML+=`<div class="swatch ${ME.colorIdx===i?'sel':''}" style="background:${c.h}" onclick="pickHomeColor(${i})"></div>`;});
 }
 function pickHomeColor(i){ME.colorIdx=i;renderHomeColors();}
+(function killAutofill(){var el=document.getElementById('home-name');if(el){el.setAttribute('name','pn'+Math.random().toString(36).slice(2));el.setAttribute('autocomplete','off');}})();
+function cleanName(raw){let n=String(raw||'').replace(/[\r\n\t]+/g,' ');n=n.replace(/^ {2,}/,' ');n=n.replace(/ +$/,'');return n.slice(0,8);}
+function nameOk(n){return /[0-9A-Za-z\u00C0-\u017F]/.test(n);}
+function readName(){const el=document.getElementById('home-name');const n=cleanName(el.value);el.value=n;return n;}
 function doCreate(){
-  const name=document.getElementById('home-name').value.trim();
-  if(!name){toast('Scrivi il tuo nome');return;}
+  const name=readName();
+  if(!nameOk(name)){toast('Nome non valido: serve almeno una lettera o un numero (max 8 caratteri)');return;}
   ME.name=name;
   socket.emit('createRoom',{name,colorIdx:ME.colorIdx},(res)=>{
     if(res&&res.ok){ME.id=res.youId;ME.code=res.code;ME.joined=true;}else toast((res&&res.error)||'Errore');
   });
 }
 function doJoin(){
-  const name=document.getElementById('home-name').value.trim();
+  const name=readName();
   const code=document.getElementById('home-code').value.trim().toUpperCase();
-  if(!name){toast('Scrivi il tuo nome');return;}
+  if(!nameOk(name)){toast('Nome non valido: serve almeno una lettera o un numero (max 8 caratteri)');return;}
   if(code.length<4){toast('Codice non valido');return;}
   ME.name=name;
   socket.emit('joinRoom',{code,name,colorIdx:ME.colorIdx},(res)=>{
@@ -600,7 +634,7 @@ function renderRace(v){
   if(v.isYourTurn){ h+=dashHTML(v); }
   else{ h+=`<div class="dash" style="--dc:${actColor(v)}"><div class="spectate" style="padding:24px 8px"><div class="sdot" style="background:${actColor(v)}"></div><div class="stitle">${esc(v.activeName)}</div><div class="stext">sta correndo… attendi il tuo turno</div></div></div>`; }
   h+='</div>';
-  h+='<div class="race-col-rules">'+segRulesHTML(v)+'</div>';
+  h+='<div class="race-col-rules">'+segRulesHTML(v)+classificaPanelHTML(v)+'</div>';
   h+='</div>';
   host.innerHTML=h;
   startTokens(v);
@@ -756,8 +790,60 @@ const TYPE_COLOR={rettilineo:'#2fe6e0',citta:'#ff9e2c',drift:'#ff3b6b',fortuna:'
 function openDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('drawer-bd').classList.add('show');}
 function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer-bd').classList.remove('show');}
 function toggleDrawer(){document.getElementById('drawer').classList.contains('open')?closeDrawer():openDrawer();}
+function cardEffShort(e){
+  if(e.eff==='vel')return (e.val>0?'+':'')+e.val+' Vel';
+  if(e.eff==='ctrl')return (e.val>0?'+':'')+e.val+' Ctrl';
+  if(e.eff==='partenza')return 'Partenza '+(e.val>0?'+':'')+e.val;
+  if(e.eff==='dado')return 'Dado='+e.val;
+  return '';
+}
+function classificaPanelHTML(v){
+  if(!Array.isArray(v.players))return '';
+  const ranked=[...v.players].sort((a,b)=>b.po-a.po||a.id-b.id);
+  let h='<div class="dockpanel"><div class="dockpanel-h">Classifica</div><div class="dockpanel-body">';
+  ranked.forEach((p,i)=>{
+    const tc=p.pilot?(TYPE_COLOR[p.pilot.tipo]||'var(--muted)'):'var(--muted)';
+    const tl=p.pilot?p.pilot.tipoLabel:'\u2014';
+    const me=p.id===v.you.id;
+    h+=`<button class="dw-row${me?' you':''}" onclick="openInspect(${p.id})"><span class="dw-pos">${i+1}</span><span class="pp-dot" style="background:${p.colorH}"></span><span class="dw-nm">${esc(p.name)}${me?' (tu)':''}</span><span class="ptype" style="--tc:${tc}">${esc(tl)}</span><span class="dw-po">${p.po}</span></button>`;
+  });
+  return h+'</div></div>';
+}
+function openLog(){document.getElementById('logdrawer').classList.add('open');document.getElementById('log-bd').classList.add('show');}
+function closeLog(){document.getElementById('logdrawer').classList.remove('open');document.getElementById('log-bd').classList.remove('show');}
+function toggleLog(){document.getElementById('logdrawer').classList.contains('open')?closeLog():openLog();}
+function renderLog(v){
+  const btn=document.getElementById('log-toggle');
+  const has=v.phase==='race'&&Array.isArray(v.log);
+  if(btn)btn.style.display=has?'inline-flex':'none';
+  if(!has){closeLog();return;}
+  const list=document.getElementById('log-list');
+  if(!v.log.length){list.innerHTML='<div class="log-empty">Ancora nessuna mossa in questa gara.</div>';return;}
+  let h='';
+  for(let i=v.log.length-1;i>=0;i--){
+    const e=v.log[i];
+    if(e.kind==='move'){
+      h+=`<div class="log-entry"><span class="lg-t">T${e.t}</span><span class="lg-who">${esc(e.who)}</span> \u2014 ${esc(e.seg||'')} \u00b7 mov <b>${e.mov}</b> \u2192 cas. ${e.pos}</div>`;
+    } else if(e.kind==='card'){
+      const hit=(e.targetId===v.you.id)&&(e.who!==v.you.name);
+      const onSelf=(e.target===e.who);
+      h+=`<div class="log-entry lg-card${hit?' lg-hit':''}"><span class="lg-t">T${e.t}</span><span class="lg-who">${esc(e.who)}</span> gioca \u00ab${esc(e.nome)}\u00bb ${cardEffShort(e)} \u00b7 ${onSelf?'su di s\u00e9':('su '+esc(e.target))}</div>`;
+    }
+  }
+  list.innerHTML=h;
+}
+let _lastToastId=0,_logRound=-1;
+function checkIncoming(v){
+  if(v.phase!=='race'||!Array.isArray(v.log)){return;}
+  const maxId=v.log.reduce((m,e)=>Math.max(m,e.id||0),0);
+  if(v.round!==_logRound){_logRound=v.round;_lastToastId=maxId;return;}
+  let newest=null;
+  v.log.forEach(e=>{ if(e.kind==='card'&&e.targetId===v.you.id&&e.who!==v.you.name&&e.id>_lastToastId&&(!newest||e.id>newest.id))newest=e; });
+  _lastToastId=Math.max(_lastToastId,maxId);
+  if(newest)toast('\u26a0\ufe0f '+newest.who+' ti ha giocato \u00ab'+newest.nome+'\u00bb');
+}
 function renderDrawer(v){
-  const has=(v.phase==='prep'||v.phase==='race'||v.phase==='results'||v.phase==='win')&&Array.isArray(v.players);
+  const has=(v.phase==='prep'||v.phase==='results'||v.phase==='win')&&Array.isArray(v.players);
   const btn=document.getElementById('drawer-toggle');
   if(btn)btn.style.display=has?'inline-flex':'none';
   if(!has){closeDrawer();return;}
@@ -811,6 +897,8 @@ function render(v){
   else if(v.phase==='results')renderResults(v);
   else if(v.phase==='win')renderWin(v);
   renderDrawer(v);
+  renderLog(v);
+  checkIncoming(v);
 }
 
 socket.on('state',render);
