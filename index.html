@@ -1336,8 +1336,14 @@ function prepDone(){
   const maxBuys=(v.round===1)?2:1;
   const boughtNothing=v.me&&v.me.buysLeft===maxBuys;
   const canBuy=Array.isArray(v.shop)&&v.shop.some(c=>c.buyable);
-  if(boughtNothing&&canBuy){
-    showConfirm('Non hai comprato nulla','Hai ancora un acquisto disponibile e i soldi per prendere qualcosa in officina. Vuoi passare lo stesso il turno?','Passa comunque',()=>socket.emit('prep:done'),{cancel:'Torna in officina'});
+  const warnBuy=boughtNothing&&canBuy;
+  const noBet=v.canBet&&!(v.myBet&&v.myBet.targetId!=null&&v.myBet.amount>0);
+  if(warnBuy||noBet){
+    let title,text,cancel;
+    if(warnBuy&&noBet){ title='Niente acquisti né scommessa'; text='Hai ancora un acquisto disponibile in officina e non hai piazzato una scommessa. Vuoi passare lo stesso il turno?'; cancel='Torna indietro'; }
+    else if(warnBuy){ title='Non hai comprato nulla'; text='Hai ancora un acquisto disponibile e i soldi per prendere qualcosa in officina. Vuoi passare lo stesso il turno?'; cancel='Torna in officina'; }
+    else { title='Non hai scommesso'; text='Da questo round puoi scommettere sul vincitore (apri 👥 Piloti in alto). Vuoi passare il turno senza scommettere?'; cancel='Torna a scommettere'; }
+    showConfirm(title,text,'Passa comunque',()=>socket.emit('prep:done'),{cancel});
     return;
   }
   socket.emit('prep:done');
