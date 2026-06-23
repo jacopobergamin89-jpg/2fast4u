@@ -551,6 +551,10 @@ body:has(#s-home.active) .topbar{display:none}
 .mof-minip .d{width:7px;height:7px;border-radius:2px;background:var(--c,#888)}
 .mof-minip .l{color:var(--muted)}
 .mof-empty3{font-size:10px;color:var(--muted-2)}
+/* intro video officina */
+.of-intro{position:fixed;inset:0;z-index:300;background:#000;display:flex;align-items:center;justify-content:center;opacity:1;transition:opacity .4s ease}
+.of-intro.hide{opacity:0}
+.of-intro video{width:100%;height:100%;object-fit:contain;background:#000}
 @media (max-width:680px){
   .of-bg::before{height:8px}
   .of-inner{display:flex;flex-direction:column}
@@ -1339,12 +1343,25 @@ function prepDone(){
   }
   socket.emit('prep:done');
 }
+function showOfficinaIntro(){
+  if(document.getElementById('of-intro'))return;
+  const ov=document.createElement('div');ov.id='of-intro';ov.className='of-intro';
+  ov.innerHTML='<video id="of-intro-vid" muted autoplay playsinline preload="auto"><source src="video/officina.mp4" type="video/mp4"></video>';
+  document.body.appendChild(ov);
+  const vid=document.getElementById('of-intro-vid');
+  let done=false;const finish=()=>{if(done)return;done=true;ov.classList.add('hide');setTimeout(()=>{if(ov.parentNode)ov.remove();},400);};
+  vid.addEventListener('ended',finish);vid.addEventListener('error',finish);
+  setTimeout(finish,5200);
+  try{const pr=vid.play();if(pr&&pr.catch)pr.catch(()=>{});}catch(e){}
+}
 function render(v){
+  const prevPhase=ui.lastPhase;
   LAST=v;
   document.body.classList.toggle('race-mode', v.phase==='race');
   if(v.activeId!==ui.lastActive){ui.nosArmed=false;ui.lastActive=v.activeId;pendBetTarget=null;ui.raceTab='tiro';}
   if(v.phase!=='reveal')ui.pilotRevealed=false;
   ui.lastPhase=v.phase;
+  if(v.phase==='prep'&&prevPhase!=='prep')showOfficinaIntro();
   if(v.phase==='lobby')renderLobby(v);
   else if(v.phase==='reveal')renderReveal(v);
   else if(v.phase==='prep')renderPrep(v);
