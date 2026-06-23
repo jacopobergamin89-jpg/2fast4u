@@ -269,7 +269,7 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .ptype{font-family:var(--disp);text-transform:uppercase;letter-spacing:.4px;font-size:9.5px;font-weight:600;color:var(--tc);border:1px solid var(--tc);border-radius:5px;padding:1px 5px;white-space:nowrap}
 .drawer-bd{position:fixed;inset:0;background:#0008;opacity:0;pointer-events:none;transition:opacity .2s;z-index:44}
 .drawer-bd.show{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;right:0;height:100%;width:300px;max-width:88vw;background:var(--asphalt-1);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .22s ease;z-index:45;display:flex;flex-direction:column;box-shadow:-14px 0 44px -16px #000}
+.drawer{position:fixed;top:0;right:0;height:100%;width:330px;max-width:90vw;background:var(--asphalt-1);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .22s ease;z-index:45;display:flex;flex-direction:column;box-shadow:-14px 0 44px -16px #000}
 .drawer.open{transform:translateX(0)}
 .dw-head{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid var(--line);font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:13px}
 .dw-head button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1}
@@ -313,6 +313,69 @@ h1.title em{font-style:italic;color:var(--cyan)}
   body.race-mode #s-race .dash .hand{max-height:none;overflow:visible}
   body.race-mode #s-race .trackcap{margin-bottom:8px}
 }
+/* v4 fix: footer azione gara sempre visibile + footer prep + banner carta */
+.flash{position:fixed;left:50%;top:78px;transform:translateX(-50%) translateY(-14px);background:var(--asphalt-2);color:var(--ink);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:11px;padding:12px 18px;font-size:14px;font-weight:600;opacity:0;transition:.22s;z-index:70;pointer-events:none;max-width:92%;box-shadow:0 16px 44px -14px #000;text-align:center}
+.flash.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.flash.hostile{border-left-color:#ff3b6b;background:#26141d}
+.flash.mine{border-left-color:#34c759;background:#13211a}
+.prep-foot{position:sticky;bottom:0;z-index:5;padding:12px 0 6px;margin-top:14px;background:linear-gradient(transparent,var(--asphalt-0) 34%)}
+@media(min-width:900px){
+  body.race-mode #s-race .race-grid3>.race-col-car{overflow:hidden;display:flex;flex-direction:column;min-height:0}
+  body.race-mode #s-race .dash{display:flex;flex-direction:column;flex:1;min-height:0;max-height:100%;padding:13px}
+  body.race-mode #s-race .dash-scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding-right:5px}
+  body.race-mode #s-race .race-act{flex:none;padding-top:10px;margin-top:6px;border-top:1px solid var(--line)}
+  body.race-mode #s-race .dice-area{margin-bottom:9px}
+  body.race-mode #s-race .breakdown{margin-bottom:0}
+}
+.dw-sec{font-family:var(--disp);text-transform:uppercase;letter-spacing:1.2px;font-size:11px;color:var(--amber);margin:8px 2px 9px;display:flex;align-items:center;gap:7px}
+.dw-sec:after{content:'';flex:1;height:1px;background:var(--line)}
+.dw-betbox{background:var(--asphalt-0);border:1px solid var(--line);border-radius:11px;padding:11px;margin-bottom:8px}
+.dw-betlab{font-size:11px;color:var(--muted-2);margin-bottom:8px}
+.dw-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px}
+.dw-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:5px 9px;border-radius:8px;border:1px solid var(--line);background:var(--asphalt-2);cursor:pointer;color:var(--ink)}
+.dw-chip.sel{border-color:var(--cyan);background:#1ad6ea1a}
+.dw-chip .dw-q{font-family:var(--mono);color:var(--cyan);font-size:11px}
+.dw-cdot{width:9px;height:9px;border-radius:50%;flex:none}
+.dw-amt{display:flex;gap:7px}
+.dw-amt input{flex:2;background:var(--asphalt-2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 10px;font-family:var(--mono);font-size:13px;min-width:0}
+.dw-amt button{flex:1;background:var(--asphalt-2);border:1px solid var(--line);color:var(--muted);border-radius:8px;font-size:12px;cursor:pointer}
+.dw-brow{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:7px 2px;border-bottom:1px dashed #ffffff12}
+.dw-brow:last-child{border-bottom:none}
+.dw-who{font-weight:600}
+.dw-tgt{color:var(--muted)}
+.dw-bamt{margin-left:auto;font-family:var(--mono);color:var(--po);font-size:12px}
+.dw-empty{font-size:12px;color:var(--muted-2);text-align:center;padding:8px 4px}
+.dw-prow{background:var(--asphalt-0);border:1px solid var(--line);border-radius:11px;padding:10px 11px;margin-bottom:8px}
+.dw-prow.you{border-color:#1ad6ea55;background:#1ad6ea0d}
+.dw-prtop{display:flex;align-items:center;gap:9px}
+.dw-prpos{font-family:var(--mono);font-size:12px;color:var(--muted-2);width:16px;text-align:center}
+.dw-prdot{width:13px;height:13px;border-radius:50%;flex:none}
+.dw-prname{flex:1;font-size:14px;font-weight:600}
+.dw-prpo{font-family:var(--mono);font-size:13px;color:var(--po)}
+.dw-prpo small{color:var(--muted-2);font-size:10px}
+.dw-prstats{display:flex;gap:6px;margin:9px 0 7px;flex-wrap:wrap}
+.dw-st{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:7px;background:var(--asphalt-2);border:1px solid var(--line)}
+.dw-st b{color:var(--cyan)}
+.dw-st.cas b{color:var(--amber)}
+.dw-prcomp{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.2px}
+.dw-prcomp span{color:var(--ink)}
+.dw-prbet{font-size:11.5px;color:var(--muted);margin-top:7px;padding-top:7px;border-top:1px dashed #ffffff12}
+.dw-prbet b{color:var(--ink)}
+.dw-prpilot{display:flex;align-items:center;gap:7px;margin-top:8px;flex-wrap:wrap}
+.dw-pname2{font-size:12.5px;color:var(--ink);font-weight:500}
+.dw-prab{font-size:10.5px;color:var(--muted-2);margin-top:3px;line-height:1.35}
+.dw-legend{font-size:11px;color:var(--muted-2);text-align:center;padding:6px 4px 2px}
+.res-cell{font-family:var(--mono);font-size:11px;color:var(--muted-2);font-weight:400;margin-left:6px}
+.trackinfo{padding:12px 14px}
+.ti-comp{font-size:13px;color:var(--ink);margin-bottom:9px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ti-comp b{font-family:var(--mono);color:var(--amber)}
+.ti-lab{font-size:11px;color:var(--muted-2);text-transform:uppercase;letter-spacing:.5px}
+.ti-lv{font-family:var(--mono);font-size:11px;font-weight:600}
+.ti-lv.lv1{color:var(--lv1)}.ti-lv.lv2{color:var(--lv2)}.ti-lv.lv3{color:var(--lv3)}.ti-lv.lv4{color:var(--lv4)}.ti-lv.lv5{color:var(--lv5)}
+.ti-note{font-size:12.5px;line-height:1.4;padding:9px 11px;border-radius:8px;border:1px solid var(--line)}
+.ti-up{color:var(--good);border-color:#34c75955;background:#34c7590d}
+.ti-same{color:var(--amber);border-color:#ff9e2c55;background:#ff9e2c0d}
+.ti-none{color:var(--muted);background:var(--asphalt-0)}
 </style>
 </head>
 <body>
@@ -377,6 +440,7 @@ h1.title em{font-style:italic;color:var(--cyan)}
 
 <div class="conn" id="conn">disconnesso…</div>
 <div class="toast" id="toast"></div>
+<div class="flash" id="flash"></div>
 <div class="modal" id="picker"><div class="box"><div class="mh" id="picker-h">Scegli bersaglio</div><div id="picker-opts"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:4px" onclick="closePicker()">Annulla</button></div></div>
 <div class="modal" id="inspect"><div class="box"><div class="mh">Avversario</div><div id="inspect-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeInspect()">Chiudi</button></div></div>
 <div class="modal" id="segm"><div class="box"><div class="mh">Regole del tratto</div><div id="segm-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeSegRules()">Chiudi</button></div></div>
@@ -387,7 +451,7 @@ h1.title em{font-style:italic;color:var(--cyan)}
 </aside>
 <div class="drawer-bd" id="drawer-bd" onclick="closeDrawer()"></div>
 <aside class="drawer" id="drawer">
-  <div class="dw-head"><span>Classifica · Piloti</span><button onclick="closeDrawer()">✕</button></div>
+  <div class="dw-head"><span>Giocatori · scommesse</span><button onclick="closeDrawer()">✕</button></div>
   <div class="dw-list" id="drawer-list"></div>
   <div class="dw-foot" id="drawer-foot"></div>
 </aside>
@@ -598,18 +662,12 @@ function renderPrep(v){
   });
   if(v.pregara.length){
     h+='<div class="sec-h">Carte pre-gara in mano</div><div class="hand">';
-    v.pregara.forEach(c=>{const desc=c.eff==='money'?(c.val>=0?'+':'')+eur(c.val):(c.val>=0?'+':'')+c.val+' PO';const col=c.val>=0?'var(--good)':'var(--danger)';h+=`<div class="hcard" style="--hc:${col}"><div class="hi"><div class="hn">${esc(c.nome)}</div><div class="he">${desc} — su di te, subito</div></div><button class="btn btn-line btn-sm" onclick="socket.emit('prep:playCard',{handIdx:${c.idx}})">Gioca</button></div>`;});
+    v.pregara.forEach(c=>{const neg=c.val<0;const desc=c.eff==='money'?(c.val>=0?'+':'')+eur(c.val):(c.val>=0?'+':'')+c.val+' PO';const col=c.val>=0?'var(--good)':'var(--danger)';const tl=neg?'su un avversario':'su di te';const oc=neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`;h+=`<div class="hcard" style="--hc:${col}"><div class="hi"><div class="hn">${esc(c.nome)}</div><div class="he">${desc} — ${tl}, subito</div></div><button class="btn btn-line btn-sm" onclick="${oc}">Gioca</button></div>`;});
     h+='</div>';
   }
-  if(v.canBet){
-    h+='<div class="sec-h">Scommessa (facoltativa, segreta)</div><p style="font-size:12px;color:var(--muted);margin-bottom:10px">Punta su chi vincerà la gara. Quota = posizione di quel pilota nell\'ultima gara.</p><div class="betpick">';
-    v.betTargets.forEach(t=>{const sel=v.myBet&&v.myBet.targetId===t.id;h+=`<div class="bp ${sel?'sel':''}" onclick="setBetTarget(${t.id})"><span style="width:11px;height:11px;border-radius:50%;background:${t.colorH};display:inline-block"></span>${esc(t.name)}${t.you?' (tu)':''} <span class="q">x${t.quote}</span></div>`;});
-    h+='</div><div class="row" style="align-items:center;margin-bottom:6px"><input class="nameinput" id="betamt" type="number" min="0" step="50" placeholder="Importo €" value="'+(v.myBet?v.myBet.amount:'')+'" style="flex:2"><button class="btn btn-line btn-sm" style="flex:1" onclick="clearBet()">Nessuna</button></div>';
-  }
-  h+='<button class="btn btn-primary foot" onclick="prepDone()">Pronto — passa il turno</button>';
+  if(v.canBet){ h+='<div class="sec-h">Scommessa</div><p style="font-size:12px;color:var(--muted);margin-bottom:6px">Apri il pannello <b>👥 Piloti</b> in alto a destra per scommettere e vedere le puntate di tutti.</p>'; }
+  h+='<div class="prep-foot"><button class="btn btn-primary" style="width:100%" onclick="prepDone()">Pronto — passa il turno →</button></div>';
   host.innerHTML=h;
-  const amt=document.getElementById('betamt');
-  if(amt){amt.onchange=()=>sendBet();amt.onblur=()=>sendBet();}
 }
 let pendBetTarget=null;
 function setBetTarget(id){pendBetTarget=id;sendBet(id);}
@@ -627,14 +685,13 @@ function renderRace(v){
   const host=document.getElementById('s-race');
   let h=`<div class="race-head"><div class="eyebrow" style="margin:0">Gara</div><div class="rh-turn">Turno <b>${v.turn}</b><span style="color:var(--muted-2)">/5</span></div></div>`;
   h+=trackHTML(v);
-  h+='<div class="trackcap"><b>Passa il mouse</b> su un\'auto per vederne la casella · <b>clicca</b> un\'auto per vederne macchina e pilota.</div>';
   h+='<div class="race-grid3">';
   h+='<div class="race-col-cards">'+cardsMenuHTML(v)+'</div>';
   h+='<div class="race-col-car">';
   if(v.isYourTurn){ h+=dashHTML(v); }
   else{ h+=`<div class="dash" style="--dc:${actColor(v)}"><div class="spectate" style="padding:24px 8px"><div class="sdot" style="background:${actColor(v)}"></div><div class="stitle">${esc(v.activeName)}</div><div class="stext">sta correndo… attendi il tuo turno</div></div></div>`; }
   h+='</div>';
-  h+='<div class="race-col-rules">'+segRulesHTML(v)+classificaPanelHTML(v)+'</div>';
+  h+='<div class="race-col-rules">'+segRulesHTML(v)+'</div>';
   h+='</div>';
   host.innerHTML=h;
   startTokens(v);
@@ -664,6 +721,7 @@ function cardsMenuHTML(v){
 function dashHTML(v){
   const m=v.me;
   let h=`<div class="dash" style="--dc:${v.you.colorH}">`;
+  h+='<div class="dash-scroll">';
   h+=`<div class="dash-top"><div class="dash-token" style="background:${v.you.colorH}">${ini(v.you.name)}</div><div><div class="dash-name">${esc(v.you.name)}</div><div class="dash-pilot">${esc(m.pilotNome)} · ${m.gang}</div><div class="dash-ab"><span class="badge ${['rettilineo','citta','drift'].includes(m.pilotTipo)?m.pilotTipo:''}" ${!['rettilineo','citta','drift'].includes(m.pilotTipo)?'style="background:#1ad6ea22;color:var(--cyan)"':''}>${m.pilotTipoLabel}</span> ${esc(m.ab)} <span class="part">Partenza +${m.partenza}</span></div></div></div>`;
   h+=`<div class="gauges"><div class="gauge vel"><div class="gl">Velocità</div><div class="gv">${m.vel}</div></div><div class="gauge ctrl"><div class="gl">Controllo</div><div class="gv">${m.ctrl}</div></div><div class="gauge mov"><div class="gl">Mov. base</div><div class="gv">${m.mov}</div></div></div>`;
   const segd=m.segType==='rettilineo'?'Nessuna penalità, NOS libero.':(m.segType==='citta'?'NOS −1. Penalità se Controllo basso.':'NOS vietato. Penalità se Velocità alta o Controllo basso.');
@@ -676,13 +734,15 @@ function dashHTML(v){
     h+='</div>';
   }
   if(!v.rolled){
-    h+=`<div class="car-actions"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${m.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato ⚡':'Usa NOS'}${m.nosVal>0?' (+'+m.nosVal+')':''}</button><button class="btn btn-dado" onclick="doRoll()">Tira il dado</button></div>`;
+    h+='</div>';
+    h+=`<div class="race-act"><div class="car-actions"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${m.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato ⚡':'Usa NOS'}${m.nosVal>0?' (+'+m.nosVal+')':''}</button><button class="btn btn-dado" onclick="doRoll()">Tira il dado</button></div></div>`;
   }else{
     const b=v.rolled;
     let ls=b.lines.map(l=>`<div class="bd-line"><span>${l.k}</span><span class="${l.cls||''}">${l.info?'min 0':(l.v>=0?'+':'')+l.v}</span></div>`).join('');
     h+=`<div class="dice-area"><div class="die" id="die">${dieFaces(b.die)}</div><div class="dice-info"><div class="di-big">Dado ${b.die} → +${b.db}</div>${b.useNos?'<span style="color:var(--cyan)">NOS ⚡</span>':''}</div></div>`;
     h+=`<div class="breakdown">${ls}<div class="bd-total"><span>Movimento</span><b>${b.total}</b></div></div>`;
-    h+=`<button class="btn btn-cyan" onclick="socket.emit('race:move')">${b.np>=55?'🏁 In fondo (casella 55)':'Avanza a casella '+b.np+' →'}</button>`;
+    h+='</div>';
+    h+=`<div class="race-act"><button class="btn btn-cyan" style="width:100%" onclick="socket.emit('race:move')">${b.np>=55?'🏁 In fondo (casella 55)':'Avanza a casella '+b.np+' →'}</button></div>`;
   }
   h+='</div>';return h;
 }
@@ -691,13 +751,35 @@ function doRoll(){
   const die=document.getElementById('die');if(die){die.classList.add('rolling');let t=0;const iv=setInterval(()=>{die.innerHTML=dieFaces(1+Math.floor(Math.random()*6));if(++t>8){clearInterval(iv);}},60);}
   socket.emit('race:roll',{useNos:ui.nosArmed});
 }
+function _cardNm(idx){const hh=(LAST&&LAST.me&&LAST.me.hand)||[];const c=hh.find(x=>x.idx===idx);return c?c.nome:'carta';}
+function _rivNm(tid){const r=(LAST&&LAST.me&&LAST.me.rivals)||[];const x=r.find(y=>y.id===tid);return x?x.name:'rivale';}
 function playCard(idx,target){
-  if(target==='self'){socket.emit('race:playCard',{handIdx:idx});return;}
-  const v=LAST;const opts=document.getElementById('picker-opts');opts.innerHTML='';
+  const v=LAST;
+  if(target==='self'){
+    if((v.players||[]).length>2){
+      const opts=document.getElementById('picker-opts');opts.innerHTML='';
+      document.getElementById('picker-h').textContent='A chi la dai?';
+      opts.innerHTML+=`<div class="opt" onclick="pickTarget(${idx},${v.you.id})"><span class="pdot" style="background:${v.you.colorH}"></span><span class="pname">Su di te</span></div>`;
+      v.me.rivals.forEach(r=>{opts.innerHTML+=`<div class="opt" onclick="pickTarget(${idx},${r.id})"><span class="pdot" style="background:${r.colorH}"></span><span class="pname">${esc(r.name)}</span></div>`;});
+      document.getElementById('picker').classList.add('show');return;
+    }
+    flash('Hai giocato \u00ab'+_cardNm(idx)+'\u00bb su di te','mine');socket.emit('race:playCard',{handIdx:idx});return;
+  }
+  const opts=document.getElementById('picker-opts');opts.innerHTML='';
+  document.getElementById('picker-h').textContent='Scegli bersaglio';
   v.me.rivals.forEach(r=>{opts.innerHTML+=`<div class="opt" onclick="pickTarget(${idx},${r.id})"><span class="pdot" style="background:${r.colorH}"></span><span class="pname">${esc(r.name)}</span></div>`;});
   document.getElementById('picker').classList.add('show');
 }
-function pickTarget(idx,tid){closePicker();socket.emit('race:playCard',{handIdx:idx,targetId:tid});}
+function pickTarget(idx,tid){const self=(LAST&&tid===LAST.you.id);flash('Hai giocato \u00ab'+_cardNm(idx)+'\u00bb '+(self?'su di te':'su '+_rivNm(tid)),'mine');closePicker();if(self)socket.emit('race:playCard',{handIdx:idx});else socket.emit('race:playCard',{handIdx:idx,targetId:tid});}
+function prepNeg(idx){
+  const v=LAST;const rivals=(v.players||[]).filter(p=>p.id!==v.you.id);
+  if(!rivals.length){toast('Nessun avversario a cui darla');return;}
+  const opts=document.getElementById('picker-opts');opts.innerHTML='';
+  document.getElementById('picker-h').textContent='Dai questa carta a\u2026';
+  rivals.forEach(r=>{opts.innerHTML+=`<div class="opt" onclick="pickPrepTarget(${idx},${r.id})"><span class="pdot" style="background:${r.colorH}"></span><span class="pname">${esc(r.name)}</span></div>`;});
+  document.getElementById('picker').classList.add('show');
+}
+function pickPrepTarget(idx,tid){closePicker();socket.emit('prep:playCard',{handIdx:idx,targetId:tid});}
 function closePicker(){document.getElementById('picker').classList.remove('show');}
 function openInspect(id){
   const v=LAST; if(!v||!v.players) return;
@@ -760,12 +842,26 @@ function renderResults(v){
   let h=`<div class="eyebrow">Traguardo · gara liv. ${v.raceLevel}</div><h1 class="title">Risultati gara</h1>`;
   v.results.forEach(r=>{
     let bet='';if(r.betDelta>0)bet=`<div class="bet">scommessa +${eur(r.betDelta)}</div>`;else if(r.betDelta<0)bet=`<div class="bet" style="color:var(--danger)">scommessa ${eur(r.betDelta)}</div>`;
-    h+=`<div class="res-row${r.pos===1?' p1':''}"><div class="res-pos">${r.pos}</div><span class="res-dot" style="background:${r.colorH}"></span><div class="res-nm">${esc(r.name)}${r.id===v.you.id?' (tu)':''}</div><div class="res-rew">${r.po>0?'<span class="po">+'+r.po+' PO</span>':'<span style="color:var(--muted-2)">—</span>'}<div class="mn">+${eur(r.money)}</div>${bet}</div></div>`;
+    h+=`<div class="res-row${r.pos===1?' p1':''}"><div class="res-pos">${r.pos}</div><span class="res-dot" style="background:${r.colorH}"></span><div class="res-nm">${esc(r.name)}${r.id===v.you.id?' (tu)':''}${r.cell!=null?' <span class="res-cell">cas. '+r.cell+'</span>':''}</div><div class="res-rew">${r.po>0?'<span class="po">+'+r.po+' PO</span>':'<span style="color:var(--muted-2)">—</span>'}<div class="mn">+${eur(r.money)}</div>${bet}</div></div>`;
   });
+  h+=trackInfoHTML(v);
   h+=`<div class="panel" style="margin-top:6px"><div class="panel-h">Classifica campionato — obiettivo 50</div>${champHTML(v)}</div>`;
   if(v.canNext)h+='<button class="btn btn-primary foot" onclick="socket.emit(\'results:next\')">Prossima gara</button>';
   else h+='<div class="spectate" style="padding:14px"><div class="stext">In attesa che l\'host avvii la prossima gara…</div></div>';
   document.getElementById('s-results').innerHTML=h;
+}
+function trackInfoHTML(v){
+  const ti=v.trackInfo; if(!ti)return '';
+  const lv=ti.racedLevels||[];
+  const counts={}; lv.forEach(l=>{counts[l]=(counts[l]||0)+1;});
+  const comp=Object.keys(counts).sort().map(l=>`<span class="ti-lv lv${l}">L${l}</span>\u00d7${counts[l]}`).join(' \u00b7 ');
+  const c=ti.change||{};
+  let note,cls;
+  if(c.passedAll>=2 && c.newLevel>c.oldLevel){ note=`La pista sale al livello ${c.newLevel}: ${c.addedCount} nuove strade in coda per la prossima gara.`; cls='up'; }
+  else if(c.passedAll>=2){ note=`La pista avanza di ${c.addedCount} strade (gi\u00e0 al livello massimo L${c.newLevel}).`; cls='same'; }
+  else if(c.passedAll===1){ note='La pista avanza di 1 strada (stesso livello).'; cls='same'; }
+  else { note='Pista invariata: nessuno ha superato strade in comune.'; cls='none'; }
+  return `<div class="panel" style="margin-top:6px"><div class="panel-h">Pista</div><div class="trackinfo"><div class="ti-comp"><span class="ti-lab">Strade gara</span><b>${lv.length}</b> \u00b7 ${comp}</div><div class="ti-note ti-${cls}">${note}</div></div></div>`;
 }
 function renderWin(v){
   show('s-win');topMeta('Partita conclusa');
@@ -840,22 +936,45 @@ function checkIncoming(v){
   let newest=null;
   v.log.forEach(e=>{ if(e.kind==='card'&&e.targetId===v.you.id&&e.who!==v.you.name&&e.id>_lastToastId&&(!newest||e.id>newest.id))newest=e; });
   _lastToastId=Math.max(_lastToastId,maxId);
-  if(newest)toast('\u26a0\ufe0f '+newest.who+' ti ha giocato \u00ab'+newest.nome+'\u00bb');
+  if(newest){const host=(newest.val<0)||(newest.eff==='dado'&&newest.val<6);flash((host?'\u26a0\ufe0f ':'\u2728 ')+newest.who+(host?' ti ha giocato \u00ab':' ti ha dato \u00ab')+newest.nome+'\u00bb',host?'hostile':'mine');}
 }
+function shortComp(c){return {motore:'Mot',cambio:'Cam',sterzo:'Ste',assetto:'Ass',peso:'Peso',nos:'NOS'}[c]||c;}
 function renderDrawer(v){
-  const has=(v.phase==='prep'||v.phase==='results'||v.phase==='win')&&Array.isArray(v.players);
+  const has=(v.phase==='prep'||v.phase==='race'||v.phase==='results'||v.phase==='win')&&Array.isArray(v.players);
   const btn=document.getElementById('drawer-toggle');
   if(btn)btn.style.display=has?'inline-flex':'none';
   if(!has){closeDrawer();return;}
-  const ranked=[...v.players].sort((a,b)=>b.po-a.po||a.id-b.id);
   let h='';
+  if(v.phase==='prep' && v.isYourTurn && v.canBet && Array.isArray(v.betTargets)){
+    h+='<div class="dw-sec">La tua scommessa</div>';
+    h+='<div class="dw-betbox"><div class="dw-betlab">Punta su chi vince \u00b7 quota = posizione nell\'ultima gara</div><div class="dw-chips">';
+    v.betTargets.forEach(t=>{const sel=v.myBet&&v.myBet.targetId===t.id;h+=`<span class="dw-chip${sel?' sel':''}" onclick="setBetTarget(${t.id})"><span class="dw-cdot" style="background:${t.colorH}"></span>${esc(t.name)}${t.you?' (tu)':''} <span class="dw-q">x${t.quote}</span></span>`;});
+    h+='</div><div class="dw-amt"><input id="betamt" type="number" min="0" step="50" placeholder="Importo \u20ac" value="'+(v.myBet?v.myBet.amount:'')+'"><button onclick="clearBet()">Nessuna</button></div></div>';
+  }
+  if(Array.isArray(v.allBets)){
+    h+='<div class="dw-sec">Scommesse di tutti</div><div class="dw-betbox dw-betlist">';
+    if(!v.allBets.length) h+='<div class="dw-empty">Ancora nessuna scommessa.</div>';
+    else v.allBets.forEach(b=>{const who=v.players.find(p=>p.id===b.playerId);if(!who)return;const onSelf=b.playerId===b.targetId;const tgt=v.players.find(p=>p.id===b.targetId);h+=`<div class="dw-brow"><span class="dw-cdot" style="background:${who.colorH}"></span><span class="dw-who">${esc(who.name)}${who.id===v.you.id?' (tu)':''}</span><span class="dw-tgt">\u2192 ${onSelf?'su s\u00e9':('su '+esc(tgt?tgt.name:'?'))}</span><span class="dw-bamt">${eur(b.amount)}</span></div>`;});
+    h+='</div>';
+  }
+  h+='<div class="dw-sec">Classifica &amp; auto</div>';
+  const ranked=[...v.players].sort((a,b)=>b.po-a.po||a.id-b.id);
   ranked.forEach((p,i)=>{
-    const tc=p.pilot?(TYPE_COLOR[p.pilot.tipo]||'var(--muted)'):'var(--muted)';
-    const tl=p.pilot?p.pilot.tipoLabel:'\u2014';
-    const me=p.id===v.you.id;
-    h+=`<button class="dw-row${me?' you':''}" onclick="openInspect(${p.id})"><span class="dw-pos">${i+1}</span><span class="pp-dot" style="background:${p.colorH}"></span><span class="dw-nm">${esc(p.name)}${me?' (tu)':''}</span><span class="ptype" style="--tc:${tc}">${esc(tl)}</span><span class="dw-po">${p.po}</span></button>`;
+    const me=p.id===v.you.id;const car=p.car;
+    h+=`<div class="dw-prow${me?' you':''}"><div class="dw-prtop"><span class="dw-prpos">${i+1}</span><span class="dw-prdot" style="background:${p.colorH}"></span><span class="dw-prname">${esc(p.name)}${me?' (tu)':''}</span><span class="dw-prpo">${p.po} <small>PO</small></span></div>`;
+    if(p.pilot){h+=`<div class="dw-prpilot"><span class="dw-pname2">${esc(p.pilot.nome)}</span><span class="ptype" style="--tc:${TYPE_COLOR[p.pilot.tipo]||'var(--muted)'}">${esc(p.pilot.tipoLabel)}</span></div><div class="dw-prab">${esc(p.pilot.gang)} · ${esc(p.pilot.ab)} · Part. ${p.pilot.partenza}</div>`;}
+    if(car){
+      const posTxt=(p.pos!=null)?`<span class="dw-st cas">cas. <b>${p.pos}</b></span>`:'';
+      h+=`<div class="dw-prstats">${posTxt}<span class="dw-st">VEL <b>${car.stats.vel}</b></span><span class="dw-st">CTRL <b>${car.stats.ctrl}</b></span><span class="dw-st">NOS <b>${car.stats.nos}</b></span></div>`;
+      h+=`<div class="dw-prcomp">${car.owned.map(o=>shortComp(o.comp)+' <span>L'+o.lvl+'</span>').join(' \u00b7 ')}</div>`;
+    } else h+='<div class="dw-prcomp" style="color:var(--muted-2)">auto non ancora pronta</div>';
+    const mb=(v.allBets||[]).find(b=>b.playerId===p.id);
+    if(mb){const tgt=v.players.find(x=>x.id===mb.targetId);h+=`<div class="dw-prbet">Scommette: <b>${mb.playerId===mb.targetId?'su s\u00e9':('su '+esc(tgt?tgt.name:'?'))}</b> \u00b7 ${eur(mb.amount)}</div>`;}
+    h+='</div>';
   });
+  h+='<div class="dw-legend">Pilota, auto e scommessa di ogni giocatore</div>';
   document.getElementById('drawer-list').innerHTML=h;
+  const amt=document.getElementById('betamt'); if(amt){amt.onchange=()=>sendBet();amt.onblur=()=>sendBet();}
   document.getElementById('drawer-foot').innerHTML=v.you.isHost
     ?`<button class="btn-restart" onclick="confirmRestart()">\u21bb Riavvia partita</button>`
     :`<div class="dw-hint">Solo l'host pu\u00f2 riavviare la partita.</div>`;
