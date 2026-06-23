@@ -327,6 +327,50 @@ h1.title em{font-style:italic;color:var(--cyan)}
   body.race-mode #s-race .dice-area{margin-bottom:9px}
   body.race-mode #s-race .breakdown{margin-bottom:0}
 }
+/* ===== gara mobile (<900px): HUD compatto, azione fissa, carte a cassetto ===== */
+@media(max-width:899px){
+  body.race-mode{overflow:hidden}
+  body.race-mode .wrap{height:100dvh;min-height:0}
+  body.race-mode #s-race.active{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;padding:0;position:relative}
+  .rm{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+  .rm-status{flex:none;display:flex;gap:6px;overflow-x:auto;padding:9px 14px;border-bottom:1px solid var(--line);scrollbar-width:none}
+  .rm-status::-webkit-scrollbar{display:none}
+  .rm-chip{flex:none;font-family:var(--mono);font-size:11.5px;color:var(--ink);background:var(--asphalt-2);border:1px solid var(--line);border-radius:9px;padding:6px 9px;white-space:nowrap;display:flex;gap:5px;align-items:center}
+  .rm-chip b{font-family:var(--disp);font-weight:600;color:var(--muted)}
+  .rm-chip.pos{background:rgba(255,158,44,.12);border-color:rgba(255,158,44,.45);color:var(--amber);font-weight:600}
+  .rm-chip.vel b{color:var(--cyan)} .rm-chip.ctrl b{color:var(--amber)}
+  body.race-mode #s-race .track{flex:none;margin:0;border-top:none}
+  body.race-mode #s-race .track svg{height:130px;width:auto}
+  .rm-main{flex:1;min-height:0;overflow-y:auto;padding:12px 14px}
+  .rm-segcard{background:var(--asphalt-1);border:1px solid var(--line);border-radius:14px;padding:13px 14px 0;overflow:hidden}
+  .rm-sc-h{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+  .rm-sc-cas{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .rm-sc-list{list-style:none;display:flex;flex-direction:column;gap:7px;padding-bottom:13px}
+  .rm-sc-list li{font-family:var(--mono);font-size:13px;color:var(--ink);display:flex;gap:9px;align-items:flex-start}
+  .rm-sc-list li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan);flex:none;margin-top:5px}
+  .rm-sc-list li.warn{color:var(--amber)} .rm-sc-list li.warn::before{background:var(--amber)}
+  .rm-sc-next{margin:0 -14px;padding:10px 14px;border-top:1px solid var(--line);background:rgba(255,59,107,.06);font-family:var(--mono);font-size:11.5px;color:#ff8aa6;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .rm-spec{margin-top:12px;text-align:center;color:var(--muted);font-size:13px;padding:8px}
+  .rm-seg{flex:none;display:flex;gap:5px;margin:11px 14px 0;padding:4px;background:var(--asphalt-1);border:1px solid var(--line);border-radius:13px}
+  .rm-seg button{flex:1;font-family:var(--disp);text-transform:uppercase;letter-spacing:.5px;font-size:13px;font-weight:600;padding:11px;border-radius:9px;color:var(--muted);background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+  .rm-seg button.on{background:linear-gradient(180deg,var(--asphalt-3),var(--asphalt-2));color:var(--ink)}
+  .rm-seg-n{min-width:16px;height:16px;line-height:16px;text-align:center;border-radius:8px;background:var(--cyan);color:#05121a;font-size:10px;font-weight:700;font-family:var(--mono);padding:0 4px}
+  .rm-pane{display:none;flex-direction:column;flex:1;min-height:0;overflow-y:auto;padding:12px 14px}
+  .rm-pane.on{display:flex}
+  .rm-act{flex:none;display:flex;gap:9px;padding:11px 14px calc(11px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:linear-gradient(180deg,var(--asphalt-0),#0a0f19)}
+  .rm-act .btn{margin:0}
+  .rm-act .nos-btn{flex:0 0 38%}
+  .rm-act .btn-dado{flex:1}
+  .rm-crow{display:flex;align-items:stretch;background:var(--asphalt-0);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:9px}
+  .rm-crow .rm-cbar{flex:0 0 5px}
+  .rm-crow.good .rm-cbar{background:var(--good)} .rm-crow.bad .rm-cbar{background:var(--danger)}
+  .rm-crow .rm-cmain{flex:1;padding:11px 12px;min-width:0}
+  .rm-ct{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.15;margin-bottom:3px}
+  .rm-cm{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .rm-cgo{flex:none;align-self:center;margin:0 11px 0 6px;font-family:var(--disp);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:9px 15px;border-radius:10px;background:var(--asphalt-3);border:1px solid var(--line);color:var(--ink)}
+  .rm-crow.bad .rm-cgo{background:rgba(255,59,107,.16);border-color:rgba(255,59,107,.5);color:#ff8aa6}
+  .rm-crow.good .rm-cgo{background:rgba(52,199,89,.16);border-color:rgba(52,199,89,.5);color:#7fe39b}
+}
 .dw-sec{font-family:var(--disp);text-transform:uppercase;letter-spacing:1.2px;font-size:11px;color:var(--amber);margin:8px 2px 9px;display:flex;align-items:center;gap:7px}
 .dw-sec:after{content:'';flex:1;height:1px;background:var(--line)}
 .dw-betbox{background:var(--asphalt-0);border:1px solid var(--line);border-radius:11px;padding:11px;margin-bottom:8px}
@@ -463,7 +507,7 @@ const COLORS=[{n:'Rosso',h:'#e74c3c'},{n:'Blu',h:'#3498db'},{n:'Verde',h:'#2ecc7
 const LV_COLOR=['var(--muted-2)','var(--lv1)','var(--lv2)','var(--lv3)','var(--lv4)','var(--lv5)'];
 let socket=io();
 let ME={id:null,code:null,name:'',colorIdx:0,joined:false};
-let ui={nosArmed:false,lastActive:undefined,lastPhase:null};
+let ui={nosArmed:false,lastActive:undefined,lastPhase:null,raceTab:'tiro'};
 const ACCENT={rettilineo:'#2fe6e0',citta:'#ffb02e',drift:'#ff3d97'};
 let LAST=null;
 
@@ -681,8 +725,91 @@ function sendBet(forceTarget){
 }
 
 /* ---------- RACE ---------- */
+function isMobileRace(){return window.matchMedia('(max-width:899px)').matches;}
+function rmTab(which){ui.raceTab=(which==='carte')?'carte':'tiro';const t=document.querySelector('.rm-pane-tiro'),c=document.querySelector('.rm-pane-carte');if(t)t.classList.toggle('on',ui.raceTab==='tiro');if(c)c.classList.toggle('on',ui.raceTab==='carte');const bs=document.querySelectorAll('.rm-seg button');bs.forEach(b=>b.classList.remove('on'));const bi=ui.raceTab==='carte'?1:0;if(bs[bi])bs[bi].classList.add('on');}
+function rmSegCard(v){
+  if(!v.track||!v.track.length)return '';
+  const ci=curSegIndex(v);const cur=v.track[ci];const nxt=v.track[ci+1]||null;
+  const tc=['rettilineo','citta','drift'].includes(cur.t)?cur.t:'';
+  let h=`<div class="rm-segcard"><div class="rm-sc-h"><span class="badge ${tc}">${cur.label}</span><span class="lvchip" style="background:${LV_COLOR[cur.lvl]}">L${cur.lvl}</span><span class="rm-sc-cas">cas. ${cur.from}\u2013${cur.to}</span></div><ul class="rm-sc-list">`;
+  segPenList(cur).forEach(t=>{h+=`<li>${t}</li>`;});
+  h+=`<li>${segNosText(cur.t)}</li>`;
+  if(v.me&&!v.me.firstDone)h+='<li class="warn">1\u00b0 tiro: +partenza, no NOS</li>';
+  h+='</ul>';
+  if(nxt){const ntc=['rettilineo','citta','drift'].includes(nxt.t)?nxt.t:'';
+    h+=`<div class="rm-sc-next"><span class="badge ${ntc}">${nxt.label}</span> prossimo \u00b7 ${segPenList(nxt).join(' \u00b7 ')} \u00b7 ${segNosText(nxt.t)}</div>`;}
+  return h+'</div>';
+}
+function renderRaceMobile(v){
+  const host=document.getElementById('s-race');
+  const meCar=(v.cars||[]).find(c=>c.id===v.you.id);
+  const pos=meCar?(meCar.pos||0):0;
+  const yt=v.isYourTurn,mm=yt?v.me:null,rolled=v.rolled;
+  const cards=(mm&&mm.hand)?mm.hand:[];
+  const tabs=yt&&!rolled&&cards.length>0;
+  const tab=ui.raceTab==='carte'?'carte':'tiro';
+  let h='<div class="rm">';
+  // chip di stato
+  h+='<div class="rm-status">';
+  h+=`<span class="rm-chip pos">\ud83d\udccd cas. ${pos>0?pos:'\u2014'}</span>`;
+  if(mm){
+    h+=`<span class="rm-chip vel"><b>VEL</b> ${mm.vel}</span>`;
+    h+=`<span class="rm-chip ctrl"><b>CTRL</b> ${mm.ctrl}</span>`;
+    h+=`<span class="rm-chip"><b>MOV</b> ${mm.mov}</span>`;
+    h+=`<span class="rm-chip"><b>NOS</b> ${mm.nosVal}</span>`;
+  }
+  h+=`<span class="rm-chip"><b>TURNO</b> ${v.turn}/5</span>`;
+  if(!yt)h+=`<span class="rm-chip" style="color:${actColor(v)}">${esc(v.activeName)} corre</span>`;
+  h+='</div>';
+  // pista (sempre visibile)
+  h+=trackHTML(v);
+  // interruttore Tiro / Carte (solo nel tuo turno, prima del tiro, con carte)
+  if(tabs){
+    h+=`<div class="rm-seg"><button class="${tab==='tiro'?'on':''}" onclick="rmTab('tiro')">Tiro</button><button class="${tab==='carte'?'on':''}" onclick="rmTab('carte')">Carte <span class="rm-seg-n">${cards.length}</span></button></div>`;
+    h+=`<div class="rm-pane rm-pane-tiro${tab==='tiro'?' on':''}">`+rmSegCard(v)+'</div>';
+    h+=`<div class="rm-pane rm-pane-carte${tab==='carte'?' on':''}">`+rmCardsHTML(cards)+'</div>';
+  }else{
+    h+='<div class="rm-main">';
+    if(yt&&rolled){
+      const b=rolled;
+      let ls=b.lines.map(l=>`<div class="bd-line"><span>${l.k}</span><span class="${l.cls||''}">${l.info?'min 0':(l.v>=0?'+':'')+l.v}</span></div>`).join('');
+      h+=`<div class="dice-area"><div class="die" id="die">${dieFaces(b.die)}</div><div class="dice-info"><div class="di-big">Dado ${b.die} \u2192 +${b.db}</div>${b.useNos?'<span style="color:var(--cyan)">NOS \u26a1</span>':''}</div></div>`;
+      h+=`<div class="breakdown">${ls}<div class="bd-total"><span>Movimento</span><b>${b.total}</b></div></div>`;
+    }else{
+      h+=rmSegCard(v);
+      if(!yt)h+=`<div class="rm-spec">${esc(v.activeName)} sta correndo\u2026 attendi il tuo turno.</div>`;
+    }
+    h+='</div>';
+  }
+  // barra azione fissa
+  if(yt&&!rolled){
+    h+=`<div class="rm-act"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${mm.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato \u26a1':'Usa NOS'}${mm.nosVal>0?' (+'+mm.nosVal+')':''}</button><button class="btn btn-dado" onclick="doRoll()">Tira il dado</button></div>`;
+  }else if(yt&&rolled){
+    const b=rolled;
+    h+=`<div class="rm-act"><button class="btn btn-cyan" style="flex:1" onclick="socket.emit('race:move')">${b.np>=55?'\ud83c\udfc1 In fondo (casella 55)':'Avanza a casella '+b.np+' \u2192'}</button></div>`;
+  }
+  h+='</div>';
+  host.innerHTML=h;
+  startTokens(v);
+  const lead=Math.max(1,...v.cars.map(c=>c.pos));
+  const tr=document.getElementById('track');if(tr)tr.scrollLeft=Math.max(0,(lead-0.5)*30-140);
+}
+function rmCardsHTML(cards){
+  let h='';
+  cards.forEach(c=>{
+    let desc='';const good=(c.eff==='dado')?(c.val===6):(c.val>0);
+    if(c.eff==='vel')desc=(c.val>0?'+':'')+c.val+' Velocit\u00e0 \u00b7 '+c.dur+(c.dur===1?' tiro':' tiri');
+    else if(c.eff==='ctrl')desc=(c.val>0?'+':'')+c.val+' Controllo \u00b7 '+c.dur+(c.dur===1?' tiro':' tiri');
+    else if(c.eff==='partenza')desc='Partenza '+(c.val>0?'+':'')+c.val;
+    else if(c.eff==='dado')desc='Dado = '+c.val;
+    const tgt=c.target==='self'?'su di te':'su un rivale';
+    h+=`<div class="rm-crow ${good?'good':'bad'}"><div class="rm-cbar"></div><div class="rm-cmain"><div class="rm-ct">${esc(c.nome)}</div><div class="rm-cm">${desc} \u00b7 ${tgt}</div></div><button class="rm-cgo" onclick="playCard(${c.idx},'${c.target}')">Gioca</button></div>`;
+  });
+  return h;
+}
 function renderRace(v){
   show('s-race');topMeta('Round '+v.round+' · liv. '+v.raceLevel);
+  if(isMobileRace()){renderRaceMobile(v);return;}
   const host=document.getElementById('s-race');
   let h=`<div class="race-head"><div class="eyebrow" style="margin:0">Gara</div><div class="rh-turn">Turno <b>${v.turn}</b><span style="color:var(--muted-2)">/5</span></div></div>`;
   h+=trackHTML(v);
@@ -1012,7 +1139,7 @@ function prepDone(){
 function render(v){
   LAST=v;
   document.body.classList.toggle('race-mode', v.phase==='race');
-  if(v.activeId!==ui.lastActive){ui.nosArmed=false;ui.lastActive=v.activeId;pendBetTarget=null;}
+  if(v.activeId!==ui.lastActive){ui.nosArmed=false;ui.lastActive=v.activeId;pendBetTarget=null;ui.raceTab='tiro';}
   if(v.phase!=='reveal')ui.pilotRevealed=false;
   ui.lastPhase=v.phase;
   if(v.phase==='lobby')renderLobby(v);
@@ -1036,6 +1163,8 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
+let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
+window.BUILD='2026-06-23 · gara-mobile-tab';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 </body>
 </html>
