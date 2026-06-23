@@ -432,7 +432,7 @@ body:has(#s-home.active) .topbar{display:none}
 /* ===== OFFICINA (fase prep) ===== */
 .of-scene{position:relative;max-width:880px;margin:0 auto;padding:4px 4px 22px}
 .of-bg{position:absolute;inset:0;z-index:0;border-radius:16px;overflow:hidden;background:radial-gradient(60% 45% at 50% 38%,rgba(255,201,30,.08),transparent 60%),linear-gradient(180deg,#1c0f40,#120a2b);box-shadow:inset 0 0 0 1px var(--line)}
-/* PER LA TUA IMMAGINE DI SFONDO: sostituisci il background sopra con  url('officina.jpg') center/cover  */
+/* PER LA TUA IMMAGINE DI SFONDO: sostituisci il background sopra con  url('img/officina.jpg') center/cover  */
 .of-bg::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:repeating-linear-gradient(45deg,var(--amber),var(--amber) 12px,#0b0510 12px,#0b0510 24px);opacity:.8}
 .of-inner{position:relative;z-index:1;padding:14px 10px 6px}
 .of-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;flex-wrap:wrap}
@@ -520,7 +520,7 @@ body:has(#s-home.active) .topbar{display:none}
   <!-- HOME -->
   <section id="s-home" class="screen active">
     <div class="home-wrap">
-      <div class="home-poster"><img src="bg-home.jpg" alt="2FAST4U" onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="home-poster"><img src="img/bg-home.jpg" alt="2FAST4U" onerror="this.parentNode.classList.add('noimg')"></div>
       <div class="panel home-panel">
         <div class="field-lab">Il tuo nome</div>
         <input class="nameinput" id="home-name" maxlength="8" placeholder="Es. Jacopo" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
