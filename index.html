@@ -455,8 +455,9 @@ body:has(#s-home.active) .topbar{display:none}
 .of-part:hover{transform:translateY(-2px);border-color:var(--amber);box-shadow:0 6px 16px rgba(0,0,0,.45)}
 .of-part.off{cursor:default;opacity:.42;filter:grayscale(.3)}
 .of-part.off:hover{transform:none;border-color:var(--line);box-shadow:none}
-.of-badge{display:inline-block;font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.04em;padding:2px 7px;border-radius:5px;color:#0a0418;background:var(--c,#888)}
-.of-nm{font-family:var(--disp);font-weight:600;font-size:13.5px;margin:7px 0 2px;line-height:1.05}
+.of-badge{display:inline-block;font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.04em;padding:3px 9px;border-radius:5px;color:#0a0418;background:var(--c,#888);text-transform:uppercase}
+.of-part-h{display:flex;align-items:center;gap:7px;margin:0 0 6px}
+.of-lvtag{font-family:var(--disp);font-weight:700;font-size:12px;color:var(--muted);letter-spacing:.03em}
 .of-val{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
 .of-price{display:inline-block;font-family:var(--disp);font-weight:700;font-size:12px;color:#0a0418;background:var(--amber);padding:2px 8px;border-radius:5px;transform:rotate(-2deg)}
 .of-reason{display:block;font-size:10px;color:var(--danger);margin-top:4px}
@@ -492,18 +493,85 @@ body:has(#s-home.active) .topbar{display:none}
 .of-pre-d{font-size:11px;color:var(--muted)}
 .of-bet-note{width:min(96%,600px);margin:10px auto 0;font-size:12px;color:var(--muted);text-align:center}
 .of-bet-note b{color:var(--amber)}
+.of-others-h{display:none}
+/* ===== OFFICINA MOBILE — Vetrina (mof-) ===== */
+.mof{position:relative}
+.mof-hz{height:8px;background:repeating-linear-gradient(45deg,var(--amber),var(--amber) 12px,#0b0510 12px,#0b0510 24px);border-radius:8px 8px 0 0}
+.mof-cassa{display:flex;align-items:center;gap:11px;padding:11px 12px;background:linear-gradient(#150b32,#11082a);border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+.mof-ava{width:38px;height:38px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:16px;color:#0a0418;background:var(--c,#888);box-shadow:0 0 0 2px var(--asphalt-0),0 0 0 3px var(--c,#888)}
+.mof-who{font-family:var(--disp);font-weight:700;font-size:15px;line-height:1}
+.mof-turn{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--cyan);font-weight:600;margin-top:3px}
+.mof-wallet{margin-left:auto;text-align:right}
+.mof-euro{font-family:var(--disp);font-weight:700;font-size:22px;line-height:1;color:#fff7df;text-shadow:0 0 6px rgba(255,201,30,.55),0 0 14px rgba(255,201,30,.3)}
+.mof-buys{display:flex;gap:4px;justify-content:flex-end;align-items:center;margin-top:5px}
+.mof-buys span{font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.mof-tok{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 6px rgba(255,201,30,.5)}
+.mof-tok.off{background:transparent;box-shadow:inset 0 0 0 1.5px var(--muted)}
+.mof-watch{font-family:var(--disp);font-size:13px;color:var(--amber)}
+.mof-body{padding:0 12px 6px}
+.mof-sech{display:flex;align-items:center;gap:8px;margin:16px 0 10px}
+.mof-sech .mof-t{font-family:var(--disp);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--muted)}
+.mof-sech .mof-ln{flex:1;height:1px;background:var(--line)}
+.mof-wr{width:16px;height:16px;color:var(--muted);display:inline-flex}.mof-wr svg{width:16px;height:16px}
+.mof-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.mof-prod{position:relative;text-align:left;border-radius:13px;padding:13px 12px 14px;background:linear-gradient(165deg,#221148,#160b34);border:1px solid var(--line);box-shadow:0 8px 18px rgba(0,0,0,.35);overflow:hidden;color:var(--ink);cursor:pointer}
+.mof-prod::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--c,#888)}
+.mof-prod:active{transform:scale(.985)}
+.mof-prod.off{opacity:.42;filter:grayscale(.4);cursor:default}
+.mof-ic{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;background:rgba(0,0,0,.22);border:1px solid var(--c,#888);color:var(--c,#888);margin-bottom:9px}
+.mof-ic svg{width:20px;height:20px}
+.mof-nm{font-family:var(--disp);font-weight:700;text-transform:uppercase;font-size:15px;line-height:1}
+.mof-lv{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);margin-top:4px}
+.mof-vl{font-size:11px;color:var(--muted);margin-top:7px}
+.mof-tag{position:absolute;right:-3px;bottom:13px;background:var(--amber);color:#0a0418;font-family:var(--disp);font-weight:700;font-size:14px;padding:5px 11px 5px 14px;border-radius:6px 0 0 6px;transform:rotate(-3deg);box-shadow:0 3px 7px rgba(0,0,0,.4)}
+.mof-tag::before{content:"";position:absolute;left:6px;top:50%;width:5px;height:5px;border-radius:50%;background:#0a0418;transform:translateY(-50%)}
+.mof-prod.off .mof-tag{background:var(--muted)}
+.mof-reason{font-size:10px;color:var(--danger);margin-top:8px}
+.mof-empty2{grid-column:1/-1;text-align:center;color:var(--muted);font-size:13px;padding:14px}
+.mof-spect{text-align:center;color:var(--muted);font-size:14px;line-height:1.6;padding:26px 10px;background:linear-gradient(#1a0f3c,#140a30);border:1px solid var(--line);border-radius:14px;margin-top:10px}
+.mof-spect b{color:var(--amber);font-family:var(--disp)}
+.mof-garage{display:flex;flex-wrap:wrap;gap:7px}
+.mof-garage .of-chip{font-size:12px;padding:6px 10px}
+.mof-pronto{display:block;width:100%;margin-top:18px;height:54px;border:0;border-radius:13px;font-family:var(--disp);font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase;background:linear-gradient(180deg,#FFD84D,var(--amber));color:#0a0418;box-shadow:0 5px 0 #b88f00,0 10px 20px rgba(255,201,30,.22)}
+.mof-pronto:active{transform:translateY(2px);box-shadow:0 3px 0 #b88f00}
+.mof-pre{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;background:var(--asphalt-1);border:1px solid var(--line);border-radius:11px;margin-bottom:8px}
+.mof-pre b{font-family:var(--disp);font-size:13px;display:block}
+.mof-pre-d{font-size:11px;color:var(--muted)}
+.mof-gioca{flex:0 0 auto;height:34px;padding:0 14px;border:0;border-radius:8px;font-family:var(--disp);font-weight:700;font-size:12px;text-transform:uppercase;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.mof-bet{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}.mof-bet b{color:var(--amber)}
+.mof-rail{display:flex;gap:10px;overflow-x:auto;padding:2px 0 8px;-webkit-overflow-scrolling:touch}
+.mof-rail::-webkit-scrollbar{display:none}
+.mof-opp{flex:0 0 158px;background:linear-gradient(#1a0f3c,#140a30);border:1px solid var(--line);border-radius:12px;padding:11px}
+.mof-opp-top{display:flex;align-items:center;gap:8px}
+.mof-oav{width:28px;height:28px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:12px;color:#0a0418;background:var(--c,#888);box-shadow:0 0 0 2px var(--asphalt-0),0 0 0 3px var(--c,#888)}
+.mof-on{font-family:var(--disp);font-weight:600;font-size:13px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mof-opo{font-family:var(--disp);font-size:11px;color:var(--po)}
+.mof-oparts{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px;min-height:20px}
+.mof-minip{font-family:var(--disp);font-weight:600;font-size:10px;padding:3px 7px;border-radius:6px;background:var(--asphalt-0);border:1px solid var(--line);display:inline-flex;gap:5px;align-items:center;white-space:nowrap}
+.mof-minip .d{width:7px;height:7px;border-radius:2px;background:var(--c,#888)}
+.mof-minip .l{color:var(--muted)}
+.mof-empty3{font-size:10px;color:var(--muted-2)}
 @media (max-width:680px){
   .of-bg::before{height:8px}
-  .of-table{display:flex;flex-direction:column;gap:10px;margin-top:8px}
-  .of-center{order:-1}
+  .of-inner{display:flex;flex-direction:column}
+  .of-table{display:contents}
+  .of-head{order:0}
+  .of-center{order:1;margin-top:4px}
+  .of-you{order:2;width:100%;margin:14px auto 0}
+  .of-others-h{order:3}
+  .of-others-h{order:3;display:block;width:100%;margin:20px 2px 2px;font-family:var(--disp);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+  .of-top{order:4} .of-left{order:5} .of-right{order:6}
+  .of-extra{order:7} .of-bet-note{order:8}
+  .of-top:empty,.of-left:empty,.of-right:empty{display:none}
   .of-bench{width:auto;aspect-ratio:auto;border-radius:14px;padding:8px;background:linear-gradient(#3a3d45,#202329)}
   .of-felt{border-radius:12px}
   .of-lots{width:auto}
   .of-cap{position:static;top:auto;margin-bottom:8px}
-  .of-top,.of-left,.of-right{flex-direction:column;width:100%}
-  .of-seat{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px}
+  .of-top,.of-left,.of-right{display:flex;flex-direction:column;width:100%;gap:8px;margin-top:8px}
+  .of-seat{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;padding:8px 12px}
+  .of-seat .of-ava{width:24px;height:24px;font-size:11px}
   .of-bought{margin-top:0;flex:1 1 100%}
-  .of-you{width:100%} .of-done{margin-left:0;flex:1 1 100%}
+  .of-done{margin-left:0;flex:1 1 100%}
 }
 </style>
 </head>
@@ -771,13 +839,53 @@ function startTokens(v){
 function dieFaces(n){const P={1:[[50,50]],2:[[28,28],[72,72]],3:[[26,26],[50,50],[74,74]],4:[[28,28],[72,28],[28,72],[72,72]],5:[[28,28],[72,28],[50,50],[28,72],[72,72]],6:[[28,24],[72,24],[28,50],[72,50],[28,76],[72,76]]};return (P[n]||[]).map(([x,y])=>`<span class="pip" style="left:${x}%;top:${y}%;transform:translate(-50%,-50%)"></span>`).join('');}
 
 /* ---------- PREP / OFFICINA ---------- */
-const COMPMETA={motore:{ab:'MOT',c:'#FF8A1E'},cambio:{ab:'CAM',c:'#2BA8E6'},sterzo:{ab:'STE',c:'#9B3BE0'},assetto:{ab:'ASS',c:'#45C166'},peso:{ab:'PESO',c:'#C7B9EF'},nos:{ab:'NOS',c:'#FFC91E'}};
-function ofMeta(comp){return COMPMETA[comp]||{ab:(comp||'?').slice(0,3).toUpperCase(),c:'var(--muted)'};}
-function ofChip(o){const m=ofMeta(o.comp);return `<span class="of-chip" style="--c:${m.c}"><span class="of-dot"></span>${m.ab} <span class="of-lv">L${o.lvl}</span></span>`;}
+const COMPMETA={motore:{ab:'MOT',full:'Motore',c:'#FF8A1E'},cambio:{ab:'CAM',full:'Cambio',c:'#2BA8E6'},sterzo:{ab:'STE',full:'Sterzo',c:'#9B3BE0'},assetto:{ab:'ASS',full:'Assetto',c:'#45C166'},peso:{ab:'PESO',full:'Peso',c:'#C7B9EF'},nos:{ab:'NOS',full:'NOS',c:'#FFC91E'}};
+function ofMeta(comp){return COMPMETA[comp]||{ab:(comp||'?').slice(0,3).toUpperCase(),full:(comp||'?'),c:'var(--muted)'};}
+function ofChip(o){const m=ofMeta(o.comp);return `<span class="of-chip" style="--c:${m.c}"><span class="of-dot"></span>${m.full} <span class="of-lv">L${o.lvl}</span></span>`;}
 function ofOwnedChips(owned,emptyTxt){const up=(owned||[]).filter(o=>o.lvl>0);return up.length?up.map(ofChip).join(''):`<span class="of-empty">${emptyTxt||'—'}</span>`;}
 function ofSeat(p,activeId){const act=p.id===activeId;return `<div class="of-seat${act?' act':''}"><div class="of-seat-top"><div class="of-ava" style="--c:${p.colorH}">${ini(p.name)}</div><div class="of-who">${esc(p.name)}</div><div class="of-po">${p.po} PO</div></div>${act?'<div class="of-now">sta scegliendo\u2026</div>':''}<div class="of-bought">${ofOwnedChips(p.car&&p.car.owned)}</div></div>`;}
+function ofIcon(comp){const I={
+  motore:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="9" width="13" height="8" rx="1.5"/><path d="M16 11h3a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-3M7 9V6h5v3M3 13H1"/></svg>',
+  cambio:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 7v11M17 7v11M7 12h10"/><circle cx="7" cy="6" r="2.2" fill="currentColor" stroke="none"/></svg>',
+  sterzo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/><path d="M12 9.6V4M9.9 13.4 5.3 16.8M14.1 13.4 18.7 16.8"/></svg>',
+  assetto:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10M7 21h10M8 6h8l-8 4h8l-8 4h8"/></svg>',
+  peso:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 9v6M8 7v10M16 7v10M19 9v6M8 12h8"/></svg>',
+  nos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9.5 3h5v3l1 2v11a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V8l1-2z"/><path d="M9.5 12h5"/></svg>'};
+  return I[comp]||'';}
+function prepMobileHTML(v){
+  const you=v.you, youP=v.players.find(p=>p.id===you.id)||null;
+  const others=v.players.filter(p=>p.id!==you.id);
+  let cassaRight='', shop='', garage='', pronto='', extra='';
+  if(v.isYourTurn&&v.me){
+    const m=v.me; const n=Math.max(0,m.buysLeft); let toks=''; for(let i=0;i<n;i++)toks+='<i class="mof-tok"></i>'; if(!n)toks='<i class="mof-tok off"></i>';
+    cassaRight=`<div class="mof-euro">${eur(m.money)}</div><div class="mof-buys"><span>acquisti</span>${toks}</div>`;
+    let cards=''; if(!v.shop.length)cards='<div class="mof-empty2">Nessun ricambio scoperto.</div>';
+    v.shop.forEach(c=>{const mm=ofMeta(c.comp);const ok=c.buyable;
+      cards+=`<button class="mof-prod${ok?'':' off'}" style="--c:${mm.c}" ${ok?'':'disabled'} ${ok?`onclick="socket.emit('prep:buy',{shopIdx:${c.idx}})"`:''}><div class="mof-ic">${ofIcon(c.comp)}</div><div class="mof-nm">${mm.full}</div><div class="mof-lv">Livello ${c.lvl}</div><div class="mof-vl">valore ${c.val>=0?'+':''}${c.val}${c.skip?' · salto ×2':''}</div><div class="mof-tag">${eur(c.price)}</div>${(!ok&&c.reason)?`<div class="mof-reason">${c.reason}</div>`:''}</button>`;});
+    shop=`<div class="mof-sech"><span class="mof-wr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6a4 4 0 0 1-5.2 3.8L7 18.6 5.4 17 14.2 8.2A4 4 0 0 1 18 3l-2.3 2.3 1 2.4 2.4 1L21 6Z"/></svg></span><span class="mof-t">Ricambi sul banco</span><span class="mof-ln"></span></div><div class="mof-grid">${cards}</div>`;
+    garage=`<div class="mof-sech"><span class="mof-t">Il tuo garage</span><span class="mof-ln"></span></div><div class="mof-garage">${ofOwnedChips(m.owned,'Ancora nessun pezzo')}</div>`;
+    pronto=`<button class="mof-pronto" onclick="prepDone()">Pronto — passa il turno →</button>`;
+    if(v.pregara&&v.pregara.length){extra+='<div class="mof-sech"><span class="mof-t">Carte pre-gara</span><span class="mof-ln"></span></div>';
+      v.pregara.forEach(c=>{const neg=c.val<0;const desc=c.eff==='money'?(c.val>=0?'+':'')+eur(c.val):(c.val>=0?'+':'')+c.val+' PO';const oc=neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`;
+        extra+=`<div class="mof-pre"><div><b>${esc(c.nome)}</b><span class="mof-pre-d">${desc} · ${neg?'su un avversario':'su di te'}</span></div><button class="mof-gioca" onclick="${oc}">Gioca</button></div>`;});}
+    if(v.canBet)extra+='<div class="mof-bet">Apri 👥 <b>Piloti</b> in alto per scommettere e vedere le puntate.</div>';
+  }else{
+    cassaRight='<div class="mof-watch">Stai guardando</div>';
+    shop=`<div class="mof-spect">Tocca a <b>${esc(v.activeName||'')}</b><br>sta scegliendo i ricambi…</div>`;
+    if(youP)garage=`<div class="mof-sech"><span class="mof-t">Il tuo garage</span><span class="mof-ln"></span></div><div class="mof-garage">${ofOwnedChips(youP.car&&youP.car.owned,'Ancora nessun pezzo')}</div>`;
+  }
+  const turnLine=v.isYourTurn?'Tocca a te · officina':('Tocca a '+esc(v.activeName||''));
+  const cassa=`<div class="mof-cassa"><div class="mof-ava" style="--c:${you.colorH}">${ini(you.name)}</div><div><div class="mof-who">${esc(you.name)}</div><div class="mof-turn">${turnLine}</div></div><div class="mof-wallet">${cassaRight}</div></div>`;
+  let rail='';
+  if(others.length){rail='<div class="mof-sech"><span class="mof-t">Avversari · '+others.length+'</span><span class="mof-ln"></span></div><div class="mof-rail">';
+    others.forEach(p=>{const ow=(p.car&&p.car.owned?p.car.owned.filter(o=>o.lvl>0):[]);const chips=ow.length?ow.map(o=>{const mm=ofMeta(o.comp);return `<span class="mof-minip" style="--c:${mm.c}"><span class="d"></span>${mm.full} <span class="l">L${o.lvl}</span></span>`;}).join(''):'<span class="mof-empty3">nessun pezzo</span>';
+      rail+=`<div class="mof-opp"><div class="mof-opp-top"><div class="mof-oav" style="--c:${p.colorH}">${ini(p.name)}</div><div class="mof-on">${esc(p.name)}</div><div class="mof-opo">${p.po} PO</div></div><div class="mof-oparts">${chips}</div></div>`;});
+    rail+='</div>';}
+  return `<div class="mof"><div class="mof-hz"></div>${cassa}<div class="mof-body">${shop}${garage}${pronto}${extra}${rail}</div></div>`;
+}
 function renderPrep(v){
   show('s-prep');topMeta('Round '+v.round);
+  if(window.matchMedia('(max-width:680px)').matches){document.getElementById('s-prep').innerHTML=prepMobileHTML(v);return;}
   const others=v.players.filter(p=>p.id!==v.you.id);
   const top=[],left=[],right=[];
   others.forEach((p,i)=>{(i%3===0?top:i%3===1?left:right).push(p);});
@@ -787,7 +895,7 @@ function renderPrep(v){
     bench+='<div class="of-cap">Ricambi \u00b7 sul banco</div><div class="of-grid">';
     if(!v.shop.length)bench+='<div class="of-bench-spect" style="grid-column:1/-1">Nessun ricambio scoperto.</div>';
     v.shop.forEach(c=>{const m=ofMeta(c.comp);
-      bench+=`<button class="of-part${c.buyable?'':' off'}" ${c.buyable?'':'disabled'} onclick="socket.emit('prep:buy',{shopIdx:${c.idx}})"><span class="of-badge" style="--c:${m.c}">${m.ab}</span><div class="of-nm">${esc(c.name)} L${c.lvl}</div><span class="of-val">valore ${c.val>=0?'+':''}${c.val}${c.skip?' \u00b7 salto \u00d72':''}</span><span class="of-price">${eur(c.price)}</span>${(!c.buyable&&c.reason)?`<span class="of-reason">${c.reason}</span>`:''}</button>`;});
+      bench+=`<button class="of-part${c.buyable?'':' off'}" ${c.buyable?'':'disabled'} onclick="socket.emit('prep:buy',{shopIdx:${c.idx}})"><div class="of-part-h"><span class="of-badge" style="--c:${m.c}">${m.full}</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">valore ${c.val>=0?'+':''}${c.val}${c.skip?' \u00b7 salto \u00d72':''}</span><span class="of-price">${eur(c.price)}</span>${(!c.buyable&&c.reason)?`<span class="of-reason">${c.reason}</span>`:''}</button>`;});
     bench+='</div>';
   }else{
     bench=`<div class="of-bench-spect">Il banco \u00e8 di <b>${esc(v.activeName||'')}</b><br>sta scegliendo i ricambi\u2026</div>`;
@@ -805,7 +913,7 @@ function renderPrep(v){
       extra+='</div>';}
     if(v.canBet)extra+='<div class="of-bet-note">Apri \ud83d\udc65 <b>Piloti</b> in alto a destra per scommettere e vedere le puntate.</div>';
   }
-  const html=`<div class="of-scene"><div class="of-bg"></div><div class="of-inner"><div class="of-head"><div class="of-title">Officina \u00b7 Ricambi <small>Round ${v.round}</small></div>${turn}</div><div class="of-table"><div class="of-top">${top.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-left">${left.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-center"><div class="of-bench"><div class="of-felt"><div class="of-lots">${bench}</div></div></div></div><div class="of-right">${right.map(p=>ofSeat(p,v.activeId)).join('')}</div></div><div class="of-you">${you}</div>${extra}</div></div>`;
+  const html=`<div class="of-scene"><div class="of-bg"></div><div class="of-inner"><div class="of-head"><div class="of-title">Officina \u00b7 Ricambi <small>Round ${v.round}</small></div>${turn}</div><div class="of-table"><div class="of-top">${top.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-left">${left.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-center"><div class="of-bench"><div class="of-felt"><div class="of-lots">${bench}</div></div></div></div><div class="of-right">${right.map(p=>ofSeat(p,v.activeId)).join('')}</div></div><div class="of-you">${you}</div><div class="of-others-h">Altri giocatori</div>${extra}</div></div>`;
   document.getElementById('s-prep').innerHTML=html;
 }
 
@@ -1166,7 +1274,7 @@ function checkIncoming(v){
   _lastToastId=Math.max(_lastToastId,maxId);
   if(newest){const host=(newest.val<0)||(newest.eff==='dado'&&newest.val<6);flash((host?'\u26a0\ufe0f ':'\u2728 ')+newest.who+(host?' ti ha giocato \u00ab':' ti ha dato \u00ab')+newest.nome+'\u00bb',host?'hostile':'mine');}
 }
-function shortComp(c){return {motore:'Mot',cambio:'Cam',sterzo:'Ste',assetto:'Ass',peso:'Peso',nos:'NOS'}[c]||c;}
+function shortComp(c){return {motore:'Motore',cambio:'Cambio',sterzo:'Sterzo',assetto:'Assetto',peso:'Peso',nos:'NOS'}[c]||c;}
 function renderDrawer(v){
   const has=(v.phase==='prep'||v.phase==='race'||v.phase==='results'||v.phase==='win')&&Array.isArray(v.players);
   const btn=document.getElementById('drawer-toggle');
