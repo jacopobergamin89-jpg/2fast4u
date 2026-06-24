@@ -934,12 +934,14 @@ io.on('connection', (socket)=>{
     code=(code||'').toUpperCase().trim();
     const room=rooms.get(code);
     if(!room){ if(cb) cb({ ok:false, error:'Stanza inesistente.' }); return; }
-    if(room.started){
-      // tentativo di rientro per nome
-      const ex=room.G.players.find(x=>x.name.toLowerCase()===cleanName(name).toLowerCase());
-      if(ex){ ex.socketId=socket.id; ex.connected=true; socketToRoom.set(socket.id, code); socket.join(code); if(cb) cb({ ok:true, code, youId:ex.id, rejoined:true }); broadcast(room); return; }
-      if(cb) cb({ ok:false, error:'Partita già iniziata.' }); return;
+    const ex=room.G.players.find(x=>x.name.toLowerCase()===cleanName(name).toLowerCase());
+    if(ex && !ex.connected){                                     // riaggancio per nome (lobby o partita in corso)
+      ex.socketId=socket.id; ex.connected=true; socketToRoom.set(socket.id, code); socket.join(code);
+      if(ex._dcTimer){ clearTimeout(ex._dcTimer); ex._dcTimer=null; }
+      if(cb) cb({ ok:true, code, youId:ex.id, rejoined:true }); broadcast(room); return;
     }
+    if(room.started){ if(cb) cb({ ok:false, error: ex?'Nome già in uso.':'Partita già iniziata.' }); return; }
+    if(ex){ if(cb) cb({ ok:false, error:'Nome già in uso in questa sala.' }); return; }
     if(room.G.players.length>=8){ if(cb) cb({ ok:false, error:'Stanza piena (max 8).' }); return; }
     let ci=(colorIdx>=0&&colorIdx<8)?colorIdx:freeColorIdx(room);
     if(room.G.players.some(x=>x.colorIdx===ci)){ ci=freeColorIdx(room); }
@@ -959,9 +961,11 @@ io.on('connection', (socket)=>{
   });
 
   socket.on('addBot', ()=>{
-    const f=playerBySocket(socket); if(!f||f.room.started) return; const {room,p}=f;
-    if(p.id!==room.hostId || room.G.players.length>=8) return;
-    const ci=freeColorIdx(room); if(ci<0) return;
+    const f=playerBySocket(socket); if(!f){ socket.emit('errorMsg','Connessione persa: ricarica la pagina.'); return; }
+    if(f.room.started) return; const {room,p}=f;
+    if(p.id!==room.hostId){ socket.emit('errorMsg','Solo l\'host può aggiungere una CPU.'); return; }
+    if(room.G.players.length>=8){ socket.emit('errorMsg','Sala piena (max 8).'); return; }
+    const ci=freeColorIdx(room); if(ci<0){ socket.emit('errorMsg','Nessun colore libero.'); return; }
     room._botN=(room._botN||0)+1;
     room.G.players.push({ id:room.G.nextId++, socketId:null, name:'CPU '+room._botN, colorIdx:ci, connected:true, isBot:true });
     broadcast(room);
@@ -1007,10 +1011,18 @@ io.on('connection', (socket)=>{
     if(!f) return; const {room,p}=f;
     p.connected=false; p.socketId=null;
     if(!room.started){
-      // in lobby: rimuovi il giocatore
-      room.G.players=room.G.players.filter(x=>x.id!==p.id);
-      if(room.G.players.length===0 || !room.G.players.some(x=>!x.isBot)){ rooms.delete(room.code); return; }
-      if(p.id===room.hostId){ room.hostId=room.G.players.find(x=>!x.isBot).id; }
+      // in lobby: NON cancellare subito — dà tempo al riaggancio (mobile/Render free)
+      const otherHuman=room.G.players.find(x=>!x.isBot && x.connected && x.id!==p.id);
+      if(p.id===room.hostId && otherHuman){ room.hostId=otherHuman.id; }   // se ci sono altri umani, l'host passa subito
+      if(p._dcTimer) clearTimeout(p._dcTimer);
+      p._dcTimer=setTimeout(()=>{                                          // scaduta la finestra: pulizia
+        p._dcTimer=null; if(p.connected) return;
+        room.G.players=room.G.players.filter(x=>x.id!==p.id);
+        if(room.G.players.length===0 || !room.G.players.some(x=>!x.isBot)){ rooms.delete(room.code); return; }
+        if(p.id===room.hostId){ const h=room.G.players.find(x=>!x.isBot&&x.connected)||room.G.players.find(x=>!x.isBot); if(h) room.hostId=h.id; }
+        broadcast(room);
+      }, 60000);
+      broadcast(room); return;
     }
     broadcast(room);
   });
