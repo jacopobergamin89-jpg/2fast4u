@@ -78,10 +78,11 @@ const C_INGARA = [
  ['Ti prendooooo!!!!','ctrl',1,1,'self'],['Hai istallato le nuove sospensioni','ctrl',1,1,'self'],['Il nuovo alettone fa il suo dovere','ctrl',1,2,'self'],['Spettacolo le nuove minigonne','ctrl',1,2,'self'],
  ['Freni rispondono male','ctrl',-1,1,'rival'],['Alettone danneggiato','ctrl',-1,1,'rival'],['Ti prendooooo!!!!','ctrl',-1,1,'rival'],['Olio vecchi nel motore','ctrl',-1,2,'rival'],
  ['Olio vecchio nei freni','ctrl',-1,2,'rival'],['Ammortizzatore scarico','ctrl',-2,1,'rival'],['Il motore non raffredda bene','ctrl',-2,1,'rival'],['Marmitta inceppata','ctrl',-2,2,'rival'],
- ['Sterzo allentato','ctrl',-2,2,'rival'],['Bel colpo di fortuna','partenza',2,0,'self'],['Il sonno aiuta','partenza',2,0,'self'],['Brucia le gomme','partenza',1,0,'self'],
+ ['Sterzo allentato','ctrl',-2,2,'rival'],['Servosterzo in tilt','ctrl',-2,1,'rival'],['Sospensioni a pezzi','ctrl',-2,2,'rival'],['Convergenza sballata','ctrl',-1,2,'rival'],['Bel colpo di fortuna','partenza',2,0,'self'],['Il sonno aiuta','partenza',2,0,'self'],['Brucia le gomme','partenza',1,0,'self'],
  ['Brucia le gomme','partenza',1,0,'self'],['Buono il caffè stamattina','partenza',1,0,'self'],['Non è la tua giornata','partenza',-2,0,'rival'],['Brutti incubi','partenza',-2,0,'rival'],
  ['Hai messo gli occhiali sbagliati','partenza',-1,0,'rival'],['Oggi va cosi…','partenza',-1,0,'rival'],['Falsa partenza','partenza',-1,0,'rival'],['Sempre la vecchia fortuna','dado',6,1,'self'],
- ['Il destino provvede','dado',6,1,'self'],['Spegni la fiamma','dado',1,1,'rival'],['ALT','dado',1,1,'rival']
+ ['Il destino provvede','dado',6,1,'self'],['Spegni la fiamma','dado',1,1,'rival'],['ALT','dado',1,1,'rival'],
+ ['Sfrutti la scia','reach',2,0,'self'],['Incollato al paraurti','reach',1,-1,'self']
 ];
 const C_PREGARA = [
  ['Bravo, aiuti il prossimo','po',1],['Quando meno se lo aspettano','po',2],['Mi sembra giusto cosi','po',2],
@@ -90,18 +91,26 @@ const C_PREGARA = [
  ['Arrivano le tasse arretrate','money',-250],['Arriva la multa per eccesso velocità','money',-500],['I debiti si pagano','money',-500],
  ['Arrivano gli sponsor','prizeUp',2],['La fortuna ti assiste','prizeUp',2],['Pareggiamo le cose','prizeDown',0.5],['Pareggiamo i conti','prizeDown',0.5],
  ['Anche gli altri puntano su di te','betUp',2],['Il broker ti fa un regalo','betUp',2],['La quota cala all\'ultimo','betDown',0.5],
+ ['Il broker ti fa un regalo di compleanno','quota',1],['Il broker sbaglia a segnare la quota','quota',0.5],['Quota ricalcolata','quota',-1],['Stai antipatico al broker','quota',-0.5],
  ['Il capo officina ti deve un debito','discount',0.5],['Il figlio del capo officina ti salda il debito','discount',0.5],['Il meccanico ti fa un favore','discount',0.5],
  ['Durante la notte smonti il pezzo al tuo acerrimo rivale','smonta',0,2],['Commissioni furto ad un tuo rivale','smonta',2000,0],['Ogni azione ha una conseguenza','smonta',2000,1],
- ['Chiedi al figlio del proprietario di riaprire l\'officina','reopenAll',0],['Chiedi alla moglie del proprietario di riaprire l\'officina','reopenAll',0],['Il proprietario riapre l\'officina per tutti','reopenAll',0],['Serata di porte aperte in officina','reopenAll',0],
+ ['Chiedi al figlio del proprietario di riaprire l\'officina','reopenAll',0],['Chiedi alla moglie del proprietario di riaprire l\'officina','reopenAll',0],['Il proprietario riapre l\'officina per tutti','reopenAll',0],['Serata di porte aperte in officina','reopenAll',0],['Notte di porte aperte in officina','reopenAll',0],
  ['Tour privato dell\'officina ti costerà caro','reopen',400],['Visita privata all\'officina','reopen',400],
- ['I debidi di gioco si pagano','reopenDebt',0]
+ ['I debidi di gioco si pagano','reopenDebt',0],['Favori incrociati in officina','reopenDebt',0],
+ ['Gara lampo','sprint',28],['Hai da fare stasera','sprint',34]
+];
+// Difese: eff 'defend', val=ambito ('ingara'|'pregara'|'both'), dur=1 se riflette
+const C_DIFESA = [
+ ['Riflessi felini','ingara',0],['Schivata all\'ultimo','ingara',0],['Sangue freddo','ingara',0],['Lo eviti in un lampo','ingara',0],['Colpo di reni','ingara',0],['Scarto secco','ingara',0],['Effetto specchio','ingara',1],
+ ['Spalle coperte','pregara',0],['Soffiata in anticipo','pregara',0],['Niente ti scalfisce','pregara',0],['Sempre un passo avanti','pregara',0],['Talpa in officina','pregara',0],['Coperto su tutto','pregara',0],['Ritorno al mittente','pregara',1],
+ ['Sesto senso','both',0],['Scudo totale','both',0]
 ];
 
 /* ============================ UTIL ============================ */
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function d6(){ return 1+Math.floor(Math.random()*6); }
 function ini(n){ return (n||'?')[0].toUpperCase(); }
-function makeDeck(){ const d=[]; C_INGARA.forEach(c=>d.push({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4]})); C_PREGARA.forEach(c=>d.push({cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3]})); return shuffle(d); }
+function makeDeck(){ const d=[]; C_INGARA.forEach(c=>d.push({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4]})); C_PREGARA.forEach(c=>d.push({cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3]})); C_DIFESA.forEach(c=>d.push({cat:'difesa',nome:c[0],eff:'defend',val:c[1],dur:c[2]})); return shuffle(d); }
 function drawCard(G){
   if(!G.deck||!G.deck.length){ if(G.discard&&G.discard.length){ G.deck=shuffle(G.discard); G.discard=[]; } else { G.deck=makeDeck(); } }
   return G.deck.length ? G.deck.pop() : null;
@@ -180,8 +189,8 @@ function startRound(room){
   G.entryFee=DB.roadBasePrice[G.raceLevel];
   G.raceFirstRollDone=false;
   rebuildShop(room);
-  G.ppIdx=0; G.phase='prep'; G.R=null; G.lastResults=null; G.reshop=false; G.reshopQueued=false; G.reshopFirst=null;
-  G.players.forEach(p=>{ p.bet=null; p.prizeMult=1; p.betMult=1; p.discountNext=false; });
+  G.ppIdx=0; G.phase='prep'; G.R=null; G.lastResults=null; G.reshop=false; G.reshopQueued=false; G.reshopFirst=null; G.sprintFinish=null;
+  G.players.forEach(p=>{ p.bet=null; p.prizeMult=1; p.betMult=1; p.quotaMod=0; p.discountNext=false; p.incoming=[]; });
   curPrep(G).buysLeft=G.maxBuys;
 }
 function rebuildShop(room){
@@ -235,19 +244,112 @@ function actBuy(room,p,shopIdx){
   const price=priceFor(G,p,card.comp,card.lvl); if(p.money<price) return 'Denaro insufficiente.';
   p.money-=price; p.comp[card.comp]=card.lvl; if(p.lvlOwned&&!p.lvlOwned[card.comp].includes(card.lvl)) p.lvlOwned[card.comp].push(card.lvl); p.buysLeft--; p.discountNext=false; G.shop.splice(shopIdx,1); return null;
 }
-function pregaraTarget(c){ if(c.eff==='prizeDown'||c.eff==='betDown'||c.eff==='smonta'||c.eff==='reopenDebt') return 'rival'; if((c.eff==='money'||c.eff==='po')&&c.val<0) return 'rival'; return 'self'; }
+function pregaraTarget(c){ if(c.eff==='prizeDown'||c.eff==='betDown'||c.eff==='smonta'||c.eff==='reopenDebt') return 'rival'; if(c.eff==='quota') return c.val<0?'rival':'self'; if((c.eff==='money'||c.eff==='po')&&c.val<0) return 'rival'; return 'self'; }
+
+/* ====================== DIFESE / MALUS ====================== */
+function isDefense(c){ return !!c && c.eff==='defend'; }
+function isReflect(c){ return isDefense(c) && (c.dur===1||c.costPO===1); }
+function canDefend(c, m){ if(!isDefense(c)) return false; const s=c.val; return m.phase==='ingara' ? (s==='ingara'||s==='both') : (s==='pregara'||s==='both'); }
+function malusLabel(m){
+  if(m.eff==='vel') return (m.val>=0?'+':'')+m.val+' Velocità';
+  if(m.eff==='ctrl') return (m.val>=0?'+':'')+m.val+' Controllo';
+  if(m.eff==='partenza') return 'Partenza '+(m.val>=0?'+':'')+m.val;
+  if(m.eff==='dado') return 'Dado truccato a '+m.val;
+  if(m.eff==='money') return '−€'+Math.abs(m.val);
+  if(m.eff==='po') return m.val+' Punti Onore';
+  if(m.eff==='smonta') return 'Smonta '+((DB.nomi&&DB.nomi[m.comp])||m.comp||'pezzo');
+  if(m.eff==='prizeDown') return 'Montepremi ÷2';
+  if(m.eff==='betDown') return 'Scommessa ÷2';
+  if(m.eff==='quota') return 'Quota '+m.val;
+  return 'Malus';
+}
+function smontaBest(G, victim){
+  let best=null;
+  DB.ordine.forEach(cp=>{ if(victim.comp[cp]>0){ const vv=DB.valori[cp][victim.comp[cp]]; if(best===null||vv>best.vv) best={cp,vv}; } });
+  if(!best) return null;
+  const cp=best.cp, lv=victim.comp[cp];
+  victim.lvlOwned[cp]=(victim.lvlOwned[cp]||[0]).filter(x=>x!==lv);
+  if(!victim.lvlOwned[cp].length) victim.lvlOwned[cp]=[0];
+  victim.comp[cp]=Math.max(...victim.lvlOwned[cp]);
+  G.shop.push({comp:cp,lvl:lv});
+  return {comp:cp,lvl:lv};
+}
+function recordMalus(room, attacker, target, m){
+  const G=room.G;
+  m.mid=(G.malusSeq=(G.malusSeq||0)+1);
+  m.attackerId=attacker.id; m.attackerName=attacker.name;
+  m.label=malusLabel(m);
+  (target.incoming=target.incoming||[]).push(m);
+  if(target.isBot) botMaybeDefend(room, target);
+}
+function revertMalus(G, t, m){
+  switch(m.eff){
+    case 'money': t.money=Math.max(0, t.money-(m.applied||0)); break;
+    case 'po': t.po=Math.max(0, t.po-(m.applied||0)); break;
+    case 'prizeDown': t.prizeMult=(t.prizeMult||1)/m.val; break;
+    case 'betDown': t.betMult=(t.betMult||1)/m.val; break;
+    case 'quota': t.quotaMod=(t.quotaMod||0)-m.val; break;
+    case 'smonta': { const cp=m.comp, lv=m.lvl; if(cp!=null){ if(t.lvlOwned[cp]&&!t.lvlOwned[cp].includes(lv)) t.lvlOwned[cp].push(lv); t.comp[cp]=Math.max(...t.lvlOwned[cp]); const si=G.shop.findIndex(s=>s.comp===cp&&s.lvl===lv); if(si>=0) G.shop.splice(si,1); } break; }
+    case 'vel': case 'ctrl': { const car=G.R&&G.R.cars[t.id]; if(car&&m.fxRef) car.fx=car.fx.filter(e=>e!==m.fxRef); break; }
+    case 'partenza': { const car=G.R&&G.R.cars[t.id]; if(car) car.pendPart-=m.val; break; }
+    case 'dado': { const car=G.R&&G.R.cars[t.id]; if(car) car.pendDado=(m.prevDado!==undefined?m.prevDado:null); break; }
+  }
+}
+function reflectMalus(G, a, m){
+  switch(m.eff){
+    case 'money': a.money=Math.max(0, a.money+m.val); break;
+    case 'po': a.po=Math.max(0, a.po+m.val); break;
+    case 'prizeDown': a.prizeMult=(a.prizeMult||1)*m.val; break;
+    case 'betDown': a.betMult=(a.betMult||1)*m.val; break;
+    case 'quota': a.quotaMod=(a.quotaMod||0)+m.val; break;
+    case 'smonta': smontaBest(G, a); break;
+    case 'vel': case 'ctrl': { const car=G.R&&G.R.cars[a.id]; if(car) car.fx.push({stat:m.eff,amt:m.val,turns:m.dur}); break; }
+    case 'partenza': { const car=G.R&&G.R.cars[a.id]; if(car) car.pendPart+=m.val; break; }
+    case 'dado': { const car=G.R&&G.R.cars[a.id]; if(car) car.pendDado=m.val; break; }
+  }
+}
+function incomingFor(player){
+  return (player.incoming||[]).map(m=>({ mid:m.mid, label:m.label, by:m.attackerName,
+    defenders: player.hand.map((c,i)=>({c,i})).filter(o=>canDefend(o.c,m)).map(o=>({ handIdx:o.i, nome:o.c.nome, reflect:isReflect(o.c) })) })).filter(x=>x.defenders.length>0);
+}
+function actDefend(room, p, handIdx, mid){
+  const G=room.G;
+  const m=(p.incoming||[]).find(x=>x.mid===mid); if(!m) return 'Quel malus non è più annullabile.';
+  const c=p.hand[handIdx]; if(!isDefense(c)) return 'Carta difesa non valida.';
+  if(!canDefend(c,m)) return 'Questa difesa non copre quel malus.';
+  revertMalus(G, p, m);
+  const reflect=isReflect(c);
+  if(reflect){ const a=G.players.find(x=>x.id===m.attackerId); if(a) reflectMalus(G, a, m); }
+  p.incoming=(p.incoming||[]).filter(x=>x.mid!==mid);
+  G.discard.push(c); p.hand.splice(handIdx,1);
+  raceLog(G,{kind:'defend',who:p.name,nome:c.nome,reflect,by:m.attackerName});
+  return null;
+}
+function botMaybeDefend(room, bot){
+  const snap=(bot.incoming||[]).slice();
+  for(const m of snap){
+    if(!(bot.incoming||[]).some(x=>x.mid===m.mid)) continue;
+    const opts=bot.hand.map((c,i)=>({c,i})).filter(o=>canDefend(o.c,m));
+    if(!opts.length) continue;
+    if(Math.random()>=0.6) continue;
+    opts.sort((a,b)=>(isReflect(b.c)?1:0)-(isReflect(a.c)?1:0));
+    actDefend(room, bot, opts[0].i, m.mid);
+  }
+}
+
 function actPlayPregara(room,p,handIdx,targetId,comp){
   const G=room.G; if(G.phase!=='prep'||curPrep(G).id!==p.id) return 'Non è il tuo turno.';
   if(G.reshop) return 'Nel giro extra puoi solo comprare.';
   const c=p.hand[handIdx]; if(!c||c.cat!=='pregara') return 'Carta non valida.';
-  let tgt=p;
+  if(c.eff==='defend') return 'Le difese si usano solo quando vieni colpito.';
+  let tgt=p; let _ap=0,_comp=null,_lvl=null;
   if(pregaraTarget(c)==='rival'){ const t=G.players.find(x=>x.id===targetId && x.id!==p.id); if(!t) return 'Scegli un avversario valido.'; tgt=t; }
   if(c.eff==='smonta'){
     const cost=c.val||0;
     if(p.money<cost) return 'Ti servono €'+cost+' per giocarla.';
     if(!comp||tgt.comp[comp]==null) return 'Componente non valido.';
     if(tgt.comp[comp]<=0) return 'Quel pezzo è già al minimo.';
-    const lvl=tgt.comp[comp];
+    const lvl=tgt.comp[comp]; _comp=comp; _lvl=lvl;
     tgt.lvlOwned[comp]=(tgt.lvlOwned[comp]||[0]).filter(x=>x!==lvl);   // tolgo il livello in cima
     if(!tgt.lvlOwned[comp].length) tgt.lvlOwned[comp]=[0];
     tgt.comp[comp]=Math.max(...tgt.lvlOwned[comp]);                    // torno al livello posseduto più alto rimasto
@@ -255,10 +357,11 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
     p.money-=cost;                        // costo denaro
     if(c.costPO) p.po=Math.max(0,p.po-c.costPO); // costo Rispetto
   }
-  else if(c.eff==='money') tgt.money=Math.max(0,tgt.money+c.val);
-  else if(c.eff==='po') tgt.po=Math.max(0,tgt.po+c.val);
+  else if(c.eff==='money'){ const _b=tgt.money; tgt.money=Math.max(0,tgt.money+c.val); _ap=tgt.money-_b; }
+  else if(c.eff==='po'){ const _b=tgt.po; tgt.po=Math.max(0,tgt.po+c.val); _ap=tgt.po-_b; }
   else if(c.eff==='prizeUp'||c.eff==='prizeDown') tgt.prizeMult=(tgt.prizeMult||1)*c.val;
   else if(c.eff==='betUp'||c.eff==='betDown') tgt.betMult=(tgt.betMult||1)*c.val;
+  else if(c.eff==='quota') tgt.quotaMod=(tgt.quotaMod||0)+c.val;
   else if(c.eff==='discount') tgt.discountNext=true;
   else if(c.eff==='reopen'){                                       // Tour privato: esclusiva, +1 acquisto, costa val
     const cost=c.val||0;
@@ -275,6 +378,11 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
     revealMore(room, Math.max(4,G.players.length), G.compMaxLevel);
     tgt.discountNext=true;                                         // il rivale scelto compra a metà prezzo
   }
+  else if(c.eff==='sprint'){                                       // gara breve: traguardo a c.val, una sola per gara
+    if(G.sprintFinish) return 'Un\'altra gara breve è già stata organizzata. Riprova la prossima.';
+    G.sprintFinish=c.val;
+  }
+  if(pregaraTarget(c)==='rival' && c.eff!=='reopenDebt' && tgt.id!==p.id) recordMalus(room, p, tgt, {phase:'pregara', eff:c.eff, val:c.val, applied:_ap, comp:_comp, lvl:_lvl});
   G.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
 function actSetBet(room,p,targetId,amount){
@@ -300,8 +408,8 @@ function actPrepDone(room,p){
 /* --- gara --- */
 function startRace(room){
   const G=room.G;
-  G.R={ turnOrder:[...G.order], turn:1, ptr:0, phase:'await', cars:{}, lastBreak:null, log:[], logId:0 };
-  G.players.forEach(p=>{ G.R.cars[p.id]={ pos:0, firstDone:false, nosUsed:false, fx:[], pendDado:null, pendPart:0 }; });
+  G.R={ turnOrder:[...G.order], turn:1, ptr:0, phase:'await', cars:{}, lastBreak:null, log:[], logId:0, finish:(G.sprintFinish||null) };
+  G.players.forEach(p=>{ G.R.cars[p.id]={ pos:0, firstDone:false, nosUsed:false, fx:[], pendDado:null, pendPart:0, pendReach:null }; p.incoming=[]; });  // azzero incoming: finestra difese pre-gara chiusa
   G.phase='race';
 }
 function activeRace(G){ return G.players.find(p=>p.id===G.R.turnOrder[G.R.ptr]); }
@@ -311,6 +419,14 @@ function nosAllowed(G,p){ const car=G.R.cars[p.id]; const seg=segOf(G,Math.max(1
 
 function computeMove(G,p,die,useNos){
   const R=G.R; const car=R.cars[p.id]; const first=!car.firstDone; const seg=segOf(G,Math.max(1,car.pos));
+  if(car.pendReach){
+    const ranked=G.players.map(x=>R.cars[x.id].pos).sort((a,b)=>b-a);   // classifica per posizione, decrescente
+    const ref=Math.min(ranked.length, Math.max(1, car.pendReach.ref));  // 1 = primo, 2 = secondo
+    let target=Math.max(0, Math.min(55, (ranked[ref-1]||0)+(car.pendReach.off||0)));
+    const mov=Math.max(0, target-car.pos);                              // solo in avanti
+    const lbl=(car.pendReach.ref===2&&car.pendReach.off===0)?'Carta · raggiungi il 2°':(car.pendReach.ref===1&&car.pendReach.off===-1)?'Carta · una casella dietro il 1°':'Carta · salto di posizione';
+    return { lines:[{k:lbl,v:mov,cls:'pos'}], total:mov, die, db:0, useNos:false, segType:seg.t, vel:0, ctrl:0 };
+  }
   const noPen = first && G.round===1 && !G.raceFirstRollDone && seg.t==='rettilineo';
   const mot=statVal(p,'motore'),cam=statVal(p,'cambio'),ste=statVal(p,'sterzo'),ass=statVal(p,'assetto'),pes=statVal(p,'peso');
   const fxVel=fxSum(R,p,'vel'),fxCtrl=fxSum(R,p,'ctrl');
@@ -339,20 +455,26 @@ function actRacePlayCard(room,p,handIdx,targetId){
   if(activeRace(G).id!==p.id) return 'Non è il tuo turno.';
   if(G.R.phase!=='await') return 'Hai già tirato.';
   const c=p.hand[handIdx]; if(!c||c.cat!=='ingara') return 'Carta non valida.';
+  if(c.eff==='defend') return 'Le difese si usano solo quando vieni colpito.';
   let target=p;
   if(c.target==='rival'){ const t=G.players.find(x=>x.id===targetId && x.id!==p.id); if(!t) return 'Scegli un rivale valido.'; target=t; }
   else if(targetId!=null && targetId!==p.id && G.players.length>2){ const t=G.players.find(x=>x.id===targetId); if(t) target=t; }
+  if(c.eff==='reach') target=p;                          // catch-up: sempre su di sé, mai redirigibile
   const tc=G.R.cars[target.id];
-  if(c.eff==='vel'||c.eff==='ctrl') tc.fx.push({stat:c.eff,amt:c.val,turns:c.dur});
+  let _fx=null,_prevDado;
+  if(c.eff==='vel'||c.eff==='ctrl'){ _fx={stat:c.eff,amt:c.val,turns:c.dur}; tc.fx.push(_fx); }
   else if(c.eff==='partenza') tc.pendPart+=c.val;
-  else if(c.eff==='dado') tc.pendDado=c.val;
+  else if(c.eff==='dado'){ _prevDado=tc.pendDado; tc.pendDado=c.val; }
+  else if(c.eff==='reach') tc.pendReach={ref:c.val,off:c.dur};
   raceLog(G,{kind:'card',who:p.name,target:target.name,targetId:target.id,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur});
+  if(c.target==='rival' && target.id!==p.id) recordMalus(room, p, target, {phase:'ingara', eff:c.eff, val:c.val, dur:c.dur, fxRef:_fx, prevDado:_prevDado});
   G.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
 function actRoll(room,p,useNos){
   const G=room.G; if(G.phase!=='race') return 'Non in gara.';
   if(activeRace(G).id!==p.id) return 'Non è il tuo turno.';
   if(G.R.phase!=='await') return 'Hai già tirato.';
+  p.incoming=(p.incoming||[]).filter(m=>m.phase!=='ingara');   // finestra di difesa chiusa: ora il malus fa effetto
   const car=G.R.cars[p.id];
   const realNos = !!useNos && nosAllowed(G,p);
   const die = car.pendDado || d6();
@@ -367,13 +489,13 @@ function actConfirmMove(room,p){
   const car=G.R.cars[p.id]; const b=G.R.lastBreak;
   if(b.useNos) car.nosUsed=true;
   car.firstDone=true; G.raceFirstRollDone=true;
-  car.pos=Math.min(55,car.pos+b.total);
+  car.pos=Math.min(G.R.finish||55,car.pos+b.total);
   raceLog(G,{kind:'move',who:p.name,seg:TIPO_LABEL[b.segType]||b.segType,mov:b.total,pos:car.pos,die:b.die});
-  car.pendPart=0; car.pendDado=null;
+  car.pendPart=0; car.pendDado=null; car.pendReach=null;
   car.fx=car.fx.map(e=>({...e,turns:e.turns-1})).filter(e=>e.turns>0);
   G.R.lastBreak=null; G.R.phase='await';
   G.R.ptr++;
-  if(G.R.ptr>=G.R.turnOrder.length){ G.R.turn++; G.R.ptr=0; if(G.R.turn>5){ endRace(room); } }
+  if(G.R.ptr>=G.R.turnOrder.length){ G.R.turn++; G.R.ptr=0; if(G.R.turn>5 || (G.R.finish && G.players.some(x=>G.R.cars[x.id].pos>=G.R.finish))){ endRace(room); } }
   return null;
 }
 
@@ -390,7 +512,7 @@ function endRace(room){
   const winnerId=ranked[0].id;
   G.players.forEach(p=>{
     if(p.bet && p.bet.targetId!=null && p.bet.amount>0){
-      const t=G.players.find(x=>x.id===p.bet.targetId); const q=DB.quoteScommessa[Math.min(7,t.prevRank)];
+      const t=G.players.find(x=>x.id===p.bet.targetId); const q=Math.max(0.5, DB.quoteScommessa[Math.min(7,t.prevRank)]+(p.quotaMod||0));
       if(p.bet.targetId===winnerId){ const payout=Math.round(p.bet.amount*q*(p.betMult||1)); p.money+=p.bet.amount+payout; p._betDelta=payout; p._betWin=true; }
       else { p._betDelta=-p.bet.amount; }
     }
@@ -482,14 +604,18 @@ function buildView(room, player){
   v.players=publicPlayers(G, G.phase==='race');
   v.allBets = G.players.filter(p=>p.bet && p.bet.targetId!=null && p.bet.amount>0).map(p=>({ playerId:p.id, targetId:p.bet.targetId, amount:p.bet.amount }));
   v.raceLevel=G.raceLevel; v.entryFee=G.entryFee;
+  v.incoming = incomingFor(player);
+  v.myDefenses = (player.hand||[]).filter(c=>isDefense(c)).map(c=>({ nome:c.nome, scope:c.val, reflect:isReflect(c) }));
 
   if(G.phase==='prep'){
     const active=curPrep(G); v.activeId=active.id; v.activeName=active.name; v.isYourTurn=active.id===player.id;
     v.reshop=!!G.reshop; v.reshopComing=(!G.reshop && !!G.reshopQueued);
+    v.sprintFinish=(G.sprintFinish||null);
+    v.incoming=incomingFor(player);
     v.compMaxLevel=G.compMaxLevel;
     if(v.isYourTurn){
       const p=player;
-      v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), discount:!!p.discountNext };
+      v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:!!p.discountNext };
       v.shop=G.shop.map((card,idx)=>{
         const cur=p.comp[card.comp]; const usable=card.lvl>cur && card.lvl<=G.compMaxLevel; const okLimit=canHaveAtLevel(p,card.comp,card.lvl);
         const price=priceFor(G,p,card.comp,card.lvl); const skip=card.lvl>cur+1;
@@ -497,10 +623,10 @@ function buildView(room, player){
         return { idx, comp:card.comp, name:DB.nomi[card.comp], lvl:card.lvl, val:DB.valori[card.comp][card.lvl], cur, price, skip,
           buyable: usable && okLimit && p.buysLeft>0 && p.money>=price, reason };
       });
-      v.pregara = G.reshop ? [] : p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c), costPO:(c.costPO||0) })).filter(c=>c.cat==='pregara');
+      v.pregara = G.reshop ? [] : p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c), costPO:(c.costPO||0) })).filter(c=>c.cat==='pregara' && c.eff!=='defend');
       v.canBet = !G.reshop && G.round>=2;
       if(v.canBet){
-        v.betTargets=G.players.map(t=>({ id:t.id, name:t.name, colorH:DB.colori[t.colorIdx].h, quote:DB.quoteScommessa[Math.min(7,t.lastRank)], you:t.id===p.id }));
+        v.betTargets=G.players.map(t=>({ id:t.id, name:t.name, colorH:DB.colori[t.colorIdx].h, quote:Math.max(0.5, DB.quoteScommessa[Math.min(7,t.lastRank)]+(p.quotaMod||0)), you:t.id===p.id }));
         v.myBet=p.bet?{ targetId:p.bet.targetId, amount:p.bet.amount }:null;
       }
     }
@@ -510,6 +636,8 @@ function buildView(room, player){
   if(G.phase==='race'){
     const R=G.R; const active=activeRace(G); v.activeId=active.id; v.activeName=active.name; v.isYourTurn=active.id===player.id;
     v.turn=R.turn; v.track=trackView(G); v.cars=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, ini:ini(p.name), pos:R.cars[p.id].pos }));
+    v.sprintFinish=(R.finish||null);
+    v.incoming=incomingFor(player);
     v.log=R.log.slice(-25).map(e=>({...e}));
     if(v.isYourTurn){
       const p=player; const car=R.cars[p.id]; const seg=segOf(G,Math.max(1,car.pos));
@@ -521,10 +649,10 @@ function buildView(room, player){
         segType:seg.t, segLabel:TIPO_LABEL[seg.t], firstDone:car.firstDone,
         nosOk:nosAllowed(G,p), nosVal:statVal(p,'nos'),
         fx:car.fx.map(e=>({stat:e.stat,amt:e.amt,turns:e.turns})), pendPart:car.pendPart, pendDado:car.pendDado,
-        hand:p.hand.map((c,idx)=>({idx,cat:c.cat,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur,target:c.target})).filter(c=>c.cat==='ingara'),
+        hand:p.hand.map((c,idx)=>({idx,cat:c.cat,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur,target:c.target})).filter(c=>c.cat==='ingara' && c.eff!=='defend'),
         rivals:G.players.filter(x=>x.id!==p.id).map(x=>({id:x.id,name:x.name,colorH:DB.colori[x.colorIdx].h}))
       };
-      v.rolled = R.phase==='rolled' ? (function(){ const b=R.lastBreak; return { lines:b.lines, total:b.total, die:b.die, db:b.db, useNos:b.useNos, np:Math.min(55,car.pos+b.total) }; })() : null;
+      v.rolled = R.phase==='rolled' ? (function(){ const b=R.lastBreak; return { lines:b.lines, total:b.total, die:b.die, db:b.db, useNos:b.useNos, np:Math.min(R.finish||55,car.pos+b.total) }; })() : null;
     }
     return v;
   }
@@ -560,7 +688,7 @@ function botPrep(room,bot){
     if(c.eff==='reopen'){ if(bot.money>=(c.val||0)+500) actPlayPregara(room,bot,i); continue; }
     if(c.eff==='reopenAll'){ actPlayPregara(room,bot,i); continue; }
     if(c.eff==='reopenDebt'){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>a.po-b.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); continue; }
-    const self=(c.eff==='money'&&c.val>0)||(c.eff==='po'&&c.val>0)||c.eff==='prizeUp'||c.eff==='betUp'||c.eff==='discount'; const rival=(c.val<0)||c.eff==='prizeDown'||c.eff==='betDown'; if(self) actPlayPregara(room,bot,i); else if(rival){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>b.po-a.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); } }
+    const self=(c.eff==='money'&&c.val>0)||(c.eff==='po'&&c.val>0)||c.eff==='prizeUp'||c.eff==='betUp'||c.eff==='discount'||(c.eff==='quota'&&c.val>0); const rival=(c.val<0)||c.eff==='prizeDown'||c.eff==='betDown'; if(self) actPlayPregara(room,bot,i); else if(rival){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>b.po-a.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); } }
   // 2) acquisti
   let safety=12;
   while(bot.buysLeft>0 && safety-->0){
@@ -584,9 +712,12 @@ function botPrep(room,bot){
 function botRace(room,bot){
   const G=room.G, R=G.R;
   if(R.phase==='await'){
+    const reachC=bot.hand.map((c,i)=>({c,i})).filter(o=>o.c.cat==='ingara'&&o.c.eff==='reach');
+    const behind=G.players.some(p=>p.id!==bot.id&&R.cars[p.id].pos>R.cars[bot.id].pos);
     const selfPos=bot.hand.map((c,i)=>({c,i})).filter(o=>o.c.cat==='ingara'&&o.c.target==='self'&&(o.c.eff==='vel'||o.c.eff==='ctrl')&&o.c.val>0);
     const rivalNeg=bot.hand.map((c,i)=>({c,i})).filter(o=>o.c.cat==='ingara'&&o.c.target==='rival');
-    if(selfPos.length && Math.random()<0.45) actRacePlayCard(room,bot,selfPos[0].i);
+    if(reachC.length && behind && Math.random()<0.5) actRacePlayCard(room,bot,reachC[0].i);
+    else if(selfPos.length && Math.random()<0.45) actRacePlayCard(room,bot,selfPos[0].i);
     else if(rivalNeg.length && Math.random()<0.5){ const lead=[...G.players].filter(p=>p.id!==bot.id).sort((a,b)=>R.cars[b.id].pos-R.cars[a.id].pos)[0]; if(lead) actRacePlayCard(room,bot,rivalNeg[0].i,lead.id); }
     actRoll(room,bot, nosAllowed(G,bot)&&Math.random()<0.5);
     actConfirmMove(room,bot);
@@ -688,6 +819,8 @@ io.on('connection', (socket)=>{
   socket.on('race:playCard', handle((room,p,d)=>actRacePlayCard(room,p,d.handIdx,d.targetId)));
   socket.on('race:roll', handle((room,p,d)=>actRoll(room,p,d.useNos)));
   socket.on('race:move', handle((room,p)=>actConfirmMove(room,p)));
+  socket.on('defend', handle((room,p,d)=>actDefend(room,p,d.handIdx,d.mid)));
+  socket.on('defense:play', handle((room,p,d)=>actDefend(room,p,d.handIdx,d.mid)));
   socket.on('results:next', handle((room,p)=>actNextRound(room,p)));
 
   socket.on('disconnect', ()=>{
@@ -704,7 +837,7 @@ io.on('connection', (socket)=>{
   });
 });
 
-module.exports = { DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending };
+module.exports = { DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending, actDefend, incomingFor };
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, ()=>console.log('2FAST4U server in ascolto sulla porta '+PORT));

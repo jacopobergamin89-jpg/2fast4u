@@ -143,6 +143,15 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .hint{font-size:12px;color:var(--muted-2);margin-top:10px;line-height:1.5}
 .foot{margin-top:18px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--asphalt-3);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:13px;opacity:0;transition:.2s;z-index:60;pointer-events:none;max-width:90%}
+.def-banner{position:fixed;top:0;left:0;right:0;z-index:80;display:none;flex-direction:column;gap:7px;padding:11px 13px;background:linear-gradient(180deg,rgba(255,59,107,.97),rgba(255,59,107,.9));box-shadow:0 6px 22px rgba(0,0,0,.45);animation:defpulse 1.2s ease-in-out infinite}
+.def-banner.show{display:flex}
+.def-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:space-between}
+.def-txt{color:#fff;font-size:13px;font-weight:600;letter-spacing:.01em}
+.def-mal{background:rgba(0,0,0,.25);padding:2px 8px;border-radius:7px;font-family:var(--mono);font-size:12px}
+.def-acts{display:flex;gap:6px;flex-wrap:wrap}
+.def-btn{background:#fff;color:#b3123d;border:none;border-radius:9px;padding:7px 13px;font-size:13px;font-weight:700;cursor:pointer}
+.def-btn.refl{background:var(--yellow,#FFC91E);color:#3a2a00}
+@keyframes defpulse{0%,100%{box-shadow:0 6px 22px rgba(0,0,0,.45)}50%{box-shadow:0 7px 32px rgba(255,59,107,.72)}}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .modal{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;z-index:50;padding:24px}
 .modal.show{display:flex}
@@ -552,6 +561,15 @@ body:has(#s-home.active) .topbar{display:none}
 .mof-minip .l{color:var(--muted)}
 .mof-empty3{font-size:10px;color:var(--muted-2)}
 .mof-boost{margin-top:12px;padding:9px 12px;border-radius:11px;background:linear-gradient(90deg,rgba(255,201,30,.16),rgba(43,168,230,.12));border:1px solid var(--amber);color:var(--po);font-family:var(--disp);font-weight:600;font-size:13px;text-align:center;letter-spacing:.02em}
+.def-alert{margin:10px 0;padding:11px 12px;border-radius:12px;background:rgba(255,59,107,.14);border:1px solid rgba(255,59,107,.55)}
+.def-hd{font-family:var(--disp);font-weight:700;font-size:13px;color:#ff8aa6;letter-spacing:.02em;margin-bottom:8px}
+.def-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-top:1px solid rgba(255,59,107,.18)}
+.def-row:first-of-type{border-top:none}
+.def-info{font-size:13px;min-width:0}
+.def-btns{display:flex;flex-wrap:wrap;gap:6px}
+.def-go{background:rgba(52,199,89,.18);border:1px solid rgba(52,199,89,.6);color:#7fe39b;border-radius:9px;padding:7px 11px;font-weight:600;font-size:12px;font-family:var(--disp);cursor:pointer}
+.def-go.refl{background:rgba(255,201,30,.16);border-color:rgba(255,201,30,.6);color:var(--po)}
+.def-hold{margin:8px 0;padding:7px 11px;border-radius:10px;background:rgba(43,168,230,.10);border:1px solid rgba(43,168,230,.35);color:#9fd8f5;font-size:12px;font-family:var(--mono)}
 .mof-giro{margin:0 0 10px;padding:12px 14px;border-radius:13px;background:linear-gradient(90deg,rgba(255,201,30,.22),rgba(155,59,224,.18));border:1px solid var(--amber);text-align:center;font-family:var(--disp);font-weight:600;color:var(--po);letter-spacing:.03em;font-size:15px;box-shadow:0 0 0 1px rgba(255,201,30,.12),0 6px 18px rgba(155,59,224,.25)}
 .mof-giro span{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:4px;letter-spacing:.02em}
 .of-giro{margin:0 14px 10px;padding:10px 14px;border-radius:11px;background:linear-gradient(90deg,rgba(255,201,30,.20),rgba(155,59,224,.16));border:1px solid var(--amber);text-align:center;font-family:var(--disp);font-weight:600;color:var(--po);letter-spacing:.02em;font-size:14px}
@@ -644,6 +662,7 @@ body:has(#s-home.active) .topbar{display:none}
 
 <div class="conn" id="conn">disconnesso…</div>
 <div class="toast" id="toast"></div>
+<div class="def-banner" id="def-banner"></div>
 <div class="flash" id="flash"></div>
 <div class="modal" id="picker"><div class="box"><div class="mh" id="picker-h">Scegli bersaglio</div><div id="picker-opts"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:4px" onclick="closePicker()">Annulla</button></div></div>
 <div class="modal" id="inspect"><div class="box"><div class="mh">Avversario</div><div id="inspect-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeInspect()">Chiudi</button></div></div>
@@ -739,16 +758,20 @@ function cardDesc(c){
   if(c.eff==='prizeDown')return 'Montepremi ÷2 (a un rivale)';
   if(c.eff==='betUp')return 'Scommessa ×2 (su di te)';
   if(c.eff==='betDown')return 'Scommessa ÷2 (a un rivale)';
+  if(c.eff==='quota')return 'Quota '+(c.val>=0?'+':'')+c.val+' sulla scommessa'+(c.val<0?' (a un rivale)':' (su di te)');
   if(c.eff==='discount')return 'Sconto 50% sul prossimo acquisto';
   if(c.eff==='smonta'){const co=[];if(c.val)co.push(eur(c.val));if(c.costPO)co.push(c.costPO+' Rispetto');return 'Smonta 1 livello a un rivale'+(co.length?' · costa '+co.join(' e '):'');}
   if(c.eff==='reopen')return 'Riapre l\'officina solo per te (+1 acquisto)'+(c.val?' · costa '+eur(c.val):'');
   if(c.eff==='reopenAll')return 'Riapre l\'officina a tutti · giro extra (tu per primo)';
   if(c.eff==='reopenDebt')return 'Riapri (+1 acquisto) · un rivale a metà prezzo';
+  if(c.eff==='sprint')return 'Gara breve · traguardo a '+c.val;
+  if(c.eff==='defend')return 'Difesa '+(c.val==='both'?'totale (gara + pre-gara)':c.val==='ingara'?'da gara':'da pre-gara')+((c.dur===1||c.costPO===1)?' · rimanda al mittente':'');
   const r=c.target==='rival'?' · su un rivale':'';
   if(c.eff==='vel')return (c.val>=0?'+':'')+c.val+' Velocità · '+c.dur+(c.dur===1?' tiro':' tiri')+r;
   if(c.eff==='ctrl')return (c.val>=0?'+':'')+c.val+' Controllo · '+c.dur+(c.dur===1?' tiro':' tiri')+r;
   if(c.eff==='partenza')return 'Partenza '+(c.val>=0?'+':'')+c.val+r;
   if(c.eff==='dado')return 'Dado fisso = '+c.val+r;
+  if(c.eff==='reach')return (c.val===2&&c.dur===0)?'Vai alla casella del 2° in gara':((c.val===1&&c.dur===-1)?'Vai a una casella dietro il 1° in gara':'Salto di posizione');
   return '';
 }
 function pregaraDesc(c){
@@ -758,11 +781,14 @@ function pregaraDesc(c){
   if(c.eff==='prizeDown')return 'Montepremi ÷2';
   if(c.eff==='betUp')return 'Scommessa ×2';
   if(c.eff==='betDown')return 'Scommessa ÷2';
+  if(c.eff==='quota')return 'Quota '+(c.val>=0?'+':'')+c.val;
   if(c.eff==='discount')return 'Sconto 50% prossimo acquisto';
   if(c.eff==='smonta'){const co=[];if(c.val)co.push(eur(c.val));if(c.costPO)co.push(c.costPO+' Rispetto');return 'Smonta 1 livello'+(co.length?' · costa '+co.join(' e '):'');}
   if(c.eff==='reopen')return 'Riapre l\'officina solo per te · +1 acquisto'+(c.val?' · costa '+eur(c.val):'');
   if(c.eff==='reopenAll')return 'Riapre l\'officina a tutti · giro extra';
   if(c.eff==='reopenDebt')return 'Riapri (+1 acquisto) · un rivale a metà prezzo';
+  if(c.eff==='sprint')return 'Gara breve · traguardo a '+c.val;
+  if(c.eff==='defend')return 'Difesa'+((c.dur===1||c.costPO===1)?' · rimanda al mittente':'');
   return '';
 }
 function renderReveal(v){
@@ -883,6 +909,23 @@ function ofIcon(comp){const I={
   peso:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 9v6M8 7v10M16 7v10M19 9v6M8 12h8"/></svg>',
   nos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9.5 3h5v3l1 2v11a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V8l1-2z"/><path d="M9.5 12h5"/></svg>'};
   return I[comp]||'';}
+function defenseHTML(v){
+  if(v.incoming&&v.incoming.length){
+    let h='<div class="def-alert"><div class="def-hd">\u26a0\ufe0f SEI COLPITO \u2014 difenditi (anche fuori dal tuo turno)</div>';
+    v.incoming.forEach(m=>{
+      h+=`<div class="def-row"><div class="def-info"><b>${esc(m.by)}</b>: ${esc(m.label)}</div><div class="def-btns">`;
+      (m.defenders||[]).forEach(d=>{ h+=`<button class="def-go${d.reflect?' refl':''}" onclick="playDefense(${d.handIdx},${m.mid})">\ud83d\udee1\ufe0f ${esc(d.nome)}${d.reflect?' \u21a9':''}</button>`; });
+      h+='</div></div>';
+    });
+    return h+'</div>';
+  }
+  if(v.myDefenses&&v.myDefenses.length){
+    const names=v.myDefenses.map(d=>esc(d.nome)+(d.reflect?' \u21a9':'')).join(', ');
+    return `<div class="def-hold">\ud83d\udee1\ufe0f Difese in mano: ${names} \u00b7 scattano quando vieni colpito</div>`;
+  }
+  return '';
+}
+function playDefense(idx,mid){ socket.emit('defense:play',{handIdx:idx,mid}); flash('Difesa giocata!','mine'); }
 function prepMobileHTML(v){
   const you=v.you, youP=v.players.find(p=>p.id===you.id)||null;
   const others=v.players.filter(p=>p.id!==you.id);
@@ -913,9 +956,9 @@ function prepMobileHTML(v){
       rail+=`<div class="mof-opp"><div class="mof-opp-top"><div class="mof-oav" style="--c:${p.colorH}">${ini(p.name)}</div><div class="mof-on">${esc(p.name)}</div><div class="mof-opo">${p.po} PO</div></div><div class="mof-oparts">${chips}</div></div>`;});
     rail+='</div>';}
   let boost='';
-  if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('×'+m):('÷'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,tg=[]; if(pm!==1)tg.push('🎁 Montepremi '+fmt(pm)); if(bm!==1)tg.push('🎲 Scommessa '+fmt(bm)); if(v.me.discount)tg.push('💸 Sconto 50% prossimo acquisto'); if(v.reshopComing)tg.push('🔧 Giro extra in officina dopo la prep'); if(tg.length)boost='<div class="mof-boost">'+tg.join(' · ')+'</div>'; }
+  if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('×'+m):('÷'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,qm=v.me.quotaMod||0,tg=[]; if(v.sprintFinish)tg.push('⚡ Gara breve: traguardo a '+v.sprintFinish); if(pm!==1)tg.push('🎁 Montepremi '+fmt(pm)); if(bm!==1)tg.push('🎲 Scommessa '+fmt(bm)); if(qm)tg.push('📊 Quota '+(qm>0?'+':'')+qm+' sulla tua scommessa'); if(v.me.discount)tg.push('💸 Sconto 50% prossimo acquisto'); if(v.reshopComing)tg.push('🔧 Giro extra in officina dopo la prep'); if(tg.length)boost='<div class="mof-boost">'+tg.join(' · ')+'</div>'; }
   const giro = v.reshop ? '<div class="mof-giro">🔧 OFFICINA RIAPERTA A TUTTI · GIRO EXTRA<span>Ognuno ricompra una volta · chi ha giocato la carta sceglie per primo</span></div>' : '';
-  return `<div class="mof"><div class="mof-hz"></div>${cassa}<div class="mof-body">${giro}${boost}${shop}${garage}${pronto}${extra}${rail}</div></div>`;
+  return `<div class="mof"><div class="mof-hz"></div>${cassa}<div class="mof-body">${defenseHTML(v)}${giro}${boost}${shop}${garage}${pronto}${extra}${rail}</div></div>`;
 }
 function renderPrep(v){
   show('s-prep');topMeta('Round '+v.round);
@@ -948,7 +991,7 @@ function renderPrep(v){
     if(v.canBet)extra+='<div class="of-bet-note">Apri \ud83d\udc65 <b>Piloti</b> in alto a destra per scommettere e vedere le puntate.</div>';
   }
   const html=`<div class="of-scene"><div class="of-bg"></div><div class="of-inner"><div class="of-head"><div class="of-title">Officina \u00b7 Ricambi <small>Round ${v.round}</small></div>${turn}</div>${v.reshop?'<div class="of-giro">\ud83d\udd27 OFFICINA RIAPERTA A TUTTI \u00b7 GIRO EXTRA \u2014 ognuno ricompra una volta, chi ha giocato la carta sceglie per primo</div>':''}<div class="of-table"><div class="of-top">${top.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-left">${left.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-center"><div class="of-bench"><div class="of-felt"><div class="of-lots">${bench}</div></div></div></div><div class="of-right">${right.map(p=>ofSeat(p,v.activeId)).join('')}</div></div><div class="of-you">${you}</div><div class="of-others-h">Altri giocatori</div>${extra}</div></div>`;
-  document.getElementById('s-prep').innerHTML=html;
+  document.getElementById('s-prep').innerHTML=defenseHTML(v)+html;
 }
 
 let pendBetTarget=null;
@@ -986,6 +1029,7 @@ function renderRaceMobile(v){
   const tabs=yt&&!rolled&&cards.length>0;
   const tab=ui.raceTab==='carte'?'carte':'tiro';
   let h='<div class="rm">';
+  h+=defenseHTML(v);
   // chip di stato
   h+='<div class="rm-status">';
   h+=`<span class="rm-chip pos">\ud83d\udccd cas. ${pos>0?pos:'\u2014'}</span>`;
@@ -1039,16 +1083,18 @@ function rmCardsHTML(cards){
     else if(c.eff==='ctrl')desc=(c.val>0?'+':'')+c.val+' Controllo \u00b7 '+c.dur+(c.dur===1?' tiro':' tiri');
     else if(c.eff==='partenza')desc='Partenza '+(c.val>0?'+':'')+c.val;
     else if(c.eff==='dado')desc='Dado = '+c.val;
+    else if(c.eff==='reach')desc=(c.val===2&&c.dur===0)?'Raggiungi il 2°':(c.val===1&&c.dur===-1)?'Una casella dietro il 1°':'Salto di posizione';
     const tgt=c.target==='self'?'su di te':'su un rivale';
     h+=`<div class="rm-crow ${good?'good':'bad'}"><div class="rm-cbar"></div><div class="rm-cmain"><div class="rm-ct">${esc(c.nome)}</div><div class="rm-cm">${desc} \u00b7 ${tgt}</div></div><button class="rm-cgo" onclick="playCard(${c.idx},'${c.target}')">Gioca</button></div>`;
   });
   return h;
 }
 function renderRace(v){
-  show('s-race');topMeta('Round '+v.round+' · liv. '+v.raceLevel);
+  show('s-race');topMeta('Round '+v.round+' · liv. '+v.raceLevel+(v.sprintFinish?' · ⚡ SPRINT traguardo '+v.sprintFinish:''));
   if(isMobileRace()){renderRaceMobile(v);return;}
   const host=document.getElementById('s-race');
   let h=`<div class="race-head"><div class="eyebrow" style="margin:0">Gara</div><div class="rh-turn">Turno <b>${v.turn}</b><span style="color:var(--muted-2)">/5</span></div></div>`;
+  h+=defenseHTML(v);
   h+=trackHTML(v);
   h+='<div class="race-grid3">';
   h+='<div class="race-col-cards">'+cardsMenuHTML(v)+'</div>';
@@ -1077,6 +1123,7 @@ function cardsMenuHTML(v){
     else if(c.eff==='ctrl'){desc=(c.val>0?'+':'')+c.val+' Controllo · '+c.dur+(c.dur===1?' tiro':' tiri');col=c.val>0?'var(--good)':'var(--danger)';}
     else if(c.eff==='partenza'){desc='Partenza '+(c.val>0?'+':'')+c.val;col=c.val>0?'var(--good)':'var(--danger)';}
     else if(c.eff==='dado'){desc='Dado = '+c.val;col=c.val===6?'var(--good)':'var(--danger)';}
+    else if(c.eff==='reach'){desc=(c.val===2&&c.dur===0)?'Raggiungi il 2°':(c.val===1&&c.dur===-1)?'Una casella dietro il 1°':'Salto di posizione';col='var(--good)';}
     const tgt=c.target==='self'?'su di te':'su un rivale';
     body+=`<div class="hcard" style="--hc:${col}"><div class="hi"><div class="hn">${esc(c.nome)}</div><div class="he">${desc} · ${tgt}</div></div><button class="btn btn-line btn-sm" onclick="playCard(${c.idx},'${c.target}')">Gioca</button></div>`;
   }); }
@@ -1312,6 +1359,8 @@ function renderLog(v){
       const hit=(e.targetId===v.you.id)&&(e.who!==v.you.name);
       const onSelf=(e.target===e.who);
       h+=`<div class="log-entry lg-card${hit?' lg-hit':''}"><span class="lg-t">T${e.t}</span><span class="lg-who">${esc(e.who)}</span> gioca \u00ab${esc(e.nome)}\u00bb ${cardEffShort(e)} \u00b7 ${onSelf?'su di s\u00e9':('su '+esc(e.target))}</div>`;
+    } else if(e.kind==='defend'){
+      h+=`<div class="log-entry lg-card"><span class="lg-t">T${e.t}</span><span class="lg-who">${esc(e.who)}</span> si difende con \u00ab${esc(e.nome)}\u00bb${e.reflect?' e rispedisce il malus a '+esc(e.by||''):''}</div>`;
     }
   }
   list.innerHTML=h;
@@ -1428,6 +1477,20 @@ function playIntroSequence(list){
   };
   next();
 }
+function renderDefenseBanner(v){
+  const el=document.getElementById('def-banner');
+  if(!el)return;
+  const inc=(v&&Array.isArray(v.incoming))?v.incoming:[];
+  if(!inc.length){ el.classList.remove('show'); el.innerHTML=''; return; }
+  let h='';
+  inc.forEach(m=>{
+    const btns=(m.defenders||[]).map(d=>`<button class="def-btn${d.reflect?' refl':''}" onclick="defend(${d.handIdx},${m.mid})">${d.reflect?'\u21a9\ufe0e ':'\ud83d\udee1 '}${esc(d.nome)}</button>`).join('');
+    h+=`<div class="def-row"><div class="def-txt">\u26a0\ufe0f <b>${esc(m.by)}</b> ti colpisce \u00b7 <span class="def-mal">${esc(m.label)}</span></div><div class="def-acts">${btns}</div></div>`;
+  });
+  el.innerHTML=h; el.classList.add('show');
+}
+function defend(handIdx,mid){ socket.emit('defend',{handIdx,mid}); }
+
 function render(v){
   const prevPhase=ui.lastPhase;
   LAST=v;
@@ -1447,6 +1510,7 @@ function render(v){
   renderDrawer(v);
   renderLog(v);
   checkIncoming(v);
+  renderDefenseBanner(v);
 }
 
 socket.on('state',render);
@@ -1460,7 +1524,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-06-23 · gara-mobile-tab';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-06-24 · mazzo-116';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 </body>
 </html>
