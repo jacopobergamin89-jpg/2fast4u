@@ -207,7 +207,7 @@ function rebuildShop(room){
   const G=room.G; const N=G.players.length; const reveal=(G.round===1)?N*2:N; const bag=[];
   DB.ordine.forEach(comp=>{
     for(let lvl=1;lvl<=G.compMaxLevel;lvl++){
-      let copies; if(lvl<=3) copies=DB.deckPerStat[lvl]; else if(lvl===4) copies=Math.max(0,N-2); else copies=Math.max(0,N-3);
+      let copies=(lvl<=3)?N:Math.max(0,N-1);   // stock per tipo: N ai liv. 1-3, N-1 ai liv. 4-5
       for(let k=0;k<copies;k++) bag.push({comp,lvl});
     }
   });
@@ -217,7 +217,7 @@ function revealMore(room,n,maxLvl){
   const G=room.G; const N=G.players.length; const bag=[];
   DB.ordine.forEach(comp=>{
     for(let lvl=1;lvl<=maxLvl;lvl++){
-      let copies; if(lvl<=3) copies=DB.deckPerStat[lvl]; else if(lvl===4) copies=Math.max(0,N-2); else copies=Math.max(0,N-3);
+      let copies=(lvl<=3)?N:Math.max(0,N-1);   // stock per tipo: N ai liv. 1-3, N-1 ai liv. 4-5
       for(let k=0;k<copies;k++) bag.push({comp,lvl});
     }
   });
