@@ -536,6 +536,23 @@ body:has(#s-home.active) .topbar{display:none}
 .mof-tag::before{content:"";position:absolute;left:6px;top:50%;width:5px;height:5px;border-radius:50%;background:#0a0418;transform:translateY(-50%)}
 .mof-prod.off .mof-tag{background:var(--muted)}
 .mof-reason{font-size:10px;color:var(--danger);margin-top:8px}
+.mof-comp{text-align:left;border-radius:13px;padding:4px 10px 11px;background:linear-gradient(165deg,#221148,#160b34);border:1px solid var(--c,#888);box-shadow:0 8px 18px rgba(0,0,0,.35);position:relative;overflow:hidden}
+.mof-comp::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--c,#888)}
+.mof-comp-h{display:flex;align-items:center;gap:9px;margin:8px 0 10px}
+.mof-cic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:rgba(0,0,0,.25);border:1px solid var(--c,#888);color:var(--c,#888);flex:none}
+.mof-cic svg{width:17px;height:17px}
+.mof-cn{font-family:var(--disp);font-weight:700;text-transform:uppercase;font-size:14px;line-height:1}
+.mof-chave{font-size:10.5px;color:var(--muted);margin-top:3px}
+.mof-lvls{display:flex;flex-direction:column;gap:6px}
+.mof-lvl{display:flex;align-items:center;gap:7px;width:100%;text-align:left;padding:7px 9px;border-radius:9px;background:var(--asphalt-0);border:1px solid var(--line);color:var(--ink);cursor:pointer}
+.mof-lvl:active{transform:scale(.985)}
+.mof-lvl.off{opacity:.5;filter:grayscale(.3);cursor:default}
+.mof-llv{font-family:var(--disp);font-weight:700;font-size:13px}
+.mof-lval{font-weight:700;font-size:12px;color:var(--c,#888)}
+.mof-lpr{font-size:11.5px;color:#C9BEEF;margin-left:auto}
+.mof-lstk{font-family:var(--disp);font-weight:700;font-size:12px;color:var(--muted);min-width:28px;text-align:right}
+.mof-lstk.soldout{color:var(--danger);font-size:9.5px;min-width:auto}
+.mof-max{font-size:11.5px;color:var(--muted);text-align:center;padding:12px 4px;background:var(--asphalt-0);border:1px dashed var(--line);border-radius:9px}
 .mof-empty2{grid-column:1/-1;text-align:center;color:var(--muted);font-size:13px;padding:14px}
 .mof-spect{text-align:center;color:var(--muted);font-size:14px;line-height:1.6;padding:26px 10px;background:linear-gradient(#1a0f3c,#140a30);border:1px solid var(--line);border-radius:14px;margin-top:10px}
 .mof-spect b{color:var(--amber);font-family:var(--disp)}
@@ -897,6 +914,11 @@ function trackHTML(v){
   s+='</svg>';
   return `<div class="track" id="track">${s}</div>`;
 }
+function centerTrackOnMe(v){
+  const meCar=(v.cars||[]).find(c=>c.id===v.you.id);
+  const focus=meCar?(meCar.pos||0):Math.max(1,...((v.cars||[]).map(c=>c.pos||0)),1);
+  const tr=document.getElementById('track'); if(tr) tr.scrollLeft=Math.max(0,(focus-0.5)*30-(tr.clientWidth||280)/2);  // ognuno vede la propria auto al centro
+}
 function buildingsSVG(xA,xB,yMid,half,col){
   let s='';const top=yMid-half-7,bot=yMid+half+7;const W=xB-xA;const n=Math.max(2,Math.round(W/52));const slot=W/n;
   for(let k=0;k<n;k++){
@@ -911,13 +933,15 @@ function buildingsSVG(xA,xB,yMid,half,col){
   return s;
 }
 function standingsHTML(v){
+  const total=v.track&&v.track.length?v.track[v.track.length-1].to:55;
   const ranked=[...v.players].sort((a,b)=>b.pos-a.pos);
   let h='<div class="standings"><div class="std-h">Classifica · tocca un pilota per vederne auto e pilota</div>';
-  ranked.forEach(p=>{h+=`<div class="st-row${p.id===v.activeId?' active':''}" onclick="openInspect(${p.id})"><span class="dot" style="background:${p.colorH}"></span><span class="nm">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span><span class="sq">cas. ${p.pos}/55</span><span class="insp">🔍</span></div>`;});
+  ranked.forEach(p=>{h+=`<div class="st-row${p.id===v.activeId?' active':''}" onclick="openInspect(${p.id})"><span class="dot" style="background:${p.colorH}"></span><span class="nm">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span><span class="sq">cas. ${p.pos}/${total}</span><span class="insp">🔍</span></div>`;});
   return h+'</div>';
 }
 function startTokens(v){
   const svg=document.getElementById('trackvg'); if(!svg||!v.cars)return;
+  const total=v.track&&v.track.length?v.track[v.track.length-1].to:55;
   v.cars.forEach((k,ci)=>{
     let pos=k.pos||0,segIdx,lf;
     if(pos<1){segIdx=0;lf=0;}
@@ -930,7 +954,7 @@ function startTokens(v){
     const g=document.createElementNS('http://www.w3.org/2000/svg','g');
     g.setAttribute('transform',`translate(${pt.x.toFixed(1)},${(pt.y+oy).toFixed(1)})`);
     g.setAttribute('class','car-tok'); g.style.cursor='pointer';
-    const casLabel=(k.pos&&k.pos>0)?('casella '+k.pos+'/55'):'in partenza';
+    const casLabel=(k.pos&&k.pos>0)?('casella '+k.pos+'/'+total):'in partenza';
     g.innerHTML=`<title>${esc(k.name||k.ini)}${k.id===v.you.id?' (tu)':''} · ${casLabel}</title><circle r="${isMe?12:10}" fill="${k.colorH}" stroke="${isMe?'#ffffff':'#0d1320'}" stroke-width="${isMe?3:2.5}"/><text class="t-tok" text-anchor="middle" y="3.5" font-size="${isMe?11:10}" fill="#ffffff">${esc(k.ini)}</text>`;
     g.addEventListener('click',()=>openInspect(k.id));
     svg.appendChild(g);
@@ -944,7 +968,7 @@ function startTokens(v){
     const g=document.createElementNS('http://www.w3.org/2000/svg','g');
     g.setAttribute('transform',`translate(${pt.x.toFixed(1)},${(pt.y-1).toFixed(1)})`);
     g.setAttribute('class','car-tok');
-    const casLabel=(pl.pos&&pl.pos>0)?('casella '+pl.pos+'/55'):'in partenza';
+    const casLabel=(pl.pos&&pl.pos>0)?('casella '+pl.pos+'/'+total):'in partenza';
     g.innerHTML=`<title>${esc(pl.name)} · ${casLabel} · si muove per ultima</title><circle r="12" fill="#10131c" stroke="#e9edf6" stroke-width="2.5"/><rect x="-8" y="-11" width="7" height="4.5" rx="1.5" fill="#ff3b3b"/><rect x="1" y="-11" width="7" height="4.5" rx="1.5" fill="#2b6bff"/><text text-anchor="middle" y="4" font-size="8.5" font-weight="800" fill="#e9edf6">POL</text>`;
     svg.appendChild(g);
   });
@@ -958,7 +982,7 @@ function startTokens(v){
     const g=document.createElementNS('http://www.w3.org/2000/svg','g');
     g.setAttribute('transform',`translate(${pt.x.toFixed(1)},${(pt.y-1).toFixed(1)})`);
     g.setAttribute('class','car-tok');
-    g.innerHTML=`<title>${esc(b.name)} · casella ${b.pos}/55 · battilo per +€${(b.reward||0).toLocaleString('it-IT')}</title><polygon points="-7,${base} -7,${base-5} -3.5,${base-2} 0,${base-7} 3.5,${base-2} 7,${base-5} 7,${base}" fill="${cc}" stroke="#0b0518" stroke-width="0.6"/><circle r="${r}" fill="${col}" stroke="#0b0518" stroke-width="2.5"/><text text-anchor="middle" y="4" font-size="${isBoss?9:8}" font-weight="800" fill="${tc}">${isBoss?'BOSS':'MINI'}</text>`;
+    g.innerHTML=`<title>${esc(b.name)} · casella ${b.pos}/${total} · battilo per +€${(b.reward||0).toLocaleString('it-IT')}</title><polygon points="-7,${base} -7,${base-5} -3.5,${base-2} 0,${base-7} 3.5,${base-2} 7,${base-5} 7,${base}" fill="${cc}" stroke="#0b0518" stroke-width="0.6"/><circle r="${r}" fill="${col}" stroke="#0b0518" stroke-width="2.5"/><text text-anchor="middle" y="4" font-size="${isBoss?9:8}" font-weight="800" fill="${tc}">${isBoss?'BOSS':'MINI'}</text>`;
     svg.appendChild(g);
   });
 }
@@ -1002,10 +1026,16 @@ function prepMobileHTML(v){
   if(v.isYourTurn&&v.me){
     const m=v.me; const n=Math.max(0,m.buysLeft); let toks=''; for(let i=0;i<n;i++)toks+='<i class="mof-tok"></i>'; if(!n)toks='<i class="mof-tok off"></i>';
     cassaRight=`<div class="mof-euro">${eur(m.money)}</div><div class="mof-buys"><span>acquisti</span>${toks}</div>`;
-    let cards=''; if(!v.shop.length)cards='<div class="mof-empty2">Nessun ricambio scoperto.</div>';
-    v.shop.forEach(c=>{const mm=ofMeta(c.comp);const ok=c.buyable;
-      cards+=`<button class="mof-prod${ok?'':' off'}" style="--c:${mm.c}" ${ok?'':'disabled'} ${ok?`onclick="socket.emit('prep:buy',{shopIdx:${c.idx}})"`:''}><div class="mof-ic">${ofIcon(c.comp)}</div><div class="mof-nm">${mm.full}</div><div class="mof-lv">Livello ${c.lvl}</div><div class="mof-vl">valore ${c.val>=0?'+':''}${c.val}${c.skip?' · salto ×2':''}</div><div class="mof-tag">${eur(c.price)}</div>${(!ok&&c.reason)?`<div class="mof-reason">${c.reason}</div>`:''}</button>`;});
-    shop=`<div class="mof-sech"><span class="mof-wr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6a4 4 0 0 1-5.2 3.8L7 18.6 5.4 17 14.2 8.2A4 4 0 0 1 18 3l-2.3 2.3 1 2.4 2.4 1L21 6Z"/></svg></span><span class="mof-t">Ricambi sul banco</span><span class="mof-ln"></span></div><div class="mof-grid">${cards}</div>`;
+    let cards='';
+    v.shop.forEach(c=>{const mm=ofMeta(c.comp);
+      let body='';
+      if(c.maxed||!c.levels.length){ body=`<div class="mof-max">Al massimo${c.maxed?` · L${c.owned}`:''}</div>`; }
+      else c.levels.forEach(l=>{ const ok=l.buyable;
+        const stk = l.stock<=0?'<span class="mof-lstk soldout">esaurito</span>':(l.cap?'<span class="mof-lstk soldout">tetto</span>':`<span class="mof-lstk">×${l.stock}</span>`);
+        body+=`<button class="mof-lvl${ok?'':' off'}" ${ok?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${l.lvl}})"`:'disabled'}><span class="mof-llv">L${l.lvl}</span><span class="mof-lval">${l.val>=0?'+':''}${l.val}</span><span class="mof-lpr">${eur(l.price)}</span>${stk}</button>`;
+      });
+      cards+=`<div class="mof-comp" style="--c:${mm.c}"><div class="mof-comp-h"><div class="mof-cic">${ofIcon(c.comp)}</div><div><div class="mof-cn">${mm.full}</div><div class="mof-chave">hai L${c.owned}</div></div></div><div class="mof-lvls">${body}</div></div>`;});
+    shop=`<div class="mof-sech"><span class="mof-wr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6a4 4 0 0 1-5.2 3.8L7 18.6 5.4 17 14.2 8.2A4 4 0 0 1 18 3l-2.3 2.3 1 2.4 2.4 1L21 6Z"/></svg></span><span class="mof-t">Banco ricambi <small style="color:var(--muted);font-weight:400;letter-spacing:0">· condiviso</small></span><span class="mof-ln"></span></div><div class="mof-grid">${cards}</div>`;
     garage=`<div class="mof-sech"><span class="mof-t">Il tuo garage</span><span class="mof-ln"></span></div><div class="mof-garage">${ofOwnedChips(m.owned,'Ancora nessun pezzo')}</div>`;
     pronto = v.mustPlayPolice ? `<button class="mof-pronto" disabled style="opacity:.5">🚨 Gioca prima la carta polizia</button>` : `<button class="mof-pronto" onclick="prepDone()">Pronto — passa il turno →</button>`;
     if(v.pregara&&v.pregara.length){extra+='<div class="mof-sech"><span class="mof-t">Carte pre-gara</span><span class="mof-ln"></span></div>';
@@ -1038,10 +1068,13 @@ function renderPrep(v){
   const turn=v.isYourTurn?'<div class="of-turn you">Tocca a <b>te</b> \u2014 scegli i ricambi</div>':`<div class="of-turn">Tocca a <b>${esc(v.activeName||'')}</b></div>`;
   let bench='';
   if(v.isYourTurn){
-    bench+='<div class="of-cap">Ricambi \u00b7 sul banco</div><div class="of-grid">';
-    if(!v.shop.length)bench+='<div class="of-bench-spect" style="grid-column:1/-1">Nessun ricambio scoperto.</div>';
+    bench+='<div class="of-cap">Banco ricambi \u00b7 condiviso</div><div class="of-grid">';
+    let any=false;
     v.shop.forEach(c=>{const m=ofMeta(c.comp);
-      bench+=`<button class="of-part${c.buyable?'':' off'}" ${c.buyable?'':'disabled'} onclick="socket.emit('prep:buy',{shopIdx:${c.idx}})"><div class="of-part-h"><span class="of-badge" style="--c:${m.c}">${m.full}</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">valore ${c.val>=0?'+':''}${c.val}${c.skip?' \u00b7 salto \u00d72':''}</span><span class="of-price">${eur(c.price)}</span>${(!c.buyable&&c.reason)?`<span class="of-reason">${c.reason}</span>`:''}</button>`;});
+      c.levels.forEach(l=>{ any=true; const ok=l.buyable;
+        const stk=l.stock<=0?'esaurito':(l.cap?'tetto pieno':`${l.stock} rim.`);
+        bench+=`<button class="of-part${ok?'':' off'}" ${ok?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${l.lvl}})"`:'disabled'}><div class="of-part-h"><span class="of-badge" style="--c:${m.c}">${m.full}</span><span class="of-lvtag">L${l.lvl}</span></div><span class="of-val">valore ${l.val>=0?'+':''}${l.val}${l.skip?' \u00b7 salto \u00d72':''} \u00b7 <b>${stk}</b></span><span class="of-price">${eur(l.price)}</span></button>`;});});
+    if(!any)bench+='<div class="of-bench-spect" style="grid-column:1/-1">Hai gi\u00e0 il massimo per la pista attuale.</div>';
     bench+='</div>';
   }else{
     bench=`<div class="of-bench-spect">Il banco \u00e8 di <b>${esc(v.activeName||'')}</b><br>sta scegliendo i ricambi\u2026</div>`;
@@ -1143,8 +1176,7 @@ function renderRaceMobile(v){
   h+='</div>';
   host.innerHTML=h;
   startTokens(v);
-  const lead=Math.max(1,...v.cars.map(c=>c.pos));
-  const tr=document.getElementById('track');if(tr)tr.scrollLeft=Math.max(0,(lead-0.5)*30-140);
+  centerTrackOnMe(v);
 }
 function rmCardsHTML(cards){
   let h='';
@@ -1179,9 +1211,7 @@ function renderRace(v){
   h+='</div>';
   host.innerHTML=h;
   startTokens(v);
-  // scroll pista al leader
-  const lead=Math.max(1,...v.cars.map(c=>c.pos));
-  const tr=document.getElementById('track');if(tr)tr.scrollLeft=Math.max(0,(lead-0.5)*30-140);
+  centerTrackOnMe(v);
 }
 function actColor(v){const a=v.players.find(p=>p.id===v.activeId);return a?a.colorH:'var(--amber)';}
 function cardsMenuHTML(v){
@@ -1425,8 +1455,10 @@ function raceRecapHTML(v){
   const rc=v.raceRecap; if(!rc)return '';
   const hasPol=(rc.blocks&&rc.blocks.length)||(rc.police&&rc.police.length)||(rc.busted&&rc.busted.length)||(rc.forfeited&&rc.forfeited.length);
   const hasBoss=(rc.bosses&&rc.bosses.length);
-  if(!hasPol&&!hasBoss)return '';
+  const hasTie=(rc.tiebreaks&&rc.tiebreaks.length);
+  if(!hasPol&&!hasBoss&&!hasTie)return '';
   let h='<div class="panel" style="margin-top:6px"><div class="panel-h">Cos\'\u00e8 successo in gara</div><div class="recap">';
+  (rc.tiebreaks||[]).forEach(t=>{ const ord=t.players.map((p,i)=>`${i===0?'<b>':''}${esc(p.name)} ${p.score}${i===0?'</b>':''}`).join(' \u203a '); h+=`<div class="recap-row">\ud83c\udfc1 Pareggio in cas. ${t.cell} \u00b7 spareggio a 3 tiri: ${ord}</div>`; });
   (rc.blocks||[]).forEach(b=>{ h+=`<div class="recap-row pol">\ud83d\udea7 Posto di blocco \u00b7 caselle ${b.from}\u2013${b.to}</div>`; });
   (rc.police||[]).forEach(p=>{ h+=`<div class="recap-row pol">\ud83d\ude93 ${esc(p.name)} \u00b7 finita a cas. ${p.pos}</div>`; });
   (rc.busted||[]).forEach(b=>{ h+=`<div class="recap-row bust">\ud83d\udea8 ${esc(b.name)} beccato (${b.reason==='blocco'?'blocco':'polizia'}) \u00b7 niente premi</div>`; });
@@ -1604,7 +1636,7 @@ function prepDone(){
   if(v.mustPlayPolice){ toast('Devi prima giocare la carta polizia (gira subito)'); return; }
   const maxBuys=(v.round===1)?2:1;
   const boughtNothing=v.me&&v.me.buysLeft===maxBuys;
-  const canBuy=Array.isArray(v.shop)&&v.shop.some(c=>c.buyable);
+  const canBuy=Array.isArray(v.shop)&&v.shop.some(c=>c.levels&&c.levels.some(l=>l.buyable));
   const warnBuy=boughtNothing&&canBuy;
   const noBet=v.canBet&&!(v.myBet&&v.myBet.targetId!=null&&v.myBet.amount>0);
   if(warnBuy||noBet){
@@ -1688,14 +1720,17 @@ socket.on('state',render);
 socket.on('errorMsg',m=>toast(m));
 socket.on('connect',()=>{
   document.getElementById('conn').classList.remove('show');
-  if(ME.joined&&ME.code){socket.emit('joinRoom',{code:ME.code,name:ME.name},(res)=>{if(res&&res.ok){ME.id=res.youId;}});}
+  if(ME.joined&&ME.code){socket.emit('joinRoom',{code:ME.code,name:ME.name},(res)=>{
+    if(res&&res.ok){ ME.id=res.youId; }
+    else { ME.joined=false; ME.code=null; toast('Partita scaduta: il server si è riavviato. Sei tornato alla home.'); show('s-home'); }
+  });}
 });
 socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show');});
 
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-06-24 · mazzo-130 · reconnect';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-06-24 · pista-125 · winnerB';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 </body>
 </html>

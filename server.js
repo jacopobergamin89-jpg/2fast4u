@@ -135,7 +135,9 @@ function freeColorIdx(room){ const used=new Set(room.G.players.map(p=>p.colorIdx
 function playerBySocket(socket){ const code=socketToRoom.get(socket.id); if(!code) return null; const room=rooms.get(code); if(!room) return null; const p=room.G.players.find(x=>x.socketId===socket.id); return p?{room,p}:null; }
 
 /* ============================ MOTORE ============================ */
-function layoutTrack(cards){ let from=1; cards.forEach((c,i)=>{ c.len=DB.lunghezze[i]; c.from=from; c.to=from+c.len-1; from+=c.len; }); }
+const POSW=[0.85,0.85,1.0,1.10,1.20];                                  // peso di posizione: 1ª = 2ª (lancio), poi a salire fino alla 5ª (la più lunga)
+function roadBase(L){ return 10+5*(Math.min(L,DB.maxLevelRoads)-1); }   // lunghezza media a livello L: 10 a L1, +5 per livello
+function layoutTrack(cards){ let from=1; cards.forEach((c,i)=>{ const w=(POSW[i]!==undefined?POSW[i]:1); c.len=Math.max(3,Math.round(roadBase(c.lvl||1)*w)); c.from=from; c.to=from+c.len-1; from+=c.len; }); }
 function newCardOfLevel(lvl){ const L=Math.min(lvl,DB.maxLevelRoads); const pool=ROADS[L]; return { ...pool[Math.floor(Math.random()*pool.length)], lvl:L }; }
 function buildInitialTrack(G){
   const pool=shuffle(ROADS[1].map(c=>({...c,lvl:1})));
@@ -163,7 +165,7 @@ function restartGame(room){
   room.started=false;
   G.phase='lobby';
   G.round=0; G.R=null; G.lastResults=null; G.winner=null;
-  G.shop=[]; G.track=[]; G.pilotPool=null; G.deck=null; G.discard=[]; G.order=[]; G.diceOrder=[];
+  G.track=[]; G.pilotPool=null; G.deck=null; G.discard=[]; G.order=[]; G.diceOrder=[];
   G.players.forEach((p,i)=>{
     p.pilot=null; p.drew=false; p.ready=false;
     p.money=3000; p.po=0;
@@ -197,32 +199,13 @@ function startRound(room){
   G.raceLevel=G.trackLevel;
   G.entryFee=DB.roadBasePrice[G.raceLevel];
   G.raceFirstRollDone=false;
-  rebuildShop(room);
   G.ppIdx=0; G.phase='prep'; G.R=null; G.lastResults=null; G.reshop=false; G.reshopQueued=false; G.reshopFirst=null; G.sprintFinish=null;
   G.blocks=[]; G.pendPolice=[]; G.forfeitedBlocks=[];
   G.players.forEach(p=>{ p.bet=null; p.prizeMult=1; p.betMult=1; p.quotaMod=0; p.discountNext=false; p.incoming=[]; });
   curPrep(G).buysLeft=G.maxBuys;
 }
-function rebuildShop(room){
-  const G=room.G; const N=G.players.length; const reveal=(G.round===1)?N*2:N; const bag=[];
-  DB.ordine.forEach(comp=>{
-    for(let lvl=1;lvl<=G.compMaxLevel;lvl++){
-      let copies=(lvl<=3)?N:Math.max(0,N-1);   // stock per tipo: N ai liv. 1-3, N-1 ai liv. 4-5
-      for(let k=0;k<copies;k++) bag.push({comp,lvl});
-    }
-  });
-  shuffle(bag); G.shop=bag.slice(0,reveal);
-}
-function revealMore(room,n,maxLvl){
-  const G=room.G; const N=G.players.length; const bag=[];
-  DB.ordine.forEach(comp=>{
-    for(let lvl=1;lvl<=maxLvl;lvl++){
-      let copies=(lvl<=3)?N:Math.max(0,N-1);   // stock per tipo: N ai liv. 1-3, N-1 ai liv. 4-5
-      for(let k=0;k<copies;k++) bag.push({comp,lvl});
-    }
-  });
-  shuffle(bag); for(let k=0;k<n&&k<bag.length;k++) G.shop.push(bag[k]);
-}
+function compSlots(N,lvl){ return Math.max(1, N - Math.max(0, lvl-2)); }   // posti totali per tipo a un livello: L1-2=N, L3=N-1, L4=N-2, L5=N-3 (min 1)
+function stockAvail(G,comp,lvl){ return compSlots(G.players.length,lvl) - G.players.filter(x=>x.comp[comp]===lvl).length; }   // disponibili = posti − chi tiene già quel livello (il pezzo rientra da solo quando uno sale)
 function pOrder(G){ return G.reshop?G.reshopOrder:G.order; }
 function curPrep(G){ const o=pOrder(G); return G.players.find(p=>p.id===o[G.ppIdx]); }
 function startReshop(room){
@@ -231,7 +214,6 @@ function startReshop(room){
   const first=G.reshopFirst;
   G.reshopOrder=[first, ...G.order.filter(id=>id!==first)];
   G.ppIdx=0;
-  revealMore(room, Math.max(4,G.players.length), G.compMaxLevel);   // officina riaperta: nuovi ricambi
   G.players.forEach(pp=>{ pp.buysLeft=0; });
   curPrep(G).buysLeft=1;
 }
@@ -244,15 +226,16 @@ function canHaveAtLevel(p,comp,lvl){
 function priceFor(G,p,comp,lvl){ let price=DB.prezzi[comp][lvl]; if(lvl>p.comp[comp]+1) price*=2; if(p.discountNext) price=Math.round(price/2); return price; }
 
 /* --- azioni preparazione --- */
-function actBuy(room,p,shopIdx){
+function actBuy(room,p,comp,lvl){
   const G=room.G; if(G.phase!=='prep'||curPrep(G).id!==p.id) return 'Non è il tuo turno.';
-  const card=G.shop[shopIdx]; if(!card) return 'Carta non valida.';
-  if(card.lvl<=p.comp[card.comp]) return 'Livello pari o inferiore.';
-  if(card.lvl>G.compMaxLevel) return 'Livello non ancora sbloccato.';
+  lvl=+lvl; if(!DB.ordine.includes(comp)||!(lvl>=1)) return 'Ricambio non valido.';
+  if(lvl<=p.comp[comp]) return 'Livello pari o inferiore.';
+  if(lvl>G.compMaxLevel) return 'Livello non ancora sbloccato.';
   if(p.buysLeft<=0) return 'Acquisti finiti.';
-  if(!canHaveAtLevel(p,card.comp,card.lvl)) return 'Tetto di costruzione raggiunto.';
-  const price=priceFor(G,p,card.comp,card.lvl); if(p.money<price) return 'Denaro insufficiente.';
-  p.money-=price; p.comp[card.comp]=card.lvl; if(p.lvlOwned&&!p.lvlOwned[card.comp].includes(card.lvl)) p.lvlOwned[card.comp].push(card.lvl); p.buysLeft--; p.discountNext=false; G.shop.splice(shopIdx,1); return null;
+  if(!canHaveAtLevel(p,comp,lvl)) return 'Tetto di costruzione raggiunto.';
+  if(stockAvail(G,comp,lvl)<=0) return 'Pezzo esaurito.';
+  const price=priceFor(G,p,comp,lvl); if(p.money<price) return 'Denaro insufficiente.';
+  p.money-=price; p.comp[comp]=lvl; if(p.lvlOwned&&!p.lvlOwned[comp].includes(lvl)) p.lvlOwned[comp].push(lvl); p.buysLeft--; p.discountNext=false; return null;
 }
 function pregaraTarget(c){ if(c.eff==='prizeDown'||c.eff==='betDown'||c.eff==='smonta'||c.eff==='reopenDebt') return 'rival'; if(c.eff==='quota') return c.val<0?'rival':'self'; if((c.eff==='money'||c.eff==='po')&&c.val<0) return 'rival'; return 'self'; }
 
@@ -281,7 +264,6 @@ function smontaBest(G, victim){
   victim.lvlOwned[cp]=(victim.lvlOwned[cp]||[0]).filter(x=>x!==lv);
   if(!victim.lvlOwned[cp].length) victim.lvlOwned[cp]=[0];
   victim.comp[cp]=Math.max(...victim.lvlOwned[cp]);
-  G.shop.push({comp:cp,lvl:lv});
   return {comp:cp,lvl:lv};
 }
 function recordMalus(room, attacker, target, m){
@@ -299,7 +281,7 @@ function revertMalus(G, t, m){
     case 'prizeDown': t.prizeMult=(t.prizeMult||1)/m.val; break;
     case 'betDown': t.betMult=(t.betMult||1)/m.val; break;
     case 'quota': t.quotaMod=(t.quotaMod||0)-m.val; break;
-    case 'smonta': { const cp=m.comp, lv=m.lvl; if(cp!=null){ if(t.lvlOwned[cp]&&!t.lvlOwned[cp].includes(lv)) t.lvlOwned[cp].push(lv); t.comp[cp]=Math.max(...t.lvlOwned[cp]); const si=G.shop.findIndex(s=>s.comp===cp&&s.lvl===lv); if(si>=0) G.shop.splice(si,1); } break; }
+    case 'smonta': { const cp=m.comp, lv=m.lvl; if(cp!=null){ if(t.lvlOwned[cp]&&!t.lvlOwned[cp].includes(lv)) t.lvlOwned[cp].push(lv); t.comp[cp]=Math.max(...t.lvlOwned[cp]); } break; }
     case 'vel': case 'ctrl': { const car=G.R&&G.R.cars[t.id]; if(car&&m.fxRef) car.fx=car.fx.filter(e=>e!==m.fxRef); break; }
     case 'partenza': { const car=G.R&&G.R.cars[t.id]; if(car) car.pendPart-=m.val; break; }
     case 'dado': { const car=G.R&&G.R.cars[t.id]; if(car) car.pendDado=(m.prevDado!==undefined?m.prevDado:null); break; }
@@ -362,8 +344,7 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
     const lvl=tgt.comp[comp]; _comp=comp; _lvl=lvl;
     tgt.lvlOwned[comp]=(tgt.lvlOwned[comp]||[0]).filter(x=>x!==lvl);   // tolgo il livello in cima
     if(!tgt.lvlOwned[comp].length) tgt.lvlOwned[comp]=[0];
-    tgt.comp[comp]=Math.max(...tgt.lvlOwned[comp]);                    // torno al livello posseduto più alto rimasto
-    G.shop.push({comp,lvl});              // il pezzo torna in officina
+    tgt.comp[comp]=Math.max(...tgt.lvlOwned[comp]);                    // torno al livello posseduto più alto rimasto (il posto si libera da solo)
     p.money-=cost;                        // costo denaro
     if(c.costPO) p.po=Math.max(0,p.po-c.costPO); // costo Rispetto
   }
@@ -378,14 +359,12 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
     if(p.money<cost) return 'Ti servono €'+cost+' per giocarla.';
     p.money-=cost;
     p.buysLeft=(p.buysLeft||0)+1;
-    revealMore(room, Math.max(4,G.players.length), G.compMaxLevel);
   }
   else if(c.eff==='reopenAll'){                                    // Apri a tutti: giro condiviso dopo la prep
     if(!G.reshopQueued){ G.reshopQueued=true; G.reshopFirst=p.id; }
   }
   else if(c.eff==='reopenDebt'){
     p.buysLeft=(p.buysLeft||0)+1;                                  // +1 acquisto per chi gioca
-    revealMore(room, Math.max(4,G.players.length), G.compMaxLevel);
     tgt.discountNext=true;                                         // il rivale scelto compra a metà prezzo
   }
   else if(c.eff==='sprint'){                                       // gara breve: traguardo a c.val, una sola per gara
@@ -406,7 +385,6 @@ function smontaCheapest(G, victim){
   victim.lvlOwned[cp]=(victim.lvlOwned[cp]||[0]).filter(x=>x!==lv);
   if(!victim.lvlOwned[cp].length) victim.lvlOwned[cp]=[0];
   victim.comp[cp]=Math.max(...victim.lvlOwned[cp]);
-  G.shop.push({comp:cp,lvl:lv});
   return {comp:cp,lvl:lv};
 }
 function actPlayPolice(room,p,handIdx,cell){
@@ -523,7 +501,7 @@ function actPrepDone(room,p){
 /* --- gara --- */
 function startRace(room){
   const G=room.G;
-  G.R={ turnOrder:[...G.order], turn:1, ptr:0, phase:'await', cars:{}, lastBreak:null, log:[], logId:0, finish:(G.sprintFinish||null), turnDice:[], police:[], blocks:(G.blocks||[]).slice() };
+  G.R={ turnOrder:[...G.order], turn:1, ptr:0, phase:'await', cars:{}, lastBreak:null, log:[], logId:0, finish:(G.sprintFinish||trackTotalCells(G)), turnDice:[], police:[], blocks:(G.blocks||[]).slice() };
   G.players.forEach(p=>{ G.R.cars[p.id]={ pos:0, firstDone:false, nosUsed:false, fx:[], pendDado:null, pendPart:0, pendReach:null }; p.incoming=[]; });  // azzero incoming: finestra difese pre-gara chiusa
   const fee=DB.roadBasePrice[G.raceLevel]||0;                    // quota d'ingresso: la paga ogni giocatore
   G.players.forEach(p=>{ const paid=Math.min(p.money,fee); p.money=Math.max(0,p.money-fee); p._entryFee=paid; });
@@ -543,7 +521,7 @@ function computeMove(G,p,die,useNos){
   if(car.pendReach){
     const ranked=G.players.map(x=>R.cars[x.id].pos).sort((a,b)=>b-a);   // classifica per posizione, decrescente
     const ref=Math.min(ranked.length, Math.max(1, car.pendReach.ref));  // 1 = primo, 2 = secondo
-    let target=Math.max(0, Math.min(55, (ranked[ref-1]||0)+(car.pendReach.off||0)));
+    let target=Math.max(0, Math.min(trackTotalCells(G), (ranked[ref-1]||0)+(car.pendReach.off||0)));
     const mov=Math.max(0, target-car.pos);                              // solo in avanti
     const lbl=(car.pendReach.ref===2&&car.pendReach.off===0)?'Carta · raggiungi il 2°':(car.pendReach.ref===1&&car.pendReach.off===-1)?'Carta · una casella dietro il 1°':'Carta · salto di posizione';
     return { lines:[{k:lbl,v:mov,cls:'pos'}], total:mov, die, db:0, useNos:false, segType:seg.t, vel:0, ctrl:0 };
@@ -615,6 +593,7 @@ function actConfirmMove(room,p){
   const car=G.R.cars[p.id]; const b=G.R.lastBreak;
   if(b.useNos) car.nosUsed=true;
   car.firstDone=true; G.raceFirstRollDone=true;
+  car.dist=(car.dist||0)+b.total;                       // distanza reale percorsa (non tappata) → classifica photo-finish
   car.pos=Math.min(G.R.finish||55,car.pos+b.total);
   const onBlk=(G.R.blocks||[]).find(bl=>car.pos>=bl.from&&car.pos<=bl.to);
   if(onBlk && car.pos>0){ p.money=Math.max(0,p.money-500); raceLog(G,{kind:'fine',who:p.name,amount:500,pos:car.pos}); }
@@ -632,9 +611,18 @@ function actConfirmMove(room,p){
   return null;
 }
 
+function dragOff3(p){ let s=0; const mov=statsOf(p).mov; for(let k=0;k<3;k++) s+=Math.max(0,mov)+dieBonus(d6()); return s; }  // spareggio: 3 tiri su strip pulito, vince la distanza più alta
 function endRace(room){
   const G=room.G;
-  const ranked=[...G.players].sort((a,b)=>G.R.cars[b.id].pos-G.R.cars[a.id].pos||Math.random()-0.5);
+  const distOf=p=>(G.R.cars[p.id].dist!=null?G.R.cars[p.id].dist:G.R.cars[p.id].pos);   // photo-finish: distanza reale percorsa (non tappata)
+  const ranked=[...G.players].sort((a,b)=>distOf(b)-distOf(a));
+  G.lastTiebreaks=[];
+  { let i=0; while(i<ranked.length){ let j=i; while(j+1<ranked.length && distOf(ranked[j+1])===distOf(ranked[i])) j++;
+      if(j>i){ const group=ranked.slice(i,j+1);                                          // pari-merito esatti → spareggio a 3 tiri solo tra loro
+        const scored=group.map(p=>({p,s:dragOff3(p)})).sort((a,b)=>b.s-a.s||Math.random()-0.5);
+        for(let k=0;k<scored.length;k++) ranked[i+k]=scored[k].p;
+        G.lastTiebreaks.push({ cell:G.R.cars[group[0].id].pos, players:scored.map(o=>({name:o.p.name,score:o.s})) });
+      } i=j+1; } }
   const N=G.players.length; const base=DB.roadBasePrice[G.raceLevel];
   const maxPolPos=(G.R.police&&G.R.police.length)?Math.max(...G.R.police.map(pl=>G.R.cars[pl.id].pos)):-1;
   ranked.forEach((p,i)=>{
@@ -680,27 +668,27 @@ function endRace(room){
     police: (G.R.police||[]).map(pl=>({name:pl.name, pos:G.R.cars[pl.id].pos})),
     bosses: (G.R.bosses||[]).map(b=>({name:b.name, kind:b.kind, reward:b.reward, pos:G.R.cars[b.id].pos, beatenBy: ranked.filter(p=>!p._busted && G.R.cars[p.id].pos>G.R.cars[b.id].pos).map(p=>p.name)})),
     busted: ranked.filter(p=>p._busted).map(p=>({name:p.name, reason:p._bustReason})),
-    forfeited: (G.forfeitedBlocks||[]).map(f=>({who:f.who,nome:f.nome}))
+    forfeited: (G.forfeitedBlocks||[]).map(f=>({who:f.who,nome:f.nome})),
+    tiebreaks: (G.lastTiebreaks||[])
   };
   G.phase = G.winner ? 'win' : 'results';
 }
 function advanceTrack(room){
-  const G=room.G;
-  const L=G.trackLevel;
+  const G=room.G; const L=G.trackLevel;
   const crossed=G.players.map(p=>{ const pos=G.R.cars[p.id].pos; return G.track.filter(c=>c.to<=pos).length; });
-  const passedAll=Math.min(...crossed);
+  const passedAll=Math.min(...crossed);                          // la finestra scorre di quante strade hanno superato TUTTI
+  const lead=Math.max(...crossed);                               // il vincitore = chi è più avanti
+  const need=(L>=3)?3:2;                                         // regola B: ×2 per L1→L2 e L2→L3, ×3 solo per l'ultimo salto L3→L4
+  const advance=(L<DB.maxLevelRoads) && lead>=need && G.track.slice(0,lead).filter(c=>c.lvl>=L).length>=need;
   let change={ passedAll, addedCount:0, oldLevel:L, newLevel:L, advanced:false };
+  if(advance){ G.trackLevel=L+1; G.bossPending=L; }             // boss per il livello completato (appare nella gara dopo)
+  const fillLvl=advance?(L+1):L;
   if(passedAll>=1){
-    const removed=G.track.slice(0,passedAll);
-    const maxPassed=removed.filter(c=>c.lvl>=L).length;          // strade del livello MASSIMO superate da tutti
-    const advance=(maxPassed>=2)&&(L<DB.maxLevelRoads);          // si sale solo superando >=2 strade del livello max
-    if(advance) G.trackLevel=L+1;
-    if(advance) G.bossPending=L;                                 // boss per il livello appena completato (appare nella gara dopo)
-    const fillLvl=advance?(L+1):L;                               // se non si sale, si riempie col livello max attuale
     G.track=G.track.slice(passedAll);
     for(let k=0;k<passedAll;k++) G.track.push(newCardOfLevel(fillLvl));
-    change.addedCount=passedAll; change.newLevel=G.trackLevel; change.advanced=advance;
-  }
+    change.addedCount=passedAll;
+  } else if(advance){ G.track[G.track.length-1]=newCardOfLevel(fillLvl); }
+  change.newLevel=G.trackLevel; change.advanced=advance;
   layoutTrack(G.track);
   G.lastTrackChange=change;
   if(!G.policeUnlocked && G.trackLevel>=2){ G.policeUnlocked=true; G.deck=shuffle((G.deck||[]).concat(makePoliceDeck())); change.policeUnlocked=true; }
@@ -782,12 +770,15 @@ function buildView(room, player){
       v.mustPlayPolice=p.hand.some(c=>c.cat==='polizia');
       v.track=trackView(G);
       v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:!!p.discountNext };
-      v.shop=G.shop.map((card,idx)=>{
-        const cur=p.comp[card.comp]; const usable=card.lvl>cur && card.lvl<=G.compMaxLevel; const okLimit=canHaveAtLevel(p,card.comp,card.lvl);
-        const price=priceFor(G,p,card.comp,card.lvl); const skip=card.lvl>cur+1;
-        let reason=''; if(!usable) reason=card.lvl<=cur?'livello pari/inferiore':'oltre il livello sbloccato'; else if(!okLimit) reason='tetto raggiunto';
-        return { idx, comp:card.comp, name:DB.nomi[card.comp], lvl:card.lvl, val:DB.valori[card.comp][card.lvl], cur, price, skip,
-          buyable: usable && okLimit && p.buysLeft>0 && p.money>=price, reason };
+      v.shop=DB.ordine.map(comp=>{
+        const owned=p.comp[comp]; const levels=[];
+        for(let lvl=owned+1; lvl<=G.compMaxLevel; lvl++){
+          const cap=!canHaveAtLevel(p,comp,lvl); const stock=stockAvail(G,comp,lvl); const price=priceFor(G,p,comp,lvl);
+          levels.push({ lvl, val:DB.valori[comp][lvl], price, stock, skip:lvl>owned+1, cap,
+            buyable: !cap && stock>0 && p.buysLeft>0 && p.money>=price,
+            reason: cap?'tetto pieno':(stock<=0?'esaurito':(p.money<price?'soldi insuff.':'')) });
+        }
+        return { comp, name:DB.nomi[comp], owned, ownedVal:DB.valori[comp][owned], maxed:(owned>=G.compMaxLevel), levels };
       });
       v.pregara = G.reshop ? [] : p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c), costPO:(c.costPO||0) })).filter(c=>c.cat==='pregara' && c.eff!=='defend');
       v.canBet = !G.reshop && G.round>=2;
@@ -870,20 +861,23 @@ function botPrep(room,bot){
   // 2) acquisti
   let safety=12;
   while(bot.buysLeft>0 && safety-->0){
-    const opts=G.shop.map((card,idx)=>({card,idx})).filter(o=>{
-      const c=o.card, cur=bot.comp[c.comp];
-      if(c.lvl<=cur || c.lvl>G.compMaxLevel) return false;
-      if(!canHaveAtLevel(bot,c.comp,c.lvl)) return false;
-      return priceFor(G,bot,c.comp,c.lvl) <= bot.money-400;
+    const opts=[];
+    DB.ordine.forEach(comp=>{ const cur=bot.comp[comp];
+      for(let lvl=cur+1; lvl<=G.compMaxLevel; lvl++){
+        if(!canHaveAtLevel(bot,comp,lvl)) continue;
+        if(stockAvail(G,comp,lvl)<=0) continue;
+        if(priceFor(G,bot,comp,lvl) > bot.money-400) continue;
+        opts.push({comp,lvl});
+      }
     });
     if(!opts.length) break;
     const w={motore:3,cambio:3,sterzo:3,assetto:3,nos:2,peso:2};
     opts.sort((a,b)=>{
-      const ga=(DB.valori[a.card.comp][a.card.lvl]-DB.valori[a.card.comp][bot.comp[a.card.comp]])*(w[a.card.comp]||1);
-      const gb=(DB.valori[b.card.comp][b.card.lvl]-DB.valori[b.card.comp][bot.comp[b.card.comp]])*(w[b.card.comp]||1);
+      const ga=(DB.valori[a.comp][a.lvl]-DB.valori[a.comp][bot.comp[a.comp]])*(w[a.comp]||1);
+      const gb=(DB.valori[b.comp][b.lvl]-DB.valori[b.comp][bot.comp[b.comp]])*(w[b.comp]||1);
       return gb-ga;
     });
-    if(actBuy(room,bot,opts[0].idx)) break;
+    if(actBuy(room,bot,opts[0].comp,opts[0].lvl)) break;
   }
   actPrepDone(room,bot);
 }
@@ -994,7 +988,7 @@ io.on('connection', (socket)=>{
 
   socket.on('setup:drawPilot', handle((room,p)=>actDrawPilot(room,p)));
   socket.on('setup:ready', handle((room,p)=>actReady(room,p)));
-  socket.on('prep:buy', handle((room,p,d)=>actBuy(room,p,d.shopIdx)));
+  socket.on('prep:buy', handle((room,p,d)=>actBuy(room,p,d.comp,d.lvl)));
   socket.on('prep:playCard', handle((room,p,d)=>actPlayPregara(room,p,d.handIdx,d.targetId,d.comp)));
   socket.on('prep:police', handle((room,p,d)=>actPlayPolice(room,p,d.handIdx,d.cell)));
   socket.on('prep:bet', handle((room,p,d)=>actSetBet(room,p,d.targetId,d.amount)));
@@ -1028,7 +1022,7 @@ io.on('connection', (socket)=>{
   });
 });
 
-module.exports = { DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actPlayPolice, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending, actDefend, incomingFor };
+module.exports = { DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actPlayPolice, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending, actDefend, incomingFor, stockAvail, compSlots, endRace };
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, ()=>console.log('2FAST4U server in ascolto sulla porta '+PORT));
