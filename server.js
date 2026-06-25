@@ -201,7 +201,8 @@ function startRound(room){
   else G.order=[...G.players].sort((a,b)=>b.lastRank-a.lastRank||a.id-b.id).map(p=>p.id);
   G.maxBuys=(G.round===1)?2:1;
   G.compMaxLevel=G.trackLevel;
-  revealMarket(G, G.round===1 ? G.players.length*2 : G.players.length);   // scopri le migliorie del round
+  G.market=[]; G.marketUsed={};                                          // ogni officina riparte pulita: le carte invendute NON si accumulano dai round precedenti
+  revealMarket(G, G.maxBuys * G.players.length);   // PEZZI = ACQUISTI: il banco scopre tanti pezzi quanti gli acquisti totali (maxBuys a testa × giocatori). Round 1: 2 a testa · dal round 2: 1 a testa
   G.raceLevel=G.trackLevel;
   G.entryFee=DB.roadBasePrice[G.raceLevel];
   G.raceFirstRollDone=false;
@@ -232,8 +233,9 @@ function startReshop(room){
   G.reshop=true; G.reshopQueued=false;
   const buys=G.reshopBuys||{};
   const parts=G.players.map(p=>p.id).filter(id=>(buys[id]||0)>0);   // solo chi ha un acquisto nel giro extra
-  const extraStock=parts.reduce((s,id)=>s+(buys[id]||0),0);         // 1 pezzo fresco per ogni acquisto del giro extra (= 1 per giocatore attivo nel caso standard)
-  revealMarket(G, extraStock);                                      // FIX: il giro extra deve scoprire nuova merce — senza, se la prep ha svuotato il mercato il banco resta vuoto
+  const extraStock=parts.reduce((s,id)=>s+(buys[id]||0),0);         // 1 pezzo per giocatore attivo nel giro extra
+  G.market=[]; G.marketUsed={};                                     // anche il giro extra riparte pulito: esattamente 1 pezzo a testa, niente residui dell'officina principale
+  revealMarket(G, extraStock);
   let first=parts.includes(G.reshopFirst)?G.reshopFirst:parts[0];
   G.reshopOrder=[first, ...G.order.filter(id=>id!==first && parts.includes(id))];
   G.ppIdx=0;
