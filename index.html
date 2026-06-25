@@ -151,6 +151,24 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .def-acts{display:flex;gap:6px;flex-wrap:wrap}
 .def-btn{background:#fff;color:#b3123d;border:none;border-radius:9px;padding:7px 13px;font-size:13px;font-weight:700;cursor:pointer}
 .def-btn.refl{background:var(--yellow,#FFC91E);color:#3a2a00}
+/* striscia carte difesa in mano (evidenziate, si gioca col tocco) */
+.def-cards{margin:10px 0;padding:12px 13px;border-radius:13px;background:rgba(255,84,112,.10);border:1px solid rgba(255,84,112,.45)}
+.def-ch{font-family:var(--disp);font-weight:700;font-size:13.5px;color:#ff9bb0;letter-spacing:.02em;display:flex;align-items:center;gap:7px}
+.def-csub{font-family:var(--mono);font-size:11px;color:var(--muted);margin:3px 0 11px}
+.def-cmal{font-family:var(--mono);font-size:11.5px;color:var(--ink);margin:4px 0 8px;padding:5px 8px;background:rgba(0,0,0,.2);border-radius:7px}
+.dcard{position:relative;display:flex;align-items:stretch;background:var(--asphalt-1);border:1.5px solid var(--good);border-radius:13px;overflow:hidden;margin-bottom:10px;box-shadow:0 0 0 3px rgba(69,193,97,.14),0 6px 16px rgba(0,0,0,.35);cursor:pointer}
+.dcard.refl{border-color:var(--po);box-shadow:0 0 0 3px rgba(255,206,74,.16),0 6px 16px rgba(0,0,0,.35)}
+.dcard .dbar{flex:0 0 6px;background:var(--good)}
+.dcard.refl .dbar{background:var(--po)}
+.dcard .dmid{flex:1;padding:11px 12px;min-width:0}
+.dcard .dnm{font-family:var(--disp);font-weight:600;font-size:16px;line-height:1.1;color:var(--ink);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.dcard .dbadge{font-family:var(--disp);font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 6px;border-radius:6px;background:rgba(69,193,97,.18);color:#7fe39b;border:1px solid rgba(69,193,97,.5)}
+.dcard.refl .dbadge{background:rgba(255,206,74,.16);color:var(--po);border-color:rgba(255,206,74,.5)}
+.dcard .dds{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:4px}
+.dcard .dgo{flex:none;align-self:center;margin:0 12px 0 6px;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--disp);font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;padding:10px 15px;border-radius:11px;background:rgba(69,193,97,.18);border:1px solid rgba(69,193,97,.55);color:#7fe39b}
+.dcard.refl .dgo{background:rgba(255,206,74,.16);border-color:rgba(255,206,74,.55);color:var(--po)}
+.dcard .dgo .dico{font-size:16px;line-height:1}
+.def-skip{text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted-2);text-decoration:underline;margin:2px 0;cursor:pointer}
 @keyframes defpulse{0%,100%{box-shadow:0 6px 22px rgba(0,0,0,.45)}50%{box-shadow:0 7px 32px rgba(255,59,107,.72)}}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .modal{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;z-index:50;padding:24px}
@@ -479,6 +497,7 @@ body:has(#s-home.active) .topbar{display:none}
 .of-ava{width:27px;height:27px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:12px;color:#0a0418;background:var(--c,#888);box-shadow:0 0 0 2px var(--asphalt-0),0 0 0 3px var(--c,#888)}
 .of-who{font-family:var(--disp);font-weight:600;font-size:13px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
 .of-po{font-family:var(--mono);font-size:11px;color:var(--po)}
+.of-money{font-family:var(--disp);font-weight:700;font-size:11px;color:#ffe9a6;background:rgba(255,201,30,.14);border:1px solid rgba(255,201,30,.4);border-radius:7px;padding:2px 7px;white-space:nowrap}
 .of-now{color:var(--amber);font-size:10px;font-family:var(--disp);font-weight:600;letter-spacing:.04em;margin-top:5px}
 .of-bought{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;min-height:16px}
 .of-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 6px 2px 5px;border-radius:6px;background:var(--asphalt-0);border:1px solid var(--line);font-family:var(--disp);font-weight:600;font-size:10px;white-space:nowrap}
@@ -872,6 +891,12 @@ const COLORS=[{n:'Rosso',h:'#e74c3c'},{n:'Blu',h:'#3498db'},{n:'Verde',h:'#2ecc7
 const LV_COLOR=['var(--muted-2)','var(--lv1)','var(--lv2)','var(--lv3)','var(--lv4)','var(--lv5)'];
 let socket=io();
 let ME={id:null,code:null,name:'',colorIdx:0,joined:false};
+// --- sessione persistente: rientro automatico dopo back/refresh/chiusura tab ---
+const SESS_KEY='2fast4u_session';
+function saveSession(){ try{ localStorage.setItem(SESS_KEY, JSON.stringify({code:ME.code,name:ME.name,colorIdx:ME.colorIdx})); }catch(e){} }
+function clearSession(){ try{ localStorage.removeItem(SESS_KEY); }catch(e){} }
+function loadSession(){ try{ const s=JSON.parse(localStorage.getItem(SESS_KEY)||'null'); if(s&&s.code&&s.name){ ME.code=s.code; ME.name=s.name; ME.colorIdx=(s.colorIdx>=0&&s.colorIdx<8)?s.colorIdx:0; ME.joined=true; } }catch(e){} }
+loadSession();   // se c'era una partita in corso, l'handler 'connect' qui sotto rientra da solo
 let ui={nosArmed:false,lastActive:undefined,lastPhase:null,raceTab:'tiro'};
 const ACCENT={rettilineo:'#2fe6e0',citta:'#ffb02e',drift:'#ff3d97'};
 let LAST=null;
@@ -899,7 +924,7 @@ function doCreate(){
   if(!nameOk(name)){toast('Nome non valido: serve almeno una lettera o un numero (max 8 caratteri)');return;}
   ME.name=name;
   socket.emit('createRoom',{name,colorIdx:ME.colorIdx},(res)=>{
-    if(res&&res.ok){ME.id=res.youId;ME.code=res.code;ME.joined=true;}else toast((res&&res.error)||'Errore');
+    if(res&&res.ok){ME.id=res.youId;ME.code=res.code;ME.joined=true;saveSession();}else toast((res&&res.error)||'Errore');
   });
 }
 function doJoin(){
@@ -909,7 +934,7 @@ function doJoin(){
   if(code.length<4){toast('Codice non valido');return;}
   ME.name=name;
   socket.emit('joinRoom',{code,name,colorIdx:ME.colorIdx},(res)=>{
-    if(res&&res.ok){ME.id=res.youId;ME.code=res.code;ME.joined=true;}else toast((res&&res.error)||'Errore');
+    if(res&&res.ok){ME.id=res.youId;ME.code=res.code;ME.joined=true;saveSession();}else toast((res&&res.error)||'Errore');
   });
 }
 
@@ -1137,7 +1162,7 @@ const COMPMETA={motore:{ab:'MOT',full:'Motore',c:'#FF8A1E'},cambio:{ab:'CAM',ful
 function ofMeta(comp){return COMPMETA[comp]||{ab:(comp||'?').slice(0,3).toUpperCase(),full:(comp||'?'),c:'var(--muted)'};}
 function ofChip(o){const m=ofMeta(o.comp);return `<span class="of-chip" style="--c:${m.c}"><span class="of-dot"></span>${m.full} <span class="of-lv">L${o.lvl}</span></span>`;}
 function ofOwnedChips(owned,emptyTxt){const up=(owned||[]).filter(o=>o.lvl>0);return up.length?up.map(ofChip).join(''):`<span class="of-empty">${emptyTxt||'—'}</span>`;}
-function ofSeat(p,activeId){const act=p.id===activeId;return `<div class="of-seat${act?' act':''}"><div class="of-seat-top"><div class="of-ava" style="--c:${p.colorH}">${ini(p.name)}</div><div class="of-who">${esc(p.name)}</div><div class="of-po">${p.po} PO</div></div>${act?'<div class="of-now">sta scegliendo\u2026</div>':''}<div class="of-bought">${ofOwnedChips(p.car&&p.car.owned)}</div></div>`;}
+function ofSeat(p,activeId){const act=p.id===activeId;return `<div class="of-seat${act?' act':''}"><div class="of-seat-top"><div class="of-ava" style="--c:${p.colorH}">${ini(p.name)}</div><div class="of-who">${esc(p.name)}</div><span class="of-money">${eur(p.money)}</span><div class="of-po">${p.po} PO</div></div>${act?'<div class="of-now">sta scegliendo\u2026</div>':''}<div class="of-bought">${ofOwnedChips(p.car&&p.car.owned)}</div></div>`;}
 function ofIcon(comp){const I={
   motore:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="9" width="13" height="8" rx="1.5"/><path d="M16 11h3a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-3M7 9V6h5v3M3 13H1"/></svg>',
   cambio:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 7v11M17 7v11M7 12h10"/><circle cx="7" cy="6" r="2.2" fill="currentColor" stroke="none"/></svg>',
@@ -1147,13 +1172,17 @@ function ofIcon(comp){const I={
   nos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9.5 3h5v3l1 2v11a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V8l1-2z"/><path d="M9.5 12h5"/></svg>'};
   return I[comp]||'';}
 function defenseHTML(v){
-  if(v.incoming&&v.incoming.length){
-    let h='<div class="def-alert"><div class="def-hd">\u26a0\ufe0f SEI COLPITO \u2014 difenditi (anche fuori dal tuo turno)</div>';
-    v.incoming.forEach(m=>{
-      h+=`<div class="def-row"><div class="def-info"><b>${esc(m.by)}</b>: ${esc(m.label)}</div><div class="def-btns">`;
-      (m.defenders||[]).forEach(d=>{ h+=`<button class="def-go${d.reflect?' refl':''}" onclick="playDefense(${d.handIdx},${m.mid})">\ud83d\udee1\ufe0f ${esc(d.nome)}${d.reflect?' \u21a9':''}</button>`; });
-      h+='</div></div>';
+  const inc=(v&&v.incoming)||[];
+  if(inc.length && !(ui.defHidden && ui.defSig===defSig(v))){
+    let h='<div class="def-cards"><div class="def-ch">\ud83d\udee1\ufe0f SEI COLPITO \u2014 DIFENDITI</div><div class="def-csub">Le tue carte difesa qui sotto \u00b7 giocabili anche fuori dal tuo turno</div>';
+    inc.forEach(m=>{
+      if(inc.length>1) h+=`<div class="def-cmal"><b>${esc(m.by)}</b> \u00b7 ${esc(m.label)}</div>`;
+      (m.defenders||[]).forEach(d=>{
+        const sub=d.reflect?('\u21a9 Rimanda a '+esc(m.by)+' \u00b7 '+esc(m.label)):('Annulla il colpo \u00b7 '+esc(m.label));
+        h+=`<div class="dcard${d.reflect?' refl':''}" onclick="defend(${d.handIdx},${m.mid})"><div class="dbar"></div><div class="dmid"><div class="dnm">${esc(d.nome)} <span class="dbadge">${d.reflect?'Rimbalzo':'Difesa'}</span></div><div class="dds">${sub}</div></div><div class="dgo"><span class="dico">${d.reflect?'\u21a9':'\ud83d\udee1\ufe0f'}</span>${d.reflect?'Rimanda':'Para'}</div></div>`;
+      });
     });
+    h+='<div class="def-skip" onclick="defDismiss()">Lascia perdere \u00b7 subisci il colpo</div>';
     return h+'</div>';
   }
   if(v.myDefenses&&v.myDefenses.length){
@@ -1655,7 +1684,7 @@ function renderWin(v){
   const w=v.winner;
   let h=`<div class="win-hero"><div class="wt">🏁 Vincitore del campionato</div><div class="wn">${esc(w.name)}</div><div class="wp">${esc(w.pilot)} · ${w.gang} — ${w.po} Punti Onore</div></div>`;
   h+=`<div class="panel"><div class="panel-h">Classifica finale</div>${champHTML(v)}</div>`;
-  h+='<button class="btn btn-cyan foot" onclick="location.reload()">Nuova partita</button>';
+  h+='<button class="btn btn-cyan foot" onclick="clearSession();location.reload()">Nuova partita</button>';
   document.getElementById('s-win').innerHTML=h;
 }
 
@@ -1836,19 +1865,24 @@ function playIntroSequence(list){
   };
   next();
 }
+let _defToastTimer=null;
 function renderDefenseBanner(v){
   const el=document.getElementById('def-banner');
   if(!el)return;
   const inc=(v&&Array.isArray(v.incoming))?v.incoming:[];
-  if(!inc.length){ el.classList.remove('show'); el.innerHTML=''; return; }
-  let h='';
-  inc.forEach(m=>{
-    const btns=(m.defenders||[]).map(d=>`<button class="def-btn${d.reflect?' refl':''}" onclick="defend(${d.handIdx},${m.mid})">${d.reflect?'\u21a9\ufe0e ':'\ud83d\udee1 '}${esc(d.nome)}</button>`).join('');
-    h+=`<div class="def-row"><div class="def-txt">\u26a0\ufe0f <b>${esc(m.by)}</b> ti colpisce \u00b7 <span class="def-mal">${esc(m.label)}</span></div><div class="def-acts">${btns}</div></div>`;
-  });
-  el.innerHTML=h; el.classList.add('show');
+  if(!inc.length){ el.classList.remove('show'); el.innerHTML=''; ui._notified={}; ui.defHidden=false; if(_defToastTimer){clearTimeout(_defToastTimer);_defToastTimer=null;} return; }
+  ui._notified=ui._notified||{};
+  const fresh=inc.filter(m=>!ui._notified[m.mid]);           // notifico solo i colpi NUOVI
+  if(!fresh.length) return;                                  // già notificati: lascio sparire la notifica dopo ~2.5s
+  el.innerHTML=fresh.map(m=>`<div class="def-row"><div class="def-txt">\u26a0\ufe0f <b>${esc(m.by)}</b> ti colpisce \u00b7 <span class="def-mal">${esc(m.label)}</span></div></div>`).join('');
+  el.classList.add('show');
+  fresh.forEach(m=>ui._notified[m.mid]=true);
+  if(_defToastTimer) clearTimeout(_defToastTimer);
+  _defToastTimer=setTimeout(()=>{ el.classList.remove('show'); }, 2500);
 }
-function defend(handIdx,mid){ socket.emit('defend',{handIdx,mid}); }
+function defend(handIdx,mid){ socket.emit('defend',{handIdx,mid}); flash('Difesa giocata!','mine'); }
+function defSig(v){ return ((v&&v.incoming)||[]).map(m=>m.mid).sort().join(','); }
+function defDismiss(){ ui.defHidden=true; ui.defSig=defSig(LAST); if(LAST) render(LAST); }
 
 function renderLaunch(v){
   show('s-launch'); topMeta('Round '+v.round);
@@ -1924,7 +1958,7 @@ socket.on('connect',()=>{
   document.getElementById('conn').classList.remove('show');
   if(ME.joined&&ME.code){socket.emit('joinRoom',{code:ME.code,name:ME.name},(res)=>{
     if(res&&res.ok){ ME.id=res.youId; }
-    else { ME.joined=false; ME.code=null; toast('Partita scaduta: il server si è riavviato. Sei tornato alla home.'); show('s-home'); }
+    else { ME.joined=false; ME.code=null; clearSession(); toast('Partita scaduta: il server si è riavviato. Sei tornato alla home.'); show('s-home'); }
   });}
 });
 socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show');});
@@ -1932,7 +1966,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-06-25 · polizia-quota';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-06-25 · difesa-mano';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 </body>
 </html>
