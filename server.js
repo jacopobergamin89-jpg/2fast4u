@@ -232,6 +232,8 @@ function startReshop(room){
   G.reshop=true; G.reshopQueued=false;
   const buys=G.reshopBuys||{};
   const parts=G.players.map(p=>p.id).filter(id=>(buys[id]||0)>0);   // solo chi ha un acquisto nel giro extra
+  const extraStock=parts.reduce((s,id)=>s+(buys[id]||0),0);         // 1 pezzo fresco per ogni acquisto del giro extra (= 1 per giocatore attivo nel caso standard)
+  revealMarket(G, extraStock);                                      // FIX: il giro extra deve scoprire nuova merce — senza, se la prep ha svuotato il mercato il banco resta vuoto
   let first=parts.includes(G.reshopFirst)?G.reshopFirst:parts[0];
   G.reshopOrder=[first, ...G.order.filter(id=>id!==first && parts.includes(id))];
   G.ppIdx=0;
