@@ -153,7 +153,7 @@ function startGame(room){
   G.players.forEach((p,i)=>{ p.roll=d6(); });
   G.diceOrder=[...G.players].sort((a,b)=>b.roll-a.roll||a.id-b.id).map(p=>p.id);
   G.pilotPool=shuffle(DB.piloti.map(p=>p.id));
-  G.players.forEach((p,idx)=>{ p.pilot=null; p.drew=false; p.money=3000; p.po=0; p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0}; p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]}; p.lastRank=idx; p.prevRank=idx; p.hand=[]; });
+  G.players.forEach((p,idx)=>{ p.pilot=null; p.drew=false; p.money=4000; p.po=0; p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0}; p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]}; p.lastRank=idx; p.prevRank=idx; p.hand=[]; });
   G.deck=shuffle(makeDeck().concat(makePoliceDeck())); G.discard=[];   // polizia già nel mazzo dal round 1
   G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach(p=>{ for(let k=0;k<3;k++){ const card=drawCard(G); if(card) p.hand.push(card); } });
@@ -173,7 +173,7 @@ function restartGame(room){
   G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach((p,i)=>{
     p.pilot=null; p.drew=false; p.ready=false;
-    p.money=3000; p.po=0;
+    p.money=4000; p.po=0;
     p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0};
     p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]};
     p.hand=[]; p.bet=null;
