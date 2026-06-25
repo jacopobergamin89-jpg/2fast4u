@@ -155,6 +155,7 @@ function startGame(room){
   G.pilotPool=shuffle(DB.piloti.map(p=>p.id));
   G.players.forEach((p,idx)=>{ p.pilot=null; p.drew=false; p.money=3000; p.po=0; p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0}; p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]}; p.lastRank=idx; p.prevRank=idx; p.hand=[]; });
   G.deck=makeDeck(); G.discard=[];
+  G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach(p=>{ for(let k=0;k<3;k++){ const card=drawCard(G); if(card) p.hand.push(card); } });
   G.round=0; room.started=true; G.policeUnlocked=false; G.blocks=[]; G.pendPolice=[]; G.bossPending=null;
   G.phase='reveal'; G.players.forEach(p=>{ p.ready=false; });
@@ -166,6 +167,7 @@ function restartGame(room){
   G.phase='lobby';
   G.round=0; G.R=null; G.lastResults=null; G.winner=null;
   G.track=[]; G.pilotPool=null; G.deck=null; G.discard=[]; G.order=[]; G.diceOrder=[];
+  G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach((p,i)=>{
     p.pilot=null; p.drew=false; p.ready=false;
     p.money=3000; p.po=0;
@@ -196,16 +198,29 @@ function startRound(room){
   else G.order=[...G.players].sort((a,b)=>b.lastRank-a.lastRank||a.id-b.id).map(p=>p.id);
   G.maxBuys=(G.round===1)?2:1;
   G.compMaxLevel=G.trackLevel;
+  revealMarket(G, G.round===1 ? G.players.length*2 : G.players.length);   // scopri le migliorie del round
   G.raceLevel=G.trackLevel;
   G.entryFee=DB.roadBasePrice[G.raceLevel];
   G.raceFirstRollDone=false;
-  G.ppIdx=0; G.phase='prep'; G.R=null; G.lastResults=null; G.reshop=false; G.reshopQueued=false; G.reshopFirst=null; G.sprintFinish=null;
+  G.ppIdx=0; G.phase='prep'; G.R=null; if(G.lastResults) G.prevResults=G.lastResults; G.lastResults=null; G.reshop=false; G.reshopQueued=false; G.reshopFirst=null; G.sprintFinish=null;
   G.blocks=[]; G.pendPolice=[]; G.forfeitedBlocks=[];
   G.players.forEach(p=>{ p.bet=null; p.prizeMult=1; p.betMult=1; p.quotaMod=0; p.discountNext=false; p.incoming=[]; });
   curPrep(G).buysLeft=G.maxBuys;
 }
 function compSlots(N,lvl){ return Math.max(1, N - Math.max(0, lvl-2)); }   // posti totali per tipo a un livello: L1-2=N, L3=N-1, L4=N-2, L5=N-3 (min 1)
 function stockAvail(G,comp,lvl){ return compSlots(G.players.length,lvl) - G.players.filter(x=>x.comp[comp]===lvl).length; }   // disponibili = posti − chi tiene già quel livello (il pezzo rientra da solo quando uno sale)
+/* ===== MERCATO a carte scoperte (regola verificata: 1° mercato N×2, successivi N; si compra solo dalle scoperte) ===== */
+function deckCountForLevel(N,lvl){ return ({1:4,2:3,3:3,4:Math.max(0,N-2),5:Math.max(0,N-3)})[lvl]||0; }   // scarsità mazzo per stat/livello
+function revealMarket(G,count){                                  // pesca `count` carte e le scopre nel mercato
+  const N=G.players.length; let guard=count*60;
+  while(count>0 && guard-->0){
+    const comp=DB.ordine[Math.floor(Math.random()*DB.ordine.length)];
+    const lvl=1+Math.floor(Math.random()*G.compMaxLevel);        // 1..livello max pista
+    const key=comp+':'+lvl; const used=G.marketUsed[key]||0;
+    if(used>=deckCountForLevel(N,lvl)) continue;                 // esaurita quella carta nel mazzo
+    G.marketUsed[key]=used+1; G.market.push({ id:++G.marketSeq, comp, lvl }); count--;
+  }
+}
 function pOrder(G){ return G.reshop?G.reshopOrder:G.order; }
 function curPrep(G){ const o=pOrder(G); return G.players.find(p=>p.id===o[G.ppIdx]); }
 function startReshop(room){
@@ -229,13 +244,16 @@ function priceFor(G,p,comp,lvl){ let price=DB.prezzi[comp][lvl]; if(lvl>p.comp[c
 function actBuy(room,p,comp,lvl){
   const G=room.G; if(G.phase!=='prep'||curPrep(G).id!==p.id) return 'Non è il tuo turno.';
   lvl=+lvl; if(!DB.ordine.includes(comp)||!(lvl>=1)) return 'Ricambio non valido.';
+  const ci=(G.market||[]).findIndex(c=>c.comp===comp&&c.lvl===lvl);
+  if(ci<0) return 'Quella carta non è più al mercato.';
   if(lvl<=p.comp[comp]) return 'Livello pari o inferiore.';
   if(lvl>G.compMaxLevel) return 'Livello non ancora sbloccato.';
   if(p.buysLeft<=0) return 'Acquisti finiti.';
   if(!canHaveAtLevel(p,comp,lvl)) return 'Tetto di costruzione raggiunto.';
-  if(stockAvail(G,comp,lvl)<=0) return 'Pezzo esaurito.';
   const price=priceFor(G,p,comp,lvl); if(p.money<price) return 'Denaro insufficiente.';
-  p.money-=price; p.comp[comp]=lvl; if(p.lvlOwned&&!p.lvlOwned[comp].includes(lvl)) p.lvlOwned[comp].push(lvl); p.buysLeft--; p.discountNext=false; return null;
+  p.money-=price; p.comp[comp]=lvl; if(p.lvlOwned&&!p.lvlOwned[comp].includes(lvl)) p.lvlOwned[comp].push(lvl); p.buysLeft--; p.discountNext=false;
+  G.market.splice(ci,1);                                          // carta scoperta consumata
+  return null;
 }
 function pregaraTarget(c){ if(c.eff==='prizeDown'||c.eff==='betDown'||c.eff==='smonta'||c.eff==='reopenDebt') return 'rival'; if(c.eff==='quota') return c.val<0?'rival':'self'; if((c.eff==='money'||c.eff==='po')&&c.val<0) return 'rival'; return 'self'; }
 
@@ -668,6 +686,8 @@ function endRace(room){
     police: (G.R.police||[]).map(pl=>({name:pl.name, pos:G.R.cars[pl.id].pos})),
     bosses: (G.R.bosses||[]).map(b=>({name:b.name, kind:b.kind, reward:b.reward, pos:G.R.cars[b.id].pos, beatenBy: ranked.filter(p=>!p._busted && G.R.cars[p.id].pos>G.R.cars[b.id].pos).map(p=>p.name)})),
     busted: ranked.filter(p=>p._busted).map(p=>({name:p.name, reason:p._bustReason})),
+    fines: (function(){ const m={}; (G.R.log||[]).filter(e=>e.kind==='fine').forEach(e=>{ (m[e.who]=m[e.who]||{who:e.who,total:0,cells:[]}); m[e.who].total+=e.amount; m[e.who].cells.push(e.pos); }); return Object.values(m); })(),
+    reopened: (function(){ const ro=(G.reshopFirst!=null)&&G.players.find(x=>x.id===G.reshopFirst); return ro?ro.name:null; })(),
     forfeited: (G.forfeitedBlocks||[]).map(f=>({who:f.who,nome:f.nome})),
     tiebreaks: (G.lastTiebreaks||[])
   };
@@ -702,7 +722,7 @@ function actNextRound(room,p){
 /* ============================ VISTE ============================ */
 function publicPlayers(G,duringRace){
   return G.players.map(p=>({
-    id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, po:p.po, connected:p.connected,
+    id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, po:p.po, money:p.money, connected:p.connected,
     pos: duringRace ? G.R.cars[p.id].pos : null,
     pilot: p.pilot?{ nome:p.pilot.nome, gang:p.pilot.gang, tipo:p.pilot.tipo, tipoLabel:(TIPO_LABEL[p.pilot.tipo]||(p.pilot.tipo==='fortuna'?'Fortuna':'NOS')), ab:p.pilot.ab, partenza:p.pilot.partenza }:null,
     car: p.pilot?{ stats:statsOf(p), owned:ownedView(p) }:null
@@ -764,22 +784,22 @@ function buildView(room, player){
     v.policeWaiting=G.players.filter(x=>(x.hand||[]).some(c=>c.cat==='polizia')).map(x=>x.name);
     v.pendBlocks=(G.blocks||[]).map(b=>({from:b.from,to:b.to,size:b.size,byName:b.byName}));
     v.trackTotal=trackTotalCells(G);
+    v.order=[...G.order];
+    v.lastRace=(G.round>1 && G.prevResults) ? G.prevResults.map(r=>({ id:r.id, name:r.name, colorH:r.colorH, pos:r.pos, busted:!!r.busted })) : null;
+    v.market=(G.market||[]).map(c=>{
+      const pl=player; const cap=!canHaveAtLevel(pl,c.comp,c.lvl);
+      const below=c.lvl<=pl.comp[c.comp]; const overcap=c.lvl>G.compMaxLevel;
+      const price=priceFor(G,pl,c.comp,c.lvl); const skip=c.lvl>pl.comp[c.comp]+1;
+      const buyable=v.isYourTurn && !cap && !below && !overcap && pl.buysLeft>0 && pl.money>=price;
+      let reason=''; if(below)reason='hai già L'+pl.comp[c.comp]; else if(overcap)reason='pista L'+G.compMaxLevel; else if(cap)reason='tetto pieno'; else if(pl.money<price)reason='soldi insuff.'; else if(pl.buysLeft<=0)reason='niente acquisti';
+      return { comp:c.comp, name:DB.nomi[c.comp], lvl:c.lvl, val:DB.valori[c.comp][c.lvl], price, skip, buyable, reason };
+    });
     if(v.isYourTurn){
       const p=player;
       v.policeHand=p.hand.map((c,idx)=>({c,idx})).filter(o=>o.c.cat==='polizia').map(o=>({idx:o.idx,nome:o.c.nome,kind:o.c.kind,size:o.c.size}));
       v.mustPlayPolice=p.hand.some(c=>c.cat==='polizia');
       v.track=trackView(G);
       v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:!!p.discountNext };
-      v.shop=DB.ordine.map(comp=>{
-        const owned=p.comp[comp]; const levels=[];
-        for(let lvl=owned+1; lvl<=G.compMaxLevel; lvl++){
-          const cap=!canHaveAtLevel(p,comp,lvl); const stock=stockAvail(G,comp,lvl); const price=priceFor(G,p,comp,lvl);
-          levels.push({ lvl, val:DB.valori[comp][lvl], price, stock, skip:lvl>owned+1, cap,
-            buyable: !cap && stock>0 && p.buysLeft>0 && p.money>=price,
-            reason: cap?'tetto pieno':(stock<=0?'esaurito':(p.money<price?'soldi insuff.':'')) });
-        }
-        return { comp, name:DB.nomi[comp], owned, ownedVal:DB.valori[comp][owned], maxed:(owned>=G.compMaxLevel), levels };
-      });
       v.pregara = G.reshop ? [] : p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c), costPO:(c.costPO||0) })).filter(c=>c.cat==='pregara' && c.eff!=='defend');
       v.canBet = !G.reshop && G.round>=2;
       if(v.canBet){
@@ -858,18 +878,10 @@ function botPrep(room,bot){
     if(c.eff==='reopenAll'){ actPlayPregara(room,bot,i); continue; }
     if(c.eff==='reopenDebt'){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>a.po-b.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); continue; }
     const self=(c.eff==='money'&&c.val>0)||(c.eff==='po'&&c.val>0)||c.eff==='prizeUp'||c.eff==='betUp'||c.eff==='discount'||(c.eff==='quota'&&c.val>0); const rival=(c.val<0)||c.eff==='prizeDown'||c.eff==='betDown'; if(self) actPlayPregara(room,bot,i); else if(rival){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>b.po-a.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); } }
-  // 2) acquisti
+  // 2) acquisti (solo dalle carte scoperte del mercato)
   let safety=12;
   while(bot.buysLeft>0 && safety-->0){
-    const opts=[];
-    DB.ordine.forEach(comp=>{ const cur=bot.comp[comp];
-      for(let lvl=cur+1; lvl<=G.compMaxLevel; lvl++){
-        if(!canHaveAtLevel(bot,comp,lvl)) continue;
-        if(stockAvail(G,comp,lvl)<=0) continue;
-        if(priceFor(G,bot,comp,lvl) > bot.money-400) continue;
-        opts.push({comp,lvl});
-      }
-    });
+    const opts=(G.market||[]).filter(c=> c.lvl>bot.comp[c.comp] && c.lvl<=G.compMaxLevel && canHaveAtLevel(bot,c.comp,c.lvl) && priceFor(G,bot,c.comp,c.lvl)<=bot.money-300);
     if(!opts.length) break;
     const w={motore:3,cambio:3,sterzo:3,assetto:3,nos:2,peso:2};
     opts.sort((a,b)=>{

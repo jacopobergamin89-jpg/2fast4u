@@ -653,6 +653,80 @@ body:has(#s-home.active) .topbar{display:none}
 .recap-row.bust{border-left:3px solid #ff3b3b;color:#ffb3c0}
 .recap-row.boss{border-left:3px solid #ff3b3b}
 .recap-row.mini{border-left:3px solid #ffa733}
+/* ===== OFFICINA v2 — a tutto schermo, no scroll (o2-) ===== */
+.wrap.locked{height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow:hidden}
+body.locked{overflow:hidden;overscroll-behavior:none}
+.wrap.locked #s-prep.active{flex:1;min-height:0;display:flex;padding:0;overflow:hidden}
+.o2-app{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.o2-hz{height:6px;flex:0 0 auto;background:repeating-linear-gradient(45deg,var(--amber),var(--amber) 12px,#0b0510 12px,#0b0510 24px)}
+.o2-cassa{flex:0 0 auto;display:flex;align-items:center;gap:11px;padding:8px 13px;background:linear-gradient(#150b32,#11082a);border-bottom:1px solid var(--line)}
+.o2-ava{width:36px;height:36px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:15px;color:#0a0418;background:var(--c,#888);box-shadow:0 0 0 2px var(--asphalt-0),0 0 0 3px var(--c,#888)}
+.o2-who{font-family:var(--disp);font-weight:700;font-size:15px;line-height:1}
+.o2-turn{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--cyan);font-weight:600;margin-top:3px}
+.o2-wallet{margin-left:auto;text-align:right}
+.o2-euro{font-family:var(--disp);font-weight:700;font-size:21px;line-height:1;color:#fff7df;text-shadow:0 0 6px rgba(255,201,30,.5),0 0 14px rgba(255,201,30,.3)}
+.o2-buys{display:flex;gap:4px;justify-content:flex-end;align-items:center;margin-top:4px}
+.o2-buys span{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.o2-tok{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 6px rgba(255,201,30,.5)}
+.o2-tok.off{background:transparent;box-shadow:inset 0 0 0 1.5px var(--muted)}
+.o2-watch{font-family:var(--disp);font-size:13px;color:var(--amber)}
+.o2-rank{flex:0 0 auto;padding:7px 0 8px;border-bottom:1px solid var(--line)}
+.o2-rank-h{display:flex;align-items:center;gap:7px;padding:0 13px 6px}
+.o2-rank-h b{font-family:var(--disp);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--muted)}
+.o2-rank-h span{font-size:9.5px;color:var(--muted-2)}
+.o2-rail{display:flex;gap:8px;overflow-x:auto;padding:0 13px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.o2-rail::-webkit-scrollbar{display:none}
+.o2-pill{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:6px 11px 6px 8px;border-radius:11px;background:linear-gradient(#1a0f3c,#140a30);border:1px solid var(--line);cursor:pointer}
+.o2-pill.you{border-color:rgba(43,168,230,.6);background:linear-gradient(#13233f,#0e1a30)}
+.o2-pos{font-family:var(--disp);font-weight:700;font-size:13px;color:var(--po);min-width:18px;text-align:center}.o2-pill.you .o2-pos{color:var(--cyan)}
+.o2-pav{width:26px;height:26px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:11px;color:#0a0418;background:var(--c,#888)}
+.o2-pn{font-family:var(--disp);font-weight:600;font-size:12.5px;white-space:nowrap;line-height:1}
+.o2-pm{font-family:var(--mono);font-size:11px;color:var(--good);margin-top:2px}
+.o2-ptag{font-size:8.5px;color:var(--cyan);text-transform:uppercase;letter-spacing:.06em;font-weight:700;line-height:1}
+.o2-mkt-h{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding:10px 13px 7px}
+.o2-mkt-h .wr{width:15px;height:15px;color:var(--muted);display:inline-flex}.o2-mkt-h .wr svg{width:15px;height:15px}
+.o2-mkt-h b{font-family:var(--disp);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--muted)}
+.o2-mkt-h span{font-size:9.5px;color:var(--muted-2)}
+.o2-mkt{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 11px 6px;-webkit-overflow-scrolling:touch}
+.o2-mkt::-webkit-scrollbar{width:5px}.o2-mkt::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.o2-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.o2-grid.few{align-content:center;min-height:100%}
+.o2-card{position:relative;text-align:left;border-radius:13px;padding:11px 11px 12px;background:linear-gradient(165deg,#221148,#160b34);border:1px solid var(--line);overflow:hidden;min-height:116px;color:var(--ink);width:100%;cursor:pointer}
+.o2-card::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--c,#888)}
+.o2-card.buy{border-color:var(--amber);box-shadow:0 0 0 1px rgba(255,201,30,.3)}
+.o2-card.lock{opacity:.5;filter:grayscale(.35);cursor:default}
+.o2-card:active.buy{transform:scale(.985)}
+.o2-ctop{display:flex;align-items:center;gap:8px}
+.o2-cic{width:32px;height:32px;border-radius:9px;flex:0 0 auto;display:grid;place-items:center;background:rgba(0,0,0,.25);border:1px solid var(--c,#888);color:var(--c,#888)}.o2-cic svg{width:18px;height:18px}
+.o2-cn{font-family:var(--disp);font-weight:700;text-transform:uppercase;font-size:13px;line-height:1}
+.o2-clv{display:inline-block;font-family:var(--disp);font-weight:700;font-size:11px;color:#0a0418;background:var(--c,#888);padding:1px 7px;border-radius:5px;margin-top:4px}
+.o2-cval{font-size:11px;color:var(--muted);margin:9px 0 0}
+.o2-skip{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber);border-radius:5px;padding:1px 6px;margin-top:7px}
+.o2-cfoot{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:9px}
+.o2-price{font-family:var(--disp);font-weight:700;font-size:15px;color:#0a0418;background:var(--amber);padding:3px 11px;border-radius:6px;transform:rotate(-2deg)}
+.o2-card.lock .o2-price{background:var(--muted);transform:none}
+.o2-reason{font-size:9.5px;color:var(--danger);text-align:right}
+.o2-empty{grid-column:1/-1;text-align:center;color:var(--muted);font-size:13px;padding:24px 10px;background:var(--asphalt-1);border:1px dashed var(--line);border-radius:12px}
+.o2-pre{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;background:var(--asphalt-1);border:1px solid var(--line);border-radius:11px;margin-top:9px}
+.o2-pre b{font-family:var(--disp);font-size:13px;display:block}
+.o2-pre-d{font-size:11px;color:var(--muted)}
+.o2-pre-go{flex:0 0 auto;height:34px;padding:0 14px;border:0;border-radius:8px;font-family:var(--disp);font-weight:700;font-size:12px;text-transform:uppercase;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.o2-note{text-align:center;font-size:12px;color:var(--muted);margin-top:10px}.o2-note b{color:var(--amber)}
+.o2-garage{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:7px 13px;border-top:1px solid var(--line)}
+.o2-garage .gl{font-family:var(--disp);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:10px;color:var(--muted);flex:0 0 auto}
+.o2-gchips{display:flex;gap:6px;overflow-x:auto;flex:1 1 0;scrollbar-width:none}.o2-gchips::-webkit-scrollbar{display:none}
+.o2-pronto-w{flex:0 0 auto;padding:8px 12px 12px}
+.o2-pronto{display:block;width:100%;height:52px;border:0;border-radius:13px;font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.04em;text-transform:uppercase;background:linear-gradient(180deg,#FFD84D,var(--amber));color:#0a0418;box-shadow:0 5px 0 #b88f00,0 9px 18px rgba(255,201,30,.22)}
+.o2-pronto:active{transform:translateY(2px);box-shadow:0 3px 0 #b88f00}
+.o2-pronto[disabled]{opacity:.5;box-shadow:none}
+.o2-bars{flex:0 0 auto;padding:8px 12px 0;display:flex;flex-direction:column;gap:7px}
+.o2-bars:empty{display:none}
+.o2-bar{padding:8px 12px;border-radius:11px;font-family:var(--disp);font-weight:600;font-size:12.5px;text-align:center;letter-spacing:.02em}
+.o2-bar.giro{background:linear-gradient(90deg,rgba(255,201,30,.2),rgba(155,59,224,.16));border:1px solid var(--amber);color:var(--po)}
+.o2-bar.boost{background:linear-gradient(90deg,rgba(255,201,30,.14),rgba(43,168,230,.12));border:1px solid var(--amber);color:var(--po)}
+/* recap: nuove righe */
+.recap-row.fine{border-left:3px solid var(--amber)}
+.recap-row.fine b{color:var(--danger)}
+.recap-row.reopen{border-left:3px solid var(--good)}
 </style>
 </head>
 <body>
@@ -747,7 +821,7 @@ let LAST=null;
 function esc(s){return(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function ini(n){return(n||'?')[0].toUpperCase();}
 function eur(n){return '€'+Math.round(n).toLocaleString('it-IT');}
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');if(id!=='s-prep'){const w=document.querySelector('.wrap');if(w)w.classList.remove('locked');document.body.classList.remove('locked');}}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
 function flash(msg,kind){const f=document.getElementById('flash');if(!f)return;f.textContent=msg;f.classList.remove('hostile','mine');if(kind)f.classList.add(kind);f.classList.add('show');clearTimeout(f._t);f._t=setTimeout(()=>f.classList.remove('show'),2600);}
 function topMeta(t){document.getElementById('topmeta').textContent=t||'';}
@@ -1021,60 +1095,79 @@ function defenseHTML(v){
 function playDefense(idx,mid){ socket.emit('defense:play',{handIdx:idx,mid}); flash('Difesa giocata!','mine'); }
 function prepMobileHTML(v){
   const you=v.you, youP=v.players.find(p=>p.id===you.id)||null;
-  const others=v.players.filter(p=>p.id!==you.id);
-  let cassaRight='', shop='', garage='', pronto='', extra='';
-  if(v.isYourTurn&&v.me){
-    const m=v.me; const n=Math.max(0,m.buysLeft); let toks=''; for(let i=0;i<n;i++)toks+='<i class="mof-tok"></i>'; if(!n)toks='<i class="mof-tok off"></i>';
-    cassaRight=`<div class="mof-euro">${eur(m.money)}</div><div class="mof-buys"><span>acquisti</span>${toks}</div>`;
-    let cards='';
-    v.shop.forEach(c=>{const mm=ofMeta(c.comp);
-      let body='';
-      if(c.maxed||!c.levels.length){ body=`<div class="mof-max">Al massimo${c.maxed?` · L${c.owned}`:''}</div>`; }
-      else c.levels.forEach(l=>{ const ok=l.buyable;
-        const stk = l.stock<=0?'<span class="mof-lstk soldout">esaurito</span>':(l.cap?'<span class="mof-lstk soldout">tetto</span>':`<span class="mof-lstk">×${l.stock}</span>`);
-        body+=`<button class="mof-lvl${ok?'':' off'}" ${ok?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${l.lvl}})"`:'disabled'}><span class="mof-llv">L${l.lvl}</span><span class="mof-lval">${l.val>=0?'+':''}${l.val}</span><span class="mof-lpr">${eur(l.price)}</span>${stk}</button>`;
-      });
-      cards+=`<div class="mof-comp" style="--c:${mm.c}"><div class="mof-comp-h"><div class="mof-cic">${ofIcon(c.comp)}</div><div><div class="mof-cn">${mm.full}</div><div class="mof-chave">hai L${c.owned}</div></div></div><div class="mof-lvls">${body}</div></div>`;});
-    shop=`<div class="mof-sech"><span class="mof-wr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6a4 4 0 0 1-5.2 3.8L7 18.6 5.4 17 14.2 8.2A4 4 0 0 1 18 3l-2.3 2.3 1 2.4 2.4 1L21 6Z"/></svg></span><span class="mof-t">Banco ricambi <small style="color:var(--muted);font-weight:400;letter-spacing:0">· condiviso</small></span><span class="mof-ln"></span></div><div class="mof-grid">${cards}</div>`;
-    garage=`<div class="mof-sech"><span class="mof-t">Il tuo garage</span><span class="mof-ln"></span></div><div class="mof-garage">${ofOwnedChips(m.owned,'Ancora nessun pezzo')}</div>`;
-    pronto = v.mustPlayPolice ? `<button class="mof-pronto" disabled style="opacity:.5">🚨 Gioca prima la carta polizia</button>` : `<button class="mof-pronto" onclick="prepDone()">Pronto — passa il turno →</button>`;
-    if(v.pregara&&v.pregara.length){extra+='<div class="mof-sech"><span class="mof-t">Carte pre-gara</span><span class="mof-ln"></span></div>';
-      v.pregara.forEach(c=>{const sm=c.eff==='smonta';const neg=c.target==='rival';const desc=pregaraDesc(c);const oc=sm?`prepSmonta(${c.idx})`:(neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`);
-        extra+=`<div class="mof-pre"><div><b>${esc(c.nome)}</b><span class="mof-pre-d">${desc} · ${neg?'su un avversario':'su di te'}</span></div><button class="mof-gioca" onclick="${oc}">Gioca</button></div>`;});}
-    if(v.canBet)extra+='<div class="mof-bet">Apri 👥 <b>Piloti</b> in alto per scommettere e vedere le puntate.</div>';
-  }else{
-    cassaRight='<div class="mof-watch">Stai guardando</div>';
-    shop=`<div class="mof-spect">Tocca a <b>${esc(v.activeName||'')}</b><br>sta scegliendo i ricambi…</div>`;
-    if(youP)garage=`<div class="mof-sech"><span class="mof-t">Il tuo garage</span><span class="mof-ln"></span></div><div class="mof-garage">${ofOwnedChips(youP.car&&youP.car.owned,'Ancora nessun pezzo')}</div>`;
+  // ---- cassa ----
+  const turnLine = v.isYourTurn ? ('Tocca a te · officina · round '+v.round) : ('Tocca a '+esc(v.activeName||''));
+  let wallet;
+  if(v.isYourTurn&&v.me){ const n=Math.max(0,v.me.buysLeft); let toks=''; for(let i=0;i<n;i++)toks+='<i class="o2-tok"></i>'; if(!n)toks='<i class="o2-tok off"></i>';
+    wallet=`<div class="o2-euro">${eur(v.me.money)}</div><div class="o2-buys"><span>acquisti</span>${toks}</div>`;
+  } else { wallet='<div class="o2-watch">Stai guardando</div>'; }
+  const cassa=`<div class="o2-cassa"><div class="o2-ava" style="--c:${you.colorH}">${ini(you.name)}</div><div><div class="o2-who">${esc(you.name)}</div><div class="o2-turn">${turnLine}</div></div><div class="o2-wallet">${wallet}</div></div>`;
+  // ---- bande condizionali (difesa / giro / boost / lock polizia) ----
+  let bars=defenseHTML(v);
+  if(v.reshop) bars+='<div class="o2-bar giro">🔧 Officina riaperta a tutti · giro extra — ognuno ricompra una volta</div>';
+  if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('×'+m):('÷'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,qm=v.me.quotaMod||0,tg=[]; if(v.sprintFinish)tg.push('⚡ Gara breve: traguardo a '+v.sprintFinish); if(pm!==1)tg.push('🎁 Montepremi '+fmt(pm)); if(bm!==1)tg.push('🎲 Scommessa '+fmt(bm)); if(qm)tg.push('📊 Quota '+(qm>0?'+':'')+qm); if(v.me.discount)tg.push('💸 Sconto 50% prossimo acquisto'); if(v.reshopComing)tg.push('🔧 Giro extra dopo la prep'); if(tg.length)bars+='<div class="o2-bar boost">'+tg.join(' · ')+'</div>'; }
+  bars+=policeBannerHTML(v);
+  const barsHTML = bars?`<div class="o2-bars">${bars}</div>`:'';
+  // ---- classifica ultima gara (o ordine di partenza) + soldi ----
+  const byId={}; v.players.forEach(p=>byId[p.id]=p);
+  let stripP, stripLabel, showPos;
+  if(v.lastRace&&v.lastRace.length){ stripP=v.lastRace.map(r=>byId[r.id]).filter(Boolean); stripLabel='Classifica ultima gara'; showPos=true; }
+  else { stripP=(v.order||[]).map(id=>byId[id]).filter(Boolean); if(!stripP.length)stripP=v.players.slice(); stripLabel='Ordine di partenza'; showPos=false; }
+  let pills='';
+  stripP.forEach((p,i)=>{ const me=p.id===you.id;
+    pills+=`<div class="o2-pill${me?' you':''}" onclick="openInspect(${p.id})">${showPos?`<div class="o2-pos">${i+1}°</div>`:''}<div class="o2-pav" style="--c:${p.colorH}">${ini(p.name)}</div><div>${me?'<div class="o2-ptag">tu</div>':''}<div class="o2-pn">${esc(p.name)}</div><div class="o2-pm">${eur(p.money)}</div></div></div>`;
+  });
+  const rank=`<div class="o2-rank"><div class="o2-rank-h"><b>${stripLabel}</b><span>· soldi attuali</span></div><div class="o2-rail">${pills}</div></div>`;
+  // ---- mercato a carte scoperte ----
+  const nM=(v.market||[]).length;
+  const mhSub = '· '+nM+' cart'+(nM===1?'a scoperta':'e scoperte')+(nM>6?' · scorri ↓':' · condiviso');
+  const mktH=`<div class="o2-mkt-h"><span class="wr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6a4 4 0 0 1-5.2 3.8L7 18.6 5.4 17 14.2 8.2A4 4 0 0 1 18 3l-2.3 2.3 1 2.4 2.4 1L21 6Z"/></svg></span><b>Mercato</b><span>${mhSub}</span></div>`;
+  let cards='';
+  (v.market||[]).forEach(c=>{ const mm=ofMeta(c.comp); const skip=c.skip?'<span class="o2-skip">salto ×2</span>':''; const reason=(!c.buyable&&c.reason)?`<span class="o2-reason">${esc(c.reason)}</span>`:''; const oc=c.buyable?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'';
+    cards+=`<button class="o2-card ${c.buyable?'buy':'lock'}" style="--c:${mm.c}" ${oc} ${c.buyable?'':'disabled'}><div class="o2-ctop"><div class="o2-cic">${ofIcon(c.comp)}</div><div><div class="o2-cn">${mm.full}</div><div class="o2-clv">L${c.lvl}</div></div></div><div class="o2-cval">valore ${c.val>=0?'+':'−'}${Math.abs(c.val)}</div>${skip}<div class="o2-cfoot"><span class="o2-price">${eur(c.price)}</span>${reason}</div></button>`;
+  });
+  const few = nM>0 && nM<=2 ? ' few':'';
+  const grid = nM ? `<div class="o2-grid${few}">${cards}</div>` : '<div class="o2-grid"><div class="o2-empty">Nessuna miglioria al mercato in questo round.</div></div>';
+  // dentro lo scroll: polizia da giocare (in cima) + griglia + carte pre-gara + nota scommessa
+  let belowMkt='';
+  if(v.isYourTurn){
+    if(v.pregara&&v.pregara.length){ v.pregara.forEach(c=>{const sm=c.eff==='smonta';const neg=c.target==='rival';const desc=pregaraDesc(c);const ocp=sm?`prepSmonta(${c.idx})`:(neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`);
+      belowMkt+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b><span class="o2-pre-d">${desc} · ${neg?'su un avversario':'su di te'}</span></div><button class="o2-pre-go" onclick="${ocp}">Gioca</button></div>`;}); }
+    if(v.canBet) belowMkt+='<div class="o2-note">Apri 👥 <b>Piloti</b> in alto per scommettere e vedere le puntate.</div>';
   }
-  const turnLine=v.isYourTurn?'Tocca a te · officina':('Tocca a '+esc(v.activeName||''));
-  const cassa=`<div class="mof-cassa"><div class="mof-ava" style="--c:${you.colorH}">${ini(you.name)}</div><div><div class="mof-who">${esc(you.name)}</div><div class="mof-turn">${turnLine}</div></div><div class="mof-wallet">${cassaRight}</div></div>`;
-  let rail='';
-  if(others.length){rail='<div class="mof-sech"><span class="mof-t">Avversari · '+others.length+'</span><span class="mof-ln"></span></div><div class="mof-rail">';
-    others.forEach(p=>{const ow=(p.car&&p.car.owned?p.car.owned.filter(o=>o.lvl>0):[]);const chips=ow.length?ow.map(o=>{const mm=ofMeta(o.comp);return `<span class="mof-minip" style="--c:${mm.c}"><span class="d"></span>${mm.full} <span class="l">L${o.lvl}</span></span>`;}).join(''):'<span class="mof-empty3">nessun pezzo</span>';
-      rail+=`<div class="mof-opp"><div class="mof-opp-top"><div class="mof-oav" style="--c:${p.colorH}">${ini(p.name)}</div><div class="mof-on">${esc(p.name)}</div><div class="mof-opo">${p.po} PO</div></div><div class="mof-oparts">${chips}</div></div>`;});
-    rail+='</div>';}
-  let boost='';
-  if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('×'+m):('÷'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,qm=v.me.quotaMod||0,tg=[]; if(v.sprintFinish)tg.push('⚡ Gara breve: traguardo a '+v.sprintFinish); if(pm!==1)tg.push('🎁 Montepremi '+fmt(pm)); if(bm!==1)tg.push('🎲 Scommessa '+fmt(bm)); if(qm)tg.push('📊 Quota '+(qm>0?'+':'')+qm+' sulla tua scommessa'); if(v.me.discount)tg.push('💸 Sconto 50% prossimo acquisto'); if(v.reshopComing)tg.push('🔧 Giro extra in officina dopo la prep'); if(tg.length)boost='<div class="mof-boost">'+tg.join(' · ')+'</div>'; }
-  const giro = v.reshop ? '<div class="mof-giro">🔧 OFFICINA RIAPERTA A TUTTI · GIRO EXTRA<span>Ognuno ricompra una volta · chi ha giocato la carta sceglie per primo</span></div>' : '';
-  return `<div class="mof"><div class="mof-hz"></div>${cassa}<div class="mof-body">${defenseHTML(v)}${giro}${boost}${policeBannerHTML(v)}${policeSectionHTML(v,true)}${shop}${garage}${pronto}${extra}${rail}</div></div>`;
+  const mkt=`${mktH}<div class="o2-mkt">${policeSectionHTML(v,true)}${grid}${belowMkt}</div>`;
+  // ---- garage ----
+  let garageChips;
+  if(v.isYourTurn&&v.me) garageChips=ofOwnedChips(v.me.owned,'Ancora nessun pezzo');
+  else if(youP) garageChips=ofOwnedChips(youP.car&&youP.car.owned,'Ancora nessun pezzo');
+  else garageChips='<span class="of-empty">—</span>';
+  const garage=`<div class="o2-garage"><div class="gl">Garage</div><div class="o2-gchips">${garageChips}</div></div>`;
+  // ---- pronto ----
+  let pronto;
+  if(v.isYourTurn){ pronto = v.mustPlayPolice ? '<button class="o2-pronto" disabled>🚨 Gioca prima la carta polizia</button>' : '<button class="o2-pronto" onclick="prepDone()">Pronto — passa il turno →</button>'; }
+  else { pronto = `<button class="o2-pronto" disabled>Tocca a ${esc(v.activeName||'…')}</button>`; }
+  const prontoW=`<div class="o2-pronto-w">${pronto}</div>`;
+  return `<div class="o2-app"><div class="o2-hz"></div>${cassa}${barsHTML}${rank}${mkt}${garage}${prontoW}</div>`;
 }
 function renderPrep(v){
   show('s-prep');topMeta('Round '+v.round);
-  if(window.matchMedia('(max-width:680px)').matches){document.getElementById('s-prep').innerHTML=prepMobileHTML(v);return;}
+  if(window.matchMedia('(max-width:680px)').matches){
+    document.querySelector('.wrap').classList.add('locked'); document.body.classList.add('locked');
+    document.getElementById('s-prep').innerHTML=prepMobileHTML(v); return;
+  }
+  document.querySelector('.wrap').classList.remove('locked'); document.body.classList.remove('locked');
   const others=v.players.filter(p=>p.id!==v.you.id);
   const top=[],left=[],right=[];
   others.forEach((p,i)=>{(i%3===0?top:i%3===1?left:right).push(p);});
   const turn=v.isYourTurn?'<div class="of-turn you">Tocca a <b>te</b> \u2014 scegli i ricambi</div>':`<div class="of-turn">Tocca a <b>${esc(v.activeName||'')}</b></div>`;
   let bench='';
   if(v.isYourTurn){
-    bench+='<div class="of-cap">Banco ricambi \u00b7 condiviso</div><div class="of-grid">';
-    let any=false;
-    v.shop.forEach(c=>{const m=ofMeta(c.comp);
-      c.levels.forEach(l=>{ any=true; const ok=l.buyable;
-        const stk=l.stock<=0?'esaurito':(l.cap?'tetto pieno':`${l.stock} rim.`);
-        bench+=`<button class="of-part${ok?'':' off'}" ${ok?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${l.lvl}})"`:'disabled'}><div class="of-part-h"><span class="of-badge" style="--c:${m.c}">${m.full}</span><span class="of-lvtag">L${l.lvl}</span></div><span class="of-val">valore ${l.val>=0?'+':''}${l.val}${l.skip?' \u00b7 salto \u00d72':''} \u00b7 <b>${stk}</b></span><span class="of-price">${eur(l.price)}</span></button>`;});});
-    if(!any)bench+='<div class="of-bench-spect" style="grid-column:1/-1">Hai gi\u00e0 il massimo per la pista attuale.</div>';
+    const nM=v.market?v.market.length:0;
+    bench+='<div class="of-cap">Mercato \u00b7 '+nM+' cart'+(nM===1?'a scoperta':'e scoperte')+' \u00b7 condiviso</div><div class="of-grid" style="max-height:46vh;overflow:auto">';
+    if(nM){
+      v.market.forEach(c=>{const m=ofMeta(c.comp);const ok=c.buyable;
+        bench+=`<button class="of-part${ok?'':' off'}" ${ok?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'disabled'}><div class="of-part-h"><span class="of-badge" style="--c:${m.c}">${m.full}</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">valore ${c.val>=0?'+':''}${c.val}${c.skip?' \u00b7 salto \u00d72':''}${(!ok&&c.reason)?' \u00b7 '+esc(c.reason):''}</span><span class="of-price">${eur(c.price)}</span></button>`;});
+    } else bench+='<div class="of-bench-spect" style="grid-column:1/-1">Nessuna miglioria al mercato in questo round.</div>';
     bench+='</div>';
   }else{
     bench=`<div class="of-bench-spect">Il banco \u00e8 di <b>${esc(v.activeName||'')}</b><br>sta scegliendo i ricambi\u2026</div>`;
@@ -1453,13 +1546,17 @@ function renderResults(v){
 }
 function raceRecapHTML(v){
   const rc=v.raceRecap; if(!rc)return '';
-  const hasPol=(rc.blocks&&rc.blocks.length)||(rc.police&&rc.police.length)||(rc.busted&&rc.busted.length)||(rc.forfeited&&rc.forfeited.length);
+  const hasFine=(rc.fines&&rc.fines.length);
+  const hasReopen=!!rc.reopened;
+  const hasPol=(rc.blocks&&rc.blocks.length)||(rc.police&&rc.police.length)||(rc.busted&&rc.busted.length)||(rc.forfeited&&rc.forfeited.length)||hasFine||hasReopen;
   const hasBoss=(rc.bosses&&rc.bosses.length);
   const hasTie=(rc.tiebreaks&&rc.tiebreaks.length);
   if(!hasPol&&!hasBoss&&!hasTie)return '';
   let h='<div class="panel" style="margin-top:6px"><div class="panel-h">Cos\'\u00e8 successo in gara</div><div class="recap">';
   (rc.tiebreaks||[]).forEach(t=>{ const ord=t.players.map((p,i)=>`${i===0?'<b>':''}${esc(p.name)} ${p.score}${i===0?'</b>':''}`).join(' \u203a '); h+=`<div class="recap-row">\ud83c\udfc1 Pareggio in cas. ${t.cell} \u00b7 spareggio a 3 tiri: ${ord}</div>`; });
   (rc.blocks||[]).forEach(b=>{ h+=`<div class="recap-row pol">\ud83d\udea7 Posto di blocco \u00b7 caselle ${b.from}\u2013${b.to}</div>`; });
+  (rc.fines||[]).forEach(f=>{ const cls=(f.cells&&f.cells.length>1)?('caselle '+f.cells.join(', ')):('casella '+(f.cells?f.cells[0]:'?')); h+=`<div class="recap-row fine">\ud83d\udea7 ${esc(f.who)} fermato al blocco \u00b7 <b>\u2212${eur(f.total)}</b> \u00b7 ${cls}</div>`; });
+  (rc.reopened)?(h+=`<div class="recap-row reopen">\ud83d\udd27 ${esc(rc.reopened)} ha riaperto l'officina a tutti \u00b7 giro extra</div>`):0;
   (rc.police||[]).forEach(p=>{ h+=`<div class="recap-row pol">\ud83d\ude93 ${esc(p.name)} \u00b7 finita a cas. ${p.pos}</div>`; });
   (rc.busted||[]).forEach(b=>{ h+=`<div class="recap-row bust">\ud83d\udea8 ${esc(b.name)} beccato (${b.reason==='blocco'?'blocco':'polizia'}) \u00b7 niente premi</div>`; });
   (rc.forfeited||[]).forEach(f=>{ h+=`<div class="recap-row pol">\ud83d\udeab Blocco di ${esc(f.who)} annullato \u00b7 nessuno spazio in pista</div>`; });
@@ -1636,7 +1733,7 @@ function prepDone(){
   if(v.mustPlayPolice){ toast('Devi prima giocare la carta polizia (gira subito)'); return; }
   const maxBuys=(v.round===1)?2:1;
   const boughtNothing=v.me&&v.me.buysLeft===maxBuys;
-  const canBuy=Array.isArray(v.shop)&&v.shop.some(c=>c.levels&&c.levels.some(l=>l.buyable));
+  const canBuy=Array.isArray(v.market)&&v.market.some(c=>c.buyable);
   const warnBuy=boughtNothing&&canBuy;
   const noBet=v.canBet&&!(v.myBet&&v.myBet.targetId!=null&&v.myBet.amount>0);
   if(warnBuy||noBet){
