@@ -163,6 +163,7 @@ function startGame(room){
 function restartGame(room){
   const G=room.G;
   if(room._botTimer){ clearTimeout(room._botTimer); room._botTimer=null; }
+  if(room._launchTimer){ clearTimeout(room._launchTimer); room._launchTimer=null; }
   room.started=false;
   G.phase='lobby';
   G.round=0; G.R=null; G.lastResults=null; G.winner=null;
@@ -512,15 +513,19 @@ function actPrepDone(room,p){
   const o=pOrder(G);
   if(G.ppIdx<o.length){ curPrep(G).buysLeft=G.reshop?1:G.maxBuys; }
   else if(!G.reshop && G.reshopQueued){ startReshop(room); }   // chiudi l'officina, riaprila a tutti
-  else { G.reshop=false; startRace(room); }
+  else { G.reshop=false; startLaunch(room); }   // tutti pronti → semaforo di partenza
   return null;
 }
 
 /* --- gara --- */
-function startRace(room){
+function setupRace(room){                                         // crea le auto: durante il semaforo le carte partenza accumulano pendPart
   const G=room.G;
   G.R={ turnOrder:[...G.order], turn:1, ptr:0, phase:'await', cars:{}, lastBreak:null, log:[], logId:0, finish:(G.sprintFinish||trackTotalCells(G)), turnDice:[], police:[], blocks:(G.blocks||[]).slice() };
   G.players.forEach(p=>{ G.R.cars[p.id]={ pos:0, firstDone:false, nosUsed:false, fx:[], pendDado:null, pendPart:0, pendReach:null }; p.incoming=[]; });  // azzero incoming: finestra difese pre-gara chiusa
+}
+function beginRace(room){                                         // VERDE: quota, polizia, boss, parte il 1° turno
+  const G=room.G;
+  if(!G.R) setupRace(room);
   const fee=DB.roadBasePrice[G.raceLevel]||0;                    // quota d'ingresso: la paga ogni giocatore
   G.players.forEach(p=>{ const paid=Math.min(p.money,fee); p.money=Math.max(0,p.money-fee); p._entryFee=paid; });
   raceLog(G,{kind:'fee',amount:fee});
@@ -528,6 +533,39 @@ function startRace(room){
   spawnBosses(room);                                            // boss (su level-up) + miniboss (25%)
   if(G.R.police.length){ const attacker=G.R.police[0]; G.players.forEach(p=>throwPoliceMalus(room, attacker, p)); }  // 1 malus a testa (non si moltiplica con più auto)
   G.phase='race';
+}
+function startRace(room){ setupRace(room); beginRace(room); }    // avvio immediato (compat, non usato col semaforo)
+function startLaunch(room){                                       // SEMAFORO: finestra di 6s per le carte partenza, poi parte la gara
+  const G=room.G;
+  setupRace(room);                                              // auto pronte sulla griglia (pendPart accumula)
+  G.phase='launch'; G.launchEndsAt=Date.now()+6000; G.launchLog=[];
+  botsPlayPartenza(room);                                       // i bot giocano subito le loro carte partenza
+  if(room._launchTimer) clearTimeout(room._launchTimer);
+  room._launchTimer=setTimeout(()=>{ room._launchTimer=null; try{ beginRace(room); }catch(e){ console.error('launch->race', e); } broadcast(room); scheduleBot(room); }, 6000);
+}
+function actPlayPartenza(room,p,handIdx,targetId){
+  const G=room.G; if(G.phase!=='launch') return 'Non è il momento della partenza.';
+  const c=p.hand[handIdx]; if(!c||c.cat!=='ingara'||c.eff!=='partenza') return 'Carta partenza non valida.';
+  let target=p;
+  if(c.target==='rival'){
+    let t=G.players.find(x=>x.id===targetId && x.id!==p.id);
+    if(!t && G.players.length===2) t=G.players.find(x=>x.id!==p.id);   // in 2 giocatori bersaglio automatico
+    if(!t) return 'Scegli un rivale.'; target=t;
+  }
+  const tc=G.R&&G.R.cars[target.id]; if(!tc) return 'Auto non pronta.';
+  tc.pendPart+=c.val;
+  (G.launchLog=G.launchLog||[]).push({ who:p.name, target:target.name, targetId:target.id, nome:c.nome, val:c.val, self:(c.target!=='rival') });
+  G.discard.push(c); p.hand.splice(handIdx,1);
+  return null;                                                  // nessuna difesa, se ne possono giocare quante si vuole
+}
+function botsPlayPartenza(room){
+  const G=room.G;
+  G.players.filter(p=>p.isBot).forEach(bot=>{
+    for(let i=bot.hand.length-1;i>=0;i--){ const c=bot.hand[i]; if(c.cat!=='ingara'||c.eff!=='partenza') continue;
+      if(c.target==='rival'){ const rivals=G.players.filter(x=>x.id!==bot.id); const tg=rivals[Math.floor(Math.random()*rivals.length)]; if(tg) actPlayPartenza(room,bot,i,tg.id); }
+      else actPlayPartenza(room,bot,i);
+    }
+  });
 }
 function activeRace(G){ return G.players.find(p=>p.id===G.R.turnOrder[G.R.ptr]); }
 function dieBonus(d){ return d<=2?1:d<=5?2:3; }
@@ -810,6 +848,17 @@ function buildView(room, player){
     return v;
   }
 
+  if(G.phase==='launch'){
+    v.launchEndsAt=G.launchEndsAt||0; v.raceLevel=G.raceLevel;
+    v.launchMs=Math.max(0,(G.launchEndsAt||0)-Date.now());   // ms rimanenti: il client ancora il countdown al momento della ricezione
+    v.launchLog=(G.launchLog||[]).map(e=>({ who:e.who, target:e.target, nome:e.nome, val:e.val, self:!!e.self }));
+    v.cars=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, ini:ini(p.name) }));
+    v.rivals=G.players.filter(x=>x.id!==player.id).map(x=>({ id:x.id, name:x.name, colorH:DB.colori[x.colorIdx].h }));
+    v.partenza=player.hand.map((c,idx)=>({c,idx})).filter(o=>o.c.cat==='ingara'&&o.c.eff==='partenza').map(o=>({ idx:o.idx, nome:o.c.nome, val:o.c.val, target:o.c.target }));
+    v.myPart=(G.R&&G.R.cars[player.id])?G.R.cars[player.id].pendPart:0;
+    return v;
+  }
+
   if(G.phase==='race'){
     const R=G.R; const active=activeRace(G); v.activeId=active.id; v.activeName=active.name; v.isYourTurn=active.id===player.id;
     v.turn=R.turn; v.track=trackView(G); v.cars=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, ini:ini(p.name), pos:R.cars[p.id].pos }));
@@ -830,7 +879,7 @@ function buildView(room, player){
         segType:seg.t, segLabel:TIPO_LABEL[seg.t], firstDone:car.firstDone,
         nosOk:nosAllowed(G,p), nosVal:statVal(p,'nos'),
         fx:car.fx.map(e=>({stat:e.stat,amt:e.amt,turns:e.turns})), pendPart:car.pendPart, pendDado:car.pendDado,
-        hand:p.hand.map((c,idx)=>({idx,cat:c.cat,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur,target:c.target})).filter(c=>c.cat==='ingara' && c.eff!=='defend'),
+        hand:p.hand.map((c,idx)=>({idx,cat:c.cat,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur,target:c.target})).filter(c=>c.cat==='ingara' && c.eff!=='defend' && c.eff!=='partenza'),
         rivals:[...G.players.filter(x=>x.id!==p.id).map(x=>({id:x.id,name:x.name,colorH:DB.colori[x.colorIdx].h})), ...(R.bosses||[]).map(b=>({id:b.id,name:b.name,colorH:b.kind==='boss'?'#ff3b3b':'#ffa733',isFoe:true,kind:b.kind}))]
       };
       v.rolled = R.phase==='rolled' ? (function(){ const b=R.lastBreak; return { lines:b.lines, total:b.total, die:b.die, db:b.db, useNos:b.useNos, np:Math.min(R.finish||55,car.pos+b.total) }; })() : null;
@@ -1005,6 +1054,7 @@ io.on('connection', (socket)=>{
   socket.on('prep:police', handle((room,p,d)=>actPlayPolice(room,p,d.handIdx,d.cell)));
   socket.on('prep:bet', handle((room,p,d)=>actSetBet(room,p,d.targetId,d.amount)));
   socket.on('prep:done', handle((room,p)=>actPrepDone(room,p)));
+  socket.on('launch:play', handle((room,p,d)=>actPlayPartenza(room,p,d.handIdx,d.targetId)));
   socket.on('race:playCard', handle((room,p,d)=>actRacePlayCard(room,p,d.handIdx,d.targetId)));
   socket.on('race:roll', handle((room,p,d)=>actRoll(room,p,d.useNos)));
   socket.on('race:move', handle((room,p)=>actConfirmMove(room,p)));
@@ -1034,7 +1084,7 @@ io.on('connection', (socket)=>{
   });
 });
 
-module.exports = { DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actPlayPolice, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending, actDefend, incomingFor, stockAvail, compSlots, endRace };
+module.exports = { DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actPlayPolice, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending, actDefend, incomingFor, stockAvail, compSlots, endRace, startLaunch, beginRace, setupRace, actPlayPartenza };
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, ()=>console.log('2FAST4U server in ascolto sulla porta '+PORT));
