@@ -959,9 +959,9 @@ function cardDesc(c){
   if(c.eff==='quota')return 'Quota '+(c.val>=0?'+':'')+c.val+' sulla scommessa'+(c.val<0?' (a un rivale)':' (su di te)');
   if(c.eff==='discount')return 'Sconto 50% sul prossimo acquisto';
   if(c.eff==='smonta'){const co=[];if(c.val)co.push(eur(c.val));if(c.costPO)co.push(c.costPO+' Rispetto');return 'Smonta 1 livello a un rivale'+(co.length?' · costa '+co.join(' e '):'');}
-  if(c.eff==='reopen')return 'Riapre l\'officina solo per te (+1 acquisto)'+(c.val?' · costa '+eur(c.val):'');
-  if(c.eff==='reopenAll')return 'Riapre l\'officina a tutti · giro extra (tu per primo)';
-  if(c.eff==='reopenDebt')return 'Riapri (+1 acquisto) · un rivale a metà prezzo';
+  if(c.eff==='reopen')return 'Giro extra in officina solo per te \u00b7 1 pezzo'+(c.val?' · costa '+eur(c.val):'');
+  if(c.eff==='reopenAll')return 'Giro extra in officina per tutti · 1 pezzo a testa (tu per primo)';
+  if(c.eff==='reopenDebt')return 'Giro extra per te e 1 rivale scelto · lui a metà prezzo · 1 pezzo a testa';
   if(c.eff==='sprint')return 'Gara breve · traguardo a '+c.val;
   if(c.eff==='defend')return 'Difesa '+(c.val==='both'?'totale (gara + pre-gara)':c.val==='ingara'?'da gara':'da pre-gara')+((c.dur===1||c.costPO===1)?' · rimanda al mittente':'');
   const r=c.target==='rival'?' · su un rivale':'';
@@ -982,9 +982,9 @@ function pregaraDesc(c){
   if(c.eff==='quota')return 'Quota '+(c.val>=0?'+':'')+c.val;
   if(c.eff==='discount')return 'Sconto 50% prossimo acquisto';
   if(c.eff==='smonta'){const co=[];if(c.val)co.push(eur(c.val));if(c.costPO)co.push(c.costPO+' Rispetto');return 'Smonta 1 livello'+(co.length?' · costa '+co.join(' e '):'');}
-  if(c.eff==='reopen')return 'Riapre l\'officina solo per te · +1 acquisto'+(c.val?' · costa '+eur(c.val):'');
-  if(c.eff==='reopenAll')return 'Riapre l\'officina a tutti · giro extra';
-  if(c.eff==='reopenDebt')return 'Riapri (+1 acquisto) · un rivale a metà prezzo';
+  if(c.eff==='reopen')return 'Giro extra in officina solo per te · 1 pezzo'+(c.val?' · costa '+eur(c.val):'');
+  if(c.eff==='reopenAll')return 'Giro extra in officina per tutti · 1 pezzo a testa';
+  if(c.eff==='reopenDebt')return 'Giro extra per te e 1 rivale scelto · lui a metà prezzo · 1 pezzo a testa';
   if(c.eff==='sprint')return 'Gara breve · traguardo a '+c.val;
   if(c.eff==='defend')return 'Difesa'+((c.dur===1||c.costPO===1)?' · rimanda al mittente':'');
   return '';
@@ -1932,7 +1932,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-06-25 · punti-onore';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-06-25 · officina-tetto';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 </body>
 </html>

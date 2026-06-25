@@ -205,7 +205,7 @@ function startRound(room){
   G.raceLevel=G.trackLevel;
   G.entryFee=DB.roadBasePrice[G.raceLevel];
   G.raceFirstRollDone=false;
-  G.ppIdx=0; G.phase='prep'; G.R=null; if(G.lastResults) G.prevResults=G.lastResults; G.lastResults=null; G.reshop=false; G.reshopQueued=false; G.reshopFirst=null; G.sprintFinish=null;
+  G.ppIdx=0; G.phase='prep'; G.R=null; if(G.lastResults) G.prevResults=G.lastResults; G.lastResults=null; G.reshop=false; G.reshopQueued=false; G.reshopFirst=null; G.reshopBuys={}; G.reshopHalf=[]; G.sprintFinish=null;
   G.blocks=[]; G.pendPolice=[]; G.forfeitedBlocks=[];
   G.players.forEach(p=>{ p.bet=null; p.prizeMult=1; p.betMult=1; p.quotaMod=0; p.discountNext=false; p.incoming=[]; });
   curPrep(G).buysLeft=G.maxBuys;
@@ -230,12 +230,15 @@ function curPrep(G){ const o=pOrder(G); return G.players.find(p=>p.id===o[G.ppId
 function startReshop(room){
   const G=room.G;
   G.reshop=true; G.reshopQueued=false;
-  const first=G.reshopFirst;
-  G.reshopOrder=[first, ...G.order.filter(id=>id!==first)];
+  const buys=G.reshopBuys||{};
+  const parts=G.players.map(p=>p.id).filter(id=>(buys[id]||0)>0);   // solo chi ha un acquisto nel giro extra
+  let first=parts.includes(G.reshopFirst)?G.reshopFirst:parts[0];
+  G.reshopOrder=[first, ...G.order.filter(id=>id!==first && parts.includes(id))];
   G.ppIdx=0;
   G.players.forEach(pp=>{ pp.buysLeft=0; });
-  curPrep(G).buysLeft=1;
-  glog(G,'Giro extra in officina · primo a scegliere: '+((G.players.find(x=>x.id===first)||{}).name||'?'),'round');
+  if(G.reshopOrder.length){ const cp=curPrep(G); cp.buysLeft=buys[cp.id]||1; }
+  const fn=(G.players.find(x=>x.id===first)||{}).name||'?';
+  glog(G, parts.length>1 ? ('Giro extra in officina · primo a scegliere: '+fn) : ('Giro extra in officina · '+fn+' riapre'), 'round');
 }
 function buildCount(p,lvl){ return DB.ordine.filter(c=>p.comp[c]===lvl).length; }
 function canHaveAtLevel(p,comp,lvl){
@@ -255,7 +258,8 @@ function actBuy(room,p,comp,lvl){
   if(lvl>G.compMaxLevel) return 'Livello non ancora sbloccato.';
   if(p.buysLeft<=0) return 'Acquisti finiti.';
   if(!canHaveAtLevel(p,comp,lvl)) return 'Tetto di costruzione raggiunto.';
-  const price=priceFor(G,p,comp,lvl); if(p.money<price) return 'Denaro insufficiente.';
+  let price=priceFor(G,p,comp,lvl); if(G.reshop && (G.reshopHalf||[]).includes(p.id)) price=Math.round(price/2);   // rivale 'portato' dalla carta: metà prezzo nel giro extra
+  if(p.money<price) return 'Denaro insufficiente.';
   p.money-=price; p.comp[comp]=lvl; if(p.lvlOwned&&!p.lvlOwned[comp].includes(lvl)) p.lvlOwned[comp].push(lvl); p.buysLeft--; p.discountNext=false;
   G.market.splice(ci,1);                                          // carta scoperta consumata
   glog(G,p.name+' compra '+(COMPLAB[comp]||comp)+' L'+lvl+' · €'+price,'buy');
@@ -378,21 +382,26 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
   else if(c.eff==='betUp'||c.eff==='betDown') tgt.betMult=(tgt.betMult||1)*c.val;
   else if(c.eff==='quota') tgt.quotaMod=(tgt.quotaMod||0)+c.val;
   else if(c.eff==='discount') tgt.discountNext=true;
-  else if(c.eff==='reopen'){                                       // Tour privato: esclusiva, +1 acquisto, costa val
+  else if(c.eff==='reopen'){                                       // Tour privato: riapre un mercato (giro extra) solo per te, costa val
     const cost=c.val||0;
     if(p.money<cost) return 'Ti servono €'+cost+' per giocarla.';
     p.money-=cost;
-    p.buysLeft=(p.buysLeft||0)+1;
+    G.reshopBuys=G.reshopBuys||{}; G.reshopBuys[p.id]=(G.reshopBuys[p.id]||0)+1;   // 1 acquisto nel giro extra
+    G.reshopQueued=true; if(G.reshopFirst==null) G.reshopFirst=p.id;
   }
-  else if(c.eff==='reopenAll'){                                    // Apri a tutti: giro condiviso dopo la prep
-    // chi riapre l'officina sceglie per primo nel giro extra. Un bot NON scavalca un umano che l'ha già rivendicata;
-    // tra giocatori dello stesso tipo vince l'ultimo a giocarla (è l'ultimo ad aver riaperto).
+  else if(c.eff==='reopenAll'){                                    // Apri a tutti: giro extra condiviso dopo la prep, 1 pezzo a testa
+    G.reshopBuys=G.reshopBuys||{}; G.players.forEach(pp=>{ G.reshopBuys[pp.id]=(G.reshopBuys[pp.id]||0)+1; });
+    // chi riapre sceglie per primo nel giro extra; un bot NON scavalca un umano che l'ha già rivendicata
     const prevHuman = G.reshopQueued && G.reshopFirst!=null && !((G.players.find(x=>x.id===G.reshopFirst)||{}).isBot);
     if(!(p.isBot && prevHuman)){ G.reshopQueued=true; G.reshopFirst=p.id; }
+    else G.reshopQueued=true;
   }
-  else if(c.eff==='reopenDebt'){
-    p.buysLeft=(p.buysLeft||0)+1;                                  // +1 acquisto per chi gioca
-    tgt.discountNext=true;                                         // il rivale scelto compra a metà prezzo
+  else if(c.eff==='reopenDebt'){                                   // riapre un mercato per te + 1 rivale scelto: 1 pezzo ciascuno, il rivale a metà prezzo
+    G.reshopBuys=G.reshopBuys||{}; G.reshopHalf=G.reshopHalf||[];
+    G.reshopBuys[p.id]=(G.reshopBuys[p.id]||0)+1;                  // tu: 1 acquisto nel giro extra (prezzo pieno)
+    G.reshopBuys[tgt.id]=(G.reshopBuys[tgt.id]||0)+1;             // il rivale scelto: 1 acquisto nel giro extra
+    if(!G.reshopHalf.includes(tgt.id)) G.reshopHalf.push(tgt.id);  // ...a metà prezzo
+    G.reshopQueued=true; if(G.reshopFirst==null) G.reshopFirst=p.id;
   }
   else if(c.eff==='sprint'){                                       // gara breve: traguardo a c.val, una sola per gara
     if(G.sprintFinish) return 'Un\'altra gara breve è già stata organizzata. Riprova la prossima.';
@@ -524,7 +533,7 @@ function actPrepDone(room,p){
   if(!G.reshop && p.bet){ if(p.bet.amount>p.money){ p.bet=null; } else { p.money-=p.bet.amount; } }
   G.ppIdx++;
   const o=pOrder(G);
-  if(G.ppIdx<o.length){ curPrep(G).buysLeft=G.reshop?1:G.maxBuys; }
+  if(G.ppIdx<o.length){ const cp=curPrep(G); cp.buysLeft=G.reshop?((G.reshopBuys&&G.reshopBuys[cp.id])||1):G.maxBuys; }
   else if(!G.reshop && G.reshopQueued){ startReshop(room); }   // chiudi l'officina, riaprila a tutti
   else { G.reshop=false; startLaunch(room); }   // tutti pronti → semaforo di partenza
   return null;
