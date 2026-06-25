@@ -694,6 +694,14 @@ body:has(#s-home.active) .topbar{display:none}
 .wrap.locked{height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow:hidden}
 body.locked{overflow:hidden;overscroll-behavior:none}
 .wrap.locked #s-prep.active{flex:1;min-height:0;display:flex;padding:0;overflow:hidden}
+/* officina desktop (>680px): foto a tutto schermo (fixed) + contenuto centrato, scroll solo interno */
+@media (min-width:681px){
+  .wrap.locked #s-prep.active{display:flex;flex-direction:column}
+  .wrap.locked #s-prep.active .of-scene{flex:1;min-height:0;width:100%;max-width:none;margin:0;padding:0;display:flex;flex-direction:column;align-items:center}
+  .wrap.locked #s-prep.active .of-bg{position:fixed;inset:0;border-radius:0;box-shadow:none;z-index:0}
+  .wrap.locked #s-prep.active .of-inner{position:relative;z-index:1;flex:1;min-height:0;width:100%;max-width:920px;overflow-y:auto;overflow-x:hidden;padding:14px 18px 26px}
+  .wrap.locked #s-prep.active .of-bench{width:min(42vw,380px,52vh)}
+}
 .o2-app{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 .o2-app.has-photo{background-color:var(--asphalt-0);background-image:linear-gradient(180deg,rgba(11,5,24,.66) 0%,rgba(11,5,24,.46) 20%,rgba(11,5,24,.46) 80%,rgba(11,5,24,.74) 100%),var(--of-photo);background-size:cover;background-position:center;background-repeat:no-repeat}
 .o2-hz{height:6px;flex:0 0 auto;background:repeating-linear-gradient(45deg,var(--amber),var(--amber) 12px,#0b0510 12px,#0b0510 24px)}
@@ -1270,14 +1278,14 @@ function prepMobileHTML(v){
   return `<div class="o2-app has-photo" style="--of-photo:url('${officinaBg(v.round)}')"><div class="o2-hz"></div>${cassa}${barsHTML}${rank}${mkt}${garage}${prontoW}</div>`;
 }
 const OFFICINA_BGS=['img/officina-1.jpg','img/officina-2.jpg'];   // aggiungi qui altre foto: officina-3.jpg, ...
-function officinaBg(round){ if(ui.ofBgRound!==round){ ui.ofBgRound=round; ui.ofBg=OFFICINA_BGS[Math.floor(Math.random()*OFFICINA_BGS.length)]; } return ui.ofBg||OFFICINA_BGS[0]; }   // una foto a caso per round, stabile tra i re-render
+function officinaBg(round){ if(ui.ofBgRound!==round){ ui.ofBgRound=round; let pool=(OFFICINA_BGS.length>1&&ui.ofBg)?OFFICINA_BGS.filter(x=>x!==ui.ofBg):OFFICINA_BGS; ui.ofBg=pool[Math.floor(Math.random()*pool.length)]; } return ui.ofBg||OFFICINA_BGS[0]; }   // mai due volte di fila la stessa foto
 function renderPrep(v){
   show('s-prep');topMeta('Round '+v.round);
   if(window.matchMedia('(max-width:680px)').matches){
     document.querySelector('.wrap').classList.add('locked'); document.body.classList.add('locked');
     document.getElementById('s-prep').innerHTML=prepMobileHTML(v); return;
   }
-  document.querySelector('.wrap').classList.remove('locked'); document.body.classList.remove('locked');
+  document.querySelector('.wrap').classList.add('locked'); document.body.classList.add('locked');   // officina desktop: pagina ferma, foto a tutto schermo (vedi CSS .wrap.locked #s-prep .of-bg)
   const others=v.players.filter(p=>p.id!==v.you.id);
   const top=[],left=[],right=[];
   others.forEach((p,i)=>{(i%3===0?top:i%3===1?left:right).push(p);});
@@ -1989,7 +1997,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-06-25 · home-fullbleed+officina-bg';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-06-25 · officina-fullscreen';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 </body>
 </html>
