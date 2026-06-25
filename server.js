@@ -143,7 +143,7 @@ function buildInitialTrack(G){
   const pool=shuffle(ROADS[1].map(c=>({...c,lvl:1})));
   const rett=pool.find(c=>c.t==='rettilineo'); const cards=[rett];
   pool.filter(c=>c!==rett).slice(0,4).forEach(c=>cards.push(c));
-  layoutTrack(cards); G.track=cards; G.trackLevel=1;
+  layoutTrack(cards); G.track=cards; G.trackLevel=1; G._lvlRaces=0;
 }
 function trackTopLevel(G){ return G.track[G.track.length-1].lvl; }
 function segOf(G,sq){ const s=Math.max(1,sq); return G.track.find(c=>s>=c.from&&s<=c.to)||G.track[G.track.length-1]; }
@@ -158,6 +158,7 @@ function startGame(room){
   G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach(p=>{ for(let k=0;k<3;k++){ const card=drawCard(G); if(card) p.hand.push(card); } });
   G.round=0; room.started=true; G.policeUnlocked=false; G.blocks=[]; G.pendPolice=[]; G.bossPending=null;
+  G.gameLog=[]; G.gameSeq=0;
   G.phase='reveal'; G.players.forEach(p=>{ p.ready=false; });
 }
 function restartGame(room){
@@ -167,6 +168,7 @@ function restartGame(room){
   room.started=false;
   G.phase='lobby';
   G.round=0; G.R=null; G.lastResults=null; G.winner=null;
+  G.gameLog=[]; G.gameSeq=0;
   G.track=[]; G.pilotPool=null; G.deck=null; G.discard=[]; G.order=[]; G.diceOrder=[];
   G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach((p,i)=>{
@@ -207,6 +209,7 @@ function startRound(room){
   G.blocks=[]; G.pendPolice=[]; G.forfeitedBlocks=[];
   G.players.forEach(p=>{ p.bet=null; p.prizeMult=1; p.betMult=1; p.quotaMod=0; p.discountNext=false; p.incoming=[]; });
   curPrep(G).buysLeft=G.maxBuys;
+  glog(G,'— Round '+G.round+' · officina aperta · gara liv. '+G.raceLevel,'round');
 }
 function compSlots(N,lvl){ return Math.max(1, N - Math.max(0, lvl-2)); }   // posti totali per tipo a un livello: L1-2=N, L3=N-1, L4=N-2, L5=N-3 (min 1)
 function stockAvail(G,comp,lvl){ return compSlots(G.players.length,lvl) - G.players.filter(x=>x.comp[comp]===lvl).length; }   // disponibili = posti − chi tiene già quel livello (il pezzo rientra da solo quando uno sale)
@@ -232,6 +235,7 @@ function startReshop(room){
   G.ppIdx=0;
   G.players.forEach(pp=>{ pp.buysLeft=0; });
   curPrep(G).buysLeft=1;
+  glog(G,'Giro extra in officina · primo a scegliere: '+((G.players.find(x=>x.id===first)||{}).name||'?'),'round');
 }
 function buildCount(p,lvl){ return DB.ordine.filter(c=>p.comp[c]===lvl).length; }
 function canHaveAtLevel(p,comp,lvl){
@@ -254,6 +258,7 @@ function actBuy(room,p,comp,lvl){
   const price=priceFor(G,p,comp,lvl); if(p.money<price) return 'Denaro insufficiente.';
   p.money-=price; p.comp[comp]=lvl; if(p.lvlOwned&&!p.lvlOwned[comp].includes(lvl)) p.lvlOwned[comp].push(lvl); p.buysLeft--; p.discountNext=false;
   G.market.splice(ci,1);                                          // carta scoperta consumata
+  glog(G,p.name+' compra '+(COMPLAB[comp]||comp)+' L'+lvl+' · €'+price,'buy');
   return null;
 }
 function pregaraTarget(c){ if(c.eff==='prizeDown'||c.eff==='betDown'||c.eff==='smonta'||c.eff==='reopenDebt') return 'rival'; if(c.eff==='quota') return c.val<0?'rival':'self'; if((c.eff==='money'||c.eff==='po')&&c.val<0) return 'rival'; return 'self'; }
@@ -380,7 +385,10 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
     p.buysLeft=(p.buysLeft||0)+1;
   }
   else if(c.eff==='reopenAll'){                                    // Apri a tutti: giro condiviso dopo la prep
-    if(!G.reshopQueued){ G.reshopQueued=true; G.reshopFirst=p.id; }
+    // chi riapre l'officina sceglie per primo nel giro extra. Un bot NON scavalca un umano che l'ha già rivendicata;
+    // tra giocatori dello stesso tipo vince l'ultimo a giocarla (è l'ultimo ad aver riaperto).
+    const prevHuman = G.reshopQueued && G.reshopFirst!=null && !((G.players.find(x=>x.id===G.reshopFirst)||{}).isBot);
+    if(!(p.isBot && prevHuman)){ G.reshopQueued=true; G.reshopFirst=p.id; }
   }
   else if(c.eff==='reopenDebt'){
     p.buysLeft=(p.buysLeft||0)+1;                                  // +1 acquisto per chi gioca
@@ -391,6 +399,7 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
     G.sprintFinish=c.val;
   }
   if(pregaraTarget(c)==='rival' && c.eff!=='reopenDebt' && tgt.id!==p.id) recordMalus(room, p, tgt, {phase:'pregara', eff:c.eff, val:c.val, applied:_ap, comp:_comp, lvl:_lvl});
+  glog(G,p.name+' gioca «'+c.nome+'»'+(pregaraTarget(c)==='rival'&&tgt.id!==p.id?(' su '+tgt.name):''),'card');
   G.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
 /* ====================== POLIZIA ====================== */
@@ -419,6 +428,7 @@ function actPlayPolice(room,p,handIdx,cell){
   } else {
     (G.pendPolice=G.pendPolice||[]).push({by:p.id});
   }
+  glog(G,p.name+' gioca «'+c.nome+'» (polizia)','card');
   G.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
 function throwPoliceMalus(room, attacker, target){
@@ -502,7 +512,10 @@ function actSetBet(room,p,targetId,amount){
   if(targetId==null||!amount||amount<=0){ p.bet=null; return null; }
   if(!G.players.some(x=>x.id===targetId)) return 'Bersaglio non valido.';
   if(amount>p.money) return 'Importo superiore al denaro.';
-  p.bet={ targetId, amount }; return null;
+  const changed=!p.bet||p.bet.targetId!==targetId||p.bet.amount!==amount;
+  p.bet={ targetId, amount };
+  if(changed){ const tn=(G.players.find(x=>x.id===targetId)||{}).name||'?'; glog(G,p.name+' scommette €'+amount+' su '+(targetId===p.id?'sé stesso':tn),'bet'); }
+  return null;
 }
 function actPrepDone(room,p){
   const G=room.G; if(G.phase!=='prep'||curPrep(G).id!==p.id) return 'Non è il tuo turno.';
@@ -533,6 +546,7 @@ function beginRace(room){                                         // VERDE: quot
   spawnBosses(room);                                            // boss (su level-up) + miniboss (25%)
   if(G.R.police.length){ const attacker=G.R.police[0]; G.players.forEach(p=>throwPoliceMalus(room, attacker, p)); }  // 1 malus a testa (non si moltiplica con più auto)
   G.phase='race';
+  glog(G,'🟢 Semaforo verde · via alla gara liv. '+G.raceLevel,'race');
 }
 function startRace(room){ setupRace(room); beginRace(room); }    // avvio immediato (compat, non usato col semaforo)
 function startLaunch(room){                                       // SEMAFORO: finestra di 6s per le carte partenza, poi parte la gara
@@ -555,6 +569,7 @@ function actPlayPartenza(room,p,handIdx,targetId){
   const tc=G.R&&G.R.cars[target.id]; if(!tc) return 'Auto non pronta.';
   tc.pendPart+=c.val;
   (G.launchLog=G.launchLog||[]).push({ who:p.name, target:target.name, targetId:target.id, nome:c.nome, val:c.val, self:(c.target!=='rival') });
+  glog(G,p.name+' al via: «'+c.nome+'» '+(c.target!=='rival'?'su di sé':('su '+target.name)),'card');
   G.discard.push(c); p.hand.splice(handIdx,1);
   return null;                                                  // nessuna difesa, se ne possono giocare quante si vuole
 }
@@ -605,6 +620,8 @@ function computeMove(G,p,die,useNos){
 }
 
 function raceLog(G,e){ if(!G.R)return; e.id=++G.R.logId; e.t=G.R.turn; G.R.log.push(e); if(G.R.log.length>60)G.R.log.shift(); }
+function glog(G,text,kind){ if(!G)return; G.gameSeq=(G.gameSeq||0)+1; (G.gameLog=G.gameLog||[]).push({ id:G.gameSeq, round:G.round||1, phase:G.phase, kind:kind||'info', text:text }); if(G.gameLog.length>240) G.gameLog.shift(); }   // registro di TUTTA la partita
+const COMPLAB={motore:'Motore',cambio:'Cambio',sterzo:'Sterzo',assetto:'Assetto',peso:'Peso',nos:'NOS'};
 function actRacePlayCard(room,p,handIdx,targetId){
   const G=room.G; if(G.phase!=='race') return 'Non in gara.';
   if(activeRace(G).id!==p.id) return 'Non è il tuo turno.';
@@ -626,6 +643,7 @@ function actRacePlayCard(room,p,handIdx,targetId){
   else if(c.eff==='dado'){ _prevDado=tc.pendDado; tc.pendDado=c.val; }
   else if(c.eff==='reach') tc.pendReach={ref:c.val,off:c.dur};
   raceLog(G,{kind:'card',who:p.name,target:target.name,targetId:target.id,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur});
+  glog(G,p.name+' gioca «'+c.nome+'»'+(c.target==='rival'&&target.id!==p.id?(' su '+target.name):'')+' (gara)','card');
   if(c.target==='rival' && target.id!==p.id && !isFoe) recordMalus(room, p, target, {phase:'ingara', eff:c.eff, val:c.val, dur:c.dur, fxRef:_fx, prevDado:_prevDado});  // i boss non si difendono
   G.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
@@ -652,8 +670,9 @@ function actConfirmMove(room,p){
   car.dist=(car.dist||0)+b.total;                       // distanza reale percorsa (non tappata) → classifica photo-finish
   car.pos=Math.min(G.R.finish||55,car.pos+b.total);
   const onBlk=(G.R.blocks||[]).find(bl=>car.pos>=bl.from&&car.pos<=bl.to);
-  if(onBlk && car.pos>0){ p.money=Math.max(0,p.money-500); raceLog(G,{kind:'fine',who:p.name,amount:500,pos:car.pos}); }
+  if(onBlk && car.pos>0){ p.money=Math.max(0,p.money-500); raceLog(G,{kind:'fine',who:p.name,amount:500,pos:car.pos}); glog(G,'🚧 '+p.name+' multato al blocco · −€500 (cas. '+car.pos+')','fine'); }
   raceLog(G,{kind:'move',who:p.name,seg:TIPO_LABEL[b.segType]||b.segType,mov:b.total,pos:car.pos,die:b.die});
+  glog(G,p.name+' muove '+b.total+' → cas. '+car.pos+' ('+(TIPO_LABEL[b.segType]||b.segType)+')','move');
   car.pendPart=0; car.pendDado=null; car.pendReach=null;
   car.fx=car.fx.map(e=>({...e,turns:e.turns-1})).filter(e=>e.turns>0);
   G.R.lastBreak=null; G.R.phase='await';
@@ -716,8 +735,11 @@ function endRace(room){
   const racedLevels=G.track.map(c=>c.lvl);
   advanceTrack(room);
   G.lastTrackInfo={ racedLevels, change:G.lastTrackChange };
-  G.winner = G.players.some(p=>p.po>=DB.obiettivo) ? [...G.players].sort((a,b)=>b.po-a.po||b.money-a.money)[0] : null;
+  const goalPO=G.targetPO||DB.obiettivo;
+  G.winner = G.players.some(p=>p.po>=goalPO) ? [...G.players].sort((a,b)=>b.po-a.po||b.money-a.money)[0] : null;
   G.lastResults = ranked.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, pos:p._finalPos, cell:G.R.cars[p.id].pos, po:p._gainPO, money:p._gainMoney, betDelta:p._betDelta, busted:!!p._busted, bustReason:p._bustReason||null, bossBonus:p._bossBonus||0, bossList:p._bossList||[] }));
+  glog(G,'🏁 Fine gara liv. '+G.raceLevel,'race');
+  ranked.forEach(p=>{ const bits=[]; if(p._gainMoney) bits.push((p._gainMoney>0?'+':'')+'€'+p._gainMoney); if(p._gainPO) bits.push('+'+p._gainPO+' PO'); if(p._betDelta) bits.push('scommessa '+(p._betDelta>0?('vinta +€'+p._betDelta):('persa −€'+Math.abs(p._betDelta)))); if(p._busted) bits.push('beccato'); glog(G,p._finalPos+'° '+p.name+(bits.length?(' · '+bits.join(' · ')):''),'result'); });
   G.lastRaceRecap = {
     quota: base,
     blocks: (G.R.blocks||[]).map(b=>({from:b.from,to:b.to,size:b.size})),
@@ -733,13 +755,21 @@ function endRace(room){
 }
 function advanceTrack(room){
   const G=room.G; const L=G.trackLevel;
+  G._lvlRaces=(G._lvlRaces||0)+1;                                // gare giocate a QUESTO livello (questa inclusa)
   const crossed=G.players.map(p=>{ const pos=G.R.cars[p.id].pos; return G.track.filter(c=>c.to<=pos).length; });
   const passedAll=Math.min(...crossed);                          // la finestra scorre di quante strade hanno superato TUTTI
   const lead=Math.max(...crossed);                               // il vincitore = chi è più avanti
-  const need=(L>=3)?3:2;                                         // regola B: ×2 per L1→L2 e L2→L3, ×3 solo per l'ultimo salto L3→L4
-  const advance=(L<DB.maxLevelRoads) && lead>=need && G.track.slice(0,lead).filter(c=>c.lvl>=L).length>=need;
+  const slow=Math.min(...G.players.map(p=>G.R.cars[p.id].pos)); // posizione (casella) dell'ultimo
+  const r2=G.track[1];                                           // seconda strada della finestra
+  const thr=r2?(r2.from+0.30*r2.len):Infinity;                   // soglia: 30% dentro la 2ª strada
+  const winnerOk=lead>=3 && G.track.slice(0,lead).filter(c=>c.lvl>=L).length>=3;   // vincitore: almeno 3 strade INTERE del livello in corso
+  let advance=winnerOk && (slow>=thr);                           // + l'ultimo ha raggiunto il 30% della 2ª strada
+  if(L===1){ if(G._lvlRaces<2) advance=false; else if(G._lvlRaces>=4) advance=true; }   // L1: min 2 gare, forzato dopo 4
+  else if(L===2){ if(G._lvlRaces>=6) advance=true; }                                     // L2: forzato dopo 6
+  else if(L===3){ if(G._lvlRaces>=9) advance=true; }                                     // L3: forzato dopo 9
+  advance = advance && (L<DB.maxLevelRoads);                     // L4 è il tetto: non si sale oltre
   let change={ passedAll, addedCount:0, oldLevel:L, newLevel:L, advanced:false };
-  if(advance){ G.trackLevel=L+1; G.bossPending=L; }             // boss per il livello completato (appare nella gara dopo)
+  if(advance){ G.trackLevel=L+1; G.bossPending=L; G._lvlRaces=0; }   // salita: boss del livello completato (appare nella gara dopo) + azzero il contatore
   const fillLvl=advance?(L+1):L;
   if(passedAll>=1){
     G.track=G.track.slice(passedAll);
@@ -782,9 +812,10 @@ function ownedView(p){ return DB.ordine.map(c=>{ const cur=p.comp[c]; const own=
 
 function buildView(room, player){
   const G=room.G;
-  const v={ phase:G.phase, code:room.code, round:G.round||0,
+  const v={ phase:G.phase, code:room.code, round:G.round||0, targetPO:(G.targetPO||DB.obiettivo),
     you:{ id:player.id, name:player.name, colorH:DB.colori[player.colorIdx].h, isHost:player.id===room.hostId },
   };
+  if(G.phase!=='lobby' && G.phase!=='reveal') v.gameLog=(G.gameLog||[]).slice(-140).map(e=>({ id:e.id, round:e.round, phase:e.phase, kind:e.kind, text:e.text }));   // diario di tutta la partita
   if(G.phase==='lobby'){
     v.players=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, isHost:p.id===room.hostId, isBot:!!p.isBot, connected:p.connected }));
     v.canStart = (player.id===room.hostId) && G.players.length>=2;
@@ -816,6 +847,7 @@ function buildView(room, player){
   if(G.phase==='prep'){
     const active=curPrep(G); v.activeId=active.id; v.activeName=active.name; v.isYourTurn=active.id===player.id;
     v.reshop=!!G.reshop; v.reshopComing=(!G.reshop && !!G.reshopQueued);
+    v.reshopBy=(G.reshopFirst!=null)?((G.players.find(x=>x.id===G.reshopFirst)||{}).name||null):null;
     v.sprintFinish=(G.sprintFinish||null);
     v.incoming=incomingFor(player);
     v.compMaxLevel=G.compMaxLevel;
@@ -977,7 +1009,7 @@ io.on('connection', (socket)=>{
 
   socket.on('createRoom', ({name,colorIdx}, cb)=>{
     const code=genCode();
-    const room={ code, hostId:0, started:false, G:{ phase:'lobby', players:[], nextId:0 } };
+    const room={ code, hostId:0, started:false, G:{ phase:'lobby', players:[], nextId:0, targetPO:50 } };
     const p={ id:0, socketId:socket.id, name:cleanName(name), colorIdx: (colorIdx>=0&&colorIdx<8)?colorIdx:0, connected:true };
     room.G.players.push(p); room.G.nextId=1; room.hostId=0;
     rooms.set(code, room); socketToRoom.set(socket.id, code); socket.join(code);
@@ -1013,6 +1045,13 @@ io.on('connection', (socket)=>{
     if(colorIdx<0||colorIdx>=8) return;
     if(f.room.G.players.some(x=>x.colorIdx===colorIdx && x.id!==f.p.id)) return;
     f.p.colorIdx=colorIdx; broadcast(f.room);
+  });
+
+  socket.on('setTargetPO', ({po})=>{
+    const f=playerBySocket(socket); if(!f||f.room.started) return; const {room,p}=f;
+    if(p.id!==room.hostId) return;                                 // solo l'host
+    if(![50,70,100].includes(po)) return;                          // solo i valori previsti
+    room.G.targetPO=po; broadcast(room);
   });
 
   socket.on('addBot', ()=>{

@@ -766,6 +766,19 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 .lc-empty{font-size:12.5px;color:var(--muted-2);text-align:center;padding:10px}
 .lc-feed{margin-top:6px;display:flex;flex-direction:column;gap:3px}
 .lc-fl{font-size:11px;color:var(--muted);font-family:var(--mono)}.lc-fl b{color:var(--ink)}.lc-fl .pos{color:var(--good);font-weight:700}.lc-fl .neg{color:var(--danger);font-weight:700}
+/* ===== DIARIO PARTITA (gl-) ===== */
+.log-rh{font-family:var(--disp);text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:600;color:var(--amber);margin:13px 2px 6px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+#log-list .log-rh:first-child{margin-top:2px}
+.gl-row{font-size:12px;color:var(--muted);padding:5px 3px;line-height:1.45;border-bottom:1px solid rgba(58,37,102,.35)}
+.gl-buy{color:#9af0b0}.gl-card{color:#ffd98a}.gl-bet{color:#7fd4ff}.gl-fine{color:#ff9bb0}.gl-result{color:var(--po);font-weight:600}.gl-race{color:#c7b9ef}.gl-info{color:var(--muted)}
+/* ===== selettore Punti Onore obiettivo (lobby) ===== */
+.po-seg{display:flex;gap:8px;margin-top:2px}
+.po-opt{flex:1;height:50px;border:1px solid var(--line);border-radius:11px;background:var(--asphalt-2);color:var(--ink);font-family:var(--disp);font-weight:700;font-size:21px;cursor:pointer;transition:.12s;position:relative}
+.po-opt .po-sub{display:block;font-weight:600;font-size:9px;letter-spacing:.04em;color:var(--muted-2);margin-top:1px}
+.po-opt.sel{border-color:var(--po);background:linear-gradient(180deg,rgba(255,206,74,.20),rgba(255,206,74,.04));color:var(--po);box-shadow:0 0 0 1px var(--po) inset}
+.po-opt.sel .po-sub{color:var(--po)}
+.po-opt:disabled{cursor:default}
+.po-note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.45}.po-note b{color:var(--po)}
 </style>
 </head>
 <body>
@@ -807,6 +820,11 @@ body.locked{overflow:hidden;overscroll-behavior:none}
       <div class="panel-h">Giocatori <span id="lob-count"></span></div>
       <div class="plist" id="lob-players"></div>
     </div>
+    <div class="panel" id="lob-po">
+      <div class="panel-h">Punti Onore per vincere</div>
+      <div class="po-seg" id="po-seg"></div>
+      <div class="po-note" id="po-note"></div>
+    </div>
     <div class="panel" id="lob-colorwrap">
       <div class="field-lab" style="margin-top:0">Cambia colore</div>
       <div class="swatches" id="lob-colors"></div>
@@ -837,7 +855,7 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 <div class="modal" id="segm"><div class="box"><div class="mh">Regole del tratto</div><div id="segm-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeSegRules()">Chiudi</button></div></div>
 <div class="drawer-bd logbd" id="log-bd" onclick="closeLog()"></div>
 <aside class="drawer logdrawer" id="logdrawer">
-  <div class="dw-head">📋 Log gara <button onclick="closeLog()">✕</button></div>
+  <div class="dw-head">📋 Diario partita <button onclick="closeLog()">✕</button></div>
   <div class="dw-list" id="log-list"></div>
 </aside>
 <div class="drawer-bd" id="drawer-bd" onclick="closeDrawer()"></div>
@@ -911,6 +929,18 @@ function renderLobby(v){
   const taken=new Set(v.players.filter(p=>p.id!==v.you.id).map(p=>COLORS.findIndex(c=>c.h===p.colorH)));
   const cw=document.getElementById('lob-colors');cw.innerHTML='';
   COLORS.forEach((c,i)=>{const mine=c.h===v.you.colorH;cw.innerHTML+=`<div class="swatch ${mine?'sel':''}" ${taken.has(i)?'disabled':''} style="background:${c.h}" onclick="socket.emit('setColor',{colorIdx:${i}})"></div>`;});
+  // selettore Punti Onore obiettivo
+  const POOPTS=[[50,'RAPIDA'],[70,'CLASSICA'],[100,'MARATONA']];
+  const tgt=v.targetPO||50, isHost=v.you.isHost;
+  const seg=document.getElementById('po-seg'); seg.innerHTML='';
+  POOPTS.forEach(([val,lab])=>{ const sel=(tgt===val)?' sel':'';
+    seg.innerHTML+= isHost
+      ? `<button class="po-opt${sel}" onclick="socket.emit('setTargetPO',{po:${val}})">${val}<span class="po-sub">${lab}</span></button>`
+      : `<button class="po-opt${sel}" disabled>${val}<span class="po-sub">${lab}</span></button>`;
+  });
+  document.getElementById('po-note').innerHTML = isHost
+    ? `Vince chi arriva primo a <b>${tgt}</b> Punti Onore.`
+    : `Obiettivo: <b>${tgt}</b> Punti Onore (scelto dall'host).`;
   const sb=document.getElementById('lob-start');
   sb.style.display=v.you.isHost?'block':'none';
   sb.disabled=!v.canStart;
@@ -1144,8 +1174,8 @@ function prepMobileHTML(v){
   const cassa=`<div class="o2-cassa"><div class="o2-ava" style="--c:${you.colorH}">${ini(you.name)}</div><div><div class="o2-who">${esc(you.name)}</div><div class="o2-turn">${turnLine}</div></div><div class="o2-wallet">${wallet}</div></div>`;
   // ---- bande condizionali (difesa / giro / boost / lock polizia) ----
   let bars=defenseHTML(v);
-  if(v.reshop) bars+='<div class="o2-bar giro">🔧 Officina riaperta a tutti · giro extra — ognuno ricompra una volta</div>';
-  if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('×'+m):('÷'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,qm=v.me.quotaMod||0,tg=[]; if(v.sprintFinish)tg.push('⚡ Gara breve: traguardo a '+v.sprintFinish); if(pm!==1)tg.push('🎁 Montepremi '+fmt(pm)); if(bm!==1)tg.push('🎲 Scommessa '+fmt(bm)); if(qm)tg.push('📊 Quota '+(qm>0?'+':'')+qm); if(v.me.discount)tg.push('💸 Sconto 50% prossimo acquisto'); if(v.reshopComing)tg.push('🔧 Giro extra dopo la prep'); if(tg.length)bars+='<div class="o2-bar boost">'+tg.join(' · ')+'</div>'; }
+  if(v.reshop) bars+='<div class="o2-bar giro">🔧 Officina riaperta'+(v.reshopBy?(' da <b>'+esc(v.reshopBy)+'</b>'):'')+' · giro extra — '+(v.reshopBy?(esc(v.reshopBy)+' sceglie per primo, '):'')+'ognuno ricompra una volta</div>';
+  if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('×'+m):('÷'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,qm=v.me.quotaMod||0,tg=[]; if(v.sprintFinish)tg.push('⚡ Gara breve: traguardo a '+v.sprintFinish); if(pm!==1)tg.push('🎁 Montepremi '+fmt(pm)); if(bm!==1)tg.push('🎲 Scommessa '+fmt(bm)); if(qm)tg.push('📊 Quota '+(qm>0?'+':'')+qm); if(v.me.discount)tg.push('💸 Sconto 50% prossimo acquisto'); if(v.reshopComing)tg.push('🔧 Giro extra dopo la prep'+(v.reshopBy?(' (riaperto da '+esc(v.reshopBy)+')'):'')); if(tg.length)bars+='<div class="o2-bar boost">'+tg.join(' · ')+'</div>'; }
   bars+=policeBannerHTML(v);
   const barsHTML = bars?`<div class="o2-bars">${bars}</div>`:'';
   // ---- classifica ultima gara (o ordine di partenza) + soldi ----
@@ -1225,18 +1255,23 @@ function renderPrep(v){
       extra+='</div>';}
     if(v.canBet)extra+='<div class="of-bet-note">Apri \ud83d\udc65 <b>Piloti</b> in alto a destra per scommettere e vedere le puntate.</div>';
   }
-  const html=`<div class="of-scene"><div class="of-bg"></div><div class="of-inner"><div class="of-head"><div class="of-title">Officina \u00b7 Ricambi <small>Round ${v.round}</small></div>${turn}</div>${policeBannerHTML(v)}${v.reshop?'<div class="of-giro">\ud83d\udd27 OFFICINA RIAPERTA A TUTTI \u00b7 GIRO EXTRA \u2014 ognuno ricompra una volta, chi ha giocato la carta sceglie per primo</div>':''}<div class="of-table"><div class="of-top">${top.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-left">${left.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-center"><div class="of-bench"><div class="of-felt"><div class="of-lots">${bench}</div></div></div></div><div class="of-right">${right.map(p=>ofSeat(p,v.activeId)).join('')}</div></div><div class="of-you">${you}</div><div class="of-others-h">Altri giocatori</div>${policeSectionHTML(v,false)}${extra}</div></div>`;
+  const html=`<div class="of-scene"><div class="of-bg"></div><div class="of-inner"><div class="of-head"><div class="of-title">Officina \u00b7 Ricambi <small>Round ${v.round}</small></div>${turn}</div>${policeBannerHTML(v)}${v.reshop?('<div class="of-giro">\ud83d\udd27 OFFICINA RIAPERTA'+(v.reshopBy?(' DA '+esc(v.reshopBy).toUpperCase()):' A TUTTI')+' \u00b7 GIRO EXTRA \u2014 '+(v.reshopBy?(esc(v.reshopBy)+' sceglie per primo, '):'')+'ognuno ricompra una volta</div>'):''}<div class="of-table"><div class="of-top">${top.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-left">${left.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-center"><div class="of-bench"><div class="of-felt"><div class="of-lots">${bench}</div></div></div></div><div class="of-right">${right.map(p=>ofSeat(p,v.activeId)).join('')}</div></div><div class="of-you">${you}</div><div class="of-others-h">Altri giocatori</div>${policeSectionHTML(v,false)}${extra}</div></div>`;
   document.getElementById('s-prep').innerHTML=defenseHTML(v)+html;
 }
 
-let pendBetTarget=null;
-function setBetTarget(id){pendBetTarget=id;sendBet(id);}
-function clearBet(){pendBetTarget=null;const a=document.getElementById('betamt');if(a)a.value='';socket.emit('prep:bet',{targetId:null,amount:0});}
-function sendBet(forceTarget){
-  const v=LAST;const t=forceTarget!=null?forceTarget:(pendBetTarget!=null?pendBetTarget:(v.myBet?v.myBet.targetId:null));
+let pendBetTarget=null,pendBetAmount=null;
+function setBetTarget(id){
+  pendBetTarget=id;
+  document.querySelectorAll('#drawer-list .dw-chip').forEach(el=>el.classList.toggle('sel', parseInt(el.dataset.bid,10)===id));  // evidenzio in-place, senza ricostruire il drawer (così il tap non si perde)
   const a=document.getElementById('betamt');const amount=a?parseInt(a.value||'0',10):0;
-  if(t==null||!amount||amount<=0){socket.emit('prep:bet',{targetId:null,amount:0});return;}
-  socket.emit('prep:bet',{targetId:t,amount});
+  if(amount>0){ pendBetAmount=null; socket.emit('prep:bet',{targetId:id,amount}); }   // importo già presente → conferma subito
+}
+function clearBet(){pendBetTarget=null;pendBetAmount=null;const a=document.getElementById('betamt');if(a)a.value='';socket.emit('prep:bet',{targetId:null,amount:0});}
+function sendBet(){
+  const v=LAST;const t=(pendBetTarget!=null?pendBetTarget:(v.myBet?v.myBet.targetId:null));
+  const a=document.getElementById('betamt');const amount=a?parseInt(a.value||'0',10):0;
+  if(t!=null && amount>0){ pendBetAmount=null; socket.emit('prep:bet',{targetId:t,amount}); }                  // bersaglio + importo → conferma
+  else if(amount<=0 && v.myBet && v.myBet.targetId!=null){ pendBetAmount=null; socket.emit('prep:bet',{targetId:null,amount:0}); } // importo svuotato → annulla
 }
 
 /* ---------- RACE ---------- */
@@ -1662,35 +1697,18 @@ function closeLog(){document.getElementById('logdrawer').classList.remove('open'
 function toggleLog(){document.getElementById('logdrawer').classList.contains('open')?closeLog():openLog();}
 function renderLog(v){
   const btn=document.getElementById('log-toggle');
-  const has=v.phase==='race'&&Array.isArray(v.log);
+  const has=Array.isArray(v.gameLog);
   if(btn)btn.style.display=has?'inline-flex':'none';
   if(!has){closeLog();return;}
   const list=document.getElementById('log-list');
-  if(!v.log.length){list.innerHTML='<div class="log-empty">Ancora nessuna mossa in questa gara.</div>';return;}
+  if(!v.gameLog.length){list.innerHTML='<div class="log-empty">Ancora nessuna azione.</div>';return;}
   let h='';
-  for(let i=v.log.length-1;i>=0;i--){
-    const e=v.log[i];
-    if(e.kind==='move'){
-      h+=`<div class="log-entry"><span class="lg-t">T${e.t}</span><span class="lg-who">${esc(e.who)}</span> \u2014 ${esc(e.seg||'')} \u00b7 mov <b>${e.mov}</b> \u2192 cas. ${e.pos}</div>`;
-    } else if(e.kind==='card'){
-      const hit=(e.targetId===v.you.id)&&(e.who!==v.you.name);
-      const onSelf=(e.target===e.who);
-      h+=`<div class="log-entry lg-card${hit?' lg-hit':''}"><span class="lg-t">T${e.t}</span><span class="lg-who">${esc(e.who)}</span> gioca \u00ab${esc(e.nome)}\u00bb ${cardEffShort(e)} \u00b7 ${onSelf?'su di s\u00e9':('su '+esc(e.target))}</div>`;
-    } else if(e.kind==='defend'){
-      h+=`<div class="log-entry lg-card"><span class="lg-t">T${e.t}</span><span class="lg-who">${esc(e.who)}</span> si difende con \u00ab${esc(e.nome)}\u00bb${e.reflect?' e rispedisce il malus a '+esc(e.by||''):''}</div>`;
-    } else if(e.kind==='fine'){
-      h+=`<div class="log-entry lg-hit"><span class="lg-t">T${e.t}</span>\ud83d\udea8 <span class="lg-who">${esc(e.who)}</span> multato al blocco \u00b7 <b>\u2212\u20ac${e.amount}</b> (cas. ${e.pos})</div>`;
-    } else if(e.kind==='police'){
-      h+=`<div class="log-entry lg-card"><span class="lg-t">T${e.t}</span>\ud83d\udea8 <span class="lg-who">${esc(e.who)}</span> lancia \u00ab${esc(e.nome)}\u00bb su ${esc(e.target)}</div>`;
-    } else if(e.kind==='police-move'){
-      h+=`<div class="log-entry"><span class="lg-t">T${e.t}</span>\ud83d\ude93 <span class="lg-who">${esc(e.who)}</span> avanza \u00b7 mov <b>${e.mov}</b> \u2192 cas. ${e.pos}</div>`;
-    } else if(e.kind==='boss-move'){
-      h+=`<div class="log-entry"><span class="lg-t">T${e.t}</span>\ud83d\udc51 <span class="lg-who">${esc(e.who)}</span> avanza \u00b7 mov <b>${e.mov}</b> \u2192 cas. ${e.pos}</div>`;
-    } else if(e.kind==='fee'){
-      h+=`<div class="log-entry">\ud83c\udfc1 Quota gara \u00b7 \u20ac${e.amount} a testa</div>`;
-    }
-  }
+  v.gameLog.forEach(e=>{
+    if(e.kind==='round'){ h+=`<div class="log-rh">${esc((e.text||'').replace(/^—\s*/,''))}</div>`; }
+    else h+=`<div class="gl-row gl-${e.kind||'info'}">${esc(e.text||'')}</div>`;
+  });
   list.innerHTML=h;
+  if(document.getElementById('logdrawer').classList.contains('open')) list.scrollTop=list.scrollHeight;   // diario: scorro all'ultima azione
 }
 let _lastToastId=0,_logRound=-1;
 function checkIncoming(v){
@@ -1716,8 +1734,9 @@ function renderDrawer(v){
   if(v.phase==='prep' && v.isYourTurn && v.canBet && Array.isArray(v.betTargets)){
     h+='<div class="dw-sec">La tua scommessa</div>';
     h+='<div class="dw-betbox"><div class="dw-betlab">Punta su chi vince \u00b7 quota = posizione nell\'ultima gara</div><div class="dw-chips">';
-    v.betTargets.forEach(t=>{const sel=v.myBet&&v.myBet.targetId===t.id;h+=`<span class="dw-chip${sel?' sel':''}" onclick="setBetTarget(${t.id})"><span class="dw-cdot" style="background:${t.colorH}"></span>${esc(t.name)}${t.you?' (tu)':''} <span class="dw-q">x${t.quote}</span></span>`;});
-    h+='</div><div class="dw-amt"><input id="betamt" type="number" min="0" step="50" placeholder="Importo \u20ac" value="'+(v.myBet?v.myBet.amount:'')+'"><button onclick="clearBet()">Nessuna</button></div></div>';
+    v.betTargets.forEach(t=>{const sel=(pendBetTarget!=null?pendBetTarget===t.id:(v.myBet&&v.myBet.targetId===t.id));h+=`<span class="dw-chip${sel?' sel':''}" data-bid="${t.id}" onclick="setBetTarget(${t.id})"><span class="dw-cdot" style="background:${t.colorH}"></span>${esc(t.name)}${t.you?' (tu)':''} <span class="dw-q">x${t.quote}</span></span>`;});
+    const betVal=(pendBetAmount!=null?pendBetAmount:(v.myBet?v.myBet.amount:''));
+    h+='</div><div class="dw-amt"><input id="betamt" type="number" min="0" step="50" placeholder="Importo \u20ac" value="'+betVal+'" oninput="pendBetAmount=this.value"><button onclick="clearBet()">Nessuna</button></div></div>';
   }
   if(Array.isArray(v.allBets)){
     h+='<div class="dw-sec">Scommesse di tutti</div><div class="dw-betbox dw-betlist">';
@@ -1878,7 +1897,8 @@ function render(v){
   const prevPhase=ui.lastPhase;
   LAST=v;
   document.body.classList.toggle('race-mode', v.phase==='race');
-  if(v.activeId!==ui.lastActive){ui.nosArmed=false;ui.lastActive=v.activeId;pendBetTarget=null;ui.raceTab='tiro';}
+  if(v.activeId!==ui.lastActive){ui.nosArmed=false;ui.lastActive=v.activeId;ui.raceTab='tiro';}
+  if(v.round!==ui.lastBetRound){ui.lastBetRound=v.round;pendBetTarget=null;pendBetAmount=null;}   // la puntata si azzera solo a nuovo round, non quando cambia il turno
   if(v.phase!=='reveal')ui.pilotRevealed=false;
   ui.lastPhase=v.phase;
   if(v.phase==='prep'&&prevPhase!=='prep')playIntroSequence(prevPhase==='reveal'?['video/inizio.mp4','video/officina.mp4']:['video/officina.mp4']);
@@ -1912,7 +1932,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-06-25 · semaforo-partenza';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-06-25 · punti-onore';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 </body>
 </html>
