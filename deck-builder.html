@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>2FAST4U — Costruisci il deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Barlow+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080b11; --bg2:#0f141d; --panel:#141b25; --panel2:#1b2430; --line:rgba(255,255,255,.07);
+  --cyan:#1ad6ea; --cyanDim:rgba(26,214,234,.13); --amber:#ff7a1a;
+  --txt:#e9eef4; --muted:#8593a3; --ok:#2ee6a0; --bad:#ff4d5e;
+  --disp:'Rajdhani',system-ui,sans-serif; --body:'Barlow Semi Condensed',system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--body)}
+body{background:radial-gradient(120% 60% at 50% -10%, #14202e 0%, var(--bg) 55%)}
+.app{max-width:520px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+
+.status{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,rgba(8,11,17,.96),rgba(8,11,17,.82));backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 14px 10px}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{font-family:var(--disp);font-weight:700;letter-spacing:.5px;font-size:18px}
+.brand b{color:var(--cyan)}
+.brand span{display:block;font-size:11px;letter-spacing:2px;color:var(--muted);font-weight:600;margin-top:-3px}
+.pill{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:1px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.pill.ready{color:#04140f;background:var(--ok);border-color:var(--ok);box-shadow:0 0 18px rgba(46,230,160,.5)}
+.gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:11px}
+.g{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:7px 8px 8px}
+.g .lab{font-size:9.5px;letter-spacing:.6px;color:var(--muted);text-transform:uppercase;font-weight:600;display:flex;justify-content:space-between;align-items:baseline}
+.g .num{font-family:var(--disp);font-weight:700;font-size:15px;line-height:1;margin:3px 0 5px}
+.g .num em{color:var(--muted);font-style:normal;font-size:11px;font-weight:600}
+.bar{height:4px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--cyan);transition:width .25s ease}
+.g.full .num{color:var(--cyan)} .g.full .bar i{box-shadow:0 0 8px var(--cyan)}
+.g.over .num{color:var(--bad)} .g.over .bar i{background:var(--bad)}
+
+.tabs{display:flex;gap:0;background:var(--bg);position:sticky;top:0;z-index:15;border-bottom:1px solid var(--line)}
+.tab{flex:1;text-align:center;padding:13px 6px;font-family:var(--disp);font-weight:700;letter-spacing:1px;font-size:13px;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer}
+.tab.on{color:var(--cyan);border-bottom-color:var(--cyan)}
+.tab small{display:block;font-size:9px;letter-spacing:.5px;color:var(--muted);font-weight:600;margin-top:1px}
+.tab.on small{color:var(--cyan)}
+
+main{flex:1;padding:14px 14px 90px}
+.sec{display:none} .sec.on{display:block;animation:fade .2s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.catnote{font-size:12.5px;color:var(--muted);margin:0 0 14px;line-height:1.45}
+.grp{margin-bottom:10px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+.grp>.head{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;cursor:pointer;user-select:none}
+.grp .gtitle{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.5px}
+.grp .gtitle em{font-style:normal;color:var(--muted);font-weight:600;font-size:12px;margin-left:7px}
+.grp .gcount{font-family:var(--disp);font-weight:700;font-size:13px;color:var(--cyan)}
+.grp .gcount.zero{color:var(--muted)}
+.chev{margin-left:9px;color:var(--muted);transition:transform .2s;font-size:11px}
+.grp.closed .chev{transform:rotate(-90deg)}
+.grp.closed .body{display:none}
+.qa{padding:7px 11px 0;display:flex;gap:14px}
+.qa button{background:none;border:none;color:var(--cyan);font-family:var(--body);font-weight:600;font-size:11.5px;cursor:pointer;padding:0;opacity:.85}
+.qa button.clr{color:var(--muted)}
+.body{padding:4px 11px 12px}
+.body.wrap{display:flex;flex-wrap:wrap;gap:7px}
+.sub{margin-top:7px}
+.sub:first-child{margin-top:3px}
+.subhead{font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;padding:8px 10px;border-radius:8px;background:var(--panel2);display:flex;align-items:center;gap:7px;color:var(--muted);cursor:pointer;user-select:none}
+.subhead .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.subhead .sl{flex:1}
+.subhead .scount{font-family:var(--disp);font-weight:700;font-size:11.5px;color:var(--cyan)}
+.subhead .scount.zero{color:var(--muted)}
+.subhead .schev{font-size:9px;transition:transform .2s;color:var(--muted)}
+.sub.closed .schev{transform:rotate(-90deg)}
+.sub.closed .subchips{display:none}
+.subhead.bon{color:var(--ok)} .subhead.bon .dot{background:var(--ok)}
+.subhead.mal{color:#ff8b96} .subhead.mal .dot{background:#ff8b96}
+.subqa{display:flex;gap:14px;padding:8px 2px 0}
+.sub.closed .subqa{display:none}
+.subqa button{background:none;border:none;color:var(--cyan);font-family:var(--body);font-weight:600;font-size:11px;cursor:pointer;padding:0;opacity:.8}
+.subqa button.clr{color:var(--muted)}
+.subchips{display:flex;flex-wrap:wrap;gap:7px;padding:6px 2px 2px}
+.chip{display:flex;flex-direction:column;gap:1px;padding:7px 10px;border-radius:9px;background:var(--panel2);border:1px solid var(--line);cursor:pointer;line-height:1.15;min-width:0}
+.chip .eff{font-family:var(--disp);font-weight:700;font-size:12.5px;letter-spacing:.2px}
+.chip .nm{font-size:10.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:185px}
+.chip.on{background:var(--cyanDim);border-color:var(--cyan)}
+.chip.on .nm{color:#bfe7ee}
+.eff.bonus{color:var(--ok)} .eff.malus{color:#ff8b96} .eff.def{color:var(--cyan)} .eff.pol{color:var(--amber)} .eff.prg{color:var(--cyan)}
+
+.piece{border:1px solid var(--line);border-radius:13px;background:var(--panel);padding:13px;margin-bottom:11px}
+.piece .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.piece .pname{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.5px}
+.ladder{display:flex;gap:6px}
+.rung{flex:1;text-align:center;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 2px 6px}
+.rung .lv{font-size:8.5px;letter-spacing:.8px;color:var(--muted);font-weight:700}
+.rung .val{font-family:var(--disp);font-weight:700;font-size:17px;line-height:1.1;margin-top:1px}
+.rung .pr{font-size:9px;color:var(--muted);margin-top:1px}
+.rung.esp{border-color:var(--amber);background:rgba(255,122,26,.08)}
+.rung.esp .val{color:var(--amber)}
+.rung.lock{opacity:.32}
+.rung.lock .val{color:var(--muted)}
+.toggles{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.sw{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);cursor:pointer;font-weight:500}
+.sw .box{width:34px;height:19px;border-radius:999px;background:rgba(255,255,255,.1);position:relative;transition:.2s;flex-shrink:0}
+.sw .box::after{content:'';position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#cfd6df;transition:.2s}
+.sw.on .box{background:var(--amber)} .sw.on .box::after{left:17px;background:#fff}
+.sw.on{color:var(--txt)}
+.sw.l4on .box{background:var(--cyan)}
+.sw.dis{opacity:.32;pointer-events:none}
+.limitbar{display:flex;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 14px;margin-bottom:13px}
+.limitbar .lt{font-size:12.5px;color:var(--muted);line-height:1.4}
+.limitbar .lc{font-family:var(--disp);font-weight:700;font-size:15px;color:var(--cyan)}
+.limitbar .lc.full{color:var(--ok)}
+
+.driver{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:13px;background:var(--panel);padding:13px;margin-bottom:10px;cursor:pointer}
+.driver.on{border-color:var(--cyan);background:var(--cyanDim)}
+.dav{width:42px;height:42px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:700;font-size:18px;color:#04121a;background:linear-gradient(135deg,var(--cyan),#0d8ea0)}
+.dinfo{flex:1;min-width:0}
+.dname{font-family:var(--disp);font-weight:700;font-size:15px;letter-spacing:.3px}
+.dgang{font-size:11px;color:var(--muted);margin-top:-1px}
+.dab{font-size:12px;color:var(--txt);margin-top:5px;line-height:1.35}
+.dtype{font-family:var(--disp);font-weight:700;font-size:9.5px;letter-spacing:.8px;padding:2px 7px;border-radius:5px;background:var(--cyanDim);color:var(--cyan);align-self:center;flex-shrink:0}
+
+.foot{position:fixed;bottom:0;left:0;right:0;z-index:20;background:linear-gradient(0deg,rgba(8,11,17,.97),rgba(8,11,17,.8));backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:11px 14px;max-width:520px;margin:0 auto}
+.footrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.summary{font-size:12px;color:var(--muted);line-height:1.4}
+.summary b{font-family:var(--disp);font-size:15px;color:var(--txt);font-weight:700}
+.btn{font-family:var(--disp);font-weight:700;letter-spacing:.8px;font-size:13px;padding:11px 20px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);cursor:pointer}
+.btn.go{background:var(--cyan);color:#04121a;border-color:var(--cyan)}
+.btn.go:disabled{background:var(--panel2);color:var(--muted);border-color:var(--line);box-shadow:none}
+.gangdiv{display:flex;align-items:center;gap:10px;margin:17px 2px 10px}
+.gangdiv span{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:1.4px;color:var(--muted);text-transform:uppercase;white-space:nowrap}
+.gangdiv:before,.gangdiv:after{content:'';height:1px;background:var(--line);flex:1}
+.gangdiv:first-of-type{margin-top:4px}
+.pilcount{display:flex;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 14px;margin:2px 0 4px}
+.pilcount .pl{font-size:12.5px;color:var(--muted)}
+.pilcount .pn{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--cyan)}
+.pilcount .pn.full{color:var(--ok)}
+.driver{position:relative}
+.dav{position:relative}
+.driver.on .dav:after{content:'\2713';position:absolute;bottom:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:var(--ok);color:#04140f;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--panel)}
+.driver.on .dtype{background:var(--cyan);color:#04121a}
+.driver.dim{opacity:.42}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="status">
+    <div class="brandrow">
+      <div class="brand"><b>2FAST4U</b><span>DECK PERSONALE</span></div>
+      <div class="pill" id="pill">DECK INCOMPLETO</div>
+    </div>
+    <div class="gauges" id="gauges"></div>
+  </header>
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-tab="deck">DECK<small id="t-deck">0 carte</small></button>
+    <button class="tab" data-tab="officina">OFFICINA<small id="t-off">base</small></button>
+    <button class="tab" data-tab="pilota">PILOTA<small id="t-pil">—</small></button>
+  </nav>
+  <main>
+    <section class="sec on" id="sec-deck">
+      <p class="catnote">Difesa, polizia e pre-gara sono gia' caricate (ne possiedi meno del limite). Tu scegli le <b>80</b> carte In gara: dentro ogni livello sono divise per Velocita', Controllo, Partenza e +/−.</p>
+      <div id="cats"></div>
+    </section>
+    <section class="sec" id="sec-officina">
+      <p class="catnote">Il tuo banco. Ogni pezzo sale di livello in gara. Su <b>L3</b> e <b>L4</b> puoi montare la variante <span style="color:var(--amber)">esp</span> (piu' forte, costa di piu'), scegliendole separatamente. A <b>L4</b> porti al massimo <b>4 pezzi su 6</b>.</p>
+      <div class="limitbar"><div class="lt">Pezzi abilitati a L4</div><div class="lc" id="l4count">0 / 4</div></div>
+      <div id="pieces"></div>
+    </section>
+    <section class="sec" id="sec-pilota">
+      <p class="catnote">Porti <b>6 piloti</b>. A inizio gara ne peschi <b>1 a caso</b> tra questi sei &mdash; come nella Classica: lo vedi solo tu e lo tieni nascosto agli avversari.</p>
+      <div class="pilcount" id="pilcount"><span class="pl">Piloti in squadra</span><span class="pn">0 / 6</span></div>
+      <div id="drivers"></div>
+    </section>
+  </main>
+</div>
+<div class="foot"><div class="footrow">
+  <div class="summary"><b id="sumTot">0</b> / 135 carte &middot; <span id="sumPil">nessun pilota</span></div>
+  <button class="btn go" id="save" disabled>SALVA DECK</button>
+</div></div>
+
+<script>
+const DATA = {"pool": {"ingara": [{"n": "Oggi devi vincere", "lvl": 1, "stat": "vel", "val": 2, "kind": "bonus"}, {"n": "Corri Fooorrreeeesstttttt!!!!", "lvl": 1, "stat": "vel", "val": 2, "kind": "bonus"}, {"n": "Monti un'espansione racing", "lvl": 1, "stat": "vel", "val": 2, "kind": "bonus"}, {"n": "Un colpo di fortuna con il turbo", "lvl": 1, "stat": "vel", "val": 2, "kind": "bonus"}, {"n": "Doppio caffe stamattina", "lvl": 1, "stat": "vel", "val": 2, "kind": "bonus"}, {"n": "Il vento è a favore", "lvl": 1, "stat": "vel", "val": 2, "kind": "bonus"}, {"n": "Veloce come il vento", "lvl": 1, "stat": "vel", "val": 1, "kind": "bonus"}, {"n": "Finalmente il giusto cambio", "lvl": 1, "stat": "vel", "val": 1, "kind": "bonus"}, {"n": "Hai messo benzina racing: boost temporaneo!", "lvl": 1, "stat": "vel", "val": 1, "kind": "bonus"}, {"n": "Il meccanico ti sistema la centralina: +1", "lvl": 1, "stat": "vel", "val": 1, "kind": "bonus"}, {"n": "Senti l'adrenalina salire: spingi di più!!!", "lvl": 1, "stat": "vel", "val": 1, "kind": "bonus"}, {"n": "L'ora del Energy drink", "lvl": 1, "stat": "vel", "val": 1, "kind": "bonus"}, {"n": "Hai montato un nuovo filtro aria", "lvl": 1, "stat": "vel", "val": 1, "kind": "bonus"}, {"n": "La marmitta si allenta", "lvl": 1, "stat": "vel", "val": -1, "kind": "malus"}, {"n": "Una curva mal presa ti rallenta", "lvl": 1, "stat": "vel", "val": -1, "kind": "malus"}, {"n": "Benzina Sporca", "lvl": 1, "stat": "vel", "val": -1, "kind": "malus"}, {"n": "Si allenta un bullone", "lvl": 1, "stat": "vel", "val": -1, "kind": "malus"}, {"n": "Le gomme slittano", "lvl": 1, "stat": "vel", "val": -1, "kind": "malus"}, {"n": "Problemi al cambio", "lvl": 1, "stat": "vel", "val": -1, "kind": "malus"}, {"n": "Perdi pressione nei pneumatici", "lvl": 1, "stat": "vel", "val": -2, "kind": "malus"}, {"n": "Frenata d'emergenza", "lvl": 1, "stat": "vel", "val": -2, "kind": "malus"}, {"n": "Gomma forata", "lvl": 1, "stat": "vel", "val": -2, "kind": "malus"}, {"n": "Carburatore ingolfato", "lvl": 1, "stat": "vel", "val": -2, "kind": "malus"}, {"n": "Ribassamento perfetto", "lvl": 1, "stat": "ctrl", "val": 2, "kind": "bonus"}, {"n": "Installato il nuovo volante", "lvl": 1, "stat": "ctrl", "val": 2, "kind": "bonus"}, {"n": "Spettacolo il nuovo alettone", "lvl": 1, "stat": "ctrl", "val": 2, "kind": "bonus"}, {"n": "Con questo nuovo cambio si vola", "lvl": 1, "stat": "ctrl", "val": 2, "kind": "bonus"}, {"n": "Ti prendooooo!!!!", "lvl": 1, "stat": "ctrl", "val": 1, "kind": "bonus"}, {"n": "Hai istallato le nuove sospensioni", "lvl": 1, "stat": "ctrl", "val": 1, "kind": "bonus"}, {"n": "Il nuovo alettone fa il suo dovere", "lvl": 1, "stat": "ctrl", "val": 1, "kind": "bonus"}, {"n": "Spettacolo le nuove minigonne", "lvl": 1, "stat": "ctrl", "val": 1, "kind": "bonus"}, {"n": "Barra antirollio nuova", "lvl": 1, "stat": "ctrl", "val": 1, "kind": "bonus"}, {"n": "Freni rispondono male", "lvl": 1, "stat": "ctrl", "val": -1, "kind": "malus"}, {"n": "Alettone danneggiato", "lvl": 1, "stat": "ctrl", "val": -1, "kind": "malus"}, {"n": "Ti prendooooo!!!!", "lvl": 1, "stat": "ctrl", "val": -1, "kind": "malus"}, {"n": "Olio vecchi nel motore", "lvl": 1, "stat": "ctrl", "val": -1, "kind": "malus"}, {"n": "Olio vecchio nei freni", "lvl": 1, "stat": "ctrl", "val": -1, "kind": "malus"}, {"n": "Ammortizzatore scarico", "lvl": 1, "stat": "ctrl", "val": -2, "kind": "malus"}, {"n": "Il motore non raffredda bene", "lvl": 1, "stat": "ctrl", "val": -2, "kind": "malus"}, {"n": "Marmitta inceppata", "lvl": 1, "stat": "ctrl", "val": -2, "kind": "malus"}, {"n": "Sterzo allentato", "lvl": 1, "stat": "ctrl", "val": -2, "kind": "malus"}, {"n": "Servosterzo in tilt", "lvl": 1, "stat": "ctrl", "val": -2, "kind": "malus"}, {"n": "Sospensioni a pezzi", "lvl": 1, "stat": "ctrl", "val": -2, "kind": "malus"}, {"n": "Convergenza sballata", "lvl": 1, "stat": "ctrl", "val": -1, "kind": "malus"}, {"n": "Bel colpo di fortuna", "lvl": 1, "stat": "partenza", "val": 2, "kind": "bonus"}, {"n": "Il sonno aiuta", "lvl": 1, "stat": "partenza", "val": 2, "kind": "bonus"}, {"n": "Brucia le gomme", "lvl": 1, "stat": "partenza", "val": 1, "kind": "bonus"}, {"n": "Brucia le gomme", "lvl": 1, "stat": "partenza", "val": 1, "kind": "bonus"}, {"n": "Buono il caffè stamattina", "lvl": 1, "stat": "partenza", "val": 1, "kind": "bonus"}, {"n": "Non è la tua giornata", "lvl": 1, "stat": "partenza", "val": -2, "kind": "malus"}, {"n": "Brutti incubi", "lvl": 1, "stat": "partenza", "val": -2, "kind": "malus"}, {"n": "Hai messo gli occhiali sbagliati", "lvl": 1, "stat": "partenza", "val": -1, "kind": "malus"}, {"n": "Oggi va cosi…", "lvl": 1, "stat": "partenza", "val": -1, "kind": "malus"}, {"n": "Falsa partenza", "lvl": 1, "stat": "partenza", "val": -1, "kind": "malus"}, {"n": "Turbo a pieni giri", "lvl": 2, "stat": "vel", "val": 3, "kind": "bonus"}, {"n": "Iniezione racing", "lvl": 2, "stat": "vel", "val": 3, "kind": "bonus"}, {"n": "Collettori liberi", "lvl": 2, "stat": "vel", "val": 3, "kind": "bonus"}, {"n": "Sgommata d'autore", "lvl": 2, "stat": "vel", "val": 3, "kind": "bonus"}, {"n": "Cambiata fulminea", "lvl": 2, "stat": "vel", "val": 3, "kind": "bonus"}, {"n": "Scia sfruttata bene", "lvl": 2, "stat": "vel", "val": 3, "kind": "bonus"}, {"n": "Gomma sgonfia", "lvl": 2, "stat": "vel", "val": -3, "kind": "malus"}, {"n": "Bullone allentato", "lvl": 2, "stat": "vel", "val": -3, "kind": "malus"}, {"n": "Frizione che pattina", "lvl": 2, "stat": "vel", "val": -3, "kind": "malus"}, {"n": "Cinghia consumata", "lvl": 2, "stat": "vel", "val": -3, "kind": "malus"}, {"n": "Turbo che perde pressione", "lvl": 2, "stat": "vel", "val": -3, "kind": "malus"}, {"n": "Filtro intasato", "lvl": 2, "stat": "vel", "val": -3, "kind": "malus"}, {"n": "Assetto azzeccato", "lvl": 2, "stat": "ctrl", "val": 2, "kind": "bonus"}, {"n": "Volante preciso", "lvl": 2, "stat": "ctrl", "val": 2, "kind": "bonus"}, {"n": "Gomme in temperatura", "lvl": 2, "stat": "ctrl", "val": 2, "kind": "bonus"}, {"n": "Differenziale a punto", "lvl": 2, "stat": "ctrl", "val": 2, "kind": "bonus"}, {"n": "Sterzo molle", "lvl": 2, "stat": "ctrl", "val": -2, "kind": "malus"}, {"n": "Gomme fredde", "lvl": 2, "stat": "ctrl", "val": -2, "kind": "malus"}, {"n": "Assetto sfasato", "lvl": 2, "stat": "ctrl", "val": -2, "kind": "malus"}, {"n": "Sospensione molle", "lvl": 2, "stat": "ctrl", "val": -2, "kind": "malus"}, {"n": "Reazione fulminea al verde", "lvl": 2, "stat": "partenza", "val": 3, "kind": "bonus"}, {"n": "Frizione perfetta al via", "lvl": 2, "stat": "partenza", "val": 3, "kind": "bonus"}, {"n": "Parti in ritardo", "lvl": 2, "stat": "partenza", "val": -3, "kind": "malus"}, {"n": "Ingolfi al semaforo", "lvl": 2, "stat": "partenza", "val": -3, "kind": "malus"}, {"n": "Mappa motore aggressiva", "lvl": 3, "stat": "vel", "val": 5, "kind": "bonus"}, {"n": "Aspirazione diretta", "lvl": 3, "stat": "vel", "val": 5, "kind": "bonus"}, {"n": "Antilag attivato", "lvl": 3, "stat": "vel", "val": 5, "kind": "bonus"}, {"n": "Sorpasso da manuale", "lvl": 3, "stat": "vel", "val": 5, "kind": "bonus"}, {"n": "Pista libera davanti", "lvl": 3, "stat": "vel", "val": 5, "kind": "bonus"}, {"n": "Doppia frizione che canta", "lvl": 3, "stat": "vel", "val": 5, "kind": "bonus"}, {"n": "Surriscaldamento motore", "lvl": 3, "stat": "vel", "val": -5, "kind": "malus"}, {"n": "Olio sull'asfalto", "lvl": 3, "stat": "vel", "val": -5, "kind": "malus"}, {"n": "Iniettore intasato", "lvl": 3, "stat": "vel", "val": -5, "kind": "malus"}, {"n": "Sospensione cedevole", "lvl": 3, "stat": "vel", "val": -5, "kind": "malus"}, {"n": "Foratura improvvisa", "lvl": 3, "stat": "vel", "val": -5, "kind": "malus"}, {"n": "Cambio incrodato", "lvl": 3, "stat": "vel", "val": -5, "kind": "malus"}, {"n": "Setup da pista", "lvl": 3, "stat": "ctrl", "val": 4, "kind": "bonus"}, {"n": "Sterzo diretto", "lvl": 3, "stat": "ctrl", "val": 4, "kind": "bonus"}, {"n": "Aderenza perfetta", "lvl": 3, "stat": "ctrl", "val": 4, "kind": "bonus"}, {"n": "Alettone regolato", "lvl": 3, "stat": "ctrl", "val": 4, "kind": "bonus"}, {"n": "Sottosterzo improvviso", "lvl": 3, "stat": "ctrl", "val": -4, "kind": "malus"}, {"n": "Sospensione rotta", "lvl": 3, "stat": "ctrl", "val": -4, "kind": "malus"}, {"n": "Asfalto viscido", "lvl": 3, "stat": "ctrl", "val": -4, "kind": "malus"}, {"n": "Retrotreno ballerino", "lvl": 3, "stat": "ctrl", "val": -4, "kind": "malus"}, {"n": "Scatto da dragster", "lvl": 3, "stat": "partenza", "val": 5, "kind": "bonus"}, {"n": "Stacco di frizione chirurgico", "lvl": 3, "stat": "partenza", "val": 5, "kind": "bonus"}, {"n": "Spegni al semaforo", "lvl": 3, "stat": "partenza", "val": -5, "kind": "malus"}, {"n": "Ruote che fumano a vuoto", "lvl": 3, "stat": "partenza", "val": -5, "kind": "malus"}, {"n": "Motore portato al limite", "lvl": 4, "stat": "vel", "val": 7, "kind": "bonus"}, {"n": "Big turbo che spinge", "lvl": 4, "stat": "vel", "val": 7, "kind": "bonus"}, {"n": "Centralina sbloccata", "lvl": 4, "stat": "vel", "val": 7, "kind": "bonus"}, {"n": "Rettilineo divorato", "lvl": 4, "stat": "vel", "val": 7, "kind": "bonus"}, {"n": "Tutto il cavallaggio a terra", "lvl": 4, "stat": "vel", "val": 7, "kind": "bonus"}, {"n": "Pieno carico in spinta", "lvl": 4, "stat": "vel", "val": 7, "kind": "bonus"}, {"n": "Motore fuso a metà gara", "lvl": 4, "stat": "vel", "val": -7, "kind": "malus"}, {"n": "Albero a camme spezzato", "lvl": 4, "stat": "vel", "val": -7, "kind": "malus"}, {"n": "Trasmissione distrutta", "lvl": 4, "stat": "vel", "val": -7, "kind": "malus"}, {"n": "Detonazione in camera", "lvl": 4, "stat": "vel", "val": -7, "kind": "malus"}, {"n": "Freno motore bloccato", "lvl": 4, "stat": "vel", "val": -7, "kind": "malus"}, {"n": "Cinghia esplosa", "lvl": 4, "stat": "vel", "val": -7, "kind": "malus"}, {"n": "Aerodinamica da formula", "lvl": 4, "stat": "ctrl", "val": 6, "kind": "bonus"}, {"n": "Grip totale sull'asfalto", "lvl": 4, "stat": "ctrl", "val": 6, "kind": "bonus"}, {"n": "Bilanciamento perfetto", "lvl": 4, "stat": "ctrl", "val": 6, "kind": "bonus"}, {"n": "Downforce massima", "lvl": 4, "stat": "ctrl", "val": 6, "kind": "bonus"}, {"n": "Aderenza persa del tutto", "lvl": 4, "stat": "ctrl", "val": -6, "kind": "malus"}, {"n": "Testacoda sfiorato", "lvl": 4, "stat": "ctrl", "val": -6, "kind": "malus"}, {"n": "Sbandata in rettilineo", "lvl": 4, "stat": "ctrl", "val": -6, "kind": "malus"}, {"n": "Avantreno che scappa", "lvl": 4, "stat": "ctrl", "val": -6, "kind": "malus"}, {"n": "Holeshot perfetto", "lvl": 4, "stat": "partenza", "val": 7, "kind": "bonus"}, {"n": "Partenza da campionato", "lvl": 4, "stat": "partenza", "val": 7, "kind": "bonus"}, {"n": "Cali il motore al via", "lvl": 4, "stat": "partenza", "val": -7, "kind": "malus"}, {"n": "Frizione bruciata in partenza", "lvl": 4, "stat": "partenza", "val": -7, "kind": "malus"}], "difesa": [{"n": "Riflessi felini", "scope": "ingara"}, {"n": "Schivata all'ultimo", "scope": "ingara"}, {"n": "Sangue freddo", "scope": "ingara"}, {"n": "Lo eviti in un lampo", "scope": "ingara"}, {"n": "Colpo di reni", "scope": "ingara"}, {"n": "Scarto secco", "scope": "ingara"}, {"n": "Sterzata provvidenziale", "scope": "ingara"}, {"n": "Controsterzo da maestro", "scope": "ingara"}, {"n": "Nervi d'acciaio", "scope": "ingara"}, {"n": "Spalle coperte", "scope": "pregara"}, {"n": "Soffiata in anticipo", "scope": "pregara"}, {"n": "Niente ti scalfisce", "scope": "pregara"}, {"n": "Sempre un passo avanti", "scope": "pregara"}, {"n": "Talpa in officina", "scope": "pregara"}, {"n": "Coperto su tutto", "scope": "pregara"}, {"n": "Sesto senso", "scope": "both"}, {"n": "Scudo totale", "scope": "both"}], "polizia": [{"n": "Pattuglia dietro la curva", "size": 4}, {"n": "Controllo lampo", "size": 4}, {"n": "Gazzella in agguato", "size": 4}, {"n": "Lampeggianti all'improvviso", "size": 4}, {"n": "Soffiata alle volanti", "size": 4}, {"n": "Doppia volante di traverso", "size": 6}, {"n": "Reparto mobile schierato", "size": 6}, {"n": "La strada si chiude", "size": 6}], "pregara": [{"n": "Bravo, aiuti il prossimo", "eff": "po", "val": 1}, {"n": "Quando meno se lo aspettano", "eff": "po", "val": 2}, {"n": "Mi sembra giusto cosi", "eff": "po", "val": 2}, {"n": "Beccato", "eff": "po", "val": -1}, {"n": "Un piccolo sgarro, ti costa caro", "eff": "po", "val": -1}, {"n": "Non puoi andare avanti sempre così", "eff": "po", "val": -2}, {"n": "Arriva bonifica dallo zio del Molise", "eff": "money", "val": 250}, {"n": "Ieri sera hai vinto a Poker", "eff": "money", "val": 500}, {"n": "Il tuo cane vince il primo premio", "eff": "money", "val": 500}, {"n": "Arrivano le tasse arretrate", "eff": "money", "val": -250}, {"n": "Arriva la multa per eccesso velocità", "eff": "money", "val": -500}, {"n": "I debiti si pagano", "eff": "money", "val": -500}, {"n": "Anche gli altri puntano su di te", "eff": "betUp", "val": 2}, {"n": "Il broker ti fa un regalo", "eff": "betUp", "val": 2}, {"n": "La quota cala all'ultimo", "eff": "betDown", "val": 0.5}, {"n": "Il broker ti fa un regalo di compleanno", "eff": "quota", "val": 1}, {"n": "Il broker sbaglia a segnare la quota", "eff": "quota", "val": 0.5}, {"n": "Quota ricalcolata", "eff": "quota", "val": -1}, {"n": "Stai antipatico al broker", "eff": "quota", "val": -0.5}, {"n": "Il capo officina ti deve un debito", "eff": "discount", "val": 0.5}, {"n": "Il figlio del capo officina ti salda il debito", "eff": "discount", "val": 0.5}, {"n": "Il meccanico ti fa un favore", "eff": "discount", "val": 0.5}, {"n": "Gara lampo", "eff": "sprint", "val": 28}, {"n": "Hai da fare stasera", "eff": "sprint", "val": 34}]}, "pieces": {"motore": {"label": "Motore", "base": [2, 3, 5, 6, 8], "prezzo": [0, 800, 1600, 2100, 3200], "esp": {"3": [7, 2650], "4": [9, 3900]}}, "cambio": {"label": "Cambio", "base": [1, 2, 4, 6, 7], "prezzo": [0, 500, 1200, 2100, 2600], "esp": {"3": [7, 2600], "4": [8, 3250]}}, "sterzo": {"label": "Sterzo", "base": [1, 3, 5, 7, 8], "prezzo": [0, 800, 1600, 2600, 3200], "esp": {"3": [8, 3200], "4": [9, 3900]}}, "assetto": {"label": "Assetto", "base": [1, 2, 4, 5, 7], "prezzo": [0, 500, 1200, 1600, 2600], "esp": {"3": [6, 2100], "4": [8, 3250]}}, "peso": {"label": "Peso", "base": [-6, -5, -4, -3, -2], "prezzo": [0, 400, 800, 1200, 1700], "esp": {}}, "nos": {"label": "NOS", "base": [0, 3, 5, 6, 8], "prezzo": [0, 600, 1200, 1600, 2400], "esp": {"3": [7, 2000], "4": [9, 2900]}}}, "piloti": [{"id":1,"nome":"Topho 'Grugno' Ragnox","gang":"Scimmo Syndik8","tipo":"Rettilineo","ab":"+1 Controllo nei Rettilinei"},{"id":2,"nome":"Lil' Arpa","gang":"Scimmo Syndik8","tipo":"Città","ab":"+1 Controllo in Città"},{"id":3,"nome":"Iri 'Rage Pulse'","gang":"Scimmo Syndik8","tipo":"Fortuna","ab":"1° tiro 2 o 4 → +2 movimento"},{"id":4,"nome":"Donaz 'Torque Don'","gang":"Kromag Kru","tipo":"Drift","ab":"+1 Controllo nei Drift"},{"id":5,"nome":"Lax 'Skid Prophet'","gang":"Kromag Kru","tipo":"NOS","ab":"NOS → +4 movimento extra"},{"id":6,"nome":"IZ 'Blazeflip'","gang":"Kromag Kru","tipo":"Fortuna","ab":"1° tiro 1 o 5 → +2 movimento"},{"id":7,"nome":"MOKAH 'Drip Boss'","gang":"Mo'ka Mafia","tipo":"Città","ab":"+1 Controllo in Città"},{"id":8,"nome":"Barb'ra 'Sharp Curlz'","gang":"Mo'ka Mafia","tipo":"Drift","ab":"+1 Controllo nei Drift"},{"id":9,"nome":"Cespik 'Clippaz'","gang":"Mo'ka Mafia","tipo":"Rettilineo","ab":"+1 Controllo nei Rettilinei"},{"id":10,"nome":"GEMI.X","gang":"Geminitech","tipo":"NOS","ab":"NOS → +4 movimento extra"},{"id":11,"nome":"Antym 'RAMMER'","gang":"Geminitech","tipo":"Fortuna","ab":"1° tiro 1 o 3 → +2 movimento"},{"id":12,"nome":"Hoi.H4nn","gang":"Geminitech","tipo":"Rettilineo","ab":"+1 Controllo nei Rettilinei"},{"id":13,"nome":"K0T0R 'Blind Thrill'","gang":"Kotor Void","tipo":"Città","ab":"+1 Controllo in Città"},{"id":14,"nome":"Lil' Yanna","gang":"Kotor Void","tipo":"Drift","ab":"+1 Controllo nei Drift"},{"id":15,"nome":"Scimmiz 'Echo Noiz'","gang":"Kotor Void","tipo":"NOS","ab":"NOS → +4 movimento extra"}]};
+const CAPS = {ingara:80, difesa:20, pregara:25, polizia:10};
+const CATLABEL = {ingara:'In gara', difesa:'Difesa', pregara:'Pre-gara', polizia:'Polizia'};
+const STATFULL = {vel:'Velocità', ctrl:'Controllo', partenza:'Partenza'};
+const state = {ingara:new Set(), difesa:new Set(), polizia:new Set(), pregara:new Set(), piloti:new Set(), espL3:new Set(), espL4:new Set(), l4:new Set()};
+const PILCAP = 6;
+const PIECE_KEYS = Object.keys(DATA.pieces);
+
+function descOf(cat,c){
+  if(cat==='ingara'){ return {label:(c.val>0?'+':'')+c.val+' '+STATFULL[c.stat], cls:c.kind==='bonus'?'bonus':'malus'}; }
+  if(cat==='difesa'){ const m={ingara:'Annulla In gara',pregara:'Annulla Pre-gara',both:'Annulla qualsiasi carta'}; return {label:m[c.scope]||'Annulla', cls:'def'}; }
+  if(cat==='polizia'){ return {label:c.size===4?'Blocco piccolo \u00b7 4 caselle':'Blocco medio \u00b7 6 caselle', cls:'pol'}; }
+  if(cat==='pregara'){ return pregaraDesc(c); }
+  return {label:'',cls:''};
+}
+function pregaraDesc(c){
+  const v=c.val;
+  switch(c.eff){
+    case 'po': return {label:'Onore '+(v>0?'+':'')+v, cls:v>0?'bonus':'malus'};
+    case 'money': return {label:'Denaro '+(v>0?'+\u20ac':'\u2212\u20ac')+Math.abs(v), cls:v>0?'bonus':'malus'};
+    case 'betUp': return {label:'Scommessa \u00d7'+v, cls:'prg'};
+    case 'betDown': return {label:'Scommessa \u00d7'+v, cls:'malus'};
+    case 'quota': return {label:'Quota '+(v>0?'+':'')+v, cls:v>0?'bonus':'malus'};
+    case 'discount': return {label:'Sconto \u221250%', cls:'prg'};
+    case 'sprint': return {label:'Gara lampo \u00b7 traguardo '+v, cls:'prg'};
+    default: return {label:c.eff, cls:'prg'};
+  }
+}
+function makeChip(cat,c){
+  const chip=document.createElement('div'); chip.className='chip'+(state[cat].has(c.n)?' on':''); chip.dataset.cat=cat; chip.dataset.n=c.n;
+  const d=descOf(cat,c);
+  chip.innerHTML='<span class="eff '+d.cls+'">'+d.label+'</span><span class="nm">'+c.n+'</span>';
+  chip.onclick=()=>toggle(cat,c.n,chip);
+  return chip;
+}
+
+function buildCats(){
+  const host = document.getElementById('cats'); host.innerHTML='';
+  [1,2,3,4].forEach(lv=> host.appendChild(ingaraGroup(lv, DATA.pool.ingara.filter(c=>c.lvl===lv))) );
+  host.appendChild(flatGroup('difesa','Difesa','annulli', DATA.pool.difesa));
+  host.appendChild(flatGroup('polizia','Polizia','blocco piccolo+medio', DATA.pool.polizia));
+  host.appendChild(flatGroup('pregara','Pre-gara','economia + gara lampo', DATA.pool.pregara));
+}
+function groupShell(cat,title,sub,count,startClosed){
+  const g=document.createElement('div'); g.className='grp'+(startClosed?' closed':''); g.dataset.cat=cat;
+  const head=document.createElement('div'); head.className='head';
+  head.innerHTML='<div class="gtitle">'+title+' <em>'+count+' \u00b7 '+sub+'</em></div><div style="display:flex;align-items:center"><span class="gcount" data-gc></span><span class="chev">\u25bc</span></div>';
+  head.onclick=()=>{ g.classList.toggle('closed'); };
+  g.appendChild(head);
+  const qa=document.createElement('div'); qa.className='qa';
+  qa.innerHTML='<button data-all>+ tutte</button><button class="clr" data-clr>svuota</button>';
+  g.appendChild(qa);
+  return {g,qa};
+}
+function wireQA(qa,cat,cards){
+  qa.querySelector('[data-all]').onclick=(e)=>{e.stopPropagation(); cards.forEach(c=>{ if(state[cat].size>=CAPS[cat])return; state[cat].add(c.n); }); syncChips(); refresh();};
+  qa.querySelector('[data-clr]').onclick=(e)=>{e.stopPropagation(); cards.forEach(c=>state[cat].delete(c.n)); syncChips(); refresh();};
+}
+function ingaraGroup(lvl, cards){
+  const {g,qa}=groupShell('ingara','L'+lvl, lvl===1?'base \u00b11/\u00b12':'scalate', cards.length, true);
+  const body=document.createElement('div'); body.className='body';
+  const stats=[['vel','Velocità'],['ctrl','Controllo'],['partenza','Partenza']];
+  stats.forEach(([sk,sl])=>{
+    [['bonus','+'],['malus','\u2212']].forEach(([kind,sign])=>{
+      const sub=cards.filter(c=>c.stat===sk && c.kind===kind); if(!sub.length)return;
+      const wrap=document.createElement('div'); wrap.className='sub closed';
+      const hd=document.createElement('div'); hd.className='subhead '+(kind==='bonus'?'bon':'mal');
+      hd.innerHTML='<span class="dot"></span><span class="sl">'+sl+' '+sign+'</span><span class="scount" data-sc></span><span class="schev">\u25bc</span>';
+      hd.onclick=()=>{ wrap.classList.toggle('closed'); };
+      wrap.appendChild(hd);
+      const sqa=document.createElement('div'); sqa.className='subqa';
+      sqa.innerHTML='<button data-all>+ tutte</button><button class="clr" data-clr>svuota</button>';
+      wrap.appendChild(sqa);
+      const cc=document.createElement('div'); cc.className='subchips';
+      sub.forEach(c=>cc.appendChild(makeChip('ingara',c)));
+      wrap.appendChild(cc); wireQA(sqa,'ingara',sub); body.appendChild(wrap);
+    });
+  });
+  g.appendChild(body); wireQA(qa,'ingara',cards); return g;
+}
+function flatGroup(cat,title,sub,cards){
+  const {g,qa}=groupShell(cat,title,sub,cards.length,true);
+  const body=document.createElement('div'); body.className='body wrap';
+  cards.forEach(c=>body.appendChild(makeChip(cat,c)));
+  g.appendChild(body); wireQA(qa,cat,cards); return g;
+}
+function toggle(cat,n,chip){
+  if(state[cat].has(n)){ state[cat].delete(n); }
+  else { if(state[cat].size>=CAPS[cat]){ flash(cat); return; } state[cat].add(n); }
+  chip.classList.toggle('on', state[cat].has(n));
+  refresh();
+}
+function syncChips(){ document.querySelectorAll('.chip[data-cat]').forEach(ch=>{ ch.classList.toggle('on', state[ch.dataset.cat].has(ch.dataset.n)); }); updateGroupCounts(); }
+function updateGroupCounts(){
+  document.querySelectorAll('.grp').forEach(g=>{
+    const chips=[...g.querySelectorAll('.chip')]; if(!chips.length)return;
+    const cat=chips[0].dataset.cat; const sel=chips.filter(c=>state[cat].has(c.dataset.n)).length;
+    const gc=g.querySelector('[data-gc]'); gc.textContent=sel+'/'+chips.length; gc.classList.toggle('zero',sel===0);
+  });
+  document.querySelectorAll('.sub').forEach(s=>{
+    const chips=[...s.querySelectorAll('.chip')]; if(!chips.length)return;
+    const cat=chips[0].dataset.cat; const sel=chips.filter(c=>state[cat].has(c.dataset.n)).length;
+    const sc=s.querySelector('[data-sc]'); if(sc){ sc.textContent=sel+'/'+chips.length; sc.classList.toggle('zero',sel===0); }
+  });
+}
+function flash(cat){ const g=document.querySelector('.g[data-cat="'+cat+'"]'); if(g){ g.animate([{transform:'translateX(0)'},{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'translateX(0)'}],{duration:200}); } }
+
+function buildPieces(){
+  const host=document.getElementById('pieces'); host.innerHTML='';
+  PIECE_KEYS.forEach(k=>{
+    const p=DATA.pieces[k]; const hasEsp=Object.keys(p.esp).length>0;
+    const el=document.createElement('div'); el.className='piece'; el.dataset.k=k;
+    const espRow = hasEsp
+      ? '<div class="sw" data-esp="3"><div class="box"></div><span>esp L3</span></div><div class="sw" data-esp="4"><div class="box"></div><span>esp L4</span></div>'
+      : '<div class="sw dis"><div class="box"></div><span>nessuna esp</span></div>';
+    el.innerHTML='<div class="ph"><div class="pname">'+p.label+'</div></div>'+
+      '<div class="ladder">'+renderLadder(k)+'</div>'+
+      '<div class="toggles">'+espRow+'<div class="sw" data-l4><div class="box"></div><span>abilita L4</span></div></div>';
+    el.querySelectorAll('[data-esp]').forEach(sw=>{
+      sw.addEventListener('click',()=>{ const set=(+sw.dataset.esp===3)?state.espL3:state.espL4; if(set.has(k))set.delete(k); else set.add(k); renderPieceState(k); refresh(); });
+    });
+    el.querySelector('[data-l4]').addEventListener('click',()=>{
+      if(state.l4.has(k)){ state.l4.delete(k); }
+      else { if(state.l4.size>=4){ return; } state.l4.add(k); }
+      renderPieceState(k); refresh();
+    });
+    host.appendChild(el); renderPieceState(k);
+  });
+}
+function renderLadder(k){
+  const p=DATA.pieces[k]; let h=''; const fmt=v=>(v>0?'+':'')+v;
+  for(let L=1;L<=4;L++){
+    let useEsp=false;
+    if(L===3) useEsp = state.espL3.has(k) && p.esp[3];
+    if(L===4) useEsp = state.espL4.has(k) && p.esp[4];
+    const v = useEsp ? p.esp[L][0] : p.base[L];
+    const pr = useEsp ? p.esp[L][1] : p.prezzo[L];
+    const lock = (L===4 && !state.l4.has(k));
+    h+='<div class="rung'+(useEsp?' esp':'')+(lock?' lock':'')+'"><div class="lv">L'+L+'</div><div class="val">'+(lock?'\u2014':fmt(v))+'</div><div class="pr">'+(lock?'L3 max':'\u20ac'+pr)+'</div></div>';
+  }
+  return h;
+}
+function renderPieceState(k){
+  const el=document.querySelector('.piece[data-k="'+k+'"]'); if(!el)return;
+  el.querySelector('.ladder').innerHTML=renderLadder(k);
+  const e3=el.querySelector('[data-esp="3"]'); if(e3) e3.classList.toggle('on',state.espL3.has(k));
+  const e4=el.querySelector('[data-esp="4"]'); if(e4){ e4.classList.toggle('on',state.espL4.has(k)); e4.classList.toggle('dis', !state.l4.has(k)); }
+  const l4=el.querySelector('[data-l4]'); l4.classList.toggle('on',state.l4.has(k)); l4.classList.toggle('l4on',state.l4.has(k));
+  l4.classList.toggle('dis', state.l4.size>=4 && !state.l4.has(k));
+}
+
+function buildDrivers(){
+  const host=document.getElementById('drivers'); host.innerHTML='';
+  const gangs=[...new Set(DATA.piloti.map(p=>p.gang))];
+  gangs.forEach(g=>{
+    const div=document.createElement('div'); div.className='gangdiv'; div.innerHTML='<span>'+g+'</span>'; host.appendChild(div);
+    DATA.piloti.filter(p=>p.gang===g).forEach(d=>{
+      const el=document.createElement('div'); el.className='driver'; el.dataset.id=d.id;
+      const initials=d.nome.replace(/[^A-Za-z ]/g,'').trim().split(' ').map(w=>w[0]).slice(0,2).join('');
+      el.innerHTML='<div class="dav">'+initials+'</div><div class="dinfo"><div class="dname">'+d.nome+'</div><div class="dab">'+d.ab+'</div></div><div class="dtype">'+d.tipo.toUpperCase()+'</div>';
+      el.onclick=()=>togglePilot(d.id);
+      host.appendChild(el);
+    });
+  });
+  syncDrivers();
+}
+function togglePilot(id){
+  if(state.piloti.has(id)) state.piloti.delete(id);
+  else { if(state.piloti.size>=PILCAP) return; state.piloti.add(id); }
+  syncDrivers(); refresh();
+}
+function syncDrivers(){
+  const full=state.piloti.size>=PILCAP;
+  document.querySelectorAll('.driver').forEach(el=>{
+    const on=state.piloti.has(+el.dataset.id);
+    el.classList.toggle('on',on);
+    el.classList.toggle('dim',!on && full);
+  });
+}
+
+function buildGauges(){
+  const host=document.getElementById('gauges'); host.innerHTML='';
+  Object.keys(CAPS).forEach(cat=>{
+    const g=document.createElement('div'); g.className='g'; g.dataset.cat=cat;
+    g.innerHTML='<div class="lab"><span>'+CATLABEL[cat]+'</span></div><div class="num"><span data-n>0</span><em>/'+CAPS[cat]+'</em></div><div class="bar"><i data-bar></i></div>';
+    host.appendChild(g);
+  });
+}
+function refresh(){
+  let tot=0;
+  Object.keys(CAPS).forEach(cat=>{
+    const n=state[cat].size, cap=CAPS[cat]; tot+=n;
+    const g=document.querySelector('.g[data-cat="'+cat+'"]');
+    g.querySelector('[data-n]').textContent=n;
+    g.querySelector('[data-bar]').style.width=Math.min(100,n/cap*100)+'%';
+    g.classList.toggle('full', n===cap); g.classList.toggle('over', n>cap);
+  });
+  updateGroupCounts();
+  document.getElementById('l4count').textContent=state.l4.size+' / 4';
+  document.getElementById('l4count').classList.toggle('full',state.l4.size===4);
+  document.getElementById('t-deck').textContent=tot+' carte';
+  const espN=state.espL3.size+state.espL4.size; document.getElementById('t-off').textContent=espN?espN+' esp':'base';
+  const np=state.piloti.size;
+  document.getElementById('t-pil').textContent=np+' / '+PILCAP;
+  document.getElementById('sumTot').textContent=tot;
+  document.getElementById('sumPil').textContent=np+' '+(np===1?'pilota':'piloti');
+  const pc=document.getElementById('pilcount'); if(pc){ const pn=pc.querySelector('.pn'); pn.textContent=np+' / '+PILCAP; pn.classList.toggle('full',np===PILCAP); }
+  const noOver=Object.keys(CAPS).every(c=>state[c].size<=CAPS[c]);
+  const pilOk = np===PILCAP;
+  const ready = state.ingara.size===CAPS.ingara && noOver && pilOk;
+  const pill=document.getElementById('pill');
+  pill.classList.toggle('ready',!!ready);
+  pill.textContent = ready?'DECK PRONTO \u2713' : (state.ingara.size<CAPS.ingara? ('IN GARA '+state.ingara.size+'/80') : (!pilOk?('PILOTI '+np+'/'+PILCAP):'DECK INCOMPLETO'));
+  const sv=document.getElementById('save');
+  sv.disabled=!ready;
+  if(sv.dataset.go==='1'){ sv.dataset.go=''; sv.textContent='SALVA DECK'; }   // deck modificato dopo il salvataggio -> va risalvato
+}
+
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+  const id=t.dataset.tab;
+  document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on', s.id==='sec-'+id));
+  window.scrollTo({top:0});
+});
+document.getElementById('save').onclick=()=>{
+  const btn=document.getElementById('save');
+  if(btn.dataset.go==='1'){ location.href='/b'; return; }   // gia' salvato -> vai a correre (Modalita B)
+  const deck={ingara:[...state.ingara],difesa:[...state.difesa],pregara:[...state.pregara],polizia:[...state.polizia],piloti:[...state.piloti],esp:{L3:[...state.espL3],L4:[...state.espL4]},l4:[...state.l4]};
+  try{ localStorage.setItem('2fast4u_deckB', JSON.stringify(deck)); }catch(e){}   // la play-page lo rilegge con questa chiave
+  document.getElementById('pill').textContent='DECK SALVATO \u2713';
+  btn.textContent='VAI A CORRERE \u2192'; btn.dataset.go='1';
+  console.log('DECK',deck);
+};
+
+// pre-carico i blocchi obbligatori che hanno meno carte del limite
+['difesa','polizia','pregara'].forEach(cat=>{ if(DATA.pool[cat].length<=CAPS[cat]){ DATA.pool[cat].forEach(c=>state[cat].add(c.n)); } });
+buildGauges(); buildCats(); buildPieces(); buildDrivers(); refresh();
+</script>
+</body>
+</html>

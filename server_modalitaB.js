@@ -216,7 +216,7 @@ function defaultDeckCards(){
 }
 const DEFAULT_OFF = { espL3:[], espL4:[], l4:['motore','sterzo','assetto','nos'] };   // free player: niente esp, 4 pezzi abilitati a L4
 const DEFAULT_PILOT = 1;
-function makeDefaultCfg(){ return { ingara:defaultDeckCards().filter(c=>c.cat==='ingara'), difesa:[], pregara:[], polizia:[], pilot:DEFAULT_PILOT, esp:{L3:[],L4:[]}, l4:DEFAULT_OFF.l4 }; }
+function makeDefaultCfg(){ return { ingara:defaultDeckCards().filter(c=>c.cat==='ingara'), difesa:[], pregara:[], polizia:[], piloti:[1,2,3,4,5,6], esp:{L3:[],L4:[]}, l4:DEFAULT_OFF.l4 }; }
 
 /* applica la config di un giocatore (mazzo + officina personale + pilota) all'avvio partita */
 function applyPlayerConfig(p){
@@ -232,8 +232,11 @@ function applyPlayerConfig(p){
   p.deck=shuffle(cards); p.discard=[];
   const off=(cfg&&cfg.esp)?{espL3:cfg.esp.L3||[],espL4:cfg.esp.L4||[],l4:cfg.l4||DEFAULT_OFF.l4}:DEFAULT_OFF;
   p.espL3=new Set(off.espL3); p.espL4=new Set(off.espL4); p.l4set=new Set(off.l4);
-  const pid=(cfg&&cfg.pilot)||DEFAULT_PILOT;
-  p.pilot=DB.piloti.find(q=>q.id===pid)||DB.piloti[0];
+  // ROSTER piloti personale: i 6 scelti nel deck-builder (cfg.piloti). Resta compatibile col vecchio cfg.pilot singolo.
+  let roster=(cfg&&Array.isArray(cfg.piloti)&&cfg.piloti.length)?cfg.piloti.slice():((cfg&&cfg.pilot!=null)?[cfg.pilot]:[]);
+  roster=roster.map(id=>+id).filter(id=>DB.piloti.some(q=>q.id===id));
+  if(!roster.length) roster=[1,2,3,4,5,6].filter(id=>DB.piloti.some(q=>q.id===id));   // default (bot / nessun mazzo): i 6 base
+  p.pilotRoster=roster;   // il pilota vero si pesca a inizio gara (fase reveal) tra questi
 }
 
 /* valore/prezzo del pezzo TENENDO CONTO della variante esp personale del giocatore */
@@ -308,14 +311,16 @@ function startGame(room){
     p.money=4000; p.po=0;
     p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0};
     p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]};
-    p.lastRank=idx; p.prevRank=idx; p.hand=[]; p.drew=true; p.ready=true;
-    applyPlayerConfig(p);                                   // B: mazzo + officina + pilota PERSONALI
+    p.lastRank=idx; p.prevRank=idx; p.hand=[];
+    applyPlayerConfig(p);                                   // B: mazzo + officina + ROSTER piloti PERSONALI
+    p.pilot=null; p.drew=false; p.ready=false;              // il pilota si pesca ora (come la Classica)
+    p.pilotPool=shuffle([...(p.pilotRoster||[1])]);         // bacino PERSONALE: i suoi 6 (ognuno pesca dai propri)
   });
   G.players.forEach(p=>{ for(let k=0;k<3;k++){ const card=drawCardP(p,G); if(card) p.hand.push(card); } });   // pesca iniziale 3 dal PROPRIO mazzo
   G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.round=0; room.started=true; G.policeUnlocked=true; G.blocks=[]; G.pendPolice=[]; G.bossPending=null;
   G.gameLog=[]; G.gameSeq=0;
-  startRound(room);                                         // pilota gia' scelto: niente fase "pesca pilota", si parte dall'officina
+  G.phase='reveal';                                          // B: si pesca il pilota dal proprio roster, poi officina
 }
 function restartGame(room){
   const G=room.G;
@@ -339,8 +344,8 @@ function restartGame(room){
 function actDrawPilot(room,p){
   const G=room.G; if(G.phase!=='reveal') return 'Non in fase di pesca.';
   if(p.drew) return 'Hai già pescato il pilota.';
-  if(!G.pilotPool || !G.pilotPool.length) return 'Mazzo piloti esaurito.';
-  const pid=G.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true;
+  if(!p.pilotPool || !p.pilotPool.length) return 'Nessun pilota disponibile.';
+  const pid=p.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true;   // pesca tra i SUOI 6
   return null;
 }
 function actReady(room,p){
@@ -1034,7 +1039,7 @@ function buildView(room, player){
     const p=player;
     v.reveal={
       drawn:p.drew,
-      deckSize:(G.pilotPool?G.pilotPool.length:0),
+      deckSize:(p.pilotPool?p.pilotPool.length:0),
       pilot:p.drew?{ nome:p.pilot.nome, gang:p.pilot.gang, tipo:p.pilot.tipo, tipoLabel:(TIPO_LABEL[p.pilot.tipo]||(p.pilot.tipo==='fortuna'?'Fortuna':'NOS')), ab:p.pilot.ab, partenza:p.pilot.partenza }:null,
       roll:p.roll,
       startPos:G.diceOrder.indexOf(p.id)+1,
@@ -1206,7 +1211,7 @@ function botRace(room,bot){
 }
 function botAct(room){
   const G=room.G;
-  if(G.phase==='reveal'){ G.players.forEach(p=>{ if(p.isBot){ if(!p.drew && G.pilotPool && G.pilotPool.length){ const pid=G.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true; } p.ready=true; } }); if(G.players.every(p=>p.ready)) startRound(room); return; }
+  if(G.phase==='reveal'){ G.players.forEach(p=>{ if(p.isBot){ if(!p.drew && p.pilotPool && p.pilotPool.length){ const pid=p.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true; } p.ready=true; } }); if(G.players.every(p=>p.ready)) startRound(room); return; }
   if(G.phase==='prep'){ const b=curPrep(G); if(b.isBot) botPrep(room,b); return; }
   if(G.phase==='race'){ const b=activeRace(G); if(b.isBot) botRace(room,b); return; }
 }
