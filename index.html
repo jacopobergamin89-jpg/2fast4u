@@ -1689,6 +1689,34 @@ function champHTML(v){
   v.champ.forEach((p,i)=>{const pct=Math.min(100,p.po/50*100);h+=`<div class="champ-row"><span class="cr">${i+1}</span><span class="res-dot" style="background:${p.colorH};width:12px;height:12px"></span><span class="nm">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span><span class="bar"><i style="width:${pct}%"></i></span><span class="pov">${p.po}<small>/50</small></span></div>`;});
   return h;
 }
+let _voteTick=null;
+function stopVoteTick(){ if(_voteTick){ clearInterval(_voteTick); _voteTick=null; } }
+function startVoteTick(endTs,totalMs){ stopVoteTick(); const upd=()=>{ const s=document.getElementById('vote-secs'),f=document.getElementById('vote-fill'); if(!s){ stopVoteTick(); return; } const left=Math.max(0,endTs-Date.now()); s.textContent=Math.ceil(left/1000); if(f)f.style.width=(100*left/totalMs).toFixed(1)+'%'; if(left<=0) stopVoteTick(); }; upd(); _voteTick=setInterval(upd,200); }
+function castVote(c){ socket.emit('results:vote',{choice:c}); }
+function voteCardHTML(v){
+  const vt=v.vote; if(!vt) return '';
+  const F='font-family:var(--disp)';
+  const wrap=(head,body)=>`<div class="panel" style="margin-top:8px;border:1px solid #FFC91E66;background:linear-gradient(180deg,#241556,#160b34);box-shadow:0 0 20px #FFC91E22;overflow:hidden">`
+    +`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 13px;background:#FFC91E14;border-bottom:1px solid #FFC91E33;${F}"><div style="color:#FFC91E;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:13px">🗳️ ${head}</div><div style="color:#C7B9EF;font-size:10px">solo giocatori reali</div></div>`
+    +`<div style="padding:14px;${F}">${body}</div></div>`;
+  const bar=`<div style="height:7px;border-radius:4px;background:#ffffff14;overflow:hidden;margin:11px 0 3px"><div id="vote-fill" style="height:100%;width:100%;background:linear-gradient(90deg,#FFD86A,#FFB020)"></div></div><div style="text-align:right;color:#8A7BC0;font-size:10px;font-family:var(--mono)"><span id="vote-secs">20</span>s</div>`;
+  if(vt.stage==='voting'){
+    if(vt.eligible && !vt.youVoted)
+      return wrap('Voto segreto · bonus',`<div style="color:#fff;font-size:19px;font-weight:600;text-align:center;line-height:1.2">Aggiungere <span style="color:#FFC91E">${eur(vt.amount)}</span> al saldo di tutti?</div><div style="color:#8A7BC0;font-size:11px;text-align:center;margin-top:5px">bonus per livello · maggioranza vince</div>${bar}<div style="display:flex;gap:10px;margin-top:11px"><button onclick="castVote('si')" style="flex:1;padding:13px;border:0;border-radius:12px;background:linear-gradient(180deg,#3ddc84,#21a85a);color:#04210f;font-weight:700;font-size:17px;letter-spacing:1px;${F};cursor:pointer">SÌ</button><button onclick="castVote('no')" style="flex:1;padding:13px;border:1px solid #ffffff26;border-radius:12px;background:#ffffff10;color:#C7B9EF;font-weight:700;font-size:17px;letter-spacing:1px;${F};cursor:pointer">NO</button></div><div style="color:#8A7BC0;font-size:10.5px;text-align:center;margin-top:11px;line-height:1.5">Voti segreti · chi non vota = No<br>Se vince il Sì → video 30s e <b style="color:#C7B9EF">${eur(vt.amount)} a tutti</b></div>`);
+    if(vt.eligible && vt.youVoted)
+      return wrap('Voto registrato',`<div style="color:#fff;font-size:18px;font-weight:600;text-align:center">Hai votato ✓</div><div style="color:#8A7BC0;font-size:12px;text-align:center;margin-top:4px">in attesa degli altri giocatori…</div>${bar}`);
+    return wrap('Voto in corso',`<div style="color:#C7B9EF;text-align:center">Votazione tra i giocatori reali…</div>${bar}`);
+  }
+  if(vt.stage==='video')
+    return wrap('Ha vinto il SÌ',`<div style="border-radius:12px;overflow:hidden;border:1px solid #3a2566;background:#0b0518"><div style="display:flex;justify-content:space-between;padding:6px 11px;background:#00000033;font-size:9px;letter-spacing:1.2px;color:#8A7BC0">PUBBLICITÀ<span style="color:#FFC91E"><span id="vote-secs">30</span>s</span></div><div style="height:5px;background:#ffffff10"><div id="vote-fill" style="height:100%;width:100%;background:linear-gradient(90deg,#FFD86A,#FFB020)"></div></div><div style="height:104px;display:flex;align-items:center;justify-content:center;color:#C7B9EF;font-size:14px;background:repeating-linear-gradient(45deg,#ffffff05 0 12px,#ffffff0a 12px 24px)">📺 Video sponsor (placeholder 30s)</div></div><div style="color:#8A7BC0;font-size:11px;text-align:center;margin-top:10px">Alla fine: <b style="color:#C7B9EF">${eur(vt.amount)}</b> aggiunti al saldo di tutti</div>`);
+  if(vt.stage==='done'){
+    const t=vt.tally?` · ${vt.tally.si} Sì · ${vt.tally.no} No`:'';
+    if(vt.result==='si' && vt.credited)
+      return wrap('Bonus assegnato',`<div style="text-align:center;color:#3ddc84;font-size:17px;font-weight:600">✅ ${eur(vt.amount)} aggiunti al saldo di tutti!</div><div style="color:#8A7BC0;font-size:11px;text-align:center;margin-top:5px">voto${t}</div>`);
+    return wrap('Bonus rifiutato',`<div style="text-align:center;color:#C7B9EF;font-size:16px;font-weight:600">Bonus non assegnato</div><div style="color:#8A7BC0;font-size:11px;text-align:center;margin-top:5px">voto${t}</div>`);
+  }
+  return '';
+}
 function renderResults(v){
   show('s-results');topMeta('Round '+v.round);
   let h=`<div class="eyebrow">Traguardo · gara liv. ${v.raceLevel}</div><h1 class="title">Risultati gara</h1>`;
@@ -1704,12 +1732,14 @@ function renderResults(v){
     h+=`<div class="res-row${r.pos===1?' p1':''}"><div class="res-pos">${r.pos}</div><span class="res-dot" style="background:${r.colorH}"></span><div class="res-nm">${esc(r.name)}${r.id===v.you.id?' (tu)':''}${r.cell!=null?' <span class="res-cell">cas. '+r.cell+'</span>':''}</div><div class="res-rew">${r.po>0?'<span class="po">+'+r.po+' PO</span>':'<span style="color:var(--muted-2)">—</span>'}<div class="mn">+${eur(r.money)}</div>${bonus}${bet}</div></div>`;
   });
   if(v.raceRecap&&v.raceRecap.quota)h+=`<div style="text-align:center;color:var(--muted-2);font-size:12px;margin:8px 2px 2px">Quota d'ingresso: \u20ac${v.raceRecap.quota.toLocaleString('it-IT')} a testa \u00b7 pagata da tutti per correre</div>`;
+  h+=voteCardHTML(v);
   h+=trackInfoHTML(v);
   h+=raceRecapHTML(v);
   h+=`<div class="panel" style="margin-top:6px"><div class="panel-h">Classifica campionato — obiettivo 50</div>${champHTML(v)}</div>`;
   if(v.canNext)h+='<button class="btn btn-primary foot" onclick="socket.emit(\'results:next\')">Prossima gara</button>';
   else h+='<div class="spectate" style="padding:14px"><div class="stext">In attesa che l\'host avvii la prossima gara…</div></div>';
   document.getElementById('s-results').innerHTML=h;
+  if(v.vote&&v.vote.stage==='voting')startVoteTick(v.vote.endsAt,20000); else if(v.vote&&v.vote.stage==='video')startVoteTick(v.vote.videoEndsAt,30000); else stopVoteTick();
 }
 function raceRecapHTML(v){
   const rc=v.raceRecap; if(!rc)return '';
@@ -2029,7 +2059,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-06-25 · flag-traguardo';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-06-26 · scalate-v2';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 </body>
 </html>

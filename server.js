@@ -118,30 +118,54 @@ const C_POLIZIA = [
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function d6(){ return 1+Math.floor(Math.random()*6); }
 function ini(n){ return (n||'?')[0].toUpperCase(); }
-/* ===== CARTE SCALATE — entrano col livello pista (cumulative), formato [nome,eff,val,dur,target] ===== */
+/* ===== CARTE SCALATE — entrano col livello pista (cumulative), formato [nome,eff,val,dur,target,rarità]
+   Griglia comune/raro (magnitudo): Velocità+Partenza 3·4 / 5·6 / 7·8 ; Controllo 2·3 / 4·5 / 6·7 (L2/L3/L4).
+   Bonus = +val (self), Malus = −val (rival), speculari. 30 carte/livello, 90 totali.
+   rarità: 'comune' | 'raro'. (In Modalità A entrano tutte; per la Modalità B i 'raro' saranno espansione.) ===== */
 const C_SCALE_L2 = [
-  ["Turbo a pieni giri","vel",3,1,"self"],["Cambiata fulminea","vel",3,1,"self"],["Iniezione racing","vel",3,1,"self"],["Collettori liberi","vel",3,1,"self"],["Sgommata d'autore","vel",3,1,"self"],["Scia sfruttata bene","vel",3,1,"self"],["Sovrappressione turbo","vel",4,1,"self"],
-  ["Gomma sgonfia","vel",-2,1,"rival"],["Bullone allentato","vel",-2,1,"rival"],["Benzina sporca","vel",-2,1,"rival"],["Frizione che pattina","vel",-2,1,"rival"],["Cinghia consumata","vel",-2,1,"rival"],["Turbo che perde pressione","vel",-2,1,"rival"],["Gomma forata in curva","vel",-4,1,"rival"],["Distribuzione saltata","vel",-4,1,"rival"],
-  ["Assetto azzeccato","ctrl",1,1,"self"],["Volante preciso","ctrl",1,1,"self"],["Gomme in temperatura","ctrl",1,1,"self"],["Barra antirollio nuova","ctrl",1,1,"self"],["Differenziale autobloccante","ctrl",2,1,"self"],
-  ["Sterzo molle","ctrl",-1,1,"rival"],["Convergenza sballata","ctrl",-1,1,"rival"],["Ammortizzatore scarico","ctrl",-1,1,"rival"],["Gomme fredde","ctrl",-1,1,"rival"],["Assetto sfasato","ctrl",-2,1,"rival"],
-  ["Reazione fulminea al verde","partenza",2,0,"self"],["Frizione perfetta al via","partenza",2,0,"self"],["Parti in ritardo","partenza",-2,0,"rival"],["Ingolfi al semaforo","partenza",-2,0,"rival"],["Pattini in partenza","partenza",-2,0,"rival"],
+  // Velocità — Bonus (+3 comune ×6, +4 raro ×1)
+  ["Turbo a pieni giri","vel",3,1,"self","comune"],["Iniezione racing","vel",3,1,"self","comune"],["Collettori liberi","vel",3,1,"self","comune"],["Sgommata d'autore","vel",3,1,"self","comune"],["Cambiata fulminea","vel",3,1,"self","comune"],["Scia sfruttata bene","vel",3,1,"self","comune"],["Sovrappressione turbo","vel",4,1,"self","raro"],
+  // Velocità — Malus (−3 comune ×6, −4 raro ×1)
+  ["Gomma sgonfia","vel",-3,1,"rival","comune"],["Bullone allentato","vel",-3,1,"rival","comune"],["Frizione che pattina","vel",-3,1,"rival","comune"],["Cinghia consumata","vel",-3,1,"rival","comune"],["Turbo che perde pressione","vel",-3,1,"rival","comune"],["Filtro intasato","vel",-3,1,"rival","comune"],["Gomma forata in curva","vel",-4,1,"rival","raro"],
+  // Controllo — Bonus (+2 comune ×4, +3 raro ×1)
+  ["Assetto azzeccato","ctrl",2,1,"self","comune"],["Volante preciso","ctrl",2,1,"self","comune"],["Gomme in temperatura","ctrl",2,1,"self","comune"],["Differenziale a punto","ctrl",2,1,"self","comune"],["Differenziale autobloccante","ctrl",3,1,"self","raro"],
+  // Controllo — Malus (−2 comune ×4, −3 raro ×1)
+  ["Sterzo molle","ctrl",-2,1,"rival","comune"],["Gomme fredde","ctrl",-2,1,"rival","comune"],["Assetto sfasato","ctrl",-2,1,"rival","comune"],["Sospensione molle","ctrl",-2,1,"rival","comune"],["Geometrie sballate","ctrl",-3,1,"rival","raro"],
+  // Partenza — Bonus (+3 comune ×2, +4 raro ×1)
+  ["Reazione fulminea al verde","partenza",3,0,"self","comune"],["Frizione perfetta al via","partenza",3,0,"self","comune"],["Holeshot pulito","partenza",4,0,"self","raro"],
+  // Partenza — Malus (−3 comune ×2, −4 raro ×1)
+  ["Parti in ritardo","partenza",-3,0,"rival","comune"],["Ingolfi al semaforo","partenza",-3,0,"rival","comune"],["Spegni sulla griglia","partenza",-4,0,"rival","raro"],
 ];
 const C_SCALE_L3 = [
-  ["Mappa motore aggressiva","vel",5,1,"self"],["Doppia frizione che canta","vel",5,1,"self"],["Aspirazione diretta","vel",5,1,"self"],["Antilag attivato","vel",5,1,"self"],["Sorpasso da manuale","vel",5,1,"self"],["Pista libera davanti","vel",5,1,"self"],["Launch control perfetto","vel",6,1,"self"],
-  ["Cambio incrodato","vel",-5,1,"rival"],["Surriscaldamento motore","vel",-5,1,"rival"],["Olio sull'asfalto","vel",-5,1,"rival"],["Iniettore intasato","vel",-5,1,"rival"],["Sospensione cedevole","vel",-5,1,"rival"],["Foratura improvvisa","vel",-5,1,"rival"],["Pistone grippato","vel",-7,1,"rival"],["Turbina in avaria","vel",-7,1,"rival"],
-  ["Setup da pista","ctrl",2,1,"self"],["Sterzo diretto","ctrl",2,1,"self"],["Aderenza perfetta","ctrl",2,1,"self"],["Alettone regolato","ctrl",2,1,"self"],["Telaio rigido su misura","ctrl",3,1,"self"],
-  ["Sottosterzo improvviso","ctrl",-2,1,"rival"],["Servosterzo in tilt","ctrl",-2,1,"rival"],["Sospensione rotta","ctrl",-2,1,"rival"],["Asfalto viscido","ctrl",-2,1,"rival"],["Telaio storto","ctrl",-3,1,"rival"],
-  ["Scatto da dragster","partenza",3,0,"self"],["Stacco di frizione chirurgico","partenza",3,0,"self"],["Spegni al semaforo","partenza",-3,0,"rival"],["Ruote che fumano a vuoto","partenza",-3,0,"rival"],["Parti col freno a mano","partenza",-3,0,"rival"],
+  // Velocità — Bonus (+5 comune ×6, +6 raro ×1)
+  ["Mappa motore aggressiva","vel",5,1,"self","comune"],["Aspirazione diretta","vel",5,1,"self","comune"],["Antilag attivato","vel",5,1,"self","comune"],["Sorpasso da manuale","vel",5,1,"self","comune"],["Pista libera davanti","vel",5,1,"self","comune"],["Doppia frizione che canta","vel",5,1,"self","comune"],["Launch control perfetto","vel",6,1,"self","raro"],
+  // Velocità — Malus (−5 comune ×6, −6 raro ×1)
+  ["Surriscaldamento motore","vel",-5,1,"rival","comune"],["Olio sull'asfalto","vel",-5,1,"rival","comune"],["Iniettore intasato","vel",-5,1,"rival","comune"],["Sospensione cedevole","vel",-5,1,"rival","comune"],["Foratura improvvisa","vel",-5,1,"rival","comune"],["Cambio incrodato","vel",-5,1,"rival","comune"],["Turbina in affanno","vel",-6,1,"rival","raro"],
+  // Controllo — Bonus (+4 comune ×4, +5 raro ×1)
+  ["Setup da pista","ctrl",4,1,"self","comune"],["Sterzo diretto","ctrl",4,1,"self","comune"],["Aderenza perfetta","ctrl",4,1,"self","comune"],["Alettone regolato","ctrl",4,1,"self","comune"],["Telaio rigido su misura","ctrl",5,1,"self","raro"],
+  // Controllo — Malus (−4 comune ×4, −5 raro ×1)
+  ["Sottosterzo improvviso","ctrl",-4,1,"rival","comune"],["Sospensione rotta","ctrl",-4,1,"rival","comune"],["Asfalto viscido","ctrl",-4,1,"rival","comune"],["Retrotreno ballerino","ctrl",-4,1,"rival","comune"],["Telaio storto","ctrl",-5,1,"rival","raro"],
+  // Partenza — Bonus (+5 comune ×2, +6 raro ×1)
+  ["Scatto da dragster","partenza",5,0,"self","comune"],["Stacco di frizione chirurgico","partenza",5,0,"self","comune"],["Partenza fotocopia","partenza",6,0,"self","raro"],
+  // Partenza — Malus (−5 comune ×2, −6 raro ×1)
+  ["Spegni al semaforo","partenza",-5,0,"rival","comune"],["Ruote che fumano a vuoto","partenza",-5,0,"rival","comune"],["Parti col freno a mano","partenza",-6,0,"rival","raro"],
 ];
 const C_SCALE_L4 = [
-  ["Motore portato al limite","vel",8,1,"self"],["Big turbo che spinge","vel",8,1,"self"],["Centralina sbloccata","vel",8,1,"self"],["Rettilineo divorato","vel",8,1,"self"],["Tutto il cavallaggio a terra","vel",8,1,"self"],
-  ["Motore fuso a metà gara","vel",-8,1,"rival"],["Albero a camme spezzato","vel",-8,1,"rival"],["Trasmissione distrutta","vel",-8,1,"rival"],["Detonazione in camera","vel",-8,1,"rival"],["Freno motore bloccato","vel",-8,1,"rival"],["Cinghia esplosa","vel",-8,1,"rival"],["Motore esploso","vel",-10,1,"rival"],
-  ["Aerodinamica da formula","ctrl",4,1,"self"],["Grip totale sull'asfalto","ctrl",4,1,"self"],["Bilanciamento perfetto","ctrl",4,1,"self"],["Downforce massima","ctrl",4,1,"self"],
-  ["Aderenza persa del tutto","ctrl",-4,1,"rival"],["Testacoda sfiorato","ctrl",-4,1,"rival"],["Sbandata in rettilineo","ctrl",-4,1,"rival"],["Sterzo bloccato","ctrl",-5,1,"rival"],
-  ["Holeshot perfetto","partenza",4,0,"self"],["Partenza da campionato","partenza",4,0,"self"],["Cali il motore al via","partenza",-4,0,"rival"],["Frizione bruciata in partenza","partenza",-4,0,"rival"],["Falsa partenza, recuperi male","partenza",-4,0,"rival"],
+  // Velocità — Bonus (+7 comune ×6, +8 raro ×1)
+  ["Motore portato al limite","vel",7,1,"self","comune"],["Big turbo che spinge","vel",7,1,"self","comune"],["Centralina sbloccata","vel",7,1,"self","comune"],["Rettilineo divorato","vel",7,1,"self","comune"],["Tutto il cavallaggio a terra","vel",7,1,"self","comune"],["Pieno carico in spinta","vel",7,1,"self","comune"],["Cavallaggio scatenato","vel",8,1,"self","raro"],
+  // Velocità — Malus (−7 comune ×6, −8 raro ×1)
+  ["Motore fuso a metà gara","vel",-7,1,"rival","comune"],["Albero a camme spezzato","vel",-7,1,"rival","comune"],["Trasmissione distrutta","vel",-7,1,"rival","comune"],["Detonazione in camera","vel",-7,1,"rival","comune"],["Freno motore bloccato","vel",-7,1,"rival","comune"],["Cinghia esplosa","vel",-7,1,"rival","comune"],["Motore esploso","vel",-8,1,"rival","raro"],
+  // Controllo — Bonus (+6 comune ×4, +7 raro ×1)
+  ["Aerodinamica da formula","ctrl",6,1,"self","comune"],["Grip totale sull'asfalto","ctrl",6,1,"self","comune"],["Bilanciamento perfetto","ctrl",6,1,"self","comune"],["Downforce massima","ctrl",6,1,"self","comune"],["Assetto da gara perfetto","ctrl",7,1,"self","raro"],
+  // Controllo — Malus (−6 comune ×4, −7 raro ×1)
+  ["Aderenza persa del tutto","ctrl",-6,1,"rival","comune"],["Testacoda sfiorato","ctrl",-6,1,"rival","comune"],["Sbandata in rettilineo","ctrl",-6,1,"rival","comune"],["Avantreno che scappa","ctrl",-6,1,"rival","comune"],["Sterzo bloccato","ctrl",-7,1,"rival","raro"],
+  // Partenza — Bonus (+7 comune ×2, +8 raro ×1)
+  ["Holeshot perfetto","partenza",7,0,"self","comune"],["Partenza da campionato","partenza",7,0,"self","comune"],["Bruciati tutti al via","partenza",8,0,"self","raro"],
+  // Partenza — Malus (−7 comune ×2, −8 raro ×1)
+  ["Cali il motore al via","partenza",-7,0,"rival","comune"],["Frizione bruciata in partenza","partenza",-7,0,"rival","comune"],["Stallo in griglia","partenza",-8,0,"rival","raro"],
 ];
 const SCALE_PACKS = {2:C_SCALE_L2, 3:C_SCALE_L3, 4:C_SCALE_L4};
-function mapScale(arr){ return arr.map(c=>({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4]})); }
+function mapScale(arr){ return arr.map(c=>({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4],rar:c[5]})); }
 
 function makeDeck(){ const d=[]; C_INGARA.forEach(c=>d.push({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4]})); C_PREGARA.forEach(c=>d.push({cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3]})); C_DIFESA.forEach(c=>d.push({cat:'difesa',nome:c[0],eff:'defend',val:c[1],dur:c[2]})); return shuffle(d); }
 function makePoliceDeck(){ return C_POLIZIA.map(c=>({cat:'polizia',nome:c[0],kind:c[1],size:c[2]})); }
@@ -801,7 +825,44 @@ function endRace(room){
     tiebreaks: (G.lastTiebreaks||[])
   };
   G.phase = G.winner ? 'win' : 'results';
+  maybeStartVote(room);
 }
+
+/* ===== VOTO SEGRETO BONUS — nel riepilogo, una volta ogni 2 gare, solo con >=3 giocatori reali dispari ===== */
+const VOTE_MS=20000, VIDEO_MS=30000;
+function voteBonus(lvl){ return ({1:200,2:400,3:700,4:1000,5:1000})[Math.min(5,Math.max(1,lvl||1))]||200; }
+function clearVoteTimer(room){ if(room._voteTimer){ clearTimeout(room._voteTimer); room._voteTimer=null; } }
+function maybeStartVote(room){
+  const G=room.G; if(G.phase!=='results') return;            // niente voto sulla vittoria finale
+  const reals=G.players.filter(p=>!p.isBot);
+  if(reals.length<3 || reals.length%2===0) return;           // servono >=3 reali e in numero dispari
+  if(G.round%2!==0) return;                                  // una volta ogni 2 gare (round pari)
+  clearVoteTimer(room);
+  G.vote={ stage:'voting', amount:voteBonus(G.raceLevel), votes:{}, eligible:reals.map(p=>p.id), endsAt:Date.now()+VOTE_MS, videoEndsAt:0, tally:null, result:null, credited:false };
+  room._voteTimer=setTimeout(()=>resolveVote(room), VOTE_MS);
+}
+function actVote(room,p,choice){
+  const G=room.G, v=G.vote;
+  if(!v || v.stage!=='voting' || !v.eligible.includes(p.id) || v.votes[p.id]) return null;
+  v.votes[p.id]=(choice==='si')?'si':'no';
+  if(v.eligible.every(id=>v.votes[id])){ clearVoteTimer(room); resolveVote(room); }   // tutti hanno votato -> risolvi subito (handle fa il broadcast)
+  return null;
+}
+function resolveVote(room){
+  const G=room.G, v=G.vote; if(!v || v.stage!=='voting') return;
+  let si=0,no=0; v.eligible.forEach(id=>{ if(v.votes[id]==='si') si++; else no++; });  // chi non vota entro il timer = no
+  v.tally={si,no}; v.result=(si>no)?'si':'no'; clearVoteTimer(room);
+  if(v.result==='si'){ v.stage='video'; v.videoEndsAt=Date.now()+VIDEO_MS; room._voteTimer=setTimeout(()=>creditVote(room), VIDEO_MS); }
+  else { v.stage='done'; }
+  broadcast(room);
+}
+function creditVote(room){
+  const G=room.G, v=G.vote; if(!v || v.stage!=='video') return;
+  v.eligible.forEach(id=>{ const pl=G.players.find(x=>x.id===id); if(pl) pl.money+=v.amount; });   // +bonus a tutti i reali
+  v.stage='done'; v.credited=true; clearVoteTimer(room);
+  broadcast(room);
+}
+
 function advanceTrack(room){
   const G=room.G; const L=G.trackLevel;
   G._lvlRaces=(G._lvlRaces||0)+1;                                // gare giocate a QUESTO livello (questa inclusa)
@@ -834,6 +895,8 @@ function advanceTrack(room){
 function actNextRound(room,p){
   const G=room.G; if(G.phase!=='results') return 'Non disponibile ora.';
   if(p.id!==room.hostId) return 'Solo l\'host avvia la gara.';
+  if(G.vote && G.vote.stage!=='done') return 'Attendi la fine del voto bonus.';
+  G.vote=null; clearVoteTimer(room);
   startRound(room); return null;
 }
 
@@ -976,7 +1039,8 @@ function buildView(room, player){
     v.raceRecap=G.lastRaceRecap;
     v.champ=[...G.players].sort((a,b)=>b.po-a.po||b.money-a.money).map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, po:p.po, money:p.money }));
     v.youMoney=player.money;
-    v.canNext=(player.id===room.hostId);
+    v.canNext=(player.id===room.hostId) && !(G.vote && G.vote.stage!=='done');
+    if(G.vote){ const vt=G.vote; v.vote={ stage:vt.stage, amount:vt.amount, n:vt.eligible.length, eligible:vt.eligible.includes(player.id), youVoted:!!vt.votes[player.id], endsAt:vt.endsAt||0, videoEndsAt:vt.videoEndsAt||0, tally:vt.tally||null, result:vt.result||null, credited:!!vt.credited }; }
     if(G.winner) v.winner={ name:G.winner.name, pilot:G.winner.pilot.nome, gang:G.winner.pilot.gang, po:G.winner.po };
     return v;
   }
@@ -1152,6 +1216,7 @@ io.on('connection', (socket)=>{
   socket.on('defend', handle((room,p,d)=>actDefend(room,p,d.handIdx,d.mid)));
   socket.on('defense:play', handle((room,p,d)=>actDefend(room,p,d.handIdx,d.mid)));
   socket.on('results:next', handle((room,p)=>actNextRound(room,p)));
+  socket.on('results:vote', handle((room,p,d)=>actVote(room,p,d.choice)));
 
   socket.on('disconnect', ()=>{
     const f=playerBySocket(socket); socketToRoom.delete(socket.id);
