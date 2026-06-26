@@ -10,10 +10,10 @@ const http = require('http');
 const path = require('path');
 const { Server } = require('socket.io');
 
-const app = express();
-app.use(express.static(__dirname));
-const server = http.createServer(app);
-const io = new Server(server);
+/* Server HTTP e socket.io non creati qui: il motore classico si "monta" su un io
+   fornito (vedi mount() in fondo), cosi' puo' convivere con la Modalita' B in un
+   unico processo (bivio). In standalone si auto-avvia comunque, sul path di default. */
+let IO = null;
 
 /* ============================ DATI ============================ */
 const DB = {
@@ -1047,7 +1047,8 @@ function buildView(room, player){
   return v;
 }
 function broadcast(room){
-  room.G.players.forEach(p=>{ if(p.socketId){ const s=io.sockets.sockets.get(p.socketId); if(s) s.emit('state', buildView(room,p)); } });
+  if(!IO) return;
+  room.G.players.forEach(p=>{ if(p.socketId){ const s=IO.sockets.sockets.get(p.socketId); if(s) s.emit('state', buildView(room,p)); } });
 }
 
 /* ============================ BOT (gioco contro il PC) ============================ */
@@ -1120,7 +1121,9 @@ function scheduleBot(room){
 }
 
 /* ============================ SOCKET ============================ */
-io.on('connection', (socket)=>{
+function mount(ioInstance){
+  IO = ioInstance;
+  IO.on('connection', (socket)=>{
 
   socket.on('createRoom', ({name,colorIdx}, cb)=>{
     const code=genCode();
@@ -1238,9 +1241,19 @@ io.on('connection', (socket)=>{
     }
     broadcast(room);
   });
-});
+  });
+}
 
-module.exports = { DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actPlayPolice, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending, actDefend, incomingFor, stockAvail, compSlots, endRace, startLaunch, beginRace, setupRace, actPlayPartenza };
+module.exports = { mount, DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actPlayPolice, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending, actDefend, incomingFor, stockAvail, compSlots, endRace, startLaunch, beginRace, setupRace, actPlayPartenza };
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, ()=>console.log('2FAST4U server in ascolto sulla porta '+PORT));
+if(require.main===module){
+  // Avvio STANDALONE (node server.js): crea un server proprio e monta il classico
+  // sul path socket.io di DEFAULT, cosi' index.html (io()) funziona come sempre.
+  const app = express();
+  app.use(express.static(__dirname));
+  const server = http.createServer(app);
+  const io = new Server(server);
+  mount(io);
+  const PORT = process.env.PORT || 3000;
+  server.listen(PORT, ()=>console.log('2FAST4U (classico standalone) in ascolto sulla porta '+PORT));
+}

@@ -11,15 +11,10 @@
    Il MOTORE DI GARA (movimento, dado/NOS, difese, malus, polizia, boss,
    scommesse, avanzamento livello, voto) e' COPIATO dal classico, immutato.
    ===================================================================== */
-const express = require('express');
-const http = require('http');
-const path = require('path');
-const { Server } = require('socket.io');
-
-const app = express();
-app.use(express.static(__dirname));
-const server = http.createServer(app);
-const io = new Server(server);
+/* Il server HTTP e l'istanza socket.io NON vengono piu' creati qui: il motore si
+   "monta" su un io fornito da fuori (vedi mount() in fondo). Cosi' puo' convivere
+   col classico in un unico processo (bivio). In standalone si auto-avvia comunque. */
+let IO = null;   // istanza socket.io su cui il motore e' montato (impostata da mount)
 
 /* ============================ DATI ============================ */
 const DB = {
@@ -1085,7 +1080,8 @@ function buildView(room, player){
       v.policeHand=p.hand.map((c,idx)=>({c,idx})).filter(o=>o.c.cat==='polizia').map(o=>({idx:o.idx,nome:o.c.nome,kind:o.c.kind,size:o.c.size}));
       v.mustPlayPolice=p.hand.some(c=>c.cat==='polizia');
       v.track=trackView(G);
-      v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:!!p.discountNext };
+      v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:!!p.discountNext,
+             pilotNome:p.pilot?p.pilot.nome:null, gang:p.pilot?p.pilot.gang:null, pilotAb:p.pilot?p.pilot.ab:null };   // B: pilota gia' scelto nel deck-builder — mostrato in officina
       v.pregara = G.reshop ? [] : p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c), costPO:(c.costPO||0) })).filter(c=>c.cat==='pregara' && c.eff!=='defend');
       v.handAll = G.reshop ? [] : p.hand.map((c,idx)=>{ const o={ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, dur:c.dur, costPO:(c.costPO||0) }; if(c.cat==='pregara') o.target=pregaraTarget(c); return o; }).filter(c=>c.cat!=='polizia');
       v.canBet = !G.reshop && G.round>=2;
@@ -1150,7 +1146,8 @@ function buildView(room, player){
   return v;
 }
 function broadcast(room){
-  room.G.players.forEach(p=>{ if(p.socketId){ const s=io.sockets.sockets.get(p.socketId); if(s) s.emit('state', buildView(room,p)); } });
+  if(!IO) return;
+  room.G.players.forEach(p=>{ if(p.socketId){ const s=IO.sockets.sockets.get(p.socketId); if(s) s.emit('state', buildView(room,p)); } });
 }
 
 /* ============================ BOT (gioco contro il PC) ============================ */
@@ -1224,7 +1221,9 @@ function scheduleBot(room){
 }
 
 /* ============================ SOCKET ============================ */
-io.on('connection', (socket)=>{
+function mount(ioInstance){
+  IO = ioInstance;
+  IO.on('connection', (socket)=>{
 
   socket.on('createRoom', ({name,colorIdx}, cb)=>{
     const code=genCode();
@@ -1351,9 +1350,11 @@ io.on('connection', (socket)=>{
     }
     broadcast(room);
   });
-});
+  });
+}
 
 module.exports = {
+  mount,
   DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actPlayPolice,
   actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct,
   botPending, actDefend, incomingFor, stockAvail, compSlots, endRace, startLaunch, beginRace, setupRace,
@@ -1364,6 +1365,16 @@ module.exports = {
 };
 
 if(require.main===module){
+  // Avvio STANDALONE (node server_modalitaB.js): crea un server proprio e monta la B
+  // sul path socket.io dedicato /sock-b/ — lo stesso usato nel bivio, cosi' il client e' identico.
+  const express = require('express');
+  const http = require('http');
+  const { Server } = require('socket.io');
+  const app = express();
+  app.use(express.static(__dirname));
+  const server = http.createServer(app);
+  const ioB = new Server(server, { path:'/sock-b/' });
+  mount(ioB);
   const PORT = process.env.PORT || 3000;
-  server.listen(PORT, ()=>console.log('2FAST4U MODALITA B server in ascolto sulla porta '+PORT));
+  server.listen(PORT, ()=>console.log('2FAST4U MODALITA B (standalone) · porta '+PORT+' · socket path /sock-b/'));
 }
