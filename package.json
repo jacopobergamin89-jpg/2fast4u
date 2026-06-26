@@ -2,9 +2,9 @@
   "name": "2fast4u-online",
   "version": "1.0.0",
   "description": "2FAST4U - corse clandestine, multiplayer realtime (Node + Express + Socket.io)",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "engines": {
     "node": ">=18"
