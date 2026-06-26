@@ -537,6 +537,13 @@ body:has(#s-home.active) .topbar{display:none}
 .of-pre:first-of-type{border-top:0}
 .of-pre b{font-family:var(--disp);font-size:13px}
 .of-pre-d{font-size:11px;color:var(--muted)}
+.ctag{display:inline-block;font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.05em;text-transform:uppercase;padding:1px 6px;border-radius:6px;vertical-align:middle}
+.ctag-dif{background:rgba(43,168,230,.18);color:#7fd0f5;box-shadow:inset 0 0 0 1px rgba(43,168,230,.5)}
+.ctag-gara{background:rgba(255,201,30,.15);color:var(--amber);box-shadow:inset 0 0 0 1px rgba(255,201,30,.45)}
+.ctag-part{background:rgba(155,91,224,.18);color:#c9a7f0;box-shadow:inset 0 0 0 1px rgba(155,91,224,.5)}
+.of-hand-act{display:flex;gap:8px;align-items:center;flex:0 0 auto}
+.btn-scarta{opacity:.7}
+.of-extra-sub{font-family:var(--body);font-weight:500;font-size:11px;color:var(--muted-2);text-transform:none;letter-spacing:0}
 .of-bet-note{width:min(96%,600px);margin:10px auto 0;font-size:12px;color:var(--muted);text-align:center}
 .of-bet-note b{color:var(--amber)}
 .of-others-h{display:none}
@@ -757,6 +764,9 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 .o2-pre b{font-family:var(--disp);font-size:13px;display:block}
 .o2-pre-d{font-size:11px;color:var(--muted)}
 .o2-pre-go{flex:0 0 auto;height:34px;padding:0 14px;border:0;border-radius:8px;font-family:var(--disp);font-weight:700;font-size:12px;text-transform:uppercase;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.o2-hand-act{display:flex;gap:8px;align-items:center;flex:0 0 auto}
+.o2-pre-go.scarta{opacity:.62}
+.o2-handh{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);margin:10px 2px 2px}
 .o2-note{text-align:center;font-size:12px;color:var(--muted);margin-top:10px}.o2-note b{color:var(--amber)}
 .o2-garage{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:7px 13px;border-top:1px solid var(--line)}
 .o2-garage .gl{font-family:var(--disp);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:10px;color:var(--muted);flex:0 0 auto}
@@ -1026,6 +1036,28 @@ function cardDesc(c){
   if(c.eff==='reach')return (c.val===2&&c.dur===0)?'Vai alla casella del 2° in gara':((c.val===1&&c.dur===-1)?'Vai a una casella dietro il 1° in gara':'Salto di posizione');
   return '';
 }
+function cardTypeTag(c){
+  if(c.cat==='difesa') return '<span class="ctag ctag-dif">\ud83d\udee1 Difesa</span>';
+  if(c.cat==='ingara') return c.eff==='partenza' ? '<span class="ctag ctag-part">Partenza</span>' : '<span class="ctag ctag-gara">In gara</span>';
+  return '';
+}
+function handCardDesc(c){
+  if(c.cat==='pregara') return pregaraDesc(c)+' \u00b7 '+(c.target==='rival'?'su un avversario':'su di te');
+  if(c.cat==='difesa') return pregaraDesc(c)+(c.val==='ingara'?' \u00b7 in gara':c.val==='pregara'?' \u00b7 pre-gara':' \u00b7 universale');
+  if(c.eff==='vel') return (c.val>0?'+':'')+c.val+' Velocit\u00e0 \u00b7 '+c.dur+(c.dur===1?' tiro':' tiri');
+  if(c.eff==='ctrl') return (c.val>0?'+':'')+c.val+' Controllo \u00b7 '+c.dur+(c.dur===1?' tiro':' tiri');
+  if(c.eff==='partenza') return 'Partenza '+(c.val>0?'+':'')+c.val;
+  if(c.eff==='dado') return 'Dado = '+c.val;
+  if(c.eff==='reach') return 'Salto di posizione';
+  return '';
+}
+function ofHandPlay(c,mobile){
+  if(c.cat!=='pregara') return '';
+  const sm=c.eff==='smonta', neg=c.target==='rival';
+  const oc=sm?`prepSmonta(${c.idx})`:(neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`);
+  return mobile ? `<button class="o2-pre-go play" onclick="${oc}">Gioca</button>` : `<button class="btn btn-line btn-sm" onclick="${oc}">Gioca</button>`;
+}
+function discard(idx){ socket.emit('prep:discard',{handIdx:idx}); }
 function pregaraDesc(c){
   if(c.eff==='money')return (c.val>=0?'+':'')+eur(c.val);
   if(c.eff==='po')return (c.val>=0?'+':'')+c.val+' PO';
@@ -1259,8 +1291,8 @@ function prepMobileHTML(v){
   // dentro lo scroll: polizia da giocare (in cima) + griglia + carte pre-gara + nota scommessa
   let belowMkt='';
   if(v.isYourTurn){
-    if(v.pregara&&v.pregara.length){ v.pregara.forEach(c=>{const sm=c.eff==='smonta';const neg=c.target==='rival';const desc=pregaraDesc(c);const ocp=sm?`prepSmonta(${c.idx})`:(neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`);
-      belowMkt+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b><span class="o2-pre-d">${desc} · ${neg?'su un avversario':'su di te'}</span></div><button class="o2-pre-go" onclick="${ocp}">Gioca</button></div>`;}); }
+    if(v.handAll&&v.handAll.length){ belowMkt+='<div class="o2-handh">La tua mano \u00b7 scarta quelle che non vuoi</div>'; v.handAll.forEach(c=>{
+      belowMkt+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="o2-pre-d">${handCardDesc(c)}</span></div><div class="o2-hand-act">${ofHandPlay(c,true)}<button class="o2-pre-go scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;}); }
     if(v.canBet) belowMkt+='<div class="o2-note">Apri 👥 <b>Piloti</b> in alto per scommettere e vedere le puntate.</div>';
   }
   const mkt=`${mktH}<div class="o2-mkt">${policeSectionHTML(v,true)}${grid}${belowMkt}</div>`;
@@ -1310,8 +1342,8 @@ function renderPrep(v){
   }
   let extra='';
   if(v.isYourTurn){
-    if(v.pregara&&v.pregara.length){extra+='<div class="of-extra"><div class="of-extra-h">Carte pre-gara in mano</div>';
-      v.pregara.forEach(c=>{const sm=c.eff==='smonta';const neg=c.target==='rival';const desc=pregaraDesc(c);const oc=sm?`prepSmonta(${c.idx})`:(neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`);extra+=`<div class="of-pre"><div><b>${esc(c.nome)}</b> <span class="of-pre-d">${desc} \u00b7 ${neg?'su un avversario':'su di te'}</span></div><button class="btn btn-line btn-sm" onclick="${oc}">Gioca</button></div>`;});
+    if(v.handAll&&v.handAll.length){extra+='<div class="of-extra"><div class="of-extra-h">La tua mano <span class="of-extra-sub">\u2014 scarta quelle che non vuoi</span></div>';
+      v.handAll.forEach(c=>{extra+=`<div class="of-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="of-pre-d">${handCardDesc(c)}</span></div><div class="of-hand-act">${ofHandPlay(c,false)}<button class="btn btn-line btn-sm btn-scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;});
       extra+='</div>';}
     if(v.canBet)extra+='<div class="of-bet-note">Apri \ud83d\udc65 <b>Piloti</b> in alto a destra per scommettere e vedere le puntate.</div>';
   }
@@ -1396,10 +1428,10 @@ function renderRaceMobile(v){
   }
   // barra azione fissa
   if(yt&&!rolled){
-    h+=`<div class="rm-act"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${mm.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato \u26a1':'Usa NOS'}${mm.nosVal>0?' (+'+mm.nosVal+')':''}</button><button class="btn btn-dado" onclick="doRoll()">Tira il dado</button></div>`;
+    h+=`<div class="rm-act"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${mm.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato \u26a1':'Usa NOS'}${mm.nosVal>0?' (+'+mm.nosVal+')':''}</button><button class="btn btn-dado" onclick="doRoll()">${v.turn>=5?'\ud83c\udfc1 Ultimo lancio':'Tira il dado'}</button></div>`;
   }else if(yt&&rolled){
     const b=rolled;
-    h+=`<div class="rm-act"><button class="btn btn-cyan" style="flex:1" onclick="socket.emit('race:move')">${b.np>=55?'\ud83c\udfc1 In fondo (casella 55)':'Avanza a casella '+b.np+' \u2192'}</button></div>`;
+    h+=`<div class="rm-act"><button class="btn btn-cyan" style="flex:1" onclick="socket.emit('race:move')">${b.np>=(b.finish||1e9)?'Tagli il traguardo \u2192':'Avanza a casella '+b.np+' \u2192'}</button></div>`;
   }
   h+='</div>';
   host.innerHTML=h;
@@ -1478,14 +1510,14 @@ function dashHTML(v){
   }
   if(!v.rolled){
     h+='</div>';
-    h+=`<div class="race-act"><div class="car-actions"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${m.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato ⚡':'Usa NOS'}${m.nosVal>0?' (+'+m.nosVal+')':''}</button><button class="btn btn-dado" onclick="doRoll()">Tira il dado</button></div></div>`;
+    h+=`<div class="race-act"><div class="car-actions"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${m.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato ⚡':'Usa NOS'}${m.nosVal>0?' (+'+m.nosVal+')':''}</button><button class="btn btn-dado" onclick="doRoll()">${v.turn>=5?'🏁 Ultimo lancio':'Tira il dado'}</button></div></div>`;
   }else{
     const b=v.rolled;
     let ls=b.lines.map(l=>`<div class="bd-line"><span>${l.k}</span><span class="${l.cls||''}">${l.info?'min 0':(l.v>=0?'+':'')+l.v}</span></div>`).join('');
     h+=`<div class="dice-area"><div class="die" id="die">${dieFaces(b.die)}</div><div class="dice-info"><div class="di-big">Dado ${b.die} → +${b.db}</div>${b.useNos?'<span style="color:var(--cyan)">NOS ⚡</span>':''}</div></div>`;
     h+=`<div class="breakdown">${ls}<div class="bd-total"><span>Movimento</span><b>${b.total}</b></div></div>`;
     h+='</div>';
-    h+=`<div class="race-act"><button class="btn btn-cyan" style="width:100%" onclick="socket.emit('race:move')">${b.np>=55?'🏁 In fondo (casella 55)':'Avanza a casella '+b.np+' →'}</button></div>`;
+    h+=`<div class="race-act"><button class="btn btn-cyan" style="width:100%" onclick="socket.emit('race:move')">${b.np>=(b.finish||1e9)?'Tagli il traguardo →':'Avanza a casella '+b.np+' →'}</button></div>`;
   }
   h+='</div>';return h;
 }
@@ -1997,7 +2029,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-06-25 · officina-fullscreen';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-06-25 · flag-traguardo';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 </body>
 </html>

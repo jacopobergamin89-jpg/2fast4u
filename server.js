@@ -25,7 +25,7 @@ const DB = {
   roadBasePrice: { 1:100, 2:200, 3:300, 4:400, 5:500 },
   premiMult: [9,6,4,2.5,1.5,1,0,0],
   premiPO: [5,3,1,0,0,0,0,0],
-  quoteScommessa: [1.2,1.5,2,2.5,3,4,5,6],
+  quoteScommessa: [1.05,1.2,1.5,2,2.5,3,4,5],
   obiettivo: 50,
   maxLevelRoads: 4,
   deckPerStat: { 1:4, 2:3, 3:3 },
@@ -71,7 +71,7 @@ const C_INGARA = [
  ['Oggi devi vincere','vel',2,1,'self'],['Corri Fooorrreeeesstttttt!!!!','vel',2,1,'self'],['Monti un\'espansione racing','vel',2,1,'self'],['Un colpo di fortuna con il turbo','vel',2,1,'self'],
  ['Doppio caffe stamattina','vel',2,2,'self'],['Il vento è a favore','vel',2,2,'self'],['Veloce come il vento','vel',1,1,'self'],['Finalmente il giusto cambio','vel',1,1,'self'],
  ['Hai messo benzina racing: boost temporaneo!','vel',1,1,'self'],['Il meccanico ti sistema la centralina: +1','vel',1,1,'self'],['Senti l\'adrenalina salire: spingi di più!!!','vel',1,1,'self'],['L\'ora del Energy drink','vel',1,1,'self'],
- ['Hai montato un nuovo filtro aria','vel',1,2,'self'],['Hai montato un nuovo filtro aria','vel',1,2,'self'],['La marmitta si allenta','vel',-1,1,'rival'],['Una curva mal presa ti rallenta','vel',-1,1,'rival'],
+ ['Hai montato un nuovo filtro aria','vel',1,2,'self'],['La marmitta si allenta','vel',-1,1,'rival'],['Una curva mal presa ti rallenta','vel',-1,1,'rival'],
  ['Benzina Sporca','vel',-1,1,'rival'],['Si allenta un bullone','vel',-1,1,'rival'],['Le gomme slittano','vel',-1,2,'rival'],['Problemi al cambio','vel',-1,2,'rival'],
  ['Perdi pressione nei pneumatici','vel',-2,1,'rival'],['Frenata d\'emergenza','vel',-2,1,'rival'],['Gomma forata','vel',-2,2,'rival'],['Carburatore ingolfato','vel',-2,2,'rival'],
  ['Ribassamento perfetto','ctrl',2,1,'self'],['Installato il nuovo volante','ctrl',2,1,'self'],['Spettacolo il nuovo alettone','ctrl',2,2,'self'],['Con questo nuovo cambio si vola','ctrl',2,2,'self'],
@@ -101,7 +101,7 @@ const C_PREGARA = [
 ];
 // Difese: eff 'defend', val=ambito ('ingara'|'pregara'|'both'), dur=1 se riflette
 const C_DIFESA = [
- ['Riflessi felini','ingara',0],['Schivata all\'ultimo','ingara',0],['Sangue freddo','ingara',0],['Lo eviti in un lampo','ingara',0],['Colpo di reni','ingara',0],['Scarto secco','ingara',0],['Effetto specchio','ingara',1],
+ ['Riflessi felini','ingara',0],['Schivata all\'ultimo','ingara',0],['Sangue freddo','ingara',0],['Lo eviti in un lampo','ingara',0],['Colpo di reni','ingara',0],['Scarto secco','ingara',0],['Effetto specchio','ingara',1],['Sterzata provvidenziale','ingara',0],['Controsterzo da maestro','ingara',0],['Nervi d\'acciaio','ingara',0],['Rispedito al mittente','ingara',1],
  ['Spalle coperte','pregara',0],['Soffiata in anticipo','pregara',0],['Niente ti scalfisce','pregara',0],['Sempre un passo avanti','pregara',0],['Talpa in officina','pregara',0],['Coperto su tutto','pregara',0],['Ritorno al mittente','pregara',1],
  ['Sesto senso','both',0],['Scudo totale','both',0]
 ];
@@ -118,6 +118,31 @@ const C_POLIZIA = [
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function d6(){ return 1+Math.floor(Math.random()*6); }
 function ini(n){ return (n||'?')[0].toUpperCase(); }
+/* ===== CARTE SCALATE — entrano col livello pista (cumulative), formato [nome,eff,val,dur,target] ===== */
+const C_SCALE_L2 = [
+  ["Turbo a pieni giri","vel",3,1,"self"],["Cambiata fulminea","vel",3,1,"self"],["Iniezione racing","vel",3,1,"self"],["Collettori liberi","vel",3,1,"self"],["Sgommata d'autore","vel",3,1,"self"],["Scia sfruttata bene","vel",3,1,"self"],["Sovrappressione turbo","vel",4,1,"self"],
+  ["Gomma sgonfia","vel",-2,1,"rival"],["Bullone allentato","vel",-2,1,"rival"],["Benzina sporca","vel",-2,1,"rival"],["Frizione che pattina","vel",-2,1,"rival"],["Cinghia consumata","vel",-2,1,"rival"],["Turbo che perde pressione","vel",-2,1,"rival"],["Gomma forata in curva","vel",-4,1,"rival"],["Distribuzione saltata","vel",-4,1,"rival"],
+  ["Assetto azzeccato","ctrl",1,1,"self"],["Volante preciso","ctrl",1,1,"self"],["Gomme in temperatura","ctrl",1,1,"self"],["Barra antirollio nuova","ctrl",1,1,"self"],["Differenziale autobloccante","ctrl",2,1,"self"],
+  ["Sterzo molle","ctrl",-1,1,"rival"],["Convergenza sballata","ctrl",-1,1,"rival"],["Ammortizzatore scarico","ctrl",-1,1,"rival"],["Gomme fredde","ctrl",-1,1,"rival"],["Assetto sfasato","ctrl",-2,1,"rival"],
+  ["Reazione fulminea al verde","partenza",2,0,"self"],["Frizione perfetta al via","partenza",2,0,"self"],["Parti in ritardo","partenza",-2,0,"rival"],["Ingolfi al semaforo","partenza",-2,0,"rival"],["Pattini in partenza","partenza",-2,0,"rival"],
+];
+const C_SCALE_L3 = [
+  ["Mappa motore aggressiva","vel",5,1,"self"],["Doppia frizione che canta","vel",5,1,"self"],["Aspirazione diretta","vel",5,1,"self"],["Antilag attivato","vel",5,1,"self"],["Sorpasso da manuale","vel",5,1,"self"],["Pista libera davanti","vel",5,1,"self"],["Launch control perfetto","vel",6,1,"self"],
+  ["Cambio incrodato","vel",-5,1,"rival"],["Surriscaldamento motore","vel",-5,1,"rival"],["Olio sull'asfalto","vel",-5,1,"rival"],["Iniettore intasato","vel",-5,1,"rival"],["Sospensione cedevole","vel",-5,1,"rival"],["Foratura improvvisa","vel",-5,1,"rival"],["Pistone grippato","vel",-7,1,"rival"],["Turbina in avaria","vel",-7,1,"rival"],
+  ["Setup da pista","ctrl",2,1,"self"],["Sterzo diretto","ctrl",2,1,"self"],["Aderenza perfetta","ctrl",2,1,"self"],["Alettone regolato","ctrl",2,1,"self"],["Telaio rigido su misura","ctrl",3,1,"self"],
+  ["Sottosterzo improvviso","ctrl",-2,1,"rival"],["Servosterzo in tilt","ctrl",-2,1,"rival"],["Sospensione rotta","ctrl",-2,1,"rival"],["Asfalto viscido","ctrl",-2,1,"rival"],["Telaio storto","ctrl",-3,1,"rival"],
+  ["Scatto da dragster","partenza",3,0,"self"],["Stacco di frizione chirurgico","partenza",3,0,"self"],["Spegni al semaforo","partenza",-3,0,"rival"],["Ruote che fumano a vuoto","partenza",-3,0,"rival"],["Parti col freno a mano","partenza",-3,0,"rival"],
+];
+const C_SCALE_L4 = [
+  ["Motore portato al limite","vel",8,1,"self"],["Big turbo che spinge","vel",8,1,"self"],["Centralina sbloccata","vel",8,1,"self"],["Rettilineo divorato","vel",8,1,"self"],["Tutto il cavallaggio a terra","vel",8,1,"self"],
+  ["Motore fuso a metà gara","vel",-8,1,"rival"],["Albero a camme spezzato","vel",-8,1,"rival"],["Trasmissione distrutta","vel",-8,1,"rival"],["Detonazione in camera","vel",-8,1,"rival"],["Freno motore bloccato","vel",-8,1,"rival"],["Cinghia esplosa","vel",-8,1,"rival"],["Motore esploso","vel",-10,1,"rival"],
+  ["Aerodinamica da formula","ctrl",4,1,"self"],["Grip totale sull'asfalto","ctrl",4,1,"self"],["Bilanciamento perfetto","ctrl",4,1,"self"],["Downforce massima","ctrl",4,1,"self"],
+  ["Aderenza persa del tutto","ctrl",-4,1,"rival"],["Testacoda sfiorato","ctrl",-4,1,"rival"],["Sbandata in rettilineo","ctrl",-4,1,"rival"],["Sterzo bloccato","ctrl",-5,1,"rival"],
+  ["Holeshot perfetto","partenza",4,0,"self"],["Partenza da campionato","partenza",4,0,"self"],["Cali il motore al via","partenza",-4,0,"rival"],["Frizione bruciata in partenza","partenza",-4,0,"rival"],["Falsa partenza, recuperi male","partenza",-4,0,"rival"],
+];
+const SCALE_PACKS = {2:C_SCALE_L2, 3:C_SCALE_L3, 4:C_SCALE_L4};
+function mapScale(arr){ return arr.map(c=>({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4]})); }
+
 function makeDeck(){ const d=[]; C_INGARA.forEach(c=>d.push({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4]})); C_PREGARA.forEach(c=>d.push({cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3]})); C_DIFESA.forEach(c=>d.push({cat:'difesa',nome:c[0],eff:'defend',val:c[1],dur:c[2]})); return shuffle(d); }
 function makePoliceDeck(){ return C_POLIZIA.map(c=>({cat:'polizia',nome:c[0],kind:c[1],size:c[2]})); }
 function drawCard(G){
@@ -157,7 +182,7 @@ function startGame(room){
   G.deck=shuffle(makeDeck().concat(makePoliceDeck())); G.discard=[];   // polizia già nel mazzo dal round 1
   G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach(p=>{ for(let k=0;k<3;k++){ const card=drawCard(G); if(card) p.hand.push(card); } });
-  G.round=0; room.started=true; G.policeUnlocked=true; G.blocks=[]; G.pendPolice=[]; G.bossPending=null;
+  G.round=0; room.started=true; G.policeUnlocked=true; G.scaleUnlocked={2:false,3:false,4:false}; G.blocks=[]; G.pendPolice=[]; G.bossPending=null;
   G.gameLog=[]; G.gameSeq=0;
   G.phase='reveal'; G.players.forEach(p=>{ p.ready=false; });
 }
@@ -361,6 +386,17 @@ function botMaybeDefend(room, bot){
   }
 }
 
+function actDiscard(room,p,handIdx){
+  const G=room.G;
+  if(G.phase!=='prep') return 'Si scartano le carte solo in officina.';
+  if(curPrep(G).id!==p.id) return 'Non è il tuo turno.';
+  const c=p.hand[handIdx];
+  if(!c) return 'Carta non trovata.';
+  if(c.cat==='polizia') return 'Le carte polizia non si scartano: vanno giocate.';
+  p.hand.splice(handIdx,1);
+  G.discard.push(c);                 // niente ripesca immediata: la mano si ricompone a 5 a fine gara
+  return null;
+}
 function actPlayPregara(room,p,handIdx,targetId,comp){
   const G=room.G; if(G.phase!=='prep'||curPrep(G).id!==p.id) return 'Non è il tuo turno.';
   if(G.reshop) return 'Nel giro extra puoi solo comprare.';
@@ -737,7 +773,7 @@ function endRace(room){
     if(p.bet && p.bet.targetId!=null && p.bet.amount>0){
       if(p._busted){ p._betDelta=-p.bet.amount; }                                    // beccato: niente vincita scommessa (perdi la posta)
       else {
-        const t=G.players.find(x=>x.id===p.bet.targetId); const q=Math.max(1.2, Math.min(6, DB.quoteScommessa[Math.min(7,t.prevRank)]+(p.quotaMod||0)));
+        const t=G.players.find(x=>x.id===p.bet.targetId); const q=Math.max(1.05, Math.min(6, DB.quoteScommessa[Math.min(7,t.prevRank)]+(p.quotaMod||0)));
         if(p.bet.targetId===winnerId){ const payout=Math.round(p.bet.amount*q*(p.betMult||1)); p.money+=p.bet.amount+payout; p._betDelta=payout; p._betWin=true; }
         else { p._betDelta=-p.bet.amount; }
       }
@@ -793,6 +829,7 @@ function advanceTrack(room){
   layoutTrack(G.track);
   G.lastTrackChange=change;
   if(!G.policeUnlocked && G.trackLevel>=2){ G.policeUnlocked=true; G.deck=shuffle((G.deck||[]).concat(makePoliceDeck())); change.policeUnlocked=true; }
+  for(const lv of [2,3,4]){ if(G.trackLevel>=lv && G.scaleUnlocked && !G.scaleUnlocked[lv]){ G.scaleUnlocked[lv]=true; G.deck=shuffle((G.deck||[]).concat(mapScale(SCALE_PACKS[lv]))); change.scaleUnlocked=(change.scaleUnlocked||[]).concat(lv); } }   // carte scalate cumulative
 }
 function actNextRound(room,p){
   const G=room.G; if(G.phase!=='results') return 'Non disponibile ora.';
@@ -884,9 +921,10 @@ function buildView(room, player){
       v.track=trackView(G);
       v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:!!p.discountNext };
       v.pregara = G.reshop ? [] : p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c), costPO:(c.costPO||0) })).filter(c=>c.cat==='pregara' && c.eff!=='defend');
+      v.handAll = G.reshop ? [] : p.hand.map((c,idx)=>{ const o={ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, dur:c.dur, costPO:(c.costPO||0) }; if(c.cat==='pregara') o.target=pregaraTarget(c); return o; }).filter(c=>c.cat!=='polizia');
       v.canBet = !G.reshop && G.round>=2;
       if(v.canBet){
-        v.betTargets=G.players.map(t=>({ id:t.id, name:t.name, colorH:DB.colori[t.colorIdx].h, quote:Math.max(1.2, Math.min(6, DB.quoteScommessa[Math.min(7,t.lastRank)]+(p.quotaMod||0))), you:t.id===p.id }));
+        v.betTargets=G.players.map(t=>({ id:t.id, name:t.name, colorH:DB.colori[t.colorIdx].h, quote:Math.max(1.05, Math.min(6, DB.quoteScommessa[Math.min(7,t.lastRank)]+(p.quotaMod||0))), you:t.id===p.id }));
         v.myBet=p.bet?{ targetId:p.bet.targetId, amount:p.bet.amount }:null;
       }
     }
@@ -927,7 +965,7 @@ function buildView(room, player){
         hand:p.hand.map((c,idx)=>({idx,cat:c.cat,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur,target:c.target})).filter(c=>c.cat==='ingara' && c.eff!=='defend' && c.eff!=='partenza'),
         rivals:[...G.players.filter(x=>x.id!==p.id).map(x=>({id:x.id,name:x.name,colorH:DB.colori[x.colorIdx].h})), ...(R.bosses||[]).map(b=>({id:b.id,name:b.name,colorH:b.kind==='boss'?'#ff3b3b':'#ffa733',isFoe:true,kind:b.kind}))]
       };
-      v.rolled = R.phase==='rolled' ? (function(){ const b=R.lastBreak; return { lines:b.lines, total:b.total, die:b.die, db:b.db, useNos:b.useNos, np:Math.min(R.finish||55,car.pos+b.total) }; })() : null;
+      v.rolled = R.phase==='rolled' ? (function(){ const b=R.lastBreak; return { lines:b.lines, total:b.total, die:b.die, db:b.db, useNos:b.useNos, np:Math.min(R.finish||55,car.pos+b.total), finish:(R.finish||0) }; })() : null;
     }
     return v;
   }
@@ -1103,6 +1141,7 @@ io.on('connection', (socket)=>{
   socket.on('setup:ready', handle((room,p)=>actReady(room,p)));
   socket.on('prep:buy', handle((room,p,d)=>actBuy(room,p,d.comp,d.lvl)));
   socket.on('prep:playCard', handle((room,p,d)=>actPlayPregara(room,p,d.handIdx,d.targetId,d.comp)));
+  socket.on('prep:discard', handle((room,p,d)=>actDiscard(room,p,d.handIdx)));
   socket.on('prep:police', handle((room,p,d)=>actPlayPolice(room,p,d.handIdx,d.cell)));
   socket.on('prep:bet', handle((room,p,d)=>actSetBet(room,p,d.targetId,d.amount)));
   socket.on('prep:done', handle((room,p)=>actPrepDone(room,p)));
