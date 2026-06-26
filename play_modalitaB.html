@@ -834,6 +834,17 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 .po-opt.sel .po-sub{color:var(--po)}
 .po-opt:disabled{cursor:default}
 .po-note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.45}.po-note b{color:var(--po)}
+.deckcta{background:linear-gradient(180deg,#15294a,#0e131d);border:1px solid var(--cyan);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 0 0 1px rgba(43,168,230,.15),0 8px 30px rgba(43,168,230,.12)}
+.deckcta .dc-h{font-family:var(--disp);text-transform:uppercase;letter-spacing:1.5px;font-size:13px;color:var(--cyan);margin-bottom:6px}
+.deckcta .dc-sub{font-size:13px;color:var(--muted);margin-bottom:13px;line-height:1.45}
+.deckdone{display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,var(--asphalt-1),#0e131d);border:1px solid rgba(69,193,102,.5);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.deckdone .dd-ic{width:34px;height:34px;border-radius:50%;background:rgba(69,193,102,.18);color:var(--good);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.deckdone .dd-t{font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:14px;color:var(--good)}
+.deckdone .dd-s{font-size:12px;color:var(--muted)}
+.deckdone .dd-edit{margin-left:auto;font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:12px;color:var(--cyan);background:none;border:1px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer;width:auto}
+.dckb{font-family:var(--disp);text-transform:uppercase;letter-spacing:.6px;font-size:9px;font-weight:600;padding:3px 9px;border-radius:999px;margin-left:auto;white-space:nowrap}
+.dckb.done{background:rgba(69,193,102,.16);color:var(--good);border:1px solid rgba(69,193,102,.5)}
+.dckb.todo{background:rgba(255,201,30,.12);color:var(--amber);border:1px solid rgba(255,201,30,.4)}
 </style>
 </head>
 <body>
@@ -874,6 +885,7 @@ body.locked{overflow:hidden;overscroll-behavior:none}
     <h1 class="title">Codice partita</h1>
     <div class="codebig" id="lob-code">····</div>
     <p class="hint" style="margin-top:0;margin-bottom:16px">Condividi questo codice con i tuoi amici. Lo digitano nella schermata iniziale per entrare.</p>
+    <div id="lob-deck"></div>
     <div class="panel">
       <div class="panel-h">Giocatori <span id="lob-count"></span></div>
       <div class="plist" id="lob-players"></div>
@@ -989,9 +1001,16 @@ function renderLobby(v){
   v.players.forEach(p=>{
     const rm=(v.you.isHost&&p.isBot)?`<button class="rmbot" onclick="socket.emit('removeBot',{id:${p.id}})">×</button>`:'';
     const badge=p.isBot?'<span class="pbadge" style="background:#1ad6ea22;color:var(--cyan)">CPU</span>':(p.isHost?'<span class="pbadge">Host</span>':'');
-    host.innerHTML+=`<div class="prow ${p.connected?'':'poff'}"><span class="pdot" style="background:${p.colorH}"></span><span class="pname">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span>${badge}${rm}</div>`;
+    const deckBadge=p.isBot?'':`<span class="dckb ${p.deck?'done':'todo'}">${p.deck?'\u2713 mazzo pronto':'mazzo da fare'}</span>`;
+    host.innerHTML+=`<div class="prow ${p.connected?'':'poff'}"><span class="pdot" style="background:${p.colorH}"></span><span class="pname">${esc(p.name)}${p.id===v.you.id?' (tu)':''}</span>${badge}${deckBadge}${rm}</div>`;
   });
   if(v.canAddBot)host.innerHTML+=`<button class="btn btn-line btn-sm" style="width:100%;margin-top:2px" onclick="socket.emit('addBot')">+ Aggiungi CPU</button>`;
+  // passo "costruisci il tuo mazzo" (stato dal server: ho gia' mandato un mazzo?)
+  const myP=v.players.find(p=>p.id===v.you.id); const myDeck=!!(myP&&myP.deck);
+  const ld=document.getElementById('lob-deck');
+  if(ld) ld.innerHTML = myDeck
+    ? `<div class="deckdone"><div class="dd-ic">\u2713</div><div><div class="dd-t">Mazzo pronto</div><div class="dd-s">Il tuo mazzo personale e' impostato.</div></div><button class="dd-edit" onclick="goBuildDeck()">Modifica</button></div>`
+    : `<div class="deckcta"><div class="dc-h">Il tuo mazzo</div><div class="dc-sub">Costruisci il tuo mazzo, la tua officina e scegli i tuoi 6 piloti. Senza, corri col mazzo base.</div><button class="btn btn-cyan" onclick="goBuildDeck()">\ud83d\udd27 Costruisci il tuo mazzo \u2192</button></div>`;
   // color picker (escludi colori presi da altri)
   const taken=new Set(v.players.filter(p=>p.id!==v.you.id).map(p=>COLORS.findIndex(c=>c.h===p.colorH)));
   const cw=document.getElementById('lob-colors');cw.innerHTML='';
@@ -1011,9 +1030,17 @@ function renderLobby(v){
   const sb=document.getElementById('lob-start');
   sb.style.display=v.you.isHost?'block':'none';
   sb.disabled=!v.canStart;
-  document.getElementById('lob-hint').textContent=v.you.isHost?(v.canStart?'Avvia quando siete pronti — o aggiungi una CPU per giocarci contro.':'Aggiungi una CPU o aspetta un altro giocatore per iniziare.'):'In attesa che l\'host avvii la partita…';
+  const humans=v.players.filter(p=>!p.isBot); const allDecks=humans.every(p=>p.deck);
+  let lh;
+  if(v.you.isHost){
+    if(!v.canStart) lh='Aggiungi una CPU o aspetta un altro giocatore per iniziare.';
+    else if(!allDecks) lh='Qualcuno non ha ancora costruito il mazzo: correr\u00e0 col mazzo base. Puoi avviare comunque.';
+    else lh='Avvia quando siete pronti \u2014 o aggiungi una CPU per giocarci contro.';
+  } else lh='In attesa che l\'host avvii la partita\u2026';
+  document.getElementById('lob-hint').textContent=lh;
 }
 function doStart(){socket.emit('startGame');}
+function goBuildDeck(){ location.href='/deck'; }   // MODALITA B: il deck-builder salva e torna a /b, che rientra nella stanza e rimanda il mazzo
 
 /* ---------- REVEAL (pilota segreto + carte iniziali) ---------- */
 function cardDesc(c){
@@ -2063,7 +2090,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-06-26 · modalitaB-v1';console.log('%c2FAST4U · Deck personale · build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-06-26 · modalitaB-v2';console.log('%c2FAST4U · Deck personale · build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 </body>
 </html>

@@ -1027,7 +1027,7 @@ function buildView(room, player){
   };
   if(G.phase!=='lobby' && G.phase!=='reveal') v.gameLog=(G.gameLog||[]).slice(-140).map(e=>({ id:e.id, round:e.round, phase:e.phase, kind:e.kind, text:e.text }));   // diario di tutta la partita
   if(G.phase==='lobby'){
-    v.players=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, isHost:p.id===room.hostId, isBot:!!p.isBot, connected:p.connected }));
+    v.players=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, isHost:p.id===room.hostId, isBot:!!p.isBot, connected:p.connected, deck:(p.isBot?true:!!p.deckCfg) }));
     v.canStart = (player.id===room.hostId) && G.players.length>=2;
     v.canAddBot = (player.id===room.hostId) && G.players.length<8;
     return v;
