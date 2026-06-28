@@ -1,0 +1,3710 @@
+[
+ {
+  "nome": "Sovrappressione turbo",
+  "lvl": 2,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": 4,
+  "target": "self"
+ },
+ {
+  "nome": "Pieno gas",
+  "lvl": 2,
+  "tipo": "Libero",
+  "dur": 2,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": 3,
+  "target": "self"
+ },
+ {
+  "nome": "Gomma forata in curva",
+  "lvl": 2,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": -4,
+  "target": "rival"
+ },
+ {
+  "nome": "Detrito in pista",
+  "lvl": 2,
+  "tipo": "Libero",
+  "dur": 2,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": -3,
+  "target": "rival"
+ },
+ {
+  "nome": "Colpo di Lupara",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Agguato in curva",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Rispetto a tutto gas",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Sgambetto d'onore",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Imboscata",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Pizzo sull'asfalto",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Baciamano",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 3,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Soffiata ai federali",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -3,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Avvertimento",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 3,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Pallottola vagante",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -3,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Launch control perfetto",
+  "lvl": 3,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": 6,
+  "target": "self"
+ },
+ {
+  "nome": "Sgommata in quinta",
+  "lvl": 3,
+  "tipo": "Libero",
+  "dur": 2,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": 5,
+  "target": "self"
+ },
+ {
+  "nome": "Turbina in affanno",
+  "lvl": 3,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": -6,
+  "target": "rival"
+ },
+ {
+  "nome": "Olio sull'asfalto",
+  "lvl": 3,
+  "tipo": "Libero",
+  "dur": 2,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": -5,
+  "target": "rival"
+ },
+ {
+  "nome": "Mano nera",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 4,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Bersaglio designato",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -4,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Sgarro mortale",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 4,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Tradimento",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -4,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Esecuzione mirata",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -5,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Caricatore pieno",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 5,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Faida aperta",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 5,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Conto da saldare",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -5,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "L'onore del padrino",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 6,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Mira sul capo",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -6,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Cavallaggio scatenato",
+  "lvl": 4,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": 8,
+  "target": "self"
+ },
+ {
+  "nome": "Sorpasso fulmineo",
+  "lvl": 4,
+  "tipo": "Libero",
+  "dur": 3,
+  "copie": 1,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": 7,
+  "target": "self"
+ },
+ {
+  "nome": "Motore esploso",
+  "lvl": 4,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": -8,
+  "target": "rival"
+ },
+ {
+  "nome": "Curva cieca",
+  "lvl": 4,
+  "tipo": "Libero",
+  "dur": 3,
+  "copie": 1,
+  "cat": "ingara",
+  "eff": "vel",
+  "val": -7,
+  "target": "rival"
+ },
+ {
+  "nome": "Vendetta a tutto gas",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 6,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Colpo al capofila",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -6,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Lupara bianca",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 6,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Sparatoria al semaforo",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -6,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Resa dei conti",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -7,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Giustizia di strada",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 7,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Sangue sull'asfalto",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -7,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Sentenza",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 7,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Lupara su misura",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -7,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 3,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "L'ultimo sgarro",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lupara Boys",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 7,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -3,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Re del vicolo",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Imboscata nel vicolo",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Padrone della via",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Gomme tagliate",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Sgambetto da strada",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Tassa di strada",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Trappola nel traffico",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Sgommata da boss",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Vetri rotti",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Asfalto mio",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Strada chiusa",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 4,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Posto sbagliato",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -4,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Comando io",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 4,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Contro il muro",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -4,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Chiodi sull'asfalto",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -5,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Quartiere blindato",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 4,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Strada sbarrata",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -4,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Legge della strada",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 5,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Agguato al semaforo",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -5,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Sorpasso sporco",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 4,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Affari sporchi",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 6,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Pestaggio",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -6,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Giro di vite",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": 6,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Borseggio",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -6,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Rapina lampo",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "vel",
+    "val": -7,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 3,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Mano pesante",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 6,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Colpo gobbo",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -6,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Tutto il blocco",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 6,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Sportellata",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -6,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 3,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Cresta sull'incasso",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Lowlifes",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 6,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -3,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Differenziale autobloccante",
+  "lvl": 2,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": 3,
+  "target": "self"
+ },
+ {
+  "nome": "Presa salda",
+  "lvl": 2,
+  "tipo": "Libero",
+  "dur": 2,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": 2,
+  "target": "self"
+ },
+ {
+  "nome": "Geometrie sballate",
+  "lvl": 2,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": -3,
+  "target": "rival"
+ },
+ {
+  "nome": "Sterzo molle",
+  "lvl": 2,
+  "tipo": "Libero",
+  "dur": 2,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": -2,
+  "target": "rival"
+ },
+ {
+  "nome": "Sterzata kruda",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Speronata",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Strappo secco",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Sportellata kruda",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Lamiera contro lamiera",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Forza bruta",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Manata",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Testacoda forzato",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Spaccatutto",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Schiacciato",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Telaio rigido su misura",
+  "lvl": 3,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": 5,
+  "target": "self"
+ },
+ {
+  "nome": "Traiettoria pulita",
+  "lvl": 3,
+  "tipo": "Libero",
+  "dur": 2,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": 4,
+  "target": "self"
+ },
+ {
+  "nome": "Telaio storto",
+  "lvl": 3,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": -5,
+  "target": "rival"
+ },
+ {
+  "nome": "Gomme fredde",
+  "lvl": 3,
+  "tipo": "Libero",
+  "dur": 2,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": -4,
+  "target": "rival"
+ },
+ {
+  "nome": "Senza pietà",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 3,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Muro di gomme",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -3,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Muso duro",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 3,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Spintone",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -3,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Tamponamento",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -4,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Ferro contro ferro",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 4,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Sangue freddo",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 4,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Rottamato",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -4,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Grezzo",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 5,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Frenata assassina",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -5,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Assetto da gara perfetto",
+  "lvl": 4,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": 7,
+  "target": "self"
+ },
+ {
+  "nome": "Aderenza totale",
+  "lvl": 4,
+  "tipo": "Libero",
+  "dur": 3,
+  "copie": 1,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": 6,
+  "target": "self"
+ },
+ {
+  "nome": "Sterzo bloccato",
+  "lvl": 4,
+  "tipo": "Rara",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": -7,
+  "target": "rival"
+ },
+ {
+  "nome": "Sbandata",
+  "lvl": 4,
+  "tipo": "Libero",
+  "dur": 3,
+  "copie": 1,
+  "cat": "ingara",
+  "eff": "ctrl",
+  "val": -6,
+  "target": "rival"
+ },
+ {
+  "nome": "Spinta brutale",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 5,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Incrocio chiuso",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -5,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Demolizione",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 5,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Carambola",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -5,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Botta secca",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -6,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Macello",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 6,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Fuori strada",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -6,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Carne e lamiere",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 6,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Stretta mortale",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": -6,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 3,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Pugno di ferro",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 2,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Krudo",
+  "effects": [
+   {
+    "eff": "ctrl",
+    "val": 6,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -3,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Nos +1",
+  "lvl": 2,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": 1,
+  "target": "self"
+ },
+ {
+  "nome": "Nos -1",
+  "lvl": 2,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": -1,
+  "target": "rival"
+ },
+ {
+  "nome": "Nos +2",
+  "lvl": 2,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": 2,
+  "target": "self"
+ },
+ {
+  "nome": "Nos -2",
+  "lvl": 2,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": -2,
+  "target": "rival"
+ },
+ {
+  "nome": "Lampo nel buio",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Fantasma notturno",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Ombra veloce",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Imboscata al buio",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Spegni i fari",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Buio pesto",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -1,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Nero su nero",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Sparizione",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Trappola d'ombra",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 1,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Accecato",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Nos +3",
+  "lvl": 3,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": 3,
+  "target": "self"
+ },
+ {
+  "nome": "Nos -3",
+  "lvl": 3,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": -3,
+  "target": "rival"
+ },
+ {
+  "nome": "Nos +4",
+  "lvl": 3,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": 4,
+  "target": "self"
+ },
+ {
+  "nome": "Nos -4",
+  "lvl": 3,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": -4,
+  "target": "rival"
+ },
+ {
+  "nome": "Notte fonda",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 3,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Eclissi",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -3,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Mezzanotte",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -3,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Nebbia nera",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -3,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Sabotaggio notturno",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 3,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Fuoco fatuo",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Scia nera",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -3,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Senza luci",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 2,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -3,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Colpo nell'ombra",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Black out",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -2,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 3,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Nos +5",
+  "lvl": 4,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": 5,
+  "target": "self"
+ },
+ {
+  "nome": "Nos -5",
+  "lvl": 4,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": -5,
+  "target": "rival"
+ },
+ {
+  "nome": "Nos +6",
+  "lvl": 4,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": 6,
+  "target": "self"
+ },
+ {
+  "nome": "Nos -6",
+  "lvl": 4,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 2,
+  "cat": "ingara",
+  "eff": "nos",
+  "val": -6,
+  "target": "rival"
+ },
+ {
+  "nome": "Coprifuoco",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 4,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -2,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Caccia notturna",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 3,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -4,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Predatore della notte",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 5,
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": -4,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Tradito dal buio",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -5,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 3,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Lama nell'ombra",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -5,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "vel",
+    "val": 4,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Silenzio",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 4,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -3,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Spettro",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 5,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -4,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Ala nera",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": 5,
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": -3,
+    "scope": "allRivals"
+   }
+  ]
+ },
+ {
+  "nome": "Pugnalata",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -4,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 3,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Tenebra",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "gang": "Ombre Nere",
+  "effects": [
+   {
+    "eff": "nos",
+    "val": -4,
+    "scope": "oneTarget"
+   },
+   {
+    "eff": "ctrl",
+    "val": 4,
+    "scope": "allOthers"
+   }
+  ]
+ },
+ {
+  "nome": "Dado forza 1,2",
+  "lvl": 2,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     1,
+     2
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Dado forza 1,2",
+  "lvl": 2,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     1,
+     2
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Dado forza 3,4,5",
+  "lvl": 2,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Dado forza 3,4,5",
+  "lvl": 2,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Patto col Diavolo · 3-4-5",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 2,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Mano del Demonio · 3-4-5",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 3,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Fuoco dell'inferno · 3-4-5",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 2,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Marchio del Diavolo · 3-4-5",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 3,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Maledizione · 1-2",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     1,
+     2
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 3,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Il Sei del Diavolo",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     6
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 3,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Tiro infernale · 6",
+  "lvl": 2,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     6
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 3,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Dado forza 1,2",
+  "lvl": 3,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     1,
+     2
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 3,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Dado forza 1,2",
+  "lvl": 3,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     1,
+     2
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 3,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Dado forza 3,4,5",
+  "lvl": 3,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 3,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Dado forza 3,4,5",
+  "lvl": 3,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 3,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Fortuna sfacciata · 3-4-5",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 4,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Asso nella manica · 3-4-5",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 5,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Tridente · 3-4-5",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 4,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Sortilegio · 3-4-5",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 5,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Malocchio · 1-2",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     1,
+     2
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 5,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Numero della Bestia · 6",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     6
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 4,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Mano di Lucifero · 6",
+  "lvl": 3,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     6
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 4,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Dado forza 1,2",
+  "lvl": 4,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     1,
+     2
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 4,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Dado forza 1,2",
+  "lvl": 4,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     1,
+     2
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 4,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Dado forza 3,4,5",
+  "lvl": 4,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 4,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Dado forza 3,4,5",
+  "lvl": 4,
+  "tipo": "Base",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 4,
+    "scope": "self"
+   }
+  ]
+ },
+ {
+  "nome": "Anima dannata · 3-4-5",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 5,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Tentazione · 3-4-5",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 6,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Carico infernale · 3-4-5",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 5,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Benedizione nera · 3-4-5",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 6,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Jella ribaltata · 1-2",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     1,
+     2
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 6,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Sei di fuoco",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     6
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "vel",
+    "val": 6,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ },
+ {
+  "nome": "Dannazione · 6",
+  "lvl": 4,
+  "tipo": "ESP Premium",
+  "dur": 1,
+  "copie": 1,
+  "cat": "ingara",
+  "effects": [
+   {
+    "eff": "dadoForza",
+    "set": [
+     6
+    ],
+    "scope": "self"
+   },
+   {
+    "eff": "ctrl",
+    "val": 5,
+    "scope": "self"
+   }
+  ],
+  "gang": "I Diavoli"
+ }
+]

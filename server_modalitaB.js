@@ -35,21 +35,35 @@ const DB = {
     { n:'Viola', h:'#9b59b6' }, { n:'Turchese', h:'#1abc9c' }, { n:'Arancio', h:'#e67e22' }, { n:'Rosa', h:'#e91e63' }
   ],
   piloti: [
-    { id:1, nome:"Topho 'Grugno' Ragnox", gang:'Scimmo Syndik8', tipo:'rettilineo', ab:'+1 Controllo nei Rettilinei', partenza:2 },
-    { id:2, nome:"Lil' Arpa", gang:'Scimmo Syndik8', tipo:'citta', ab:'+1 Controllo in Città', partenza:1 },
-    { id:3, nome:"Iri 'Rage Pulse'", gang:'Scimmo Syndik8', tipo:'fortuna', ab:'1° tiro 2 o 4 → +2 movimento', partenza:3, fortuna:[2,4] },
-    { id:4, nome:"Donaz 'Torque Don'", gang:'Kromag Kru', tipo:'drift', ab:'+1 Controllo nei Drift', partenza:1 },
-    { id:5, nome:"Lax 'Skid Prophet'", gang:'Kromag Kru', tipo:'nos', ab:'NOS → +4 movimento extra', partenza:2 },
-    { id:6, nome:"IZ 'Blazeflip'", gang:'Kromag Kru', tipo:'fortuna', ab:'1° tiro 1 o 5 → +2 movimento', partenza:3, fortuna:[1,5] },
-    { id:7, nome:"MOKAH 'Drip Boss'", gang:"Mo'ka Mafia", tipo:'citta', ab:'+1 Controllo in Città', partenza:1 },
-    { id:8, nome:"Barb'ra 'Sharp Curlz'", gang:"Mo'ka Mafia", tipo:'drift', ab:'+1 Controllo nei Drift', partenza:1 },
-    { id:9, nome:"Cespik 'Clippaz'", gang:"Mo'ka Mafia", tipo:'rettilineo', ab:'+1 Controllo nei Rettilinei', partenza:2 },
-    { id:10, nome:'GEMI.X', gang:'Geminitech', tipo:'nos', ab:'NOS → +4 movimento extra', partenza:2 },
-    { id:11, nome:"Antym 'RAMMER'", gang:'Geminitech', tipo:'fortuna', ab:'1° tiro 1 o 3 → +2 movimento', partenza:3, fortuna:[1,3] },
-    { id:12, nome:'Hoi.H4nn', gang:'Geminitech', tipo:'rettilineo', ab:'+1 Controllo nei Rettilinei', partenza:2 },
-    { id:13, nome:"K0T0R 'Blind Thrill'", gang:'Kotor Void', tipo:'citta', ab:'+1 Controllo in Città', partenza:1 },
-    { id:14, nome:"Lil' Yanna", gang:'Kotor Void', tipo:'drift', ab:'+1 Controllo nei Drift', partenza:1 },
-    { id:15, nome:"Scimmiz 'Echo Noiz'", gang:'Kotor Void', tipo:'nos', ab:'NOS → +4 movimento extra', partenza:2 }
+    // A · Lupara Boys (leva Velocità)
+    { id:1,  nome:"Topho 'Grugno' Ragnox",   gang:'Lupara Boys', tipo:'rettilineo', partenza:2, seg:{type:'rettilineo',amt:1}, bonus:{vel:1},          ab:'+1 nei Rettilinei · +1 Velocità' },
+    { id:2,  nome:"Cespik 'Clippaz'",         gang:'Lupara Boys', tipo:'rettilineo', partenza:2, seg:{type:'rettilineo',amt:2}, bonus:{vel:1},          ab:'+2 nei Rettilinei · +1 Velocità' },
+    { id:3,  nome:"Hoi.H4nn",                 gang:'Lupara Boys', tipo:'rettilineo', partenza:2, seg:{type:'rettilineo',amt:2}, bonus:{vel:2},          ab:'+2 nei Rettilinei · +2 Velocità' },
+    { id:4,  nome:"Dmitri 'Vostok' Kozlov",   gang:'Lupara Boys', tipo:'rettilineo', partenza:2, seg:{type:'rettilineo',amt:2}, bonus:{vel:2},          ab:'+2 nei Rettilinei · +2 Velocità' },
+    { id:5,  nome:"Greta 'Autobahn' Brandt",  gang:'Lupara Boys', tipo:'rettilineo', partenza:2, seg:{type:'rettilineo',amt:3}, bonus:{vel:1},          ab:'+3 nei Rettilinei · +1 Velocità' },
+    // B · Lowlifes (leva Città)
+    { id:6,  nome:"Lil' Arpa",                gang:'Lowlifes',    tipo:'citta',      partenza:1, seg:{type:'citta',amt:1},      bonus:{vel:1},          ab:'+1 in Città · +1 Velocità' },
+    { id:7,  nome:"K0T0R 'Blind Thrill'",     gang:'Lowlifes',    tipo:'citta',      partenza:1, seg:{type:'citta',amt:1},      bonus:{ctrl:1},         ab:'+1 in Città · +1 Controllo' },
+    { id:8,  nome:"MOKAH 'Drip Boss'",        gang:'Lowlifes',    tipo:'citta',      partenza:1, seg:{type:'citta',amt:2},      bonus:{vel:1},          ab:'+2 in Città · +1 Velocità' },
+    { id:9,  nome:"Emeka 'Lagos' Okafor",     gang:'Lowlifes',    tipo:'citta',      partenza:1, seg:{type:'citta',amt:2},      bonus:{vel:1},          ab:'+2 in Città · +1 Velocità' },
+    { id:10, nome:"Yumi 'Tokyo' Takeda",      gang:'Lowlifes',    tipo:'citta',      partenza:1, seg:{type:'citta',amt:2},      bonus:{ctrl:1},         ab:'+2 in Città · +1 Controllo' },
+    // C · Krudo (leva Controllo / Drift)
+    { id:11, nome:"Donaz 'Torque Don'",       gang:'Krudo',       tipo:'drift',      partenza:1, seg:{type:'drift',amt:1},      bonus:{ctrl:1},         ab:'+1 nei Drift · +1 Controllo' },
+    { id:12, nome:"Lil' Yanna",               gang:'Krudo',       tipo:'drift',      partenza:1, seg:{type:'drift',amt:1},      bonus:{vel:-1},         ab:'+1 nei Drift · −1 Velocità' },
+    { id:13, nome:"Barb'ra 'Sharp Curlz'",    gang:'Krudo',       tipo:'drift',      partenza:1, seg:{type:'drift',amt:2},      bonus:{ctrl:1},         ab:'+2 nei Drift · +1 Controllo' },
+    { id:14, nome:"Kenji 'Touge' Nakamura",   gang:'Krudo',       tipo:'drift',      partenza:1, seg:{type:'drift',amt:2},      bonus:{ctrl:1},         ab:'+2 nei Drift · +1 Controllo' },
+    { id:15, nome:"Amara 'Dakar' Diallo",     gang:'Krudo',       tipo:'drift',      partenza:1, seg:{type:'drift',amt:2},      bonus:{vel:-1,ctrl:1},  ab:'+2 nei Drift · −1 Velocità +1 Controllo' },
+    // D · Ombre Nere (leva NOS) — specialisti rettilineo
+    { id:16, nome:"Lax 'Skid Prophet'",       gang:'Ombre Nere',  tipo:'nos',        partenza:2, seg:{type:'rettilineo',amt:2}, bonus:{nos:1},          ab:'+2 nei Rettilinei · +1 NOS' },
+    { id:17, nome:"GEMI.X",                   gang:'Ombre Nere',  tipo:'nos',        partenza:2, seg:{type:'rettilineo',amt:1}, bonus:{nos:2},          ab:'+1 nei Rettilinei · +2 NOS' },
+    { id:18, nome:"Scimmiz 'Echo Noiz'",      gang:'Ombre Nere',  tipo:'nos',        partenza:2, seg:{type:'rettilineo',amt:2}, bonus:{nos:3},          ab:'+2 nei Rettilinei · +3 NOS' },
+    { id:19, nome:"Klaus 'Turbo' Richter",    gang:'Ombre Nere',  tipo:'nos',        partenza:2, seg:{type:'rettilineo',amt:2}, bonus:{nos:2},          ab:'+2 nei Rettilinei · +2 NOS' },
+    { id:20, nome:"Jin 'Seoul' Park",         gang:'Ombre Nere',  tipo:'nos',        partenza:2, seg:{type:'rettilineo',amt:3}, bonus:{nos:2},          ab:'+3 nei Rettilinei · +2 NOS' },
+    // E · I Diavoli (leva Fortuna / dado)
+    { id:21, nome:"Iri 'Rage Pulse'",         gang:'I Diavoli',   tipo:'fortuna',    partenza:3, fortuna:{set:[1,2],amt:1},     bonus:{ctrl:1},         ab:'+1 se 1° dado 1-2 · +1 Controllo' },
+    { id:22, nome:"IZ 'Blazeflip'",           gang:'I Diavoli',   tipo:'fortuna',    partenza:3, fortuna:{set:[3,4,5],amt:2},   bonus:{ctrl:1},         ab:'+2 se 1° dado 3-4-5 · +1 Controllo' },
+    { id:23, nome:"Antym 'RAMMER'",           gang:'I Diavoli',   tipo:'fortuna',    partenza:3, fortuna:{set:[1],amt:2},       bonus:{ctrl:2},         ab:'+2 se 1° dado 1 · +2 Controllo' },
+    { id:24, nome:"Katya 'Zima' Sokolova",    gang:'I Diavoli',   tipo:'fortuna',    partenza:3, fortuna:{set:[1,2],amt:2},     bonus:{ctrl:1},         ab:'+2 se 1° dado 1-2 · +1 Controllo' }
   ]
 };
 const TIPO_LABEL = { rettilineo:'Rettilineo', citta:'Città', drift:'Drift' };
@@ -176,6 +190,13 @@ function mapScale(arr){ return arr.map(c=>({cat:'ingara',nome:c[0],eff:c[1],val:
 DB.espValori = { motore:{3:7,4:9}, cambio:{3:7,4:8}, sterzo:{3:8,4:9}, assetto:{3:6,4:8}, nos:{3:7,4:9} };
 DB.espPrezzi = { motore:{3:2650,4:3900}, cambio:{3:2600,4:3250}, sterzo:{3:3200,4:3900}, assetto:{3:2100,4:3250}, nos:{3:2000,4:2900} };
 
+/* === ESPANSIONE GANG (Mod B): carte in-gara generate da 2FAST4U_gang.xlsx ===
+   189 tipi · 221 copie — Rara/Libero/Base (Tutti) + ESP Premium (gated per gang).
+   Formato: oggetto carta gia' pronto {cat:'ingara', nome, lvl, dur, eff/val/target  OPPURE  effects:[...], gang?}. */
+const GANG_INGARA = require('./cards_ingara_modB.json');
+const GANG_BY_LVL = {1:[],2:[],3:[],4:[]};
+GANG_INGARA.forEach(c=>{ (GANG_BY_LVL[c.lvl] || (GANG_BY_LVL[c.lvl]=[])).push(c); });
+
 /* effetti pre-gara presenti nei mazzi BASE della B (le altre — prize/smonta/reopen — sono espansione, escluse) */
 const BASE_PREGARA_EFF = ['po','money','discount','sprint','betUp','betDown','quota'];
 
@@ -189,6 +210,7 @@ const NAME_MAP = (function(){
   C_DIFESA.forEach(c=>{ m[c[0]]={cat:'difesa',nome:c[0],eff:'defend',val:c[1],dur:c[2]}; });
   C_PREGARA.forEach(c=>{ m[c[0]]={cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3]}; });
   C_POLIZIA.forEach(c=>{ m[c[0]]={cat:'polizia',nome:c[0],kind:c[1],size:c[2]}; });
+  GANG_INGARA.forEach(c=>{ m[c.nome]=c; });   // espansione gang: sovrascrive eventuali duplicati di nome con la versione nuova
   return m;
 })();
 
@@ -205,10 +227,7 @@ function buildDeckFromCfg(cfg){
 function defaultDeckCards(){
   const out=[];
   C_INGARA.filter(c=>['vel','ctrl','partenza'].includes(c[1])).forEach(c=> out.push({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4],lvl:1}));   // 54 carte L1 (no dado/reach: speciali = espansione)
-  const commons=L=> SCALE_PACKS[L].filter(c=>c[5]==='comune');
-  commons(2).slice(0,12).forEach(c=> out.push({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4],lvl:2}));
-  commons(3).slice(0,8 ).forEach(c=> out.push({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4],lvl:3}));
-  commons(4).slice(0,6 ).forEach(c=> out.push({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4],lvl:4}));
+  GANG_INGARA.forEach(c=> out.push({...c}));   // L2/L3/L4: tutte le carte gang (Rara/Libero/Base/ESP Premium). Il gate gang limita il gioco in gara al pilota giusto.
   C_DIFESA.filter(c=>c[2]!==1).forEach(c=> out.push({cat:'difesa',nome:c[0],eff:'defend',val:c[1],dur:c[2]}));   // 17 (no specchio)
   C_PREGARA.filter(c=>BASE_PREGARA_EFF.includes(c[1])).forEach(c=> out.push({cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3]}));   // 24
   C_POLIZIA.filter(c=>c[1]==='blocco'&&(c[2]===4||c[2]===6)).forEach(c=> out.push({cat:'polizia',nome:c[0],kind:c[1],size:c[2]}));   // 8
@@ -278,7 +297,7 @@ function drawCard(G){
   if(!G.deck||!G.deck.length){ if(G.discard&&G.discard.length){ G.deck=shuffle(G.discard); G.discard=[]; } else { G.deck=makeDeck(); } }
   return G.deck.length ? G.deck.pop() : null;
 }
-function statVal(p,k){ return pieceVal(p,k,p.comp[k]); }   // B: valore personale del pezzo (con variante esp)
+function statVal(p,k){ return pieceVal(p,k,p.comp[k]) + ((k==='nos' && p.pilot && p.pilot.bonus && p.pilot.bonus.nos) || 0); }   // B: valore personale del pezzo (con variante esp) + bonus nos del pilota
 
 /* ============================ STANZE ============================ */
 const rooms = new Map();             // code -> room
@@ -703,7 +722,7 @@ function actPrepDone(room,p){
 function setupRace(room){                                         // crea le auto: durante il semaforo le carte partenza accumulano pendPart
   const G=room.G;
   G.R={ turnOrder:[...G.order], turn:1, ptr:0, phase:'await', cars:{}, lastBreak:null, log:[], logId:0, finish:(G.sprintFinish||trackTotalCells(G)), turnDice:[], police:[], blocks:(G.blocks||[]).slice() };
-  G.players.forEach(p=>{ G.R.cars[p.id]={ pos:0, firstDone:false, nosUsed:false, fx:[], pendDado:null, pendPart:0, pendReach:null }; p.incoming=[]; });  // azzero incoming: finestra difese pre-gara chiusa
+  G.players.forEach(p=>{ G.R.cars[p.id]={ pos:0, firstDone:false, nosUsed:false, fx:[], pendDado:null, pendDadoSet:null, pendPart:0, pendReach:null }; p.incoming=[]; });  // azzero incoming: finestra difese pre-gara chiusa
 }
 function beginRace(room){                                         // VERDE: quota, polizia, boss, parte il 1° turno
   const G=room.G;
@@ -754,7 +773,7 @@ function botsPlayPartenza(room){
 function activeRace(G){ return G.players.find(p=>p.id===G.R.turnOrder[G.R.ptr]); }
 function dieBonus(d){ return d<=2?1:d<=5?2:3; }
 function fxSum(R,p,stat){ return R.cars[p.id].fx.filter(e=>e.stat===stat).reduce((s,e)=>s+e.amt,0); }
-function nosAllowed(G,p){ const car=G.R.cars[p.id]; const seg=segOf(G,Math.max(1,car.pos)); if(car.nosUsed) return false; if(!car.firstDone) return false; if(seg.t==='drift') return false; if(statVal(p,'nos')<=0) return false; return true; }
+function nosAllowed(G,p){ const car=G.R.cars[p.id]; const seg=segOf(G,Math.max(1,car.pos)); if(car.nosUsed) return false; if(!car.firstDone) return false; if(seg.t==='drift') return false; if(statVal(p,'nos')+fxSum(G.R,p,'nos')<=0) return false; return true; }
 
 function computeMove(G,p,die,useNos){
   const R=G.R; const car=R.cars[p.id]; const first=!car.firstDone; const seg=segOf(G,Math.max(1,car.pos));
@@ -772,14 +791,17 @@ function computeMove(G,p,die,useNos){
   let vel=mot+cam+fxVel, ctrl=ste+ass+fxCtrl;
   let total=mot+cam+ste+ass+pes;
   const lines=[{k:'Base auto',v:mot+cam+ste+ass+pes}];
+  const _pb=(p.pilot&&p.pilot.bonus)||{};
+  if(_pb.vel){ vel+=_pb.vel; total+=_pb.vel; lines.push({k:'Bonus pilota Velocità',v:_pb.vel,cls:_pb.vel>0?'pos':'neg'}); }
+  if(_pb.ctrl){ ctrl+=_pb.ctrl; total+=_pb.ctrl; lines.push({k:'Bonus pilota Controllo',v:_pb.ctrl,cls:_pb.ctrl>0?'pos':'neg'}); }
   if(fxVel){ total+=fxVel; lines.push({k:'Carte velocità',v:fxVel,cls:fxVel>0?'pos':'neg'}); }
   if(fxCtrl){ total+=fxCtrl; lines.push({k:'Carte controllo',v:fxCtrl,cls:fxCtrl>0?'pos':'neg'}); }
   const db=dieBonus(die); total+=db; lines.push({k:'Dado '+die,v:db,cls:'pos'});
   if(first){ total+=p.pilot.partenza; lines.push({k:'Partenza pilota',v:p.pilot.partenza,cls:'pos'}); }
   if(car.pendPart){ total+=car.pendPart; lines.push({k:'Carta partenza',v:car.pendPart,cls:car.pendPart>0?'pos':'neg'}); }
-  if(!first && ['rettilineo','drift','citta'].includes(p.pilot.tipo) && p.pilot.tipo===seg.t){ total+=1; ctrl+=1; lines.push({k:'Abilità '+TIPO_LABEL[seg.t],v:1,cls:'pos'}); }
-  if(first && p.pilot.tipo==='fortuna' && p.pilot.fortuna.includes(die)){ total+=2; vel+=2; lines.push({k:'Fortuna 1° tiro',v:2,cls:'pos'}); }
-  if(useNos){ let nv=statVal(p,'nos'); if(seg.t==='citta') nv=Math.max(0,nv-1); const add=nv+(p.pilot.tipo==='nos'?4:0); total+=add; lines.push({k:'NOS'+(seg.t==='citta'?' (–1 città)':'')+(p.pilot.tipo==='nos'?' +4':''),v:add,cls:'nos'}); }
+  if(!first && p.pilot.seg && p.pilot.seg.type===seg.t){ const _sa=p.pilot.seg.amt; total+=_sa; ctrl+=_sa; lines.push({k:'Specialità '+(TIPO_LABEL[seg.t]||seg.t),v:_sa,cls:'pos'}); }
+  if(first && p.pilot.fortuna && Array.isArray(p.pilot.fortuna.set) && p.pilot.fortuna.set.includes(die)){ const _fa=p.pilot.fortuna.amt; total+=_fa; vel+=_fa; lines.push({k:'Fortuna 1° tiro',v:_fa,cls:'pos'}); }
+  if(useNos){ let nv=statVal(p,'nos')+fxSum(R,p,'nos'); if(seg.t==='citta') nv=Math.max(0,nv-1); const add=nv+(p.pilot.tipo==='nos'?4:0); total+=add; lines.push({k:'NOS'+(seg.t==='citta'?' (–1 città)':'')+(p.pilot.tipo==='nos'?' +4':''),v:add,cls:'nos'}); }
   if(!noPen){
     if(seg.pv && vel>seg.pv.gt){ total-=seg.pv.a; lines.push({k:'Pen. Drift (Vel '+vel+'>'+seg.pv.gt+')',v:-seg.pv.a,cls:'neg'}); }
     if(seg.pc && ctrl<seg.pc.lt){ total-=seg.pc.a; lines.push({k:'Pen. Controllo (Ctrl '+ctrl+'<'+seg.pc.lt+')',v:-seg.pc.a,cls:'neg'}); }
@@ -791,12 +813,41 @@ function computeMove(G,p,die,useNos){
 function raceLog(G,e){ if(!G.R)return; e.id=++G.R.logId; e.t=G.R.turn; G.R.log.push(e); if(G.R.log.length>60)G.R.log.shift(); }
 function glog(G,text,kind){ if(!G)return; G.gameSeq=(G.gameSeq||0)+1; (G.gameLog=G.gameLog||[]).push({ id:G.gameSeq, round:G.round||1, phase:G.phase, kind:kind||'info', text:text }); if(G.gameLog.length>240) G.gameLog.shift(); }   // registro di TUTTA la partita
 const COMPLAB={motore:'Motore',cambio:'Cambio',sterzo:'Sterzo',assetto:'Assetto',peso:'Peso',nos:'NOS'};
+function applyRaceEff(car, eff, val, dur, set){
+  if(eff==='vel'||eff==='ctrl'||eff==='nos'){ const fx={stat:eff,amt:val,turns:dur}; car.fx.push(fx); return fx; }
+  if(eff==='partenza'){ car.pendPart+=val; return null; }
+  if(eff==='dado'){ const prev=car.pendDado; car.pendDado=val; return {prevDado:prev}; }
+  if(eff==='dadoForza'){ car.pendDadoSet=(Array.isArray(set)&&set.length?set.slice():(val!=null?[val]:null)); return null; }   // I Diavoli: forza il dado in un insieme (es. 3-4-5)
+  if(eff==='reach'){ car.pendReach={ref:val,off:dur}; return null; }
+  return null;
+}
 function actRacePlayCard(room,p,handIdx,targetId){
   const G=room.G; if(G.phase!=='race') return 'Non in gara.';
   if(activeRace(G).id!==p.id) return 'Non è il tuo turno.';
   if(G.R.phase!=='await') return 'Hai già tirato.';
   const c=p.hand[handIdx]; if(!c||c.cat!=='ingara') return 'Carta non valida.';
   if(c.eff==='defend') return 'Le difese si usano solo quando vieni colpito.';
+  // GATE GANG: le carte esclusive (ESP Premium) si giocano solo col pilota della gang giusta
+  if(c.gang && (!p.pilot || p.pilot.gang!==c.gang)) return 'Solo i piloti '+c.gang+' possono giocare «'+c.nome+'».';
+  // CARTE A DOPPIO VALORE / MULTI-EFFETTO (ESP Premium): ogni effetto ha uno scope
+  //   self = chi la gioca · allRivals = ogni rivale · oneTarget = un bersaglio · allOthers = tutti tranne il bersaglio
+  if(Array.isArray(c.effects) && c.effects.length){
+    const needTgt=c.effects.some(e=>e.scope==='oneTarget'||e.scope==='allOthers');
+    let tgt=null;
+    if(needTgt){ tgt=G.players.find(x=>x.id===targetId && x.id!==p.id); if(!tgt) return 'Scegli il rivale da colpire.'; }
+    const carsFor=(scope)=>{
+      if(scope==='self') return [G.R.cars[p.id]];
+      if(scope==='allRivals') return G.players.filter(x=>x.id!==p.id).map(x=>G.R.cars[x.id]);
+      if(scope==='oneTarget') return [G.R.cars[tgt.id]];
+      if(scope==='allOthers') return G.players.filter(x=>x.id!==tgt.id).map(x=>G.R.cars[x.id]);
+      return [];
+    };
+    c.effects.forEach(e=> carsFor(e.scope).forEach(car=> applyRaceEff(car, e.eff, e.val, (e.dur!=null?e.dur:c.dur), e.set) ));
+    raceLog(G,{kind:'card',who:p.name,target:(tgt?tgt.name:'tutti'),targetId:(tgt?tgt.id:null),nome:c.nome,eff:'esp',val:0,dur:c.dur});
+    glog(G,p.name+' gioca «'+c.nome+'»'+(tgt?(' colpendo '+tgt.name):'')+' (ESP Premium)','card');
+    p.discard.push(c); p.hand.splice(handIdx,1); return null;
+  }
+  // CARTE CLASSICHE A EFFETTO SINGOLO
   let target=p, isFoe=false;
   if(c.target==='rival'){
     let t=G.players.find(x=>x.id===targetId && x.id!==p.id);
@@ -807,10 +858,9 @@ function actRacePlayCard(room,p,handIdx,targetId){
   if(c.eff==='reach') target=p;                          // catch-up: sempre su di sé, mai redirigibile
   const tc=G.R.cars[target.id];
   let _fx=null,_prevDado;
-  if(c.eff==='vel'||c.eff==='ctrl'){ _fx={stat:c.eff,amt:c.val,turns:c.dur}; tc.fx.push(_fx); }
-  else if(c.eff==='partenza') tc.pendPart+=c.val;
-  else if(c.eff==='dado'){ _prevDado=tc.pendDado; tc.pendDado=c.val; }
-  else if(c.eff==='reach') tc.pendReach={ref:c.val,off:c.dur};
+  const _r=applyRaceEff(tc, c.eff, c.val, c.dur);
+  if(c.eff==='vel'||c.eff==='ctrl') _fx=_r;
+  else if(c.eff==='dado'&&_r) _prevDado=_r.prevDado;
   raceLog(G,{kind:'card',who:p.name,target:target.name,targetId:target.id,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur});
   glog(G,p.name+' gioca «'+c.nome+'»'+(c.target==='rival'&&target.id!==p.id?(' su '+target.name):'')+' (gara)','card');
   if(c.target==='rival' && target.id!==p.id && !isFoe) recordMalus(room, p, target, {phase:'ingara', eff:c.eff, val:c.val, dur:c.dur, fxRef:_fx, prevDado:_prevDado});  // i boss non si difendono
@@ -823,7 +873,7 @@ function actRoll(room,p,useNos){
   p.incoming=(p.incoming||[]).filter(m=>m.phase!=='ingara');   // finestra di difesa chiusa: ora il malus fa effetto
   const car=G.R.cars[p.id];
   const realNos = !!useNos && nosAllowed(G,p);
-  const die = car.pendDado || d6();
+  const die = (car.pendDadoSet && car.pendDadoSet.length) ? car.pendDadoSet[Math.floor(Math.random()*car.pendDadoSet.length)] : (car.pendDado || d6());
   (G.R.turnDice=G.R.turnDice||[]).push(die);
   G.R.lastBreak = computeMove(G,p,die,realNos);
   G.R.phase='rolled';
@@ -842,7 +892,7 @@ function actConfirmMove(room,p){
   if(onBlk && car.pos>0){ p.money=Math.max(0,p.money-500); raceLog(G,{kind:'fine',who:p.name,amount:500,pos:car.pos}); glog(G,'🚧 '+p.name+' multato al blocco · −€500 (cas. '+car.pos+')','fine'); }
   raceLog(G,{kind:'move',who:p.name,seg:TIPO_LABEL[b.segType]||b.segType,mov:b.total,pos:car.pos,die:b.die});
   glog(G,p.name+' muove '+b.total+' → cas. '+car.pos+' ('+(TIPO_LABEL[b.segType]||b.segType)+')','move');
-  car.pendPart=0; car.pendDado=null; car.pendReach=null;
+  car.pendPart=0; car.pendDado=null; car.pendDadoSet=null; car.pendReach=null;
   car.fx=car.fx.map(e=>({...e,turns:e.turns-1})).filter(e=>e.turns>0);
   G.R.lastBreak=null; G.R.phase='await';
   G.R.ptr++;
@@ -1198,13 +1248,23 @@ function botPrep(room,bot){
 function botRace(room,bot){
   const G=room.G, R=G.R;
   if(R.phase==='await'){
-    const reachC=bot.hand.map((c,i)=>({c,i})).filter(o=>o.c.cat==='ingara'&&o.c.eff==='reach');
+    const hand=bot.hand.map((c,i)=>({c,i}));
+    const myGang=bot.pilot?bot.pilot.gang:null;
+    const ok=o=> o.c.cat==='ingara' && (!o.c.gang || o.c.gang===myGang);   // gate gang: ESP Premium solo col pilota giusto
+    const reachC =hand.filter(o=>ok(o)&&o.c.eff==='reach');
+    const dado   =hand.filter(o=>ok(o)&&Array.isArray(o.c.effects)&&o.c.effects.some(e=>e.eff==='dadoForza'));         // I Diavoli: forza il dado
+    const egoist =hand.filter(o=>ok(o)&&Array.isArray(o.c.effects)&&o.c.effects.some(e=>e.scope==='self'&&e.val>0)&&!o.c.effects.some(e=>e.scope==='oneTarget'));  // ESP Premium egoista
+    const sabot  =hand.filter(o=>ok(o)&&Array.isArray(o.c.effects)&&o.c.effects.some(e=>e.scope==='oneTarget'));       // ESP Premium sabotaggio (serve bersaglio)
+    const selfPos=hand.filter(o=>ok(o)&&o.c.target==='self'&&(o.c.eff==='vel'||o.c.eff==='ctrl'||o.c.eff==='nos')&&o.c.val>0);
+    const rivalNeg=hand.filter(o=>ok(o)&&o.c.target==='rival');
     const behind=G.players.some(p=>p.id!==bot.id&&R.cars[p.id].pos>R.cars[bot.id].pos);
-    const selfPos=bot.hand.map((c,i)=>({c,i})).filter(o=>o.c.cat==='ingara'&&o.c.target==='self'&&(o.c.eff==='vel'||o.c.eff==='ctrl')&&o.c.val>0);
-    const rivalNeg=bot.hand.map((c,i)=>({c,i})).filter(o=>o.c.cat==='ingara'&&o.c.target==='rival');
-    if(reachC.length && behind && Math.random()<0.5) actRacePlayCard(room,bot,reachC[0].i);
-    else if(selfPos.length && Math.random()<0.45) actRacePlayCard(room,bot,selfPos[0].i);
-    else if(rivalNeg.length && Math.random()<0.5){ const lead=[...G.players].filter(p=>p.id!==bot.id).sort((a,b)=>R.cars[b.id].pos-R.cars[a.id].pos)[0]; if(lead) actRacePlayCard(room,bot,rivalNeg[0].i,lead.id); }
+    const leader=[...G.players].filter(p=>p.id!==bot.id).sort((a,b)=>R.cars[b.id].pos-R.cars[a.id].pos)[0];
+    if(dado.length && (behind||Math.random()<0.4)) actRacePlayCard(room,bot,dado[0].i);                                // dado-forza prima del tiro
+    else if(reachC.length && behind && Math.random()<0.5) actRacePlayCard(room,bot,reachC[0].i);
+    else if(sabot.length && leader && Math.random()<0.45) actRacePlayCard(room,bot,sabot[0].i,leader.id);
+    else if(egoist.length && Math.random()<0.45) actRacePlayCard(room,bot,egoist[0].i);
+    else if(selfPos.length && Math.random()<0.4) actRacePlayCard(room,bot,selfPos[0].i);
+    else if(rivalNeg.length && leader && Math.random()<0.5) actRacePlayCard(room,bot,rivalNeg[0].i,leader.id);
     actRoll(room,bot, nosAllowed(G,bot)&&Math.random()<0.5);
     actConfirmMove(room,bot);
   } else if(R.phase==='rolled') actConfirmMove(room,bot);
