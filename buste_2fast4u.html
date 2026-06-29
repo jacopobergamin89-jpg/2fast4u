@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>2FAST4U — Buste</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --asphalt:#0B0D12; --asphalt2:#11141C; --surface:#181C26; --surface2:#1F2430;
+  --line:#2A3040; --ink:#EEF1F6; --dim:#8B93A5; --dim2:#5C6373;
+  --pink:#FF2E83; --cyan:#1FE0E0; --gold:#F4C95D;
+  --g-lupara:#FF4747; --g-lowlifes:#3D8BFF; --g-krudo:#2FD98A; --g-ombre:#A974FF; --g-diavoli:#FFB02E;
+  --steel:#7E8696;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(120% 60% at 50% -10%, rgba(255,46,131,.10), transparent 60%),
+    radial-gradient(100% 50% at 50% 110%, rgba(31,224,224,.08), transparent 60%),
+    var(--asphalt);
+  color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  max-width:430px; margin:0 auto; min-height:100vh;
+  padding:0 16px 40px;
+  overflow-x:hidden;
+}
+.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+.osw{font-family:"Oswald",system-ui,sans-serif}
+
+/* header */
+header{padding:22px 0 14px; position:relative}
+.brand{display:flex; align-items:baseline; gap:8px}
+.brand h1{
+  font-family:"Oswald",sans-serif; font-weight:700; font-size:30px; letter-spacing:.5px;
+  margin:0; line-height:1;
+  background:linear-gradient(90deg,var(--pink),var(--cyan));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-transform:uppercase; font-style:italic;
+}
+.brand .tag{font-family:"Oswald",sans-serif; font-weight:500; font-size:12px; color:var(--dim);
+  text-transform:uppercase; letter-spacing:3px}
+.sub{margin:6px 0 0; font-size:13px; color:var(--dim); line-height:1.4}
+
+/* pack */
+.shop{padding:14px 0 4px; text-align:center}
+.pack-wrap{perspective:900px; display:inline-block}
+.pack{
+  width:188px; height:268px; margin:6px auto 0;
+  border-radius:16px; position:relative; cursor:pointer;
+  background:
+    linear-gradient(150deg, #20131f 0%, #0e1320 46%, #0a1a1e 100%);
+  border:1px solid var(--line);
+  box-shadow:0 18px 50px -18px rgba(255,46,131,.45), 0 8px 26px -10px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.05);
+  overflow:hidden;
+  transition:transform .18s cubic-bezier(.2,.7,.3,1), box-shadow .18s;
+  -webkit-tap-highlight-color:transparent;
+}
+.pack:hover{transform:translateY(-4px) rotateX(4deg)}
+.pack:active{transform:translateY(-1px) scale(.99)}
+.pack::before{ /* diagonal neon shear */
+  content:""; position:absolute; inset:-20% -40%;
+  background:linear-gradient(115deg, transparent 38%, rgba(255,46,131,.22) 47%, rgba(31,224,224,.22) 53%, transparent 62%);
+  transform:translateX(-30%); transition:transform .6s ease;
+}
+.pack:hover::before{transform:translateX(30%)}
+.pack .foil{position:absolute; inset:10px; border:1px dashed rgba(255,255,255,.10); border-radius:10px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; text-align:center}
+.pack .pf-mark{font-family:"Oswald",sans-serif; font-weight:700; font-style:italic; font-size:34px;
+  letter-spacing:1px; line-height:.9;
+  background:linear-gradient(90deg,var(--pink),var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.pack .pf-mark small{display:block; font-size:11px; letter-spacing:5px; color:var(--dim); -webkit-text-fill-color:var(--dim); margin-top:4px}
+.pack .pf-label{font-family:"Oswald",sans-serif; text-transform:uppercase; letter-spacing:4px; font-size:13px; color:var(--ink); margin-top:14px}
+.pack .pf-count{font-size:11px; color:var(--cyan); letter-spacing:2px; text-transform:uppercase}
+.pack .stripe{position:absolute; left:0; right:0; bottom:0; height:5px; background:linear-gradient(90deg,var(--pink),var(--cyan))}
+
+.openbtn{
+  display:inline-flex; align-items:center; gap:9px; margin:20px auto 0; cursor:pointer;
+  font-family:"Oswald",sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:2px; font-size:15px;
+  color:#0A0A0F; background:linear-gradient(90deg,var(--pink),#ff5fa0);
+  border:none; border-radius:11px; padding:13px 26px;
+  box-shadow:0 10px 28px -10px rgba(255,46,131,.7);
+  transition:transform .12s, filter .12s;
+}
+.openbtn:hover{filter:brightness(1.06); transform:translateY(-1px)}
+.openbtn:active{transform:translateY(1px)}
+.openbtn:disabled{opacity:.5; cursor:default; filter:grayscale(.5)}
+.cost{font-size:11px; color:var(--dim); margin-top:9px; letter-spacing:1px}
+.cost b{color:var(--gold)}
+
+/* panels */
+.panel{background:var(--asphalt2); border:1px solid var(--line); border-radius:14px; padding:15px 15px 16px; margin-top:18px}
+.eyebrow{font-family:ui-monospace,monospace; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--cyan); display:flex; align-items:center; gap:8px; margin:0 0 13px}
+.eyebrow::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan)}
+.eyebrow .n{margin-left:auto; color:var(--dim); letter-spacing:1px}
+
+.bar{display:grid; grid-template-columns:74px 1fr 92px; align-items:center; gap:10px; margin:9px 0; font-size:13px}
+.bar .lbl{color:var(--ink); font-weight:500}
+.bar .track{height:7px; background:var(--surface); border-radius:6px; overflow:hidden; position:relative}
+.bar .track i{position:absolute; left:0; top:0; bottom:0; width:0; border-radius:6px; transition:width .4s ease}
+.bar .val{font-family:ui-monospace,monospace; font-size:12px; text-align:right; color:var(--dim)}
+.bar .val b{color:var(--ink)}
+.bar .tgt{color:var(--dim2)}
+.fill-c{background:linear-gradient(90deg,#5C6373,#8B93A5)}
+.fill-p{background:linear-gradient(90deg,var(--pink),#ff6fa8)}
+.fill-l{background:linear-gradient(90deg,var(--cyan),#7af0e6)}
+.fill-pil{background:linear-gradient(90deg,var(--gold),#ffe39a)}
+.divider{height:1px; background:var(--line); margin:14px 0 12px}
+.subhead{font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:2px; margin:2px 0 6px}
+
+.simrow{display:flex; gap:9px; margin-top:14px}
+.simbtn{flex:1; cursor:pointer; font-family:"Oswald",sans-serif; font-weight:500; text-transform:uppercase; letter-spacing:1.5px; font-size:12.5px;
+  color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:9px; padding:11px 8px; transition:.12s}
+.simbtn:hover{border-color:var(--cyan); color:var(--cyan)}
+.simbtn:active{transform:translateY(1px)}
+.simbtn.ghost:hover{border-color:var(--dim); color:var(--dim)}
+
+.coll{display:flex; align-items:center; gap:14px}
+.coll .ring{flex:0 0 auto}
+.coll .meta{flex:1; font-size:13px}
+.coll .meta .big{font-family:"Oswald",sans-serif; font-size:20px; font-weight:600}
+.collbar{height:7px; background:var(--surface); border-radius:6px; overflow:hidden; margin-top:7px}
+.collbar i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--pink),var(--cyan)); transition:width .5s}
+
+/* reveal overlay */
+.overlay{position:fixed; inset:0; background:rgba(6,7,11,.94); backdrop-filter:blur(3px);
+  display:none; flex-direction:column; z-index:50; padding:18px 16px; max-width:430px; margin:0 auto;}
+.overlay.on{display:flex}
+.ov-head{text-align:center; padding:6px 0 14px}
+.ov-head .k{font-family:ui-monospace,monospace; font-size:11px; letter-spacing:3px; color:var(--cyan); text-transform:uppercase}
+.ov-head .t{font-family:"Oswald",sans-serif; font-size:24px; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-top:2px}
+.grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; align-content:start; overflow-y:auto; padding:4px 2px; flex:1}
+.grid.few{grid-template-columns:repeat(2,1fr); max-width:300px; margin:0 auto}
+
+.card{aspect-ratio:5/7; perspective:700px}
+.card .inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .5s cubic-bezier(.2,.8,.3,1); transform:rotateY(180deg)}
+.card.flip .inner{transform:rotateY(0)}
+.face{position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:10px; overflow:hidden}
+.back{transform:rotateY(180deg); background:
+   repeating-linear-gradient(135deg,#141824 0 9px,#11141d 9px 18px);
+   border:1px solid var(--line); display:flex; align-items:center; justify-content:center}
+.back .bk{font-family:"Oswald",sans-serif; font-style:italic; font-weight:700; font-size:15px; letter-spacing:.5px; text-transform:uppercase; background:linear-gradient(90deg,var(--pink),var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent; opacity:.85}
+.front{background:var(--surface); border:1.5px solid var(--line); display:flex; flex-direction:column; padding:8px 8px 9px}
+.front .top{display:flex; justify-content:space-between; align-items:center; gap:4px}
+.lv{font-family:ui-monospace,monospace; font-size:10px; font-weight:700; padding:2px 6px; border-radius:5px; background:var(--surface2); color:var(--dim); letter-spacing:.5px}
+.tagr{font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--dim)}
+.front .nm{font-family:"Oswald",sans-serif; font-weight:600; font-size:13.5px; line-height:1.08; margin-top:auto; margin-bottom:3px}
+.front .gg{font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:1px}
+.glow{box-shadow:0 0 0 1.5px var(--c), 0 0 22px -4px var(--c); border-color:var(--c)!important}
+.front.prem .nm{color:#fff}
+.front.pilot{background:linear-gradient(165deg,#241c0e,#1a1408); border-color:var(--gold);
+  box-shadow:0 0 0 1.5px var(--gold),0 0 26px -4px var(--gold)}
+.front.pilot .badge{font-family:ui-monospace,monospace; font-size:9px; letter-spacing:2px; color:var(--gold); text-transform:uppercase}
+.front.pilot .nm{color:var(--gold)}
+.card.rare .inner{animation:pop .5s ease both}
+@keyframes pop{0%{}60%{transform:rotateY(0) scale(1.06)}100%{transform:rotateY(0) scale(1)}}
+
+.ov-foot{padding-top:12px}
+.contbtn{width:100%; cursor:pointer; font-family:"Oswald",sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:2px; font-size:14px;
+  color:#0A0A0F; background:linear-gradient(90deg,var(--cyan),#6af0e6); border:none; border-radius:11px; padding:13px; box-shadow:0 8px 24px -10px rgba(31,224,224,.6)}
+.contbtn:active{transform:translateY(1px)}
+.ov-sum{text-align:center; font-size:12px; color:var(--dim); margin:0 0 10px; min-height:16px}
+.ov-sum b{color:var(--gold)}
+
+.flash{position:fixed; inset:0; z-index:60; pointer-events:none; opacity:0; background:radial-gradient(circle at 50% 45%, rgba(244,201,93,.5), rgba(255,46,131,.15) 40%, transparent 70%)}
+.flash.go{animation:fl .7s ease both}
+@keyframes fl{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+
+.toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px); z-index:70;
+  background:var(--surface2); border:1px solid var(--line); color:var(--ink); font-size:13px;
+  padding:11px 18px; border-radius:10px; opacity:0; transition:.25s; box-shadow:0 12px 30px -12px rgba(0,0,0,.8); max-width:340px; text-align:center}
+.toast.on{opacity:1; transform:translateX(-50%) translateY(0)}
+
+.note{font-size:11.5px; color:var(--dim2); line-height:1.5; margin-top:16px; text-align:center}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none!important; animation:none!important}
+  .card .inner{transform:rotateY(0)}
+}
+:focus-visible{outline:2px solid var(--cyan); outline-offset:2px}
+
+.detail{position:fixed; inset:0; z-index:80; background:rgba(6,7,11,.82); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; padding:28px; max-width:430px; margin:0 auto}
+.detail.on{display:flex}
+.d-card{width:100%; max-width:320px; background:linear-gradient(180deg,var(--surface2),var(--asphalt2)); border:1.5px solid var(--line); border-radius:16px; padding:20px 18px 18px; box-shadow:0 24px 60px -20px rgba(0,0,0,.85)}
+.d-chips{display:flex; gap:7px; flex-wrap:wrap; margin-bottom:12px}
+.d-chips span{font-size:10.5px; text-transform:uppercase; letter-spacing:1px; padding:3px 9px; border-radius:20px; background:var(--surface); border:1px solid var(--line)}
+.d-lv{color:var(--cyan)!important}
+.d-name{font-family:"Oswald",sans-serif; font-weight:600; font-size:23px; line-height:1.1; color:#fff; margin-bottom:14px}
+.d-efflabel{font-family:ui-monospace,monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--dim); margin-bottom:5px}
+.d-eff{font-size:15px; line-height:1.45; color:var(--ink); margin-bottom:18px}
+.d-close{width:100%; cursor:pointer; font-family:"Oswald",sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:2px; font-size:13px; color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:12px}
+.d-close:hover{border-color:var(--cyan); color:var(--cyan)}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><h1>2Fast4U</h1><span class="tag">Buste</span></div>
+  <p class="sub">Le carte e i piloti delle espansioni non si comprano: si trovano nelle buste. Ogni busta = 5 carte. Apri e verifica i tassi.</p>
+</header>
+
+<section class="shop">
+  <div class="pack-wrap">
+    <div class="pack" id="pack" role="button" tabindex="0" aria-label="Apri una busta">
+      <div class="foil">
+        <div class="pf-mark">2F<small>4U</small></div>
+        <div class="pf-label">Busta</div>
+        <div class="pf-count">5 carte</div>
+      </div>
+      <div class="stripe"></div>
+    </div>
+  </div>
+  <div><button class="openbtn" id="open">Apri busta</button></div>
+  <div class="cost">prezzo negozio: <b>da definire</b> · qui le buste sono gratis per il test</div>
+</section>
+
+<section class="panel" id="telem">
+  <div class="eyebrow">Telemetria <span class="n" id="np">0 buste</span></div>
+  <div class="subhead">Rarità carta</div>
+  <div class="bar"><span class="lbl">Comuni</span><span class="track"><i class="fill-c" id="b-c"></i></span><span class="val"><b id="v-c">—</b> <span class="tgt">/65%</span></span></div>
+  <div class="bar"><span class="lbl">Premium</span><span class="track"><i class="fill-p" id="b-p"></i></span><span class="val"><b id="v-p">—</b> <span class="tgt">/35%</span></span></div>
+  <div class="divider"></div>
+  <div class="subhead">Livello carta</div>
+  <div class="bar"><span class="lbl">Livello 2</span><span class="track"><i class="fill-l" id="b-l2"></i></span><span class="val"><b id="v-l2">—</b> <span class="tgt">/60%</span></span></div>
+  <div class="bar"><span class="lbl">Livello 3</span><span class="track"><i class="fill-l" id="b-l3"></i></span><span class="val"><b id="v-l3">—</b> <span class="tgt">/30%</span></span></div>
+  <div class="bar"><span class="lbl">Livello 4</span><span class="track"><i class="fill-l" id="b-l4"></i></span><span class="val"><b id="v-l4">—</b> <span class="tgt">/10%</span></span></div>
+  <div class="divider"></div>
+  <div class="subhead">Piloti (solo i 18 delle espansioni)</div>
+  <div class="bar"><span class="lbl">In busta</span><span class="track"><i class="fill-pil" id="b-pil"></i></span><span class="val"><b id="v-pil">—</b> <span class="tgt">/10%</span></span></div>
+  <div class="bar"><span class="lbl">Esp1·L2</span><span class="track"><i class="fill-pil" id="b-pl2"></i></span><span class="val"><b id="v-pl2">—</b> <span class="tgt">/60%</span></span></div>
+  <div class="bar"><span class="lbl">Esp2·L3</span><span class="track"><i class="fill-pil" id="b-pl3"></i></span><span class="val"><b id="v-pl3">—</b> <span class="tgt">/30%</span></span></div>
+  <div class="bar"><span class="lbl">Esp3·L4</span><span class="track"><i class="fill-pil" id="b-pl4"></i></span><span class="val"><b id="v-pl4">—</b> <span class="tgt">/10%</span></span></div>
+  <div class="simrow">
+    <button class="simbtn" id="sim100">Simula ×100</button>
+    <button class="simbtn" id="sim1000">Simula ×1000</button>
+    <button class="simbtn ghost" id="reset">Azzera</button>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="eyebrow">Collezione</div>
+  <div class="coll">
+    <div class="meta">
+      <div><span class="big" id="coll-c">0</span> <span style="color:var(--dim)">/ 217 carte</span></div>
+      <div class="collbar"><i id="collbar-c"></i></div>
+      <div style="margin-top:10px"><span class="big" id="coll-p">0</span> <span style="color:var(--dim)">/ 18 piloti</span></div>
+      <div class="collbar"><i id="collbar-p"></i></div>
+    </div>
+  </div>
+</section>
+
+<p class="note">Mockup interattivo · dati e percentuali reali del gioco · la logica qui dentro è quella che va nel motore.</p>
+
+<div class="overlay" id="ov">
+  <div class="ov-head"><div class="k" id="ov-k">Busta aperta</div><div class="t" id="ov-t">Le tue carte</div><div style="font-size:11px;color:var(--dim);margin-top:4px">tocca una carta per vedere l'effetto</div></div>
+  <div class="grid" id="grid"></div>
+  <div class="ov-foot"><p class="ov-sum" id="ovsum"></p><button class="contbtn" id="cont">Continua</button></div>
+</div>
+<div class="detail" id="detail">
+  <div class="d-card">
+    <div class="d-chips"></div>
+    <div class="d-name"></div>
+    <div class="d-efflabel">Effetto</div>
+    <div class="d-eff"></div>
+    <button class="d-close">Chiudi</button>
+  </div>
+</div>
+<div class="flash" id="flash"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const POOL = {"cards": [{"n": "Sovrappressione turbo", "r": "c", "l": 2, "g": "Lupara Boys"}, {"n": "Pieno gas", "r": "c", "l": 2, "g": "Lupara Boys"}, {"n": "Gomma forata in curva", "r": "c", "l": 2, "g": "Lupara Boys"}, {"n": "Detrito in pista", "r": "c", "l": 2, "g": "Lupara Boys"}, {"n": "Colpo di Lupara", "r": "p", "l": 2, "g": "Lupara Boys"}, {"n": "Agguato in curva", "r": "p", "l": 2, "g": "Lupara Boys"}, {"n": "Rispetto a tutto gas", "r": "p", "l": 2, "g": "Lupara Boys"}, {"n": "Sgambetto d'onore", "r": "p", "l": 2, "g": "Lupara Boys"}, {"n": "Imboscata", "r": "p", "l": 2, "g": "Lupara Boys"}, {"n": "Pizzo sull'asfalto", "r": "p", "l": 2, "g": "Lupara Boys"}, {"n": "Baciamano", "r": "p", "l": 2, "g": "Lupara Boys"}, {"n": "Soffiata ai federali", "r": "p", "l": 2, "g": "Lupara Boys"}, {"n": "Avvertimento", "r": "p", "l": 2, "g": "Lupara Boys"}, {"n": "Pallottola vagante", "r": "p", "l": 2, "g": "Lupara Boys"}, {"n": "Launch control perfetto", "r": "c", "l": 3, "g": "Lupara Boys"}, {"n": "Sgommata in quinta", "r": "c", "l": 3, "g": "Lupara Boys"}, {"n": "Turbina in affanno", "r": "c", "l": 3, "g": "Lupara Boys"}, {"n": "Olio sull'asfalto", "r": "c", "l": 3, "g": "Lupara Boys"}, {"n": "Mano nera", "r": "p", "l": 3, "g": "Lupara Boys"}, {"n": "Bersaglio designato", "r": "p", "l": 3, "g": "Lupara Boys"}, {"n": "Sgarro mortale", "r": "p", "l": 3, "g": "Lupara Boys"}, {"n": "Tradimento", "r": "p", "l": 3, "g": "Lupara Boys"}, {"n": "Esecuzione mirata", "r": "p", "l": 3, "g": "Lupara Boys"}, {"n": "Caricatore pieno", "r": "p", "l": 3, "g": "Lupara Boys"}, {"n": "Faida aperta", "r": "p", "l": 3, "g": "Lupara Boys"}, {"n": "Conto da saldare", "r": "p", "l": 3, "g": "Lupara Boys"}, {"n": "L'onore del padrino", "r": "p", "l": 3, "g": "Lupara Boys"}, {"n": "Mira sul capo", "r": "p", "l": 3, "g": "Lupara Boys"}, {"n": "Cavallaggio scatenato", "r": "c", "l": 4, "g": "Lupara Boys"}, {"n": "Sorpasso fulmineo", "r": "c", "l": 4, "g": "Lupara Boys"}, {"n": "Motore esploso", "r": "c", "l": 4, "g": "Lupara Boys"}, {"n": "Curva cieca", "r": "c", "l": 4, "g": "Lupara Boys"}, {"n": "Vendetta a tutto gas", "r": "p", "l": 4, "g": "Lupara Boys"}, {"n": "Colpo al capofila", "r": "p", "l": 4, "g": "Lupara Boys"}, {"n": "Lupara bianca", "r": "p", "l": 4, "g": "Lupara Boys"}, {"n": "Sparatoria al semaforo", "r": "p", "l": 4, "g": "Lupara Boys"}, {"n": "Resa dei conti", "r": "p", "l": 4, "g": "Lupara Boys"}, {"n": "Giustizia di strada", "r": "p", "l": 4, "g": "Lupara Boys"}, {"n": "Sangue sull'asfalto", "r": "p", "l": 4, "g": "Lupara Boys"}, {"n": "Sentenza", "r": "p", "l": 4, "g": "Lupara Boys"}, {"n": "Lupara su misura", "r": "p", "l": 4, "g": "Lupara Boys"}, {"n": "L'ultimo sgarro", "r": "p", "l": 4, "g": "Lupara Boys"}, {"n": "Riscuoti un vecchio credito", "r": "c", "l": 2, "g": "Lowlifes"}, {"n": "Vinci una gara di bellezza", "r": "c", "l": 2, "g": "Lowlifes"}, {"n": "Svuoti la cassa di un rivale", "r": "c", "l": 2, "g": "Lowlifes"}, {"n": "Mandi gli strozzini da un rivale", "r": "c", "l": 2, "g": "Lowlifes"}, {"n": "Re del vicolo", "r": "p", "l": 2, "g": "Lowlifes"}, {"n": "Imboscata nel vicolo", "r": "p", "l": 2, "g": "Lowlifes"}, {"n": "Padrone della via", "r": "p", "l": 2, "g": "Lowlifes"}, {"n": "Gomme tagliate", "r": "p", "l": 2, "g": "Lowlifes"}, {"n": "Sgambetto da strada", "r": "p", "l": 2, "g": "Lowlifes"}, {"n": "Tassa di strada", "r": "p", "l": 2, "g": "Lowlifes"}, {"n": "Trappola nel traffico", "r": "p", "l": 2, "g": "Lowlifes"}, {"n": "Sgommata da boss", "r": "p", "l": 2, "g": "Lowlifes"}, {"n": "Vetri rotti", "r": "p", "l": 2, "g": "Lowlifes"}, {"n": "Asfalto mio", "r": "p", "l": 2, "g": "Lowlifes"}, {"n": "Il colpo grosso della tua vita", "r": "c", "l": 3, "g": "Lowlifes"}, {"n": "Soffiata al fisco contro un rivale", "r": "c", "l": 3, "g": "Lowlifes"}, {"n": "Scommessa · quota +2", "r": "c", "l": 3, "g": "Lowlifes"}, {"n": "Scommessa · quota -1.5", "r": "c", "l": 3, "g": "Lowlifes"}, {"n": "Alzi la posta in palio", "r": "c", "l": 3, "g": "Lowlifes"}, {"n": "Doppia o niente", "r": "c", "l": 3, "g": "Lowlifes"}, {"n": "Il banco raddoppia per te", "r": "c", "l": 3, "g": "Lowlifes"}, {"n": "Tagli la posta a un rivale", "r": "c", "l": 3, "g": "Lowlifes"}, {"n": "Il banco bara contro un rivale", "r": "c", "l": 3, "g": "Lowlifes"}, {"n": "Dimezzi il bottino di un rivale", "r": "c", "l": 3, "g": "Lowlifes"}, {"n": "Strada chiusa", "r": "p", "l": 3, "g": "Lowlifes"}, {"n": "Posto sbagliato", "r": "p", "l": 3, "g": "Lowlifes"}, {"n": "Comando io", "r": "p", "l": 3, "g": "Lowlifes"}, {"n": "Contro il muro", "r": "p", "l": 3, "g": "Lowlifes"}, {"n": "Chiodi sull'asfalto", "r": "p", "l": 3, "g": "Lowlifes"}, {"n": "Quartiere blindato", "r": "p", "l": 3, "g": "Lowlifes"}, {"n": "Strada sbarrata", "r": "p", "l": 3, "g": "Lowlifes"}, {"n": "Legge della strada", "r": "p", "l": 3, "g": "Lowlifes"}, {"n": "Agguato al semaforo", "r": "p", "l": 3, "g": "Lowlifes"}, {"n": "Sorpasso sporco", "r": "p", "l": 3, "g": "Lowlifes"}, {"n": "Strada · modifica 1 tratto → Città", "r": "c", "l": 4, "g": "Lowlifes"}, {"n": "Strada · modifica 1 tratto → Rettilineo", "r": "c", "l": 4, "g": "Lowlifes"}, {"n": "Raggiungi il 2°", "r": "c", "l": 4, "g": "Lowlifes"}, {"n": "Strada · modifica 1 tratto → Drift", "r": "c", "l": 4, "g": "Lowlifes"}, {"n": "Affari sporchi", "r": "p", "l": 4, "g": "Lowlifes"}, {"n": "Pestaggio", "r": "p", "l": 4, "g": "Lowlifes"}, {"n": "Giro di vite", "r": "p", "l": 4, "g": "Lowlifes"}, {"n": "Borseggio", "r": "p", "l": 4, "g": "Lowlifes"}, {"n": "Rapina lampo", "r": "p", "l": 4, "g": "Lowlifes"}, {"n": "Mano pesante", "r": "p", "l": 4, "g": "Lowlifes"}, {"n": "Colpo gobbo", "r": "p", "l": 4, "g": "Lowlifes"}, {"n": "Tutto il blocco", "r": "p", "l": 4, "g": "Lowlifes"}, {"n": "Sportellata", "r": "p", "l": 4, "g": "Lowlifes"}, {"n": "Cresta sull'incasso", "r": "p", "l": 4, "g": "Lowlifes"}, {"n": "Differenziale autobloccante", "r": "c", "l": 2, "g": "Krudo"}, {"n": "Presa salda", "r": "c", "l": 2, "g": "Krudo"}, {"n": "Geometrie sballate", "r": "c", "l": 2, "g": "Krudo"}, {"n": "Sterzo molle", "r": "c", "l": 2, "g": "Krudo"}, {"n": "Sterzata kruda", "r": "p", "l": 2, "g": "Krudo"}, {"n": "Speronata", "r": "p", "l": 2, "g": "Krudo"}, {"n": "Strappo secco", "r": "p", "l": 2, "g": "Krudo"}, {"n": "Sportellata kruda", "r": "p", "l": 2, "g": "Krudo"}, {"n": "Lamiera contro lamiera", "r": "p", "l": 2, "g": "Krudo"}, {"n": "Forza bruta", "r": "p", "l": 2, "g": "Krudo"}, {"n": "Manata", "r": "p", "l": 2, "g": "Krudo"}, {"n": "Testacoda forzato", "r": "p", "l": 2, "g": "Krudo"}, {"n": "Spaccatutto", "r": "p", "l": 2, "g": "Krudo"}, {"n": "Schiacciato", "r": "p", "l": 2, "g": "Krudo"}, {"n": "Telaio rigido su misura", "r": "c", "l": 3, "g": "Krudo"}, {"n": "Traiettoria pulita", "r": "c", "l": 3, "g": "Krudo"}, {"n": "Telaio storto", "r": "c", "l": 3, "g": "Krudo"}, {"n": "Gomme fredde", "r": "c", "l": 3, "g": "Krudo"}, {"n": "Senza pietà", "r": "p", "l": 3, "g": "Krudo"}, {"n": "Muro di gomme", "r": "p", "l": 3, "g": "Krudo"}, {"n": "Muso duro", "r": "p", "l": 3, "g": "Krudo"}, {"n": "Spintone", "r": "p", "l": 3, "g": "Krudo"}, {"n": "Tamponamento", "r": "p", "l": 3, "g": "Krudo"}, {"n": "Ferro contro ferro", "r": "p", "l": 3, "g": "Krudo"}, {"n": "Sangue freddo", "r": "p", "l": 3, "g": "Krudo"}, {"n": "Rottamato", "r": "p", "l": 3, "g": "Krudo"}, {"n": "Grezzo", "r": "p", "l": 3, "g": "Krudo"}, {"n": "Frenata assassina", "r": "p", "l": 3, "g": "Krudo"}, {"n": "Assetto da gara perfetto", "r": "c", "l": 4, "g": "Krudo"}, {"n": "Aderenza totale", "r": "c", "l": 4, "g": "Krudo"}, {"n": "Sterzo bloccato", "r": "c", "l": 4, "g": "Krudo"}, {"n": "Sbandata", "r": "c", "l": 4, "g": "Krudo"}, {"n": "Spinta brutale", "r": "p", "l": 4, "g": "Krudo"}, {"n": "Incrocio chiuso", "r": "p", "l": 4, "g": "Krudo"}, {"n": "Demolizione", "r": "p", "l": 4, "g": "Krudo"}, {"n": "Carambola", "r": "p", "l": 4, "g": "Krudo"}, {"n": "Botta secca", "r": "p", "l": 4, "g": "Krudo"}, {"n": "Macello", "r": "p", "l": 4, "g": "Krudo"}, {"n": "Fuori strada", "r": "p", "l": 4, "g": "Krudo"}, {"n": "Carne e lamiere", "r": "p", "l": 4, "g": "Krudo"}, {"n": "Stretta mortale", "r": "p", "l": 4, "g": "Krudo"}, {"n": "Pugno di ferro", "r": "p", "l": 4, "g": "Krudo"}, {"n": "Nos +1", "r": "c", "l": 2, "g": "Ombre Nere"}, {"n": "Nos -1", "r": "c", "l": 2, "g": "Ombre Nere"}, {"n": "Nos +2", "r": "c", "l": 2, "g": "Ombre Nere"}, {"n": "Nos -2", "r": "c", "l": 2, "g": "Ombre Nere"}, {"n": "Lampo nel buio", "r": "p", "l": 2, "g": "Ombre Nere"}, {"n": "Fantasma notturno", "r": "p", "l": 2, "g": "Ombre Nere"}, {"n": "Ombra veloce", "r": "p", "l": 2, "g": "Ombre Nere"}, {"n": "Imboscata al buio", "r": "p", "l": 2, "g": "Ombre Nere"}, {"n": "Spegni i fari", "r": "p", "l": 2, "g": "Ombre Nere"}, {"n": "Buio pesto", "r": "p", "l": 2, "g": "Ombre Nere"}, {"n": "Nero su nero", "r": "p", "l": 2, "g": "Ombre Nere"}, {"n": "Sparizione", "r": "p", "l": 2, "g": "Ombre Nere"}, {"n": "Trappola d'ombra", "r": "p", "l": 2, "g": "Ombre Nere"}, {"n": "Accecato", "r": "p", "l": 2, "g": "Ombre Nere"}, {"n": "Nos +3", "r": "c", "l": 3, "g": "Ombre Nere"}, {"n": "Nos -3", "r": "c", "l": 3, "g": "Ombre Nere"}, {"n": "Nos +4", "r": "c", "l": 3, "g": "Ombre Nere"}, {"n": "Nos -4", "r": "c", "l": 3, "g": "Ombre Nere"}, {"n": "Notte fonda", "r": "p", "l": 3, "g": "Ombre Nere"}, {"n": "Eclissi", "r": "p", "l": 3, "g": "Ombre Nere"}, {"n": "Mezzanotte", "r": "p", "l": 3, "g": "Ombre Nere"}, {"n": "Nebbia nera", "r": "p", "l": 3, "g": "Ombre Nere"}, {"n": "Sabotaggio notturno", "r": "p", "l": 3, "g": "Ombre Nere"}, {"n": "Fuoco fatuo", "r": "p", "l": 3, "g": "Ombre Nere"}, {"n": "Scia nera", "r": "p", "l": 3, "g": "Ombre Nere"}, {"n": "Senza luci", "r": "p", "l": 3, "g": "Ombre Nere"}, {"n": "Colpo nell'ombra", "r": "p", "l": 3, "g": "Ombre Nere"}, {"n": "Black out", "r": "p", "l": 3, "g": "Ombre Nere"}, {"n": "Nos +5", "r": "c", "l": 4, "g": "Ombre Nere"}, {"n": "Nos -5", "r": "c", "l": 4, "g": "Ombre Nere"}, {"n": "Nos +6", "r": "c", "l": 4, "g": "Ombre Nere"}, {"n": "Nos -6", "r": "c", "l": 4, "g": "Ombre Nere"}, {"n": "Coprifuoco", "r": "p", "l": 4, "g": "Ombre Nere"}, {"n": "Caccia notturna", "r": "p", "l": 4, "g": "Ombre Nere"}, {"n": "Predatore della notte", "r": "p", "l": 4, "g": "Ombre Nere"}, {"n": "Tradito dal buio", "r": "p", "l": 4, "g": "Ombre Nere"}, {"n": "Lama nell'ombra", "r": "p", "l": 4, "g": "Ombre Nere"}, {"n": "Silenzio", "r": "p", "l": 4, "g": "Ombre Nere"}, {"n": "Spettro", "r": "p", "l": 4, "g": "Ombre Nere"}, {"n": "Ala nera", "r": "p", "l": 4, "g": "Ombre Nere"}, {"n": "Pugnalata", "r": "p", "l": 4, "g": "Ombre Nere"}, {"n": "Tenebra", "r": "p", "l": 4, "g": "Ombre Nere"}, {"n": "Dado forza 1,2", "r": "c", "l": 2, "g": "I Diavoli"}, {"n": "Dado forza 1,2", "r": "c", "l": 2, "g": "I Diavoli"}, {"n": "Dado forza 3,4,5", "r": "c", "l": 2, "g": "I Diavoli"}, {"n": "Dado forza 3,4,5", "r": "c", "l": 2, "g": "I Diavoli"}, {"n": "Patto col Diavolo · 3-4-5", "r": "p", "l": 2, "g": "I Diavoli"}, {"n": "Mano del Demonio · 3-4-5", "r": "p", "l": 2, "g": "I Diavoli"}, {"n": "Fuoco dell'inferno · 3-4-5", "r": "p", "l": 2, "g": "I Diavoli"}, {"n": "Marchio del Diavolo · 3-4-5", "r": "p", "l": 2, "g": "I Diavoli"}, {"n": "Maledizione · 1-2", "r": "p", "l": 2, "g": "I Diavoli"}, {"n": "Il Sei del Diavolo", "r": "p", "l": 2, "g": "I Diavoli"}, {"n": "Tiro infernale · 6", "r": "p", "l": 2, "g": "I Diavoli"}, {"n": "Dado forza 1,2", "r": "c", "l": 3, "g": "I Diavoli"}, {"n": "Dado forza 1,2", "r": "c", "l": 3, "g": "I Diavoli"}, {"n": "Dado forza 3,4,5", "r": "c", "l": 3, "g": "I Diavoli"}, {"n": "Dado forza 3,4,5", "r": "c", "l": 3, "g": "I Diavoli"}, {"n": "Fortuna sfacciata · 3-4-5", "r": "p", "l": 3, "g": "I Diavoli"}, {"n": "Asso nella manica · 3-4-5", "r": "p", "l": 3, "g": "I Diavoli"}, {"n": "Tridente · 3-4-5", "r": "p", "l": 3, "g": "I Diavoli"}, {"n": "Sortilegio · 3-4-5", "r": "p", "l": 3, "g": "I Diavoli"}, {"n": "Malocchio · 1-2", "r": "p", "l": 3, "g": "I Diavoli"}, {"n": "Numero della Bestia · 6", "r": "p", "l": 3, "g": "I Diavoli"}, {"n": "Mano di Lucifero · 6", "r": "p", "l": 3, "g": "I Diavoli"}, {"n": "Dado forza 1,2", "r": "c", "l": 4, "g": "I Diavoli"}, {"n": "Dado forza 1,2", "r": "c", "l": 4, "g": "I Diavoli"}, {"n": "Dado forza 3,4,5", "r": "c", "l": 4, "g": "I Diavoli"}, {"n": "Dado forza 3,4,5", "r": "c", "l": 4, "g": "I Diavoli"}, {"n": "Anima dannata · 3-4-5", "r": "p", "l": 4, "g": "I Diavoli"}, {"n": "Tentazione · 3-4-5", "r": "p", "l": 4, "g": "I Diavoli"}, {"n": "Carico infernale · 3-4-5", "r": "p", "l": 4, "g": "I Diavoli"}, {"n": "Benedizione nera · 3-4-5", "r": "p", "l": 4, "g": "I Diavoli"}, {"n": "Jella ribaltata · 1-2", "r": "p", "l": 4, "g": "I Diavoli"}, {"n": "Sei di fuoco", "r": "p", "l": 4, "g": "I Diavoli"}, {"n": "Dannazione · 6", "r": "p", "l": 4, "g": "I Diavoli"}, {"n": "Sconto 50% solo per te", "r": "c", "l": 2, "g": ""}, {"n": "Riapri officina per tutti", "r": "c", "l": 2, "g": ""}, {"n": "Tour privato — entri solo tu", "r": "c", "l": 3, "g": ""}, {"n": "Entra con un avversario a scelta: lui paga il 50% del pezzo che scegli per te (se non può, paga il max verso la bancarotta); poi lui può fare 1 acquisto", "r": "c", "l": 4, "g": ""}, {"n": "Smonta pezzo avversario −1 livello", "r": "c", "l": 4, "g": ""}, {"n": "Difesa classica (gara + pregara)", "r": "c", "l": 3, "g": ""}, {"n": "Difesa a specchio", "r": "c", "l": 3, "g": ""}, {"n": "Posto di blocco grande", "r": "c", "l": 4, "g": ""}, {"n": "Inseguimento", "r": "c", "l": 4, "g": ""}, {"n": "Raggiungi la casella prima del 1°", "r": "c", "l": 2, "g": ""}], "pilots": [{"n": "Hoi.H4nn", "l": 3, "g": "Lupara Boys"}, {"n": "Dmitri 'Vostok' Kozlov", "l": 3, "g": "Lupara Boys"}, {"n": "Greta 'Autobahn' Brandt", "l": 4, "g": "Lupara Boys"}, {"n": "MOKAH 'Drip Boss'", "l": 2, "g": "Lowlifes"}, {"n": "Emeka 'Lagos' Okafor", "l": 3, "g": "Lowlifes"}, {"n": "Yumi 'Tokyo' Takeda", "l": 4, "g": "Lowlifes"}, {"n": "Barb'ra 'Sharp Curlz'", "l": 2, "g": "Krudo"}, {"n": "Kenji 'Touge' Nakamura", "l": 3, "g": "Krudo"}, {"n": "Amara 'Dakar' Diallo", "l": 4, "g": "Krudo"}, {"n": "Lax 'Skid Prophet'", "l": 2, "g": "Ombre Nere"}, {"n": "GEMI.X", "l": 2, "g": "Ombre Nere"}, {"n": "Scimmiz 'Echo Noiz'", "l": 3, "g": "Ombre Nere"}, {"n": "Klaus 'Turbo' Richter", "l": 3, "g": "Ombre Nere"}, {"n": "Jin 'Seoul' Park", "l": 4, "g": "Ombre Nere"}, {"n": "Iri 'Rage Pulse'", "l": 2, "g": "I Diavoli"}, {"n": "IZ 'Blazeflip'", "l": 3, "g": "I Diavoli"}, {"n": "Antym 'RAMMER'", "l": 4, "g": "I Diavoli"}, {"n": "Katya 'Zima' Sokolova", "l": 4, "g": "I Diavoli"}]};
+const EFFECTS = {"Alettone danneggiato": "Controllo -1 (a un rivale)", "ALT": "Dado/Forza +1 (a un rivale)", "Ammortizzatore scarico": "Controllo -2 (a un rivale)", "Barra antirollio nuova": "Controllo +1 (su di sé)", "Bel colpo di fortuna": "Partenza +2 (su di sé)", "Benzina Sporca": "Velocità -1 (a un rivale)", "Brucia le gomme": "Partenza +1 (su di sé)", "Brutti incubi": "Partenza -2 (a un rivale)", "Buono il caffè stamattina": "Partenza +1 (su di sé)", "Carburatore ingolfato": "Velocità -2 (a un rivale)", "Con questo nuovo cambio si vola": "Controllo +2 (su di sé)", "Convergenza sballata": "Controllo -1 (a un rivale)", "Corri Fooorrreeeesstttttt!!!!": "Velocità +2 (su di sé)", "Doppio caffe stamattina": "Velocità +2 (su di sé)", "Falsa partenza": "Partenza -1 (a un rivale)", "Finalmente il giusto cambio": "Velocità +1 (su di sé)", "Frenata d'emergenza": "Velocità -2 (a un rivale)", "Freni rispondono male": "Controllo -1 (a un rivale)", "Gomma forata": "Velocità -2 (a un rivale)", "Hai istallato le nuove sospensioni": "Controllo +1 (su di sé)", "Hai messo benzina racing: boost temporaneo!": "Velocità +1 (su di sé)", "Hai messo gli occhiali sbagliati": "Partenza -1 (a un rivale)", "Hai montato un nuovo filtro aria": "Velocità +1 (su di sé)", "Il destino provvede": "Dado/Forza +6 (su di sé)", "Il meccanico ti sistema la centralina: +1": "Velocità +1 (su di sé)", "Il motore non raffredda bene": "Controllo -2 (a un rivale)", "Il nuovo alettone fa il suo dovere": "Controllo +1 (su di sé)", "Il sonno aiuta": "Partenza +2 (su di sé)", "Il vento è a favore": "Velocità +2 (su di sé)", "Incollato al paraurti": "Allungo +1 (su di sé)", "Installato il nuovo volante": "Controllo +2 (su di sé)", "L'ora del Energy drink": "Velocità +1 (su di sé)", "La marmitta si allenta": "Velocità -1 (a un rivale)", "Le gomme slittano": "Velocità -1 (a un rivale)", "Marmitta inceppata": "Controllo -2 (a un rivale)", "Monti un'espansione racing": "Velocità +2 (su di sé)", "Non è la tua giornata": "Partenza -2 (a un rivale)", "Oggi devi vincere": "Velocità +2 (su di sé)", "Oggi va cosi…": "Partenza -1 (a un rivale)", "Olio vecchi nel motore": "Controllo -1 (a un rivale)", "Olio vecchio nei freni": "Controllo -1 (a un rivale)", "Perdi pressione nei pneumatici": "Velocità -2 (a un rivale)", "Problemi al cambio": "Velocità -1 (a un rivale)", "Ribassamento perfetto": "Controllo +2 (su di sé)", "Sempre la vecchia fortuna": "Dado/Forza +6 (su di sé)", "Senti l'adrenalina salire: spingi di più!!!": "Velocità +1 (su di sé)", "Servosterzo in tilt": "Controllo -2 (a un rivale)", "Sfrutti la scia": "Allungo +2 (su di sé)", "Si allenta un bullone": "Velocità -1 (a un rivale)", "Sospensioni a pezzi": "Controllo -2 (a un rivale)", "Spegni la fiamma": "Dado/Forza +1 (a un rivale)", "Spettacolo il nuovo alettone": "Controllo +2 (su di sé)", "Spettacolo le nuove minigonne": "Controllo +1 (su di sé)", "Sterzo allentato": "Controllo -2 (a un rivale)", "Ti prendooooo!!!!": "Controllo +1 (su di sé)", "Un colpo di fortuna con il turbo": "Velocità +2 (su di sé)", "Una curva mal presa ti rallenta": "Velocità -1 (a un rivale)", "Veloce come il vento": "Velocità +1 (su di sé)", "Assetto azzeccato": "Controllo +2 (su di sé)", "Assetto sfasato": "Controllo -2 (a un rivale)", "Bullone allentato": "Velocità -3 (a un rivale)", "Cambiata fulminea": "Velocità +3 (su di sé)", "Cinghia consumata": "Velocità -3 (a un rivale)", "Collettori liberi": "Velocità +3 (su di sé)", "Differenziale a punto": "Controllo +2 (su di sé)", "Filtro intasato": "Velocità -3 (a un rivale)", "Frizione che pattina": "Velocità -3 (a un rivale)", "Frizione perfetta al via": "Partenza +3 (su di sé)", "Gomma sgonfia": "Velocità -3 (a un rivale)", "Gomme fredde": "Controllo -4 (a un rivale)", "Gomme in temperatura": "Controllo +2 (su di sé)", "Ingolfi al semaforo": "Partenza -3 (a un rivale)", "Iniezione racing": "Velocità +3 (su di sé)", "Parti in ritardo": "Partenza -3 (a un rivale)", "Reazione fulminea al verde": "Partenza +3 (su di sé)", "Scia sfruttata bene": "Velocità +3 (su di sé)", "Sgommata d'autore": "Velocità +3 (su di sé)", "Sospensione molle": "Controllo -2 (a un rivale)", "Turbo a pieni giri": "Velocità +3 (su di sé)", "Turbo che perde pressione": "Velocità -3 (a un rivale)", "Volante preciso": "Controllo +2 (su di sé)", "Differenziale autobloccante": "Controllo +3 (su di sé)", "Geometrie sballate": "Controllo -3 (a un rivale)", "Gomma forata in curva": "Velocità -4 (a un rivale)", "Holeshot pulito": "Partenza +4 (su di sé)", "Sovrappressione turbo": "Velocità +4 (su di sé)", "Spegni sulla griglia": "Partenza -4 (a un rivale)", "Detrito in pista": "Velocità -3 (a un rivale)", "Pieno gas": "Velocità +3 (su di sé)", "Presa salda": "Controllo +2 (su di sé)", "Sterzo molle": "Controllo -2 (a un rivale)", "Dado forza 1,2": "undefined undefined (undefined)", "Dado forza 3,4,5": "undefined undefined (undefined)", "Nos -1": "NOS -1 (a un rivale)", "Nos -2": "NOS -2 (a un rivale)", "Nos +1": "NOS +1 (su di sé)", "Nos +2": "NOS +2 (su di sé)", "Fuoco dell'inferno · 3-4-5": "dadoForza undefined (su di sé) · Controllo +2 (su di sé)", "Il Sei del Diavolo": "dadoForza undefined (su di sé) · Velocità +3 (su di sé)", "Maledizione · 1-2": "dadoForza undefined (su di sé) · Controllo +3 (su di sé)", "Mano del Demonio · 3-4-5": "dadoForza undefined (su di sé) · Velocità +3 (su di sé)", "Marchio del Diavolo · 3-4-5": "dadoForza undefined (su di sé) · Controllo +3 (su di sé)", "Patto col Diavolo · 3-4-5": "dadoForza undefined (su di sé) · Velocità +2 (su di sé)", "Tiro infernale · 6": "dadoForza undefined (su di sé) · Controllo +3 (su di sé)", "Forza bruta": "Controllo +1 (su di sé) · Controllo -2 (a tutti i rivali)", "Lamiera contro lamiera": "Controllo -1 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Manata": "Controllo +2 (su di sé) · Controllo -1 (a tutti i rivali)", "Schiacciato": "Controllo -2 (a un bersaglio) · Controllo +1 (a tutti gli altri)", "Spaccatutto": "Controllo +2 (su di sé) · Controllo -1 (a tutti i rivali)", "Speronata": "Controllo -1 (a un bersaglio) · Controllo +1 (a tutti gli altri)", "Sportellata kruda": "Controllo -1 (a un bersaglio) · Controllo +1 (a tutti gli altri)", "Sterzata kruda": "Controllo +1 (su di sé) · Controllo -1 (a tutti i rivali)", "Strappo secco": "Controllo +1 (su di sé) · Controllo -1 (a tutti i rivali)", "Testacoda forzato": "Controllo -2 (a un bersaglio) · Controllo +1 (a tutti gli altri)", "Asfalto mio": "Controllo +1 (su di sé) · Velocità -2 (a tutti i rivali)", "Gomme tagliate": "Velocità -2 (a un bersaglio) · Controllo +1 (a tutti gli altri)", "Imboscata nel vicolo": "Velocità -2 (a un bersaglio) · Controllo +1 (a tutti gli altri)", "Padrone della via": "Velocità +2 (su di sé) · Controllo -1 (a tutti i rivali)", "Re del vicolo": "Velocità +2 (su di sé) · Controllo -1 (a tutti i rivali)", "Sgambetto da strada": "Velocità -2 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Sgommata da boss": "Controllo +2 (su di sé) · Velocità -1 (a tutti i rivali)", "Tassa di strada": "Controllo +2 (su di sé) · Velocità -1 (a tutti i rivali)", "Trappola nel traffico": "Controllo -2 (a un bersaglio) · Velocità +1 (a tutti gli altri)", "Vetri rotti": "Controllo -2 (a un bersaglio) · Velocità +1 (a tutti gli altri)", "Agguato in curva": "Velocità -2 (a un bersaglio) · Velocità +1 (a tutti gli altri)", "Avvertimento": "Velocità +3 (su di sé) · Velocità -1 (a tutti i rivali)", "Baciamano": "Velocità +3 (su di sé) · Velocità -1 (a tutti i rivali)", "Colpo di Lupara": "Velocità +2 (su di sé) · Velocità -1 (a tutti i rivali)", "Imboscata": "Velocità -2 (a un bersaglio) · Velocità +2 (a tutti gli altri)", "Pallottola vagante": "Velocità -3 (a un bersaglio) · Velocità +1 (a tutti gli altri)", "Pizzo sull'asfalto": "Velocità +2 (su di sé) · Velocità -2 (a tutti i rivali)", "Rispetto a tutto gas": "Velocità +2 (su di sé) · Velocità -1 (a tutti i rivali)", "Sgambetto d'onore": "Velocità -2 (a un bersaglio) · Velocità +1 (a tutti gli altri)", "Soffiata ai federali": "Velocità -3 (a un bersaglio) · Velocità +1 (a tutti gli altri)", "Accecato": "NOS -2 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Buio pesto": "NOS +2 (su di sé) · Controllo -1 (a tutti i rivali)", "Fantasma notturno": "NOS +2 (su di sé) · Velocità -2 (a tutti i rivali)", "Imboscata al buio": "NOS -2 (a un bersaglio) · Velocità +1 (a tutti gli altri)", "Lampo nel buio": "NOS +2 (su di sé) · Velocità -1 (a tutti i rivali)", "Nero su nero": "NOS +2 (su di sé) · Controllo -2 (a tutti i rivali)", "Ombra veloce": "NOS +2 (su di sé) · Velocità -2 (a tutti i rivali)", "Sparizione": "NOS +2 (su di sé) · Controllo -2 (a tutti i rivali)", "Spegni i fari": "NOS -2 (a un bersaglio) · Velocità +2 (a tutti gli altri)", "Trappola d'ombra": "NOS -2 (a un bersaglio) · Controllo +1 (a tutti gli altri)", "Aderenza perfetta": "Controllo +4 (su di sé)", "Alettone regolato": "Controllo +4 (su di sé)", "Antilag attivato": "Velocità +5 (su di sé)", "Asfalto viscido": "Controllo -4 (a un rivale)", "Aspirazione diretta": "Velocità +5 (su di sé)", "Cambio incrodato": "Velocità -5 (a un rivale)", "Doppia frizione che canta": "Velocità +5 (su di sé)", "Foratura improvvisa": "Velocità -5 (a un rivale)", "Iniettore intasato": "Velocità -5 (a un rivale)", "Mappa motore aggressiva": "Velocità +5 (su di sé)", "Pista libera davanti": "Velocità +5 (su di sé)", "Retrotreno ballerino": "Controllo -4 (a un rivale)", "Ruote che fumano a vuoto": "Partenza -5 (a un rivale)", "Scatto da dragster": "Partenza +5 (su di sé)", "Setup da pista": "Controllo +4 (su di sé)", "Sorpasso da manuale": "Velocità +5 (su di sé)", "Sospensione cedevole": "Velocità -5 (a un rivale)", "Sospensione rotta": "Controllo -4 (a un rivale)", "Sottosterzo improvviso": "Controllo -4 (a un rivale)", "Spegni al semaforo": "Partenza -5 (a un rivale)", "Stacco di frizione chirurgico": "Partenza +5 (su di sé)", "Sterzo diretto": "Controllo +4 (su di sé)", "Surriscaldamento motore": "Velocità -5 (a un rivale)", "Launch control perfetto": "Velocità +6 (su di sé)", "Partenza fotocopia": "Partenza +6 (su di sé)", "Parti col freno a mano": "Partenza -6 (a un rivale)", "Telaio rigido su misura": "Controllo +5 (su di sé)", "Telaio storto": "Controllo -5 (a un rivale)", "Turbina in affanno": "Velocità -6 (a un rivale)", "Olio sull'asfalto": "Velocità -5 (a un rivale)", "Sgommata in quinta": "Velocità +5 (su di sé)", "Traiettoria pulita": "Controllo +4 (su di sé)", "Nos -3": "NOS -3 (a un rivale)", "Nos -4": "NOS -4 (a un rivale)", "Nos +3": "NOS +3 (su di sé)", "Nos +4": "NOS +4 (su di sé)", "Asso nella manica · 3-4-5": "dadoForza undefined (su di sé) · Velocità +5 (su di sé)", "Fortuna sfacciata · 3-4-5": "dadoForza undefined (su di sé) · Velocità +4 (su di sé)", "Malocchio · 1-2": "dadoForza undefined (su di sé) · Controllo +5 (su di sé)", "Mano di Lucifero · 6": "dadoForza undefined (su di sé) · Controllo +4 (su di sé)", "Numero della Bestia · 6": "dadoForza undefined (su di sé) · Velocità +4 (su di sé)", "Sortilegio · 3-4-5": "dadoForza undefined (su di sé) · Controllo +5 (su di sé)", "Tridente · 3-4-5": "dadoForza undefined (su di sé) · Controllo +4 (su di sé)", "Ferro contro ferro": "Controllo +4 (su di sé) · Controllo -2 (a tutti i rivali)", "Frenata assassina": "Controllo -5 (a un bersaglio) · Controllo +1 (a tutti gli altri)", "Grezzo": "Controllo +5 (su di sé) · Controllo -1 (a tutti i rivali)", "Muro di gomme": "Controllo -3 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Muso duro": "Controllo +3 (su di sé) · Controllo -1 (a tutti i rivali)", "Rottamato": "Controllo -4 (a un bersaglio) · Controllo +1 (a tutti gli altri)", "Sangue freddo": "Annulla un malus giocato in gara", "Senza pietà": "Controllo +3 (su di sé) · Controllo -1 (a tutti i rivali)", "Spintone": "Controllo -3 (a un bersaglio) · Controllo +1 (a tutti gli altri)", "Tamponamento": "Controllo -4 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Agguato al semaforo": "Controllo -5 (a un bersaglio) · Velocità +2 (a tutti gli altri)", "Chiodi sull'asfalto": "Velocità -5 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Comando io": "Velocità +4 (su di sé) · Controllo -1 (a tutti i rivali)", "Contro il muro": "Velocità -4 (a un bersaglio) · Controllo +1 (a tutti gli altri)", "Legge della strada": "Controllo +5 (su di sé) · Velocità -2 (a tutti i rivali)", "Posto sbagliato": "Velocità -4 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Quartiere blindato": "Controllo +4 (su di sé) · Velocità -2 (a tutti i rivali)", "Sorpasso sporco": "Controllo +4 (su di sé) · Velocità -2 (a tutti i rivali)", "Strada chiusa": "Velocità +4 (su di sé) · Controllo -2 (a tutti i rivali)", "Strada sbarrata": "Controllo -4 (a un bersaglio) · Velocità +1 (a tutti gli altri)", "Bersaglio designato": "Velocità -4 (a un bersaglio) · Velocità +2 (a tutti gli altri)", "Caricatore pieno": "Velocità +5 (su di sé) · Velocità -2 (a tutti i rivali)", "Conto da saldare": "Velocità -5 (a un bersaglio) · Velocità +1 (a tutti gli altri)", "Esecuzione mirata": "Velocità -5 (a un bersaglio) · Velocità +2 (a tutti gli altri)", "Faida aperta": "Velocità +5 (su di sé) · Velocità -1 (a tutti i rivali)", "L'onore del padrino": "Velocità +6 (su di sé) · Velocità -1 (a tutti i rivali)", "Mano nera": "Velocità +4 (su di sé) · Velocità -1 (a tutti i rivali)", "Mira sul capo": "Velocità -6 (a un bersaglio) · Velocità +1 (a tutti gli altri)", "Sgarro mortale": "Velocità +4 (su di sé) · Velocità -1 (a tutti i rivali)", "Tradimento": "Velocità -4 (a un bersaglio) · Velocità +1 (a tutti gli altri)", "Black out": "NOS -2 (a un bersaglio) · Controllo +3 (a tutti gli altri)", "Colpo nell'ombra": "NOS -2 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Eclissi": "NOS +2 (su di sé) · Velocità -3 (a tutti i rivali)", "Fuoco fatuo": "NOS +2 (su di sé) · Controllo -2 (a tutti i rivali)", "Mezzanotte": "NOS +2 (su di sé) · Velocità -3 (a tutti i rivali)", "Nebbia nera": "NOS -3 (a un bersaglio) · Velocità +2 (a tutti gli altri)", "Notte fonda": "NOS +3 (su di sé) · Velocità -2 (a tutti i rivali)", "Sabotaggio notturno": "NOS -2 (a un bersaglio) · Velocità +3 (a tutti gli altri)", "Scia nera": "NOS +2 (su di sé) · Controllo -3 (a tutti i rivali)", "Senza luci": "NOS +2 (su di sé) · Controllo -3 (a tutti i rivali)", "Aderenza persa del tutto": "Controllo -6 (a un rivale)", "Aerodinamica da formula": "Controllo +6 (su di sé)", "Albero a camme spezzato": "Velocità -7 (a un rivale)", "Avantreno che scappa": "Controllo -6 (a un rivale)", "Big turbo che spinge": "Velocità +7 (su di sé)", "Bilanciamento perfetto": "Controllo +6 (su di sé)", "Cali il motore al via": "Partenza -7 (a un rivale)", "Centralina sbloccata": "Velocità +7 (su di sé)", "Cinghia esplosa": "Velocità -7 (a un rivale)", "Detonazione in camera": "Velocità -7 (a un rivale)", "Downforce massima": "Controllo +6 (su di sé)", "Freno motore bloccato": "Velocità -7 (a un rivale)", "Frizione bruciata in partenza": "Partenza -7 (a un rivale)", "Grip totale sull'asfalto": "Controllo +6 (su di sé)", "Holeshot perfetto": "Partenza +7 (su di sé)", "Motore fuso a metà gara": "Velocità -7 (a un rivale)", "Motore portato al limite": "Velocità +7 (su di sé)", "Partenza da campionato": "Partenza +7 (su di sé)", "Pieno carico in spinta": "Velocità +7 (su di sé)", "Rettilineo divorato": "Velocità +7 (su di sé)", "Sbandata in rettilineo": "Controllo -6 (a un rivale)", "Testacoda sfiorato": "Controllo -6 (a un rivale)", "Trasmissione distrutta": "Velocità -7 (a un rivale)", "Tutto il cavallaggio a terra": "Velocità +7 (su di sé)", "Assetto da gara perfetto": "Controllo +7 (su di sé)", "Bruciati tutti al via": "Partenza +8 (su di sé)", "Cavallaggio scatenato": "Velocità +8 (su di sé)", "Motore esploso": "Velocità -8 (a un rivale)", "Stallo in griglia": "Partenza -8 (a un rivale)", "Sterzo bloccato": "Controllo -7 (a un rivale)", "Aderenza totale": "Controllo +6 (su di sé)", "Curva cieca": "Velocità -7 (a un rivale)", "Sbandata": "Controllo -6 (a un rivale)", "Sorpasso fulmineo": "Velocità +7 (su di sé)", "Nos -5": "NOS -5 (a un rivale)", "Nos -6": "NOS -6 (a un rivale)", "Nos +5": "NOS +5 (su di sé)", "Nos +6": "NOS +6 (su di sé)", "Anima dannata · 3-4-5": "dadoForza undefined (su di sé) · Velocità +5 (su di sé)", "Benedizione nera · 3-4-5": "dadoForza undefined (su di sé) · Controllo +6 (su di sé)", "Carico infernale · 3-4-5": "dadoForza undefined (su di sé) · Controllo +5 (su di sé)", "Dannazione · 6": "dadoForza undefined (su di sé) · Controllo +5 (su di sé)", "Jella ribaltata · 1-2": "dadoForza undefined (su di sé) · Controllo +6 (su di sé)", "Sei di fuoco": "dadoForza undefined (su di sé) · Velocità +6 (su di sé)", "Tentazione · 3-4-5": "dadoForza undefined (su di sé) · Velocità +6 (su di sé)", "Botta secca": "Controllo -6 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Carambola": "Controllo -5 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Carne e lamiere": "Controllo +6 (su di sé) · Controllo -2 (a tutti i rivali)", "Demolizione": "Controllo +5 (su di sé) · Controllo -2 (a tutti i rivali)", "Fuori strada": "Controllo -6 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Incrocio chiuso": "Controllo -5 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Macello": "Controllo +6 (su di sé) · Controllo -2 (a tutti i rivali)", "Pugno di ferro": "Controllo +6 (su di sé) · Controllo -3 (a tutti i rivali)", "Spinta brutale": "Controllo +5 (su di sé) · Controllo -2 (a tutti i rivali)", "Stretta mortale": "Controllo -6 (a un bersaglio) · Controllo +3 (a tutti gli altri)", "Affari sporchi": "Velocità +6 (su di sé) · Controllo -2 (a tutti i rivali)", "Borseggio": "Velocità -6 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Colpo gobbo": "Controllo -6 (a un bersaglio) · Velocità +2 (a tutti gli altri)", "Cresta sull'incasso": "Controllo +6 (su di sé) · Velocità -3 (a tutti i rivali)", "Giro di vite": "Velocità +6 (su di sé) · Controllo -2 (a tutti i rivali)", "Mano pesante": "Controllo +6 (su di sé) · Velocità -2 (a tutti i rivali)", "Pestaggio": "Velocità -6 (a un bersaglio) · Controllo +2 (a tutti gli altri)", "Rapina lampo": "Velocità -7 (a un bersaglio) · Controllo +3 (a tutti gli altri)", "Sportellata": "Controllo -6 (a un bersaglio) · Velocità +3 (a tutti gli altri)", "Tutto il blocco": "Controllo +6 (su di sé) · Velocità -2 (a tutti i rivali)", "Colpo al capofila": "Velocità -6 (a un bersaglio) · Velocità +2 (a tutti gli altri)", "Giustizia di strada": "Velocità +7 (su di sé) · Velocità -2 (a tutti i rivali)", "L'ultimo sgarro": "Velocità +7 (su di sé) · Velocità -3 (a tutti i rivali)", "Lupara bianca": "Velocità +6 (su di sé) · Velocità -2 (a tutti i rivali)", "Lupara su misura": "Velocità -7 (a un bersaglio) · Velocità +3 (a tutti gli altri)", "Resa dei conti": "Velocità -7 (a un bersaglio) · Velocità +2 (a tutti gli altri)", "Sangue sull'asfalto": "Velocità -7 (a un bersaglio) · Velocità +2 (a tutti gli altri)", "Sentenza": "Velocità +7 (su di sé) · Velocità -2 (a tutti i rivali)", "Sparatoria al semaforo": "Velocità -6 (a un bersaglio) · Velocità +2 (a tutti gli altri)", "Vendetta a tutto gas": "Velocità +6 (su di sé) · Velocità -2 (a tutti i rivali)", "Ala nera": "NOS +5 (su di sé) · Controllo -3 (a tutti i rivali)", "Caccia notturna": "NOS +3 (su di sé) · Velocità -4 (a tutti i rivali)", "Coprifuoco": "NOS +4 (su di sé) · Velocità -2 (a tutti i rivali)", "Lama nell'ombra": "NOS -5 (a un bersaglio) · Velocità +4 (a tutti gli altri)", "Predatore della notte": "NOS +5 (su di sé) · Velocità -4 (a tutti i rivali)", "Pugnalata": "NOS -4 (a un bersaglio) · Controllo +3 (a tutti gli altri)", "Silenzio": "NOS +4 (su di sé) · Controllo -3 (a tutti i rivali)", "Spettro": "NOS +5 (su di sé) · Controllo -4 (a tutti i rivali)", "Tenebra": "NOS -4 (a un bersaglio) · Controllo +4 (a tutti gli altri)", "Tradito dal buio": "NOS -5 (a un bersaglio) · Velocità +3 (a tutti gli altri)", "Bravo, aiuti il prossimo": "PO (punti) +1", "Quando meno se lo aspettano": "PO (punti) +2", "Mi sembra giusto cosi": "PO (punti) +2", "Beccato": "PO (punti) -1", "Un piccolo sgarro, ti costa caro": "PO (punti) -1", "Non puoi andare avanti sempre così": "PO (punti) -2", "Arriva bonifica dallo zio del Molise": "Denaro € +250", "Ieri sera hai vinto a Poker": "Denaro € +500", "Il tuo cane vince il primo premio": "Denaro € +500", "Arrivano le tasse arretrate": "Denaro € -250", "Arriva la multa per eccesso velocità": "Denaro € -500", "I debiti si pagano": "Denaro € -500", "Il colpo grosso della tua vita": "Denaro € +3000", "Riscuoti un vecchio credito": "Denaro € +2000", "Vinci una gara di bellezza": "Denaro € +1500", "Mandi gli strozzini da un rivale": "Denaro € -2000", "Soffiata al fisco contro un rivale": "Denaro € -1500", "Svuoti la cassa di un rivale": "Denaro € -1000", "Arrivano gli sponsor": "Montepremio ×2", "La fortuna ti assiste": "Montepremio ×2", "Pareggiamo le cose": "Montepremio ÷0.5", "Pareggiamo i conti": "Montepremio ÷0.5", "Alzi la posta in palio": "Montepremio ×2", "Doppia o niente": "Montepremio ×2", "Il banco raddoppia per te": "Montepremio ×2", "Tagli la posta a un rivale": "Montepremio ÷0.5", "Il banco bara contro un rivale": "Montepremio ÷0.5", "Dimezzi il bottino di un rivale": "Montepremio ÷0.5", "Anche gli altri puntano su di te": "Scommessa ×2", "Il broker ti fa un regalo": "Scommessa ×2", "La quota cala all'ultimo": "Scommessa ÷0.5", "Il broker ti fa un regalo di compleanno": "Quota +1", "Il broker sbaglia a segnare la quota": "Quota +0.5", "Quota ricalcolata": "Quota -1", "Stai antipatico al broker": "Quota -0.5", "Il capo officina ti deve un debito": "Sconto officina 50%", "Il figlio del capo officina ti salda il debito": "Sconto officina 50%", "Il meccanico ti fa un favore": "Sconto officina 50%", "Durante la notte smonti il pezzo al tuo acerrimo rivale": "Smonta il pezzo migliore di un rivale", "Commissioni furto ad un tuo rivale": "Smonta il pezzo migliore di un rivale", "Ogni azione ha una conseguenza": "Smonta il pezzo migliore di un rivale", "Chiedi al figlio del proprietario di riaprire l'officina": "Riapre l'officina a tutti", "Chiedi alla moglie del proprietario di riaprire l'officina": "Riapre l'officina a tutti", "Il proprietario riapre l'officina per tutti": "Riapre l'officina a tutti", "Serata di porte aperte in officina": "Riapre l'officina a tutti", "Notte di porte aperte in officina": "Riapre l'officina a tutti", "Tour privato dell'officina ti costerà caro": "Riapre l'officina (a te)", "Visita privata all'officina": "Riapre l'officina (a te)", "I debidi di gioco si pagano": "Riapre l'officina a debito a un rivale", "Favori incrociati in officina": "Riapre l'officina a debito a un rivale", "Gara lampo": "Sprint alla partenza", "Hai da fare stasera": "Sprint alla partenza", "Riflessi felini": "Annulla un malus giocato in gara", "Schivata all'ultimo": "Annulla un malus giocato in gara", "Lo eviti in un lampo": "Annulla un malus giocato in gara", "Colpo di reni": "Annulla un malus giocato in gara", "Scarto secco": "Annulla un malus giocato in gara", "Effetto specchio": "Annulla un malus giocato in gara", "Sterzata provvidenziale": "Annulla un malus giocato in gara", "Controsterzo da maestro": "Annulla un malus giocato in gara", "Nervi d'acciaio": "Annulla un malus giocato in gara", "Rispedito al mittente": "Annulla un malus giocato in gara", "Spalle coperte": "Annulla un malus pre-gara", "Soffiata in anticipo": "Annulla un malus pre-gara", "Niente ti scalfisce": "Annulla un malus pre-gara", "Sempre un passo avanti": "Annulla un malus pre-gara", "Talpa in officina": "Annulla un malus pre-gara", "Coperto su tutto": "Annulla un malus pre-gara", "Ritorno al mittente": "Annulla un malus pre-gara", "Sesto senso": "Annulla un malus (gara o pre-gara)", "Scudo totale": "Annulla un malus (gara o pre-gara)", "Pattuglia dietro la curva": "Posto di blocco · 4 caselle (chi ci finisce paga €500)", "Controllo lampo": "Posto di blocco · 4 caselle (chi ci finisce paga €500)", "Gazzella in agguato": "Posto di blocco · 4 caselle (chi ci finisce paga €500)", "Lampeggianti all'improvviso": "Posto di blocco · 4 caselle (chi ci finisce paga €500)", "Soffiata alle volanti": "Posto di blocco · 4 caselle (chi ci finisce paga €500)", "Doppia volante di traverso": "Posto di blocco · 6 caselle (chi ci finisce paga €500)", "Reparto mobile schierato": "Posto di blocco · 6 caselle (chi ci finisce paga €500)", "La strada si chiude": "Posto di blocco · 6 caselle (chi ci finisce paga €500)", "Maxi-retata notturna": "Posto di blocco · 10 caselle (chi ci finisce paga €500)", "Città blindata": "Posto di blocco · 10 caselle (chi ci finisce paga €500)", "Inseguimento a sirene spiegate": "Inseguimento (auto della polizia · multa €1000 o smonta un pezzo)", "Le volanti ti stanno addosso": "Inseguimento (auto della polizia · multa €1000 o smonta un pezzo)", "Elicottero in caccia": "Inseguimento (auto della polizia · multa €1000 o smonta un pezzo)", "Topho 'Grugno' Ragnox": "+1 nei Rettilinei · +1 Velocità", "Cespik 'Clippaz'": "+2 nei Rettilinei · +1 Velocità", "Hoi.H4nn": "+2 nei Rettilinei · +2 Velocità", "Dmitri 'Vostok' Kozlov": "+2 nei Rettilinei · +2 Velocità", "Greta 'Autobahn' Brandt": "+3 nei Rettilinei · +1 Velocità", "Lil' Arpa": "+1 in Città · +1 Velocità", "K0T0R 'Blind Thrill'": "+1 in Città · +1 Controllo", "MOKAH 'Drip Boss'": "+2 in Città · +1 Velocità", "Emeka 'Lagos' Okafor": "+2 in Città · +1 Velocità", "Yumi 'Tokyo' Takeda": "+2 in Città · +1 Controllo", "Donaz 'Torque Don'": "+1 nei Drift · +1 Controllo", "Lil' Yanna": "+1 nei Drift · −1 Velocità", "Barb'ra 'Sharp Curlz'": "+2 nei Drift · +1 Controllo", "Kenji 'Touge' Nakamura": "+2 nei Drift · +1 Controllo", "Amara 'Dakar' Diallo": "+2 nei Drift · −1 Velocità +1 Controllo", "Lax 'Skid Prophet'": "+2 nei Rettilinei · +1 NOS", "GEMI.X": "+1 nei Rettilinei · +2 NOS", "Scimmiz 'Echo Noiz'": "+2 nei Rettilinei · +3 NOS", "Klaus 'Turbo' Richter": "+2 nei Rettilinei · +2 NOS", "Jin 'Seoul' Park": "+3 nei Rettilinei · +2 NOS", "Iri 'Rage Pulse'": "+1 se 1° dado 1-2 · +1 Controllo", "IZ 'Blazeflip'": "+2 se 1° dado 3-4-5 · +1 Controllo", "Antym 'RAMMER'": "+2 se 1° dado 1 · +2 Controllo", "Katya 'Zima' Sokolova": "+2 se 1° dado 1-2 · +1 Controllo"};
+const GCOL = {"Lupara Boys":"#FF4747","Lowlifes":"#3D8BFF","Krudo":"#2FD98A","Ombre Nere":"#A974FF","I Diavoli":"#FFB02E"};
+const GAB = {"Lupara Boys":"Lupara","Lowlifes":"Lowlifes","Krudo":"Krudo","Ombre Nere":"Ombre Nere","I Diavoli":"I Diavoli"};
+
+// ---- buckets ----
+const B = {c:{2:[],3:[],4:[]}, p:{2:[],3:[],4:[]}};
+POOL.cards.forEach(c=>B[c.r][c.l].push(c));
+const PB = {2:[],3:[],4:[]};
+POOL.pilots.forEach(p=>PB[p.l].push(p));
+const pick = a => a[Math.floor(Math.random()*a.length)];
+function rollLevel(){const x=Math.random(); return x<0.60?2 : x<0.90?3 : 4;}
+function drawCard(){const r=Math.random()<0.65?'c':'p'; const l=rollLevel(); return Object.assign({kind:'card'}, pick(B[r][l]));}
+function drawPilot(){const l=rollLevel(); return Object.assign({kind:'pilot'}, pick(PB[l]));}
+function openPack(){
+  const out=[]; const hasP=Math.random()<0.10; const n=hasP?4:5;
+  for(let i=0;i<n;i++) out.push(drawCard());
+  if(hasP) out.splice(Math.floor(Math.random()*(out.length+1)),0,drawPilot());
+  return out;
+}
+
+// ---- stats ----
+const S = {packs:0, cardR:{c:0,p:0}, cardL:{2:0,3:0,4:0}, pilotPacks:0, pilotL:{2:0,3:0,4:0},
+           seenC:new Set(), seenP:new Set()};
+function record(items){
+  S.packs++;
+  let hadP=false;
+  items.forEach(it=>{
+    if(it.kind==='card'){ S.cardR[it.r]++; S.cardL[it.l]++; S.seenC.add(it.n); }
+    else { hadP=true; S.pilotL[it.l]++; S.seenP.add(it.n); }
+  });
+  if(hadP) S.pilotPacks++;
+}
+const $=id=>document.getElementById(id);
+const pc=(num,den)=> den? (100*num/den) : 0;
+const fmt=v=> v.toFixed(1)+'%';
+function setBar(barId,valId,val,max){ $(barId).style.width=Math.min(100,val/max*100)+'%'; $(valId).textContent=fmt(val); }
+function render(){
+  $('np').textContent = S.packs.toLocaleString('it')+ (S.packs===1?' busta':' buste');
+  const totCards=S.cardR.c+S.cardR.p;
+  setBar('b-c','v-c',pc(S.cardR.c,totCards),65);
+  setBar('b-p','v-p',pc(S.cardR.p,totCards),35);
+  setBar('b-l2','v-l2',pc(S.cardL[2],totCards),60);
+  setBar('b-l3','v-l3',pc(S.cardL[3],totCards),30);
+  setBar('b-l4','v-l4',pc(S.cardL[4],totCards),10);
+  setBar('b-pil','v-pil',pc(S.pilotPacks,S.packs),12);
+  const totPil=S.pilotL[2]+S.pilotL[3]+S.pilotL[4];
+  setBar('b-pl2','v-pl2',pc(S.pilotL[2],totPil),60);
+  setBar('b-pl3','v-pl3',pc(S.pilotL[3],totPil),30);
+  setBar('b-pl4','v-pl4',pc(S.pilotL[4],totPil),10);
+  $('coll-c').textContent=S.seenC.size; $('collbar-c').style.width=(S.seenC.size/217*100)+'%';
+  $('coll-p').textContent=S.seenP.size; $('collbar-p').style.width=(S.seenP.size/18*100)+'%';
+}
+
+// ---- reveal ----
+function cardNode(it, idx){
+  const card=document.createElement('div'); card.className='card';
+  const prem = it.kind==='card' && it.r==='p';
+  const col = it.g && GCOL[it.g] ? GCOL[it.g] : '#7E8696';
+  let front;
+  if(it.kind==='pilot'){
+    front=`<div class="face front pilot"><div class="top"><span class="lv" style="color:var(--gold)">L${it.l}</span><span class="badge">Pilota</span></div>
+      <div class="nm">${it.n}</div><div class="gg" style="color:${col}">${GAB[it.g]||''}</div></div>`;
+  } else {
+    const cls = prem ? 'front prem glow' : 'front';
+    const style = prem ? `style="--c:${col}"` : '';
+    const tag = prem ? 'Premium' : 'Comune';
+    const gg = prem ? (GAB[it.g]||'') : (it.g? '' : (it.tipo||'Utility'));
+    front=`<div class="face ${cls}" ${style}><div class="top"><span class="lv">L${it.l}</span><span class="tagr" ${prem?`style="color:${col}"`:''}>${tag}</span></div>
+      <div class="nm">${it.n}</div><div class="gg">${gg}</div></div>`;
+  }
+  card.innerHTML=`<div class="inner"><div class="face back"><span class="bk">2FAST4U</span></div>${front}</div>`;
+  if(prem||it.kind==='pilot') card.dataset.rare='1';
+  card.addEventListener('click',()=>{ if(card.classList.contains('flip')) showDetail(it); });
+  return card;
+}
+function showDetail(it){
+  const prem=it.kind==='card'&&it.r==='p'; const pilot=it.kind==='pilot';
+  const col=it.g&&GCOL[it.g]?GCOL[it.g]:'#7E8696';
+  const rar=pilot?'Pilota':(prem?'Premium':'Comune');
+  const e=EFFECTS[it.n]||'(effetto non disponibile)';
+  const gg=it.g||(it.tipo||'');
+  const d=document.getElementById('detail');
+  d.querySelector('.d-name').textContent=it.n;
+  d.querySelector('.d-chips').innerHTML='<span class="d-lv">Livello '+it.l+'</span><span class="d-rar" style="color:'+((prem||pilot)?col:'var(--dim)')+'">'+rar+'</span>'+(gg?'<span class="d-gg">'+gg+'</span>':'');
+  d.querySelector('.d-efflabel').textContent = pilot?'Abilità':'Effetto';
+  d.querySelector('.d-eff').textContent=e;
+  d.querySelector('.d-card').style.borderColor=(prem||pilot)?col:'var(--line)';
+  d.classList.add('on');
+}
+function showReveal(items, k, t, summary){
+  const grid=$('grid'); grid.innerHTML=''; grid.className='grid'+(items.length<=4?' few':'');
+  $('ov-k').textContent=k; $('ov-t').textContent=t; $('ovsum').innerHTML=summary||'';
+  const nodes=items.map((it,i)=>{const n=cardNode(it,i); grid.appendChild(n); return n;});
+  $('ov').classList.add('on');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ nodes.forEach(n=>{n.classList.add('flip'); if(n.dataset.rare)n.classList.add('rare');}); return; }
+  nodes.forEach((n,i)=>setTimeout(()=>{ n.classList.add('flip'); if(n.dataset.rare){n.classList.add('rare');} }, 230+i*210));
+}
+function openOne(){
+  const items=openPack(); record(items); render();
+  const hasP=items.some(x=>x.kind==='pilot');
+  const prem=items.filter(x=>x.kind==='card'&&x.r==='p').length;
+  let sum='';
+  if(hasP){ sum='<b>PILOTA TROVATO!</b>'; const fl=$('flash'); fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go'); }
+  else if(prem) sum=prem+(prem>1?' premium':' premium')+' in questa busta';
+  showReveal(items,'Busta aperta','Le tue carte',sum);
+}
+$('pack').addEventListener('click',openOne);
+$('pack').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openOne();}});
+$('open').addEventListener('click',openOne);
+$('cont').addEventListener('click',()=>$('ov').classList.remove('on'));
+$('ov').addEventListener('click',e=>{ if(e.target===$('ov')) $('ov').classList.remove('on'); });
+
+function toast(msg){const t=$('toast'); t.innerHTML=msg; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),2600);}
+function simulate(n){
+  let pilots=0, prem=0;
+  for(let i=0;i<n;i++){ const it=openPack(); record(it); if(it.some(x=>x.kind==='pilot'))pilots++; prem+=it.filter(x=>x.kind==='card'&&x.r==='p').length; }
+  render();
+  toast(`+${n.toLocaleString('it')} buste · ${pilots} piloti · ${prem} premium<br><span style="color:var(--dim);font-size:11px">tassi aggiornati nella telemetria</span>`);
+}
+$('sim100').addEventListener('click',()=>simulate(100));
+$('sim1000').addEventListener('click',()=>simulate(1000));
+$('reset').addEventListener('click',()=>{
+  S.packs=0; S.cardR={c:0,p:0}; S.cardL={2:0,3:0,4:0}; S.pilotPacks=0; S.pilotL={2:0,3:0,4:0};
+  S.seenC.clear(); S.seenP.clear(); render(); toast('Telemetria azzerata');
+});
+document.getElementById('detail').addEventListener('click',e=>{ if(e.target.id==='detail') e.currentTarget.classList.remove('on'); });
+document.querySelector('.d-close').addEventListener('click',()=>document.getElementById('detail').classList.remove('on'));
+render();
+</script>
+</body>
+</html>
