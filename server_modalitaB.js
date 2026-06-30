@@ -112,21 +112,22 @@ const C_PREGARA = [
  ['Chiedi al figlio del proprietario di riaprire l\'officina','reopenAll',0],['Chiedi alla moglie del proprietario di riaprire l\'officina','reopenAll',0],['Il proprietario riapre l\'officina per tutti','reopenAll',0],['Serata di porte aperte in officina','reopenAll',0],['Notte di porte aperte in officina','reopenAll',0],
  ['Tour privato dell\'officina ti costerà caro','reopen',400],['Visita privata all\'officina','reopen',400],
  ['I debidi di gioco si pagano','reopenDebt',0],['Favori incrociati in officina','reopenDebt',0],
- ['Gara lampo','sprint',28],['Hai da fare stasera','sprint',34]
+ ['Gara lampo','sprint',28],['Hai da fare stasera','sprint',34],
+  ['Buono sconto','discount',0.5],['Alzi la posta in palio','prizeUp',2],['Doppia o niente','prizeUp',2],['Il banco raddoppia per te','prizeUp',2],['Tagli la posta a un rivale','prizeDown',0.5],['Il banco bara contro un rivale','prizeDown',0.5],['Dimezzi il bottino di un rivale','prizeDown',0.5]
 ];
 // Difese: eff 'defend', val=ambito ('ingara'|'pregara'|'both'), dur=1 se riflette
 const C_DIFESA = [
- ['Riflessi felini','ingara',0],['Schivata all\'ultimo','ingara',0],['Sangue freddo','ingara',0],['Lo eviti in un lampo','ingara',0],['Colpo di reni','ingara',0],['Scarto secco','ingara',0],['Effetto specchio','ingara',1],['Sterzata provvidenziale','ingara',0],['Controsterzo da maestro','ingara',0],['Nervi d\'acciaio','ingara',0],['Rispedito al mittente','ingara',1],
- ['Spalle coperte','pregara',0],['Soffiata in anticipo','pregara',0],['Niente ti scalfisce','pregara',0],['Sempre un passo avanti','pregara',0],['Talpa in officina','pregara',0],['Coperto su tutto','pregara',0],['Ritorno al mittente','pregara',1],
- ['Sesto senso','both',0],['Scudo totale','both',0]
+ ['Riflessi felini','ingara',0,1],['Schivata all\'ultimo','ingara',0,1],['Sangue freddo','ingara',0,1],['Lo eviti in un lampo','ingara',0,1],['Colpo di reni','ingara',0,1],['Scarto secco','ingara',0,1],['Effetto specchio','ingara',0,1],['Sterzata provvidenziale','ingara',0,1],['Controsterzo da maestro','ingara',0,1],['Nervi d\'acciaio','ingara',0,1],['Rispedito al mittente','ingara',1,2],
+ ['Spalle coperte','pregara',0,1],['Soffiata in anticipo','pregara',0,1],['Niente ti scalfisce','pregara',0,1],['Sempre un passo avanti','pregara',0,1],['Talpa in officina','pregara',0,1],['Coperto su tutto','pregara',0,1],['Ritorno al mittente','pregara',1,2],
+ ['Sesto senso','both',0,3],['Scudo totale','both',0,3],['Parata','both',0,3],['Riparo','both',0,3],['Contromossa','both',0,3],['Ritorno al mittente','both',1,3]
 ];
-// Polizia: [nome, kind('blocco'|'inseguimento'), size]. size = caselle del blocco (4/6/10), 0 per inseguimento.
-// Entrano nel mazzo SOLO dal livello pista 2 in poi. "Girare subito": vanno giocate prima di proseguire.
+// Polizia: [nome, kind('blocco'|'inseguimento'), size, lvl, fine]. size = caselle (4/6/10), 0 per inseguimento. fine = multa €.
+// Entrano dal livello pista 2 in poi, poi sbloccate per livello carta. "Girare subito": vanno giocate prima di proseguire.
 const C_POLIZIA = [
- ['Pattuglia dietro la curva','blocco',4],['Controllo lampo','blocco',4],['Gazzella in agguato','blocco',4],['Lampeggianti all\'improvviso','blocco',4],['Soffiata alle volanti','blocco',4],
- ['Doppia volante di traverso','blocco',6],['Reparto mobile schierato','blocco',6],['La strada si chiude','blocco',6],
- ['Maxi-retata notturna','blocco',10],['Città blindata','blocco',10],
- ['Inseguimento a sirene spiegate','inseguimento',0],['Le volanti ti stanno addosso','inseguimento',0],['Elicottero in caccia','inseguimento',0]
+ ['Pattuglia dietro la curva','blocco',4,1,100],['Controllo lampo','blocco',4,1,100],['Gazzella in agguato','blocco',4,2,250],['Lampeggianti all\'improvviso','blocco',4,2,250],['Soffiata alle volanti','blocco',4,3,500],
+ ['Doppia volante di traverso','blocco',6,1,350],['Reparto mobile schierato','blocco',6,1,750],['La strada si chiude','blocco',6,3,1000],
+ ['Maxi-retata giornaliera','blocco',10,1,500],['Maxi-retata notturna','blocco',10,2,1000],['Città blindata','blocco',10,3,1500],
+ ['Inseguimento a sirene spiegate','inseguimento',0,1,400],['Le volanti ti stanno addosso','inseguimento',0,2,800],['Elicottero in caccia','inseguimento',0,3,2000]
 ];
 
 /* ============================ UTIL ============================ */
@@ -198,7 +199,8 @@ const GANG_BY_LVL = {1:[],2:[],3:[],4:[]};
 GANG_INGARA.forEach(c=>{ (GANG_BY_LVL[c.lvl] || (GANG_BY_LVL[c.lvl]=[])).push(c); });
 
 /* effetti pre-gara presenti nei mazzi BASE della B (le altre — prize/smonta/reopen — sono espansione, escluse) */
-const BASE_PREGARA_EFF = ['po','money','discount','sprint','betUp','betDown','quota'];
+const PREGARA_LVL = { 'Tour privato dell\'officina ti costerà caro':2, 'Visita privata all\'officina':2, 'Il figlio del capo officina ti salda il debito':2, 'Il meccanico ti fa un favore':2 };
+const BASE_PREGARA_EFF = ['po','money','discount','sprint','betDown','quota','prizeUp','prizeDown','reopen','reopenAll','reopenDebt','smonta'];   // comuni base (betUp = espansione)
 
 /* mappa nome -> carta (per costruire il mazzo da una config del deck-builder, che usa i nomi).
    NB: nei dati sorgente esistono pochi nomi duplicati (es. "Ti prendooooo!!!!" usato sia
@@ -207,9 +209,9 @@ const NAME_MAP = (function(){
   const m={};
   C_INGARA.forEach(c=>{ m[c[0]]={cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4],lvl:1}; });
   [2,3,4].forEach(L=> SCALE_PACKS[L].forEach(c=>{ m[c[0]]={cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4],lvl:L,rar:c[5]}; }));
-  C_DIFESA.forEach(c=>{ m[c[0]]={cat:'difesa',nome:c[0],eff:'defend',val:c[1],dur:c[2]}; });
-  C_PREGARA.forEach(c=>{ m[c[0]]={cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3]}; });
-  C_POLIZIA.forEach(c=>{ m[c[0]]={cat:'polizia',nome:c[0],kind:c[1],size:c[2]}; });
+  C_DIFESA.forEach(c=>{ m[c[0]]={cat:'difesa',nome:c[0],eff:'defend',val:c[1],dur:c[2],lvl:c[3]}; });
+  C_PREGARA.forEach(c=>{ m[c[0]]={cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3],lvl:PREGARA_LVL[c[0]]||1}; });
+  C_POLIZIA.forEach(c=>{ m[c[0]]={cat:'polizia',nome:c[0],kind:c[1],size:c[2],lvl:c[3],fine:c[4]}; });
   GANG_INGARA.forEach(c=>{ m[c.nome]=c; });   // espansione gang: sovrascrive eventuali duplicati di nome con la versione nuova
   return m;
 })();
@@ -223,14 +225,15 @@ function buildDeckFromCfg(cfg){
   return out;
 }
 
-/* mazzo di DEFAULT (giocatore senza deck salvato): 80 In gara + 17 difese + 24 pre-gara + 8 polizia */
+/* mazzo di DEFAULT (giocatore senza deck salvato): TUTTE le carte base, sbloccate per livello pista (cardAvailable).
+   In gara L1-L4 (54 L1 + gang/universali L2-L4) + difese 21 annulla + pre-gara comuni + polizia 14 (multe per livello). */
 function defaultDeckCards(){
   const out=[];
   C_INGARA.filter(c=>['vel','ctrl','partenza'].includes(c[1])).forEach(c=> out.push({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4],lvl:1}));   // 54 carte L1 (no dado/reach: speciali = espansione)
   GANG_INGARA.forEach(c=> out.push({...c}));   // L2/L3/L4: tutte le carte gang (Rara/Libero/Base/ESP Premium). Il gate gang limita il gioco in gara al pilota giusto.
-  C_DIFESA.filter(c=>c[2]!==1).forEach(c=> out.push({cat:'difesa',nome:c[0],eff:'defend',val:c[1],dur:c[2]}));   // 17 (no specchio)
-  C_PREGARA.filter(c=>BASE_PREGARA_EFF.includes(c[1])).forEach(c=> out.push({cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3]}));   // 24
-  C_POLIZIA.filter(c=>c[1]==='blocco'&&(c[2]===4||c[2]===6)).forEach(c=> out.push({cat:'polizia',nome:c[0],kind:c[1],size:c[2]}));   // 8
+  C_DIFESA.filter(c=>c[2]!==1).forEach(c=> out.push({cat:'difesa',nome:c[0],eff:'defend',val:c[1],dur:c[2],lvl:c[3]}));   // 21 annulla (reflect = espansione)
+  C_PREGARA.filter(c=>BASE_PREGARA_EFF.includes(c[1])).forEach(c=> out.push({cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3],lvl:PREGARA_LVL[c[0]]||1}));
+  C_POLIZIA.forEach(c=> out.push({cat:'polizia',nome:c[0],kind:c[1],size:c[2],lvl:c[3],fine:c[4]}));   // 14 (tutte comuni, sbloccate per livello)
   return out;
 }
 const DEFAULT_OFF = { espL3:[], espL4:[], l4:['motore','sterzo','assetto','nos'] };   // free player: niente esp, 4 pezzi abilitati a L4
@@ -279,7 +282,8 @@ function pieceReach(p,comp,lvl){ lvl=+lvl; if(lvl<1||lvl>4) return false; if(lvl
    Le carte non ancora "sbloccate" restano nel mazzo. */
 function cardAvailable(card, G){
   if(card.cat==='ingara') return (card.lvl||1) <= (G.trackLevel||1);
-  if(card.cat==='polizia') return (G.trackLevel||1) >= 2;
+  if(card.cat==='polizia') return (G.trackLevel||1) >= 2 && (card.lvl||1) <= (G.trackLevel||1);
+  if(card.cat==='difesa'||card.cat==='pregara') return (card.lvl||1) <= (G.trackLevel||1);
   return true;
 }
 function drawCardP(p, G){
@@ -291,8 +295,8 @@ function drawCardP(p, G){
   return null;
 }
 
-function makeDeck(){ const d=[]; C_INGARA.forEach(c=>d.push({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4]})); C_PREGARA.forEach(c=>d.push({cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3]})); C_DIFESA.forEach(c=>d.push({cat:'difesa',nome:c[0],eff:'defend',val:c[1],dur:c[2]})); return shuffle(d); }
-function makePoliceDeck(){ return C_POLIZIA.map(c=>({cat:'polizia',nome:c[0],kind:c[1],size:c[2]})); }
+function makeDeck(){ const d=[]; C_INGARA.forEach(c=>d.push({cat:'ingara',nome:c[0],eff:c[1],val:c[2],dur:c[3],target:c[4]})); C_PREGARA.forEach(c=>d.push({cat:'pregara',nome:c[0],eff:c[1],val:c[2],costPO:c[3],lvl:PREGARA_LVL[c[0]]||1})); C_DIFESA.forEach(c=>d.push({cat:'difesa',nome:c[0],eff:'defend',val:c[1],dur:c[2],lvl:c[3]})); return shuffle(d); }
+function makePoliceDeck(){ return C_POLIZIA.map(c=>({cat:'polizia',nome:c[0],kind:c[1],size:c[2],lvl:c[3],fine:c[4]})); }
 function drawCard(G){
   if(!G.deck||!G.deck.length){ if(G.discard&&G.discard.length){ G.deck=shuffle(G.discard); G.discard=[]; } else { G.deck=makeDeck(); } }
   return G.deck.length ? G.deck.pop() : null;
@@ -612,9 +616,9 @@ function actPlayPolice(room,p,handIdx,cell){
     if(!a || a<1 || a+size-1>total) return 'Posizione del blocco non valida.';
     const b=a+size-1;
     if((G.blocks||[]).some(bl=>!(b<bl.from||a>bl.to))) return 'Si sovrappone a un altro blocco: scegli un\'altra casella.';
-    (G.blocks=G.blocks||[]).push({from:a,to:b,size,by:p.id,byName:p.name});
+    (G.blocks=G.blocks||[]).push({from:a,to:b,size,fine:c.fine,nome:c.nome,by:p.id,byName:p.name});
   } else {
-    (G.pendPolice=G.pendPolice||[]).push({by:p.id});
+    (G.pendPolice=G.pendPolice||[]).push({by:p.id,fine:c.fine,nome:c.nome});
   }
   glog(G,p.name+' gioca «'+c.nome+'» (polizia)','card');
   p.discard.push(c); p.hand.splice(handIdx,1); return null;
@@ -641,7 +645,7 @@ function spawnPolice(room){
     const lowComp=DB.ordine[Math.floor(Math.random()*DB.ordine.length)];  // un pezzo a caso un livello in meno
     if(comp[lowComp]>0){ const nl=comp[lowComp]-1; comp[lowComp]=nl; lvlOwned[lowComp]=lvlOwned[lowComp].filter(x=>x<=nl); }
     if(firstLvl<2){ comp.nos=0; lvlOwned.nos=[0]; }               // NOS solo dal livello 2 in su
-    const pol={ id, name:'Polizia'+(G.pendPolice.length>1?(' '+(idx+1)):''), comp, lvlOwned, partenza:lowestPart, isPolice:true };
+    const pol={ id, name:'Polizia'+(G.pendPolice.length>1?(' '+(idx+1)):''), comp, lvlOwned, partenza:lowestPart, isPolice:true, fine:pp.fine };
     G.R.police.push(pol);
     G.R.cars[id]={ pos:0, firstDone:false, nosUsed:false, fx:[], pendDado:null, pendPart:0, pendReach:null };
   });
@@ -889,7 +893,7 @@ function actConfirmMove(room,p){
   car.dist=(car.dist||0)+b.total;                       // distanza reale percorsa (non tappata) → classifica photo-finish
   car.pos=Math.min(G.R.finish||55,car.pos+b.total);
   const onBlk=(G.R.blocks||[]).find(bl=>car.pos>=bl.from&&car.pos<=bl.to);
-  if(onBlk && car.pos>0){ p.money=Math.max(0,p.money-500); raceLog(G,{kind:'fine',who:p.name,amount:500,pos:car.pos}); glog(G,'🚧 '+p.name+' multato al blocco · −€500 (cas. '+car.pos+')','fine'); }
+  if(onBlk && car.pos>0){ const fn=onBlk.fine||500; p.money=Math.max(0,p.money-fn); raceLog(G,{kind:'fine',who:p.name,amount:fn,pos:car.pos}); glog(G,'🚧 '+p.name+' multato al blocco · −€'+fn+' (cas. '+car.pos+')','fine'); }
   raceLog(G,{kind:'move',who:p.name,seg:TIPO_LABEL[b.segType]||b.segType,mov:b.total,pos:car.pos,die:b.die});
   glog(G,p.name+' muove '+b.total+' → cas. '+car.pos+' ('+(TIPO_LABEL[b.segType]||b.segType)+')','move');
   car.pendPart=0; car.pendDado=null; car.pendDadoSet=null; car.pendReach=null;
@@ -918,14 +922,15 @@ function endRace(room){
         G.lastTiebreaks.push({ cell:G.R.cars[group[0].id].pos, players:scored.map(o=>({name:o.p.name,score:o.s})) });
       } i=j+1; } }
   const N=G.players.length; const base=DB.roadBasePrice[G.raceLevel];
-  const maxPolPos=(G.R.police&&G.R.police.length)?Math.max(...G.R.police.map(pl=>G.R.cars[pl.id].pos)):-1;
+  let maxPolPos=-1, maxPolFine=1000;
+  if(G.R.police&&G.R.police.length){ G.R.police.forEach(pl=>{ const pp=G.R.cars[pl.id].pos; if(pp>maxPolPos){ maxPolPos=pp; maxPolFine=pl.fine||1000; } }); }
   ranked.forEach((p,i)=>{
     const pos=G.R.cars[p.id].pos;
     const onBlock=(G.R.blocks||[]).some(b=>pos>=b.from&&pos<=b.to);
     const caught=(maxPolPos>=0)&&(pos<=maxPolPos);
     p._busted=onBlock||caught; p._bustReason=onBlock?'blocco':(caught?'polizia':null);
     p.prevRank=p.lastRank; p.lastRank=i; p._finalPos=i+1; p._betDelta=0; p._betWin=false; p._bossBonus=0; p._bossList=[];
-    if(caught){ if(p.money>=1000){ p.money-=1000; } else { smontaCheapest(G,p); } } // multa inseguimento (o smonta)
+    if(caught){ if(p.money>=maxPolFine){ p.money-=maxPolFine; } else { smontaCheapest(G,p); } } // multa inseguimento (o smonta)
     if(onBlock){ smontaCheapest(G,p); }                                              // fine gara sul blocco: smonta (il €500 è già stato pagato all'atterraggio)
     if(p._busted){ p._gainPO=0; p._gainMoney=0; }                                    // beccato: niente montepremi né PO
     else {
