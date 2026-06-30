@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>2FAST4U · Accedi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --asphalt-0:#0B0518;--asphalt-1:#1B0E3D;--asphalt-2:#2A1560;--line:#3A2566;
+    --ink:#F4EEFF;--muted:#C7B9EF;--muted-2:#8A7BC0;
+    --amber:#FFC91E;--cyan:#2BA8E6;--violet:#9B3BE0;
+    --stop:#FF4364;--ready:#FFC91E;--go:#34E08A;
+    --disp:'Oswald','Arial Narrow',system-ui,sans-serif;
+    --body:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{font-family:var(--body);color:var(--ink);line-height:1.45;
+    background:radial-gradient(1200px 600px at 50% -10%,#2E1566 0%,transparent 60%),var(--asphalt-0);
+    min-height:100dvh;display:flex;align-items:center;justify-content:center;
+    padding:calc(24px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom));
+    -webkit-tap-highlight-color:transparent}
+
+  .card{position:relative;width:100%;max-width:380px;
+    background:linear-gradient(180deg,rgba(42,21,96,.90),rgba(20,12,44,.95));
+    border:1px solid var(--line);border-radius:18px;
+    box-shadow:0 24px 60px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.04);
+    padding:26px 22px 24px;overflow:hidden}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--amber)}
+
+  .top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:22px}
+  .brand{font-family:var(--disp);font-weight:700;font-style:italic;letter-spacing:.5px;font-size:34px;line-height:1}
+  .brand b{color:var(--amber)} .brand span{color:var(--cyan)}
+  .tag{font-family:var(--disp);text-transform:uppercase;letter-spacing:3px;font-size:11px;color:var(--amber);margin-top:10px}
+
+  .semaphore{flex:none;display:flex;flex-direction:column;gap:5px;padding:6px 5px;
+    background:rgba(11,5,24,.6);border:1px solid var(--line);border-radius:9px}
+  .light{width:13px;height:13px;border-radius:50%;background:#2a1d4a;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.5);transition:all .18s ease}
+  .light.s.on{background:var(--stop);box-shadow:0 0 12px var(--stop)}
+  .light.r.on{background:var(--ready);box-shadow:0 0 12px var(--ready)}
+  .light.g.on{background:var(--go);box-shadow:0 0 14px var(--go)}
+
+  .config-warn{display:none;background:rgba(255,201,30,.1);border:1px solid rgba(255,201,30,.4);
+    color:#ffe39a;font-size:12.5px;line-height:1.5;border-radius:10px;padding:12px 13px;margin-bottom:16px}
+  .config-warn code{background:rgba(11,5,24,.6);padding:1px 5px;border-radius:4px;color:#ffe6ad;font-size:11.5px}
+
+  .seg{display:flex;background:rgba(11,5,24,.5);border:1px solid var(--line);border-radius:11px;padding:4px;margin-bottom:20px}
+  .seg button{flex:1;border:0;background:transparent;color:var(--muted);
+    font-family:var(--disp);font-weight:600;font-size:14px;letter-spacing:1.2px;text-transform:uppercase;
+    padding:10px 0;border-radius:8px;cursor:pointer;transition:all .2s}
+  .seg button.active{background:linear-gradient(180deg,rgba(43,21,96,.95),rgba(27,14,61,.95));
+    color:var(--ink);box-shadow:0 1px 0 rgba(255,255,255,.06)}
+
+  form{display:flex;flex-direction:column;gap:14px}
+  .field{display:flex;flex-direction:column;gap:7px}
+  label{font-family:var(--disp);font-weight:500;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted)}
+  .inp{position:relative;display:flex;align-items:center}
+  input{width:100%;background:rgba(11,5,24,.55);border:1px solid var(--line);border-radius:10px;
+    color:var(--ink);font-family:var(--body);font-size:15px;padding:13px 14px;outline:none;
+    transition:border-color .18s, box-shadow .18s;-webkit-appearance:none}
+  input::placeholder{color:var(--muted-2)}
+  input:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(255,201,30,.22)}
+  .peek{position:absolute;right:6px;background:transparent;border:0;color:var(--muted);
+    font-family:var(--disp);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:8px 9px;cursor:pointer}
+  .peek:hover{color:var(--ink)}
+
+  .go-btn{margin-top:4px;border:0;cursor:pointer;border-radius:11px;
+    font-family:var(--disp);font-weight:700;font-size:17px;letter-spacing:2px;text-transform:uppercase;
+    color:#1a1206;padding:15px 0;background:var(--amber);
+    box-shadow:0 10px 26px -8px rgba(255,201,30,.5), inset 0 1px 0 rgba(255,255,255,.35);
+    transition:transform .1s, filter .2s}
+  .go-btn:hover{filter:brightness(1.05)}
+  .go-btn:active{transform:translateY(1px)}
+  .go-btn[disabled]{filter:grayscale(.5) brightness(.6);cursor:default;transform:none}
+
+  .msg{font-size:13px;line-height:1.45;border-radius:10px;padding:11px 13px;display:none}
+  .msg.show{display:block}
+  .msg.err{background:rgba(255,67,100,.12);border:1px solid rgba(255,67,100,.4);color:#ffb3c1}
+  .msg.ok{background:rgba(52,224,138,.12);border:1px solid rgba(52,224,138,.4);color:#a6f0c8}
+
+  .switch{text-align:center;font-size:13px;color:var(--muted);margin-top:18px}
+  .switch a{color:var(--cyan);font-weight:600;cursor:pointer;text-decoration:none}
+  .switch a:hover{text-decoration:underline}
+
+  @media (max-width:420px){ .brand{font-size:30px} }
+  @media (prefers-reduced-motion:reduce){ .light{transition:none} }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="top">
+      <div>
+        <div class="brand">2<b>FAST</b>4<span>U</span></div>
+        <div class="tag">Corse clandestine · accendi il motore</div>
+      </div>
+      <div class="semaphore" aria-hidden="true">
+        <div class="light s" id="lt-s"></div>
+        <div class="light r" id="lt-r"></div>
+        <div class="light g" id="lt-g"></div>
+      </div>
+    </div>
+
+    <div class="config-warn" id="configWarn">
+      Manca la configurazione Supabase. Apri <code>login.html</code> e incolla
+      <code>SUPABASE_URL</code> e <code>SUPABASE_ANON_KEY</code> in cima allo script.
+    </div>
+
+    <div class="seg" role="tablist">
+      <button id="tab-login" class="active" type="button">Accedi</button>
+      <button id="tab-signup" type="button">Registrati</button>
+    </div>
+
+    <form id="authForm" autocomplete="on" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <div class="inp">
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="tu@email.com" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="inp">
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required minlength="6">
+          <button type="button" class="peek" id="peek">Mostra</button>
+        </div>
+      </div>
+
+      <div class="field" id="confirmField" style="display:none">
+        <label for="confirm">Conferma password</label>
+        <div class="inp">
+          <input id="confirm" name="confirm" type="password" autocomplete="new-password" placeholder="••••••••" minlength="6">
+        </div>
+      </div>
+
+      <div class="msg" id="msg"></div>
+
+      <button type="submit" class="go-btn" id="goBtn">Via →</button>
+    </form>
+
+    <div class="switch" id="switchLine">
+      Non hai un account? <a id="switchLink">Registrati</a>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ====================================================================
+   ⚙️  CONFIGURAZIONE SUPABASE
+   ==================================================================== */
+const SUPABASE_URL        = 'https://dnwiyqpivhmpziyawutw.supabase.co';
+const SUPABASE_ANON_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRud2l5cXBpdmhtcHppeWF3dXR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MzEyNDUsImV4cCI6MjA5ODMwNzI0NX0.WIHo-wC5bnLtiMQcDaFUVY_cOHNuJyxH3OWrl6WL6kI';
+const REDIRECT_AFTER_LOGIN = '/';   // dopo l'accesso -> home (scelta modalità)
+/* ==================================================================== */
+
+const $ = (id)=>document.getElementById(id);
+const msg=$('msg'), goBtn=$('goBtn'), form=$('authForm');
+const tabLogin=$('tab-login'), tabSignup=$('tab-signup'), switchLink=$('switchLink'), switchLine=$('switchLine');
+const confirmField=$('confirmField'), pwd=$('password'), confirm=$('confirm'), email=$('email');
+let mode='login';
+
+let SB=null;
+const configured = !/INCOLLA/.test(SUPABASE_URL) && !/INCOLLA/.test(SUPABASE_ANON_KEY);
+if(configured){
+  SB = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} else {
+  $('configWarn').style.display='block';
+  goBtn.disabled=true;
+}
+
+function setLights(s,r,g){ $('lt-s').classList.toggle('on',s); $('lt-r').classList.toggle('on',r); $('lt-g').classList.toggle('on',g); }
+function lightsReset(){ setLights(false,false,false); }
+function lightsError(){ setLights(true,false,false); setTimeout(lightsReset,900); }
+function lightsGoThenRedirect(){
+  setLights(true,false,false);
+  setTimeout(()=>setLights(false,true,false),220);
+  setTimeout(()=>setLights(false,false,true),480);
+  setTimeout(()=>{ window.location.href = REDIRECT_AFTER_LOGIN; }, 760);
+}
+
+function showErr(t){ msg.className='msg err show'; msg.textContent=t; }
+function showOk(t){ msg.className='msg ok show'; msg.textContent=t; }
+function clearMsg(){ msg.className='msg'; msg.textContent=''; }
+function busy(on){ goBtn.disabled=on; goBtn.textContent = on ? 'Attendi…' : (mode==='login'?'Via →':'Crea account'); }
+
+function setMode(m){
+  mode=m; clearMsg(); lightsReset();
+  const login = m==='login';
+  tabLogin.classList.toggle('active',login);
+  tabSignup.classList.toggle('active',!login);
+  confirmField.style.display = login ? 'none' : 'flex';
+  pwd.setAttribute('autocomplete', login ? 'current-password' : 'new-password');
+  goBtn.textContent = login ? 'Via →' : 'Crea account';
+  switchLine.innerHTML = login
+    ? 'Non hai un account? <a id="switchLink">Registrati</a>'
+    : 'Hai già un account? <a id="switchLink">Accedi</a>';
+  document.getElementById('switchLink').onclick = ()=> setMode(login?'signup':'login');
+}
+tabLogin.onclick=()=>setMode('login');
+tabSignup.onclick=()=>setMode('signup');
+switchLink.onclick=()=>setMode('signup');
+
+$('peek').onclick=function(){
+  const show = pwd.type==='password';
+  pwd.type = show?'text':'password';
+  if(confirm) confirm.type = show?'text':'password';
+  this.textContent = show?'Nascondi':'Mostra';
+};
+
+function trad(err){
+  const t=(err&&err.message||'').toLowerCase();
+  if(t.includes('invalid login')) return 'Email o password non corretti.';
+  if(t.includes('already registered')||t.includes('already been registered')) return 'Questa email è già registrata. Passa ad Accedi.';
+  if(t.includes('password should be at least')) return 'La password deve avere almeno 6 caratteri.';
+  if(t.includes('unable to validate email')||t.includes('invalid email')) return 'Email non valida.';
+  if(t.includes('email not confirmed')) return 'Email non ancora confermata: controlla la tua casella.';
+  if(t.includes('rate limit')||t.includes('too many')) return 'Troppi tentativi. Riprova tra poco.';
+  return (err&&err.message) || 'Qualcosa è andato storto. Riprova.';
+}
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  if(!configured) return;
+  clearMsg();
+  const em = email.value.trim(); const pw = pwd.value;
+  if(!em || !pw){ showErr('Inserisci email e password.'); return; }
+  if(pw.length<6){ showErr('La password deve avere almeno 6 caratteri.'); return; }
+  if(mode==='signup' && pw!==confirm.value){ showErr('Le due password non coincidono.'); return; }
+
+  busy(true);
+  try{
+    if(mode==='login'){
+      const { error } = await SB.auth.signInWithPassword({ email:em, password:pw });
+      if(error){ showErr(trad(error)); lightsError(); busy(false); return; }
+      lightsGoThenRedirect();
+    } else {
+      const { data, error } = await SB.auth.signUp({ email:em, password:pw });
+      if(error){ showErr(trad(error)); lightsError(); busy(false); return; }
+      if(data.session){
+        lightsGoThenRedirect();
+      } else {
+        showOk('Account creato. Ti abbiamo inviato una mail di conferma: aprila per attivare l\'accesso.');
+        busy(false);
+      }
+    }
+  }catch(ex){
+    showErr('Connessione a Supabase fallita. Controlla URL e chiave.');
+    lightsError(); busy(false);
+  }
+});
+
+(async ()=>{
+  if(!configured) return;
+  try{
+    const { data } = await SB.auth.getSession();
+    if(data && data.session){ window.location.href = REDIRECT_AFTER_LOGIN; }
+  }catch(_){}
+})();
+</script>
+</body>
+</html>
