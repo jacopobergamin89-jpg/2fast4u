@@ -19,8 +19,11 @@
   --disp:'Rajdhani',system-ui,sans-serif; --body:'Barlow Semi Condensed',system-ui,sans-serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--body)}
-body{background:radial-gradient(120% 60% at 50% -10%, #14202e 0%, var(--bg) 55%)}
+html{margin:0;color:var(--txt);font-family:var(--body);
+  background-color:#080b11;
+  background-image:linear-gradient(180deg,rgba(8,11,17,.72),rgba(8,11,17,.3) 26%,rgba(8,11,17,.22) 50%,rgba(8,11,17,.34) 74%,rgba(8,11,17,.82)),url("/public/bg-officina.jpg");
+  background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed}
+body{margin:0;background:transparent;color:var(--txt);font-family:var(--body)}
 .app{max-width:520px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
 
 .status{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,rgba(8,11,17,.96),rgba(8,11,17,.82));backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 14px 10px}
@@ -89,7 +92,7 @@ main{flex:1;padding:14px 14px 90px}
 .chip.on .nm{color:#bfe7ee}
 .eff.bonus{color:var(--ok)} .eff.malus{color:#ff8b96} .eff.def{color:var(--cyan)} .eff.pol{color:var(--amber)} .eff.prg{color:var(--cyan)}
 
-.piece{border:1px solid var(--line);border-radius:13px;background:var(--panel);padding:13px;margin-bottom:11px}
+.piece{border:1px solid var(--line);border-radius:13px;background:rgba(20,27,37,.55);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);padding:13px;margin-bottom:11px}
 .piece .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .piece .pname{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.5px}
 .ladder{display:flex;gap:6px}
@@ -109,7 +112,7 @@ main{flex:1;padding:14px 14px 90px}
 .sw.on{color:var(--txt)}
 .sw.l4on .box{background:var(--cyan)}
 .sw.dis{opacity:.32;pointer-events:none}
-.limitbar{display:flex;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 14px;margin-bottom:13px}
+.limitbar{display:flex;align-items:center;justify-content:space-between;background:rgba(20,27,37,.55);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);border:1px solid var(--line);border-radius:11px;padding:11px 14px;margin-bottom:13px}
 .limitbar .lt{font-size:12.5px;color:var(--muted);line-height:1.4}
 .limitbar .lc{font-family:var(--disp);font-weight:700;font-size:15px;color:var(--cyan)}
 .limitbar .lc.full{color:var(--ok)}
