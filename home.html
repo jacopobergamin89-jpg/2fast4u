@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>2FAST4U</title>
+<style id="authgate">html{visibility:hidden}.logout-row{text-align:center;margin-top:16px}.logout-row a{font-family:var(--disp);text-transform:uppercase;letter-spacing:1.4px;font-size:11px;color:var(--muted-2);text-decoration:none}.logout-row a:hover{color:var(--ink)}
+</style>
+<script>setTimeout(function(){document.documentElement.style.visibility="visible";},2500);</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/auth-guard.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -70,6 +75,7 @@ h1{font-family:var(--disp);font-weight:600;font-size:26px;letter-spacing:.3px;te
     </div>
 
     <div class="foot">Nella Modalità B costruisci il tuo mazzo nella sala d'attesa, dopo aver messo il nome ed essere entrato in partita.</div>
+    <div class="logout-row"><a href="#" onclick="logout();return false">Esci</a></div>
   </div>
 </body>
 </html>

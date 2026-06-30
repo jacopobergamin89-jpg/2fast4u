@@ -15,6 +15,7 @@ const app = express();
 
 /* ---- pagine ---- */
 app.get('/',         (req,res)=> res.sendFile(path.join(__dirname,'home.html')));
+app.get('/login',    (req,res)=> res.sendFile(path.join(__dirname,'login.html')));
 app.get('/classica', (req,res)=> res.sendFile(path.join(__dirname,'index.html')));
 app.get('/b',        (req,res)=> res.sendFile(path.join(__dirname,'play_modalitaB.html')));
 app.get('/deck',     (req,res)=> res.sendFile(path.join(__dirname,'deck-builder.html'), err=>{
