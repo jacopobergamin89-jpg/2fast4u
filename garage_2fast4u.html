@@ -4,20 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>2FAST4U — Garage</title>
+<style id="authgate">html{visibility:hidden}</style>
+<script>setTimeout(function(){document.documentElement.style.visibility="visible";},2500);</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/auth-guard.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --asphalt:#0B0D12; --asphalt2:#11141C; --surface:#181C26; --surface2:#1F2430;
-  --line:#2A3040; --ink:#EEF1F6; --dim:#8B93A5; --dim2:#5C6373;
-  --pink:#FF2E83; --cyan:#1FE0E0; --gold:#F4C95D;
+  --asphalt:#0B0518; --asphalt2:#160A33; --surface:#1B0E3D; --surface2:#241149;
+  --line:#3A2566; --ink:#F4EEFF; --dim:#C7B9EF; --dim2:#8A7BC0;
+  --pink:#9B3BE0; --cyan:#2BA8E6; --gold:#FFC91E;
   --g-Lupara:#FF4747; --g-Lowlifes:#3D8BFF; --g-Krudo:#2FD98A; --g-Ombre:#A974FF; --g-Diavoli:#FFB02E;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
-  background:radial-gradient(120% 50% at 50% -10%, rgba(255,46,131,.09), transparent 60%),
-             radial-gradient(100% 45% at 50% 108%, rgba(31,224,224,.07), transparent 60%), var(--asphalt);
+  background:radial-gradient(120% 50% at 50% -10%, rgba(155,59,224,.18), transparent 60%),
+             radial-gradient(100% 45% at 50% 108%, rgba(43,168,230,.06), transparent 60%), var(--asphalt);
   color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; -webkit-font-smoothing:antialiased;
   max-width:430px; margin:0 auto; min-height:100vh; overflow-x:hidden;
 }
@@ -35,8 +39,8 @@ button{font-family:inherit; cursor:pointer}
 .field label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--dim); margin-bottom:6px}
 .field input{width:100%; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:13px 14px; color:var(--ink); font-size:15px}
 .field input:focus{border-color:var(--cyan); outline:none}
-.primary{width:100%; margin-top:8px; color:#0A0A0F; background:linear-gradient(90deg,var(--pink),#ff5fa0); border:none; border-radius:11px; padding:14px;
-  font-family:"Oswald",sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:2px; font-size:15px; box-shadow:0 10px 28px -10px rgba(255,46,131,.7)}
+.primary{width:100%; margin-top:8px; color:#1a1206; background:var(--gold); border:none; border-radius:11px; padding:14px;
+  font-family:"Oswald",sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:2px; font-size:15px; box-shadow:0 10px 28px -10px rgba(255,201,30,.45)}
 .primary:active{transform:translateY(1px)}
 .altrow{display:flex; justify-content:space-between; align-items:center; margin-top:18px}
 .link{background:none; border:none; color:var(--cyan); font-size:13px; padding:4px}
@@ -49,7 +53,7 @@ button{font-family:inherit; cursor:pointer}
 /* ===== APP ===== */
 .app{display:none; padding-bottom:78px}
 .app.on{display:block}
-.topbar{position:sticky; top:0; z-index:20; background:rgba(11,13,18,.82); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+.topbar{position:sticky; top:0; z-index:20; background:rgba(11,5,24,.82); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
   padding:14px 16px 12px; display:flex; align-items:center; justify-content:space-between}
 .topbar .ttl{font-family:"Oswald",sans-serif; font-weight:600; font-size:22px; text-transform:uppercase; letter-spacing:.5px}
 .wallet{display:flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:6px 13px; font-size:13px; font-weight:600}
@@ -71,7 +75,7 @@ button{font-family:inherit; cursor:pointer}
 .filters::-webkit-scrollbar{display:none}
 .chip{flex:0 0 auto; background:var(--surface); border:1px solid var(--line); color:var(--dim); border-radius:18px; padding:8px 14px;
   font-size:12.5px; font-family:"Oswald",sans-serif; text-transform:uppercase; letter-spacing:1px; white-space:nowrap}
-.chip.active{background:linear-gradient(90deg,rgba(255,46,131,.18),rgba(31,224,224,.14)); border-color:var(--pink); color:var(--ink)}
+.chip.active{background:linear-gradient(90deg,rgba(155,59,224,.20),rgba(43,168,230,.14)); border-color:var(--pink); color:var(--ink)}
 
 /* collection grid */
 .cgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:9px}
@@ -137,7 +141,7 @@ button{font-family:inherit; cursor:pointer}
 
 /* bottom nav */
 .nav{position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:430px; z-index:30;
-  background:rgba(11,13,18,.92); backdrop-filter:blur(12px); border-top:1px solid var(--line); display:flex; padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+  background:rgba(11,5,24,.92); backdrop-filter:blur(12px); border-top:1px solid var(--line); display:flex; padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
 .nav button{flex:1; background:none; border:none; color:var(--dim); display:flex; flex-direction:column; align-items:center; gap:4px; padding:6px 0; font-size:10.5px;
   font-family:"Oswald",sans-serif; text-transform:uppercase; letter-spacing:1px}
 .nav button .ic{width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.8}
@@ -256,8 +260,8 @@ document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
   document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active')); c.classList.add('active');
   curF=c.dataset.f; renderGrid();
 }));
-function ownC(n){ return S.ownedC[n]||0; }
-function ownP(n){ return S.ownedP[n]||0; }
+function ownC(n){ return window.isAdmin ? 99 : (S.ownedC[n]||0); }
+function ownP(n){ return window.isAdmin ? 99 : (S.ownedP[n]||0); }
 function renderGrid(){
   const grid=$('cgrid'); grid.innerHTML='';
   let items=[];
@@ -303,7 +307,7 @@ function tile(it){
   return el;
 }
 function updateStats(){
-  const nc=Object.keys(S.ownedC).length, np=Object.keys(S.ownedP).length;
+  const nc=window.isAdmin?S.cards.length:Object.keys(S.ownedC).length, np=window.isAdmin?S.pilots.length:Object.keys(S.ownedP).length;
   $('pc-c').textContent=nc; $('pb-c').style.width=(nc/217*100)+'%';
   $('pc-p').textContent=np; $('pb-p').style.width=(np/18*100)+'%';
   $('st-c').textContent=nc+'/217'; $('st-p').textContent=np+'/18';
@@ -325,6 +329,8 @@ function renderDecks(){
 }
 function toast(m){const t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),2600);}
 function render(){ $('cred').textContent=S.crediti.toLocaleString('it'); updateStats(); renderGrid(); renderDecks(); }
+// sessione Supabase pronta: entro nel garage (salto il login demo). Se admin, ownC/ownP sbloccano tutto.
+window.onAuthReady = function(){ try{ enter(); }catch(e){} };
 </script>
 </body>
 </html>
