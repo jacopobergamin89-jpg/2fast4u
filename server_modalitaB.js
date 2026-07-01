@@ -113,7 +113,8 @@ const C_PREGARA = [
  ['Tour privato dell\'officina ti costerà caro','reopen',400],['Visita privata all\'officina','reopen',400],
  ['I debidi di gioco si pagano','reopenDebt',0],['Favori incrociati in officina','reopenDebt',0],
  ['Gara lampo','sprint',28],['Hai da fare stasera','sprint',34],
-  ['Buono sconto','discount',0.25],['Alzi la posta in palio','prizeUp',2],['Doppia o niente','prizeUp',2],['Il banco raddoppia per te','prizeUp',2],['Tagli la posta a un rivale','prizeDown',0.5],['Il banco bara contro un rivale','prizeDown',0.5],['Dimezzi il bottino di un rivale','prizeDown',0.5]
+  ['Buono sconto','discount',0.25],['Alzi la posta in palio','prizeUp',2],['Doppia o niente','prizeUp',2],['Il banco raddoppia per te','prizeUp',2],['Tagli la posta a un rivale','prizeDown',0.5],['Il banco bara contro un rivale','prizeDown',0.5],['Dimezzi il bottino di un rivale','prizeDown',0.5],
+ ['Entra con un avversario','coop',0,0]
 ];
 // Difese: eff 'defend', val=ambito ('ingara'|'pregara'|'both'), dur=1 se riflette
 const C_DIFESA = [
@@ -405,9 +406,10 @@ function pOrder(G){ return G.reshop?G.reshopOrder:G.order; }
 function curPrep(G){ const o=pOrder(G); return G.players.find(p=>p.id===o[G.ppIdx]); }
 function startReshop(room){
   const G=room.G;
-  G.reshop=true; G.reshopQueued=false;
   const buys=G.reshopBuys||{};
   const parts=G.players.map(p=>p.id).filter(id=>(buys[id]||0)>0);   // solo chi ha un acquisto nel giro extra
+  if(!parts.length){ G.reshop=false; G.reshopQueued=false; startLaunch(room); return; }   // nessuno ha acquisti nel giro extra (es. coop annullata con difesa) → vai al semaforo
+  G.reshop=true; G.reshopQueued=false;
   const extraStock=parts.reduce((s,id)=>s+(buys[id]||0),0);         // 1 pezzo per giocatore attivo nel giro extra
   G.market=[]; G.marketUsed={};                                     // anche il giro extra riparte pulito: esattamente 1 pezzo a testa, niente residui dell'officina principale
   revealMarket(G, extraStock);
@@ -437,7 +439,7 @@ function actBuy(room,p,comp,lvl){
   glog(G,p.name+' compra '+(COMPLAB[comp]||comp)+' L'+lvl+' · €'+price,'buy');
   return null;
 }
-function pregaraTarget(c){ if(c.eff==='prizeDown'||c.eff==='betDown'||c.eff==='smonta'||c.eff==='reopenDebt') return 'rival'; if(c.eff==='quota') return c.val<0?'rival':'self'; if((c.eff==='money'||c.eff==='po')&&c.val<0) return 'rival'; return 'self'; }
+function pregaraTarget(c){ if(c.eff==='prizeDown'||c.eff==='betDown'||c.eff==='smonta'||c.eff==='reopenDebt'||c.eff==='coop') return 'rival'; if(c.eff==='quota') return c.val<0?'rival':'self'; if((c.eff==='money'||c.eff==='po')&&c.val<0) return 'rival'; return 'self'; }
 
 /* ====================== DIFESE / MALUS ====================== */
 function isDefense(c){ return !!c && c.eff==='defend'; }
@@ -451,6 +453,7 @@ function malusLabel(m){
   if(m.eff==='money') return '−€'+Math.abs(m.val);
   if(m.eff==='po') return m.val+' Punti Onore';
   if(m.eff==='smonta') return 'Smonta '+((DB.nomi&&DB.nomi[m.comp])||m.comp||'pezzo');
+  if(m.eff==='coop') return 'Entra con un avversario';
   if(m.eff==='prizeDown') return 'Montepremi ÷2';
   if(m.eff==='betDown') return 'Scommessa ÷2';
   if(m.eff==='quota') return 'Quota '+m.val;
@@ -482,6 +485,7 @@ function revertMalus(G, t, m){
     case 'betDown': t.betMult=(t.betMult||1)/m.val; break;
     case 'quota': t.quotaMod=(t.quotaMod||0)-m.val; break;
     case 'smonta': { const cp=m.comp, lv=m.lvl; if(cp!=null){ if(t.lvlOwned[cp]&&!t.lvlOwned[cp].includes(lv)) t.lvlOwned[cp].push(lv); t.comp[cp]=Math.max(...t.lvlOwned[cp]); } break; }
+    case 'coop': { t.money += (m.applied||0); const a=G.players.find(x=>x.id===m.attackerId); if(a && m.comp!=null){ const lv=m.lvl; if(a.lvlOwned&&a.lvlOwned[m.comp]){ a.lvlOwned[m.comp]=a.lvlOwned[m.comp].filter(x=>x!==lv); if(!a.lvlOwned[m.comp].length) a.lvlOwned[m.comp]=[0]; } a.comp[m.comp]=Math.max(...((a.lvlOwned&&a.lvlOwned[m.comp])||[0])); } if(G.reshopBuys&&G.reshopBuys[t.id]) G.reshopBuys[t.id]=Math.max(0,G.reshopBuys[t.id]-1); break; }
     case 'vel': case 'ctrl': { const car=G.R&&G.R.cars[t.id]; if(car&&m.fxRef) car.fx=car.fx.filter(e=>e!==m.fxRef); break; }
     case 'partenza': { const car=G.R&&G.R.cars[t.id]; if(car) car.pendPart-=m.val; break; }
     case 'dado': { const car=G.R&&G.R.cars[t.id]; if(car) car.pendDado=(m.prevDado!==undefined?m.prevDado:null); break; }
@@ -495,6 +499,7 @@ function reflectMalus(G, a, m){
     case 'betDown': a.betMult=(a.betMult||1)*m.val; break;
     case 'quota': a.quotaMod=(a.quotaMod||0)+m.val; break;
     case 'smonta': smontaBest(G, a); break;
+    case 'coop': break;
     case 'vel': case 'ctrl': { const car=G.R&&G.R.cars[a.id]; if(car) car.fx.push({stat:m.eff,amt:m.val,turns:m.dur}); break; }
     case 'partenza': { const car=G.R&&G.R.cars[a.id]; if(car) car.pendPart+=m.val; break; }
     case 'dado': { const car=G.R&&G.R.cars[a.id]; if(car) car.pendDado=m.val; break; }
@@ -558,6 +563,22 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
     tgt.comp[comp]=Math.max(...tgt.lvlOwned[comp]);                    // torno al livello posseduto più alto rimasto (il posto si libera da solo)
     p.money-=cost;                        // costo denaro
     if(c.costPO) p.po=Math.max(0,p.po-c.costPO); // costo Rispetto
+  }
+  else if(c.eff==='coop'){                                        // Entra con un avversario: il rivale paga il TUO pezzo, poi fa 1 acquisto normale
+    if(!comp||p.comp[comp]==null) return 'Scegli un tuo pezzo da far pagare al rivale.';
+    const nextLvl=p.comp[comp]+1;
+    if(nextLvl>4) return 'Quel pezzo è già al massimo.';
+    if(nextLvl>G.compMaxLevel) return 'Livello non ancora sbloccato.';
+    if(!canHaveAtLevel(p,comp,nextLvl)) return (nextLvl===4?'Pezzo non abilitato a L4 nel tuo deck.':'Livello non disponibile.');
+    const full=priceFor(G,p,comp,nextLvl);
+    const tiers=[0.5,0.25,0.1]; let cost=null;
+    for(let ti=0;ti<tiers.length;ti++){ const cc=Math.round(full*tiers[ti]); if(tgt.money>=cc){ cost=cc; break; } }
+    if(cost===null) cost=tgt.money;                               // non arriva al 10%: paga il massimo verso la bancarotta
+    tgt.money=Math.max(0,tgt.money-cost);                          // il rivale paga
+    p.comp[comp]=nextLvl; if(p.lvlOwned&&!p.lvlOwned[comp].includes(nextLvl)) p.lvlOwned[comp].push(nextLvl);   // installo il pezzo sul giocatore
+    G.reshopBuys=G.reshopBuys||{}; G.reshopBuys[tgt.id]=(G.reshopBuys[tgt.id]||0)+1;   // il rivale: 1 acquisto (prezzo pieno) nel giro extra
+    G.reshopQueued=true; if(G.reshopFirst==null) G.reshopFirst=tgt.id;
+    _ap=cost; _comp=comp; _lvl=nextLvl;
   }
   else if(c.eff==='money'){ const _b=tgt.money; tgt.money=Math.max(0,tgt.money+c.val); _ap=tgt.money-_b; }
   else if(c.eff==='po'){ const _b=tgt.po; tgt.po=Math.max(0,tgt.po+c.val); _ap=tgt.po-_b; }
@@ -1233,6 +1254,7 @@ function botPrep(room,bot){
     if(c.eff==='reopen'){ if(bot.money>=(c.val||0)+500) actPlayPregara(room,bot,i); continue; }
     if(c.eff==='reopenAll'){ actPlayPregara(room,bot,i); continue; }
     if(c.eff==='reopenDebt'){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>a.po-b.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); continue; }
+    if(c.eff==='coop'){ const top=Math.min(4,G.compMaxLevel); let best=null; DB.ordine.forEach(cp=>{ const nl=bot.comp[cp]+1; if(nl<=top && pieceReach(bot,cp,nl)){ const gain=pieceVal(bot,cp,nl)-pieceVal(bot,cp,bot.comp[cp]); if(best===null||gain>best.gain) best={comp:cp,gain}; } }); if(best){ const rich=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>b.money-a.money)[0]; if(rich) actPlayPregara(room,bot,i,rich.id,best.comp); } continue; }
     const self=(c.eff==='money'&&c.val>0)||(c.eff==='po'&&c.val>0)||c.eff==='prizeUp'||c.eff==='betUp'||c.eff==='discount'||(c.eff==='quota'&&c.val>0); const rival=(c.val<0)||c.eff==='prizeDown'||c.eff==='betDown'; if(self) actPlayPregara(room,bot,i); else if(rival){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>b.po-a.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); } }
   // 2) acquisti dal BANCO PERSONALE (livelli comprabili dal bot, esp inclusa nel valore/prezzo)
   let safety=12;
