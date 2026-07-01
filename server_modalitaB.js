@@ -97,7 +97,7 @@ const C_INGARA = [
  ['Brucia le gomme','partenza',1,0,'self'],['Buono il caffè stamattina','partenza',1,0,'self'],['Non è la tua giornata','partenza',-2,0,'rival'],['Brutti incubi','partenza',-2,0,'rival'],
  ['Hai messo gli occhiali sbagliati','partenza',-1,0,'rival'],['Oggi va cosi…','partenza',-1,0,'rival'],['Falsa partenza','partenza',-1,0,'rival'],['Sempre la vecchia fortuna','dado',6,1,'self'],
  ['Il destino provvede','dado',6,1,'self'],['Spegni la fiamma','dado',1,1,'rival'],['ALT','dado',1,1,'rival'],
- ['Sfrutti la scia','reach',2,0,'self'],['Incollato al paraurti','reach',1,-1,'self']
+ ['Sfrutti la scia','reach',2,0,'self'],['Raggiungi il 2°','reach',2,0,'self'],['Incollato al paraurti','reach',1,-1,'self']
 ];
 const C_PREGARA = [
  ['Bravo, aiuti il prossimo','po',1],['Quando meno se lo aspettano','po',2],['Mi sembra giusto cosi','po',2],
@@ -114,7 +114,11 @@ const C_PREGARA = [
  ['I debidi di gioco si pagano','reopenDebt',0],['Favori incrociati in officina','reopenDebt',0],
  ['Gara lampo','sprint',28],['Hai da fare stasera','sprint',34],
   ['Buono sconto','discount',0.25],['Alzi la posta in palio','prizeUp',2],['Doppia o niente','prizeUp',2],['Il banco raddoppia per te','prizeUp',2],['Tagli la posta a un rivale','prizeDown',0.5],['Il banco bara contro un rivale','prizeDown',0.5],['Dimezzi il bottino di un rivale','prizeDown',0.5],
- ['Entra con un avversario','coop',0,0]
+ ['Entra con un avversario','coop',0,0],
+ ['Riscuoti un vecchio credito','money',2000],['Vinci una gara di bellezza','money',1500],['Svuoti la cassa di un rivale','money',-1000],
+ ['Mandi gli strozzini da un rivale','money',-2000],['Il colpo grosso della tua vita','money',3000],['Soffiata al fisco contro un rivale','money',-1500],
+ ['Scommessa · quota +2','quota',2],['Scommessa · quota -1.5','quota',-1.5],
+ ['Strada · modifica 1 tratto → Città','roadMod','citta'],['Strada · modifica 1 tratto → Rettilineo','roadMod','rettilineo'],['Strada · modifica 1 tratto → Drift','roadMod','drift']
 ];
 // Difese: eff 'defend', val=ambito ('ingara'|'pregara'|'both'), dur=1 se riflette
 const C_DIFESA = [
@@ -200,8 +204,8 @@ const GANG_BY_LVL = {1:[],2:[],3:[],4:[]};
 GANG_INGARA.forEach(c=>{ (GANG_BY_LVL[c.lvl] || (GANG_BY_LVL[c.lvl]=[])).push(c); });
 
 /* effetti pre-gara presenti nei mazzi BASE della B (le altre — prize/smonta/reopen — sono espansione, escluse) */
-const PREGARA_LVL = { 'Tour privato dell\'officina ti costerà caro':2, 'Visita privata all\'officina':2, 'Il figlio del capo officina ti salda il debito':2, 'Il meccanico ti fa un favore':2 };
-const BASE_PREGARA_EFF = ['po','money','discount','sprint','betDown','quota','prizeUp','prizeDown','reopen','reopenAll','reopenDebt','smonta'];   // comuni base (betUp = espansione)
+const PREGARA_LVL = { 'Tour privato dell\'officina ti costerà caro':2, 'Visita privata all\'officina':2, 'Il figlio del capo officina ti salda il debito':2, 'Il meccanico ti fa un favore':2, 'Riscuoti un vecchio credito':2, 'Vinci una gara di bellezza':2, 'Svuoti la cassa di un rivale':2, 'Mandi gli strozzini da un rivale':2, 'Il colpo grosso della tua vita':3, 'Soffiata al fisco contro un rivale':3, 'Scommessa · quota +2':3, 'Scommessa · quota -1.5':3, 'Strada · modifica 1 tratto → Città':4, 'Strada · modifica 1 tratto → Rettilineo':4, 'Strada · modifica 1 tratto → Drift':4 };
+const BASE_PREGARA_EFF = ['po','money','discount','sprint','betDown','quota','prizeUp','prizeDown','reopen','reopenAll','reopenDebt','smonta','roadMod'];   // comuni base (betUp = espansione; roadMod = strada Lowlifes)
 
 /* mappa nome -> carta (per costruire il mazzo da una config del deck-builder, che usa i nomi).
    NB: nei dati sorgente esistono pochi nomi duplicati (es. "Ti prendooooo!!!!" usato sia
@@ -391,7 +395,7 @@ function startRound(room){
   G.raceLevel=G.trackLevel;
   G.entryFee=DB.roadBasePrice[G.raceLevel];
   G.raceFirstRollDone=false;
-  G.ppIdx=0; G.phase='prep'; G.R=null; if(G.lastResults) G.prevResults=G.lastResults; G.lastResults=null; G.reshop=false; G.reshopQueued=false; G.reshopFirst=null; G.reshopBuys={}; G.reshopHalf=[]; G.sprintFinish=null;
+  G.ppIdx=0; G.phase='prep'; G.R=null; if(G.lastResults) G.prevResults=G.lastResults; G.lastResults=null; G.reshop=false; G.reshopQueued=false; G.reshopFirst=null; G.reshopBuys={}; G.reshopHalf=[]; G.sprintFinish=null; G.roadModLog=[];
   G.blocks=[]; G.pendPolice=[]; G.forfeitedBlocks=[];
   G.players.forEach(p=>{ p.bet=null; p.prizeMult=1; p.betMult=1; p.quotaMod=0; p.discountNext=0; p.incoming=[]; });
   curPrep(G).buysLeft=G.maxBuys;
@@ -586,6 +590,18 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
   else if(c.eff==='betUp'||c.eff==='betDown') tgt.betMult=(tgt.betMult||1)*c.val;
   else if(c.eff==='quota') tgt.quotaMod=(tgt.quotaMod||0)+c.val;
   else if(c.eff==='discount') tgt.discountNext=c.val;   // frazione di sconto (0.25 = 25%, 0.5 = 50%)
+  else if(c.eff==='roadMod'){                            // Lowlifes: trasforma UN tratto scelto (comp = indice) nel tipo c.val (citta/rettilineo/drift)
+    const idx=parseInt(comp,10);
+    if(isNaN(idx)||idx<0||!G.track||idx>=G.track.length) return 'Scegli un tratto valido.';
+    const targetType=c.val, seg=G.track[idx];
+    const L=Math.min(seg.lvl||G.trackLevel||1, DB.maxLevelRoads), pool=ROADS[L]||ROADS[1];
+    const fresh=pool.find(r=>r.t===targetType)||{t:targetType};   // profilo del tipo scelto a quel livello (penalità incluse)
+    seg.t=targetType;
+    if(fresh.pv) seg.pv={...fresh.pv}; else delete seg.pv;
+    if(fresh.pc) seg.pc={...fresh.pc}; else delete seg.pc;
+    seg.nm=(TIPO_LABEL[targetType]||targetType)+' (modificato)';
+    G.roadModLog=(G.roadModLog||[]); G.roadModLog.push({ who:p.name, seg:idx, type:targetType });   // per il recap "Cos'è successo in gara"
+  }
   else if(c.eff==='reopen'){                                       // Tour privato: riapre un mercato (giro extra) solo per te, costa val
     const cost=c.val||0;
     if(p.money<cost) return 'Ti servono €'+cost+' per giocarla.';
@@ -994,7 +1010,8 @@ function endRace(room){
     fines: (function(){ const m={}; (G.R.log||[]).filter(e=>e.kind==='fine').forEach(e=>{ (m[e.who]=m[e.who]||{who:e.who,total:0,cells:[]}); m[e.who].total+=e.amount; m[e.who].cells.push(e.pos); }); return Object.values(m); })(),
     reopened: (function(){ const ro=(G.reshopFirst!=null)&&G.players.find(x=>x.id===G.reshopFirst); return ro?ro.name:null; })(),
     forfeited: (G.forfeitedBlocks||[]).map(f=>({who:f.who,nome:f.nome})),
-    tiebreaks: (G.lastTiebreaks||[])
+    tiebreaks: (G.lastTiebreaks||[]),
+    roadMods: (G.roadModLog||[]).slice()
   };
   G.phase = G.winner ? 'win' : 'results';
   maybeStartVote(room);
@@ -1255,6 +1272,7 @@ function botPrep(room,bot){
     if(c.eff==='reopenAll'){ actPlayPregara(room,bot,i); continue; }
     if(c.eff==='reopenDebt'){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>a.po-b.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); continue; }
     if(c.eff==='coop'){ const top=Math.min(4,G.compMaxLevel); let best=null; DB.ordine.forEach(cp=>{ const nl=bot.comp[cp]+1; if(nl<=top && pieceReach(bot,cp,nl)){ const gain=pieceVal(bot,cp,nl)-pieceVal(bot,cp,bot.comp[cp]); if(best===null||gain>best.gain) best={comp:cp,gain}; } }); if(best){ const rich=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>b.money-a.money)[0]; if(rich) actPlayPregara(room,bot,i,rich.id,best.comp); } continue; }
+    if(c.eff==='roadMod'){ if(G.track&&G.track.length){ const idx=Math.floor(Math.random()*G.track.length); actPlayPregara(room,bot,i,null,idx); } continue; }
     const self=(c.eff==='money'&&c.val>0)||(c.eff==='po'&&c.val>0)||c.eff==='prizeUp'||c.eff==='betUp'||c.eff==='discount'||(c.eff==='quota'&&c.val>0); const rival=(c.val<0)||c.eff==='prizeDown'||c.eff==='betDown'; if(self) actPlayPregara(room,bot,i); else if(rival){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>b.po-a.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); } }
   // 2) acquisti dal BANCO PERSONALE (livelli comprabili dal bot, esp inclusa nel valore/prezzo)
   let safety=12;

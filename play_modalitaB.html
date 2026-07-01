@@ -180,6 +180,19 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .modal .box{background:var(--asphalt-1);border:1px solid var(--line);border-radius:14px;padding:18px;width:100%;max-width:340px}
 .modal .mh{font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:13px;color:var(--muted);margin-bottom:12px}
 .modal .opt{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;cursor:pointer;background:var(--asphalt-2)}
+#roadpicker .box{max-width:460px;padding:14px}
+.rm-track{display:block;overflow-x:auto;overflow-y:hidden;margin:0 -14px 6px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#08060f}
+.rm-track svg{display:block}
+#rmvg .t-lbl{font-family:var(--disp);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:1px}
+#rmvg .t-rul{font-family:var(--mono);font-size:9px}
+.rm-cap{font-size:11px;color:var(--muted-2);text-align:center;margin:0 0 4px}
+.rm-confirm{margin-top:10px;background:linear-gradient(150deg,#241049,#180c38);border:1px solid var(--cyan);border-radius:12px;padding:11px;display:none}
+.rm-confirm.show{display:block}
+.rm-cf-t{font-family:var(--disp);text-transform:uppercase;letter-spacing:.5px;font-size:14px;text-align:center;margin-bottom:2px}
+.rm-cf-t b{color:var(--cyan)}
+.rm-cf-s{font-size:11px;color:var(--muted-2);text-align:center;margin-bottom:9px}
+.rm-cf-btns{display:flex;gap:8px}
+.rm-cf-btns .btn{flex:1}
 .conn{position:fixed;top:8px;left:8px;font-family:var(--mono);font-size:10px;color:var(--danger);background:#0008;padding:2px 6px;border-radius:5px;display:none;z-index:60}
 .conn.show{display:block}
 .flipwrap{perspective:1200px;cursor:pointer;margin:8px 0 14px}
@@ -925,6 +938,7 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 <div class="def-banner" id="def-banner"></div>
 <div class="flash" id="flash"></div>
 <div class="modal" id="picker"><div class="box"><div class="mh" id="picker-h">Scegli bersaglio</div><div id="picker-opts"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:4px" onclick="closePicker()">Annulla</button></div></div>
+<div class="modal" id="roadpicker"><div class="box"><div class="mh" id="rm-h">Tocca il tratto</div><div class="track rm-track" id="rm-track"></div><div class="rm-cap">↔ scorri per vedere tutto il circuito · tocca un tratto</div><div class="rm-confirm" id="rm-confirm"><div class="rm-cf-t" id="rm-cf-t"></div><div class="rm-cf-s" id="rm-cf-s"></div><div class="rm-cf-btns"><button class="btn btn-line btn-sm" onclick="rmDeselect()">Annulla</button><button class="btn btn-cyan btn-sm" onclick="rmConfirm()">Conferma</button></div></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeRoadPicker()">Chiudi</button></div></div>
 <div class="modal" id="inspect"><div class="box"><div class="mh">Avversario</div><div id="inspect-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeInspect()">Chiudi</button></div></div>
 <div class="modal" id="segm"><div class="box"><div class="mh">Regole del tratto</div><div id="segm-body"></div><button class="btn btn-line btn-sm" style="width:100%;margin-top:8px" onclick="closeSegRules()">Chiudi</button></div></div>
 <div class="drawer-bd logbd" id="log-bd" onclick="closeLog()"></div>
@@ -1087,8 +1101,8 @@ function handCardDesc(c){
 }
 function ofHandPlay(c,mobile){
   if(c.cat!=='pregara') return '';
-  const sm=c.eff==='smonta', neg=c.target==='rival';
-  const oc=sm?`prepSmonta(${c.idx})`:(neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`);
+  const sm=c.eff==='smonta', rm=c.eff==='roadMod', coop=c.eff==='coop', neg=c.target==='rival';
+  const oc = sm?`prepSmonta(${c.idx})` : rm?`prepRoadMod(${c.idx})` : coop?`prepCoop(${c.idx})` : (neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`);
   return mobile ? `<button class="o2-pre-go play" onclick="${oc}">Gioca</button>` : `<button class="btn btn-line btn-sm" onclick="${oc}">Gioca</button>`;
 }
 function discard(idx){ socket.emit('prep:discard',{handIdx:idx}); }
@@ -1303,14 +1317,21 @@ function prepMobileHTML(v){
   if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('×'+m):('÷'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,qm=v.me.quotaMod||0,tg=[]; if(v.sprintFinish)tg.push('⚡ Gara breve: traguardo a '+v.sprintFinish); if(pm!==1)tg.push('🎁 Montepremi '+fmt(pm)); if(bm!==1)tg.push('🎲 Scommessa '+fmt(bm)); if(qm)tg.push('📊 Quota '+(qm>0?'+':'')+qm); if(v.me.discount)tg.push('💸 Sconto 50% prossimo acquisto'); if(v.reshopComing)tg.push('🔧 Giro extra dopo la prep'+(v.reshopBy?(' (riaperto da '+esc(v.reshopBy)+')'):'')); if(tg.length)bars+='<div class="o2-bar boost">'+tg.join(' · ')+'</div>'; }
   bars+=policeBannerHTML(v);
   const barsHTML = bars?`<div class="o2-bars">${bars}</div>`:'';
-  // ---- classifica ultima gara (o ordine di partenza) + soldi ----
+  // ---- classifica ultima gara ordinata per TURNO OFFICINA (dall'ultimo arrivato al vincitore) + soldi ----
   const byId={}; v.players.forEach(p=>byId[p.id]=p);
-  let stripP, stripLabel, showPos;
-  if(v.lastRace&&v.lastRace.length){ stripP=v.lastRace.map(r=>byId[r.id]).filter(Boolean); stripLabel='Classifica ultima gara'; showPos=true; }
-  else { stripP=(v.order||[]).map(id=>byId[id]).filter(Boolean); if(!stripP.length)stripP=v.players.slice(); stripLabel='Ordine di partenza'; showPos=false; }
+  let stripList, stripLabel, showPos;   // stripList: [{p, rank}]
+  if(v.lastRace&&v.lastRace.length){
+    const rankOf={}; v.lastRace.forEach((r,i)=>{ rankOf[r.id]=i+1; });                 // classifica gara: indice 0 = 1° (vincitore)
+    const ord=(v.order&&v.order.length)?v.order:v.lastRace.map(r=>r.id);               // v.order = ordine officina: chi è arrivato ultimo sceglie per primo
+    stripList=ord.map(id=>byId[id]).filter(Boolean).map(p=>({p, rank:rankOf[p.id]||null}));
+    stripLabel='Classifica ultima gara'; showPos=true;
+  } else {
+    let base=(v.order||[]).map(id=>byId[id]).filter(Boolean); if(!base.length)base=v.players.slice();
+    stripList=base.map(p=>({p, rank:null})); stripLabel='Ordine di partenza'; showPos=false;
+  }
   let pills='';
-  stripP.forEach((p,i)=>{ const me=p.id===you.id;
-    pills+=`<div class="o2-pill${me?' you':''}" onclick="openInspect(${p.id})">${showPos?`<div class="o2-pos">${i+1}°</div>`:''}<div class="o2-pav" style="--c:${p.colorH}">${ini(p.name)}</div><div>${me?'<div class="o2-ptag">tu</div>':''}<div class="o2-pn">${esc(p.name)}</div><div class="o2-pm">${eur(p.money)}</div></div></div>`;
+  stripList.forEach(o=>{ const p=o.p, me=p.id===you.id;
+    pills+=`<div class="o2-pill${me?' you':''}" onclick="openInspect(${p.id})">${(showPos&&o.rank)?`<div class="o2-pos">${o.rank}°</div>`:''}<div class="o2-pav" style="--c:${p.colorH}">${ini(p.name)}</div><div>${me?'<div class="o2-ptag">tu</div>':''}<div class="o2-pn">${esc(p.name)}</div><div class="o2-pm">${eur(p.money)}</div></div></div>`;
   });
   const rank=`<div class="o2-rank"><div class="o2-rank-h"><b>${stripLabel}</b><span>· soldi attuali</span></div><div class="o2-rail">${pills}</div></div>`;
   // ---- mercato a carte scoperte ----
@@ -1344,7 +1365,7 @@ function prepMobileHTML(v){
   const prontoW=`<div class="o2-pronto-w">${pronto}</div>`;
   return `<div class="o2-app has-photo" style="--of-photo:url('${officinaBg(v.round)}')"><div class="o2-hz"></div>${cassa}${barsHTML}${rank}${mkt}${garage}${prontoW}</div>`;
 }
-const OFFICINA_BGS=['img/officina-1.jpg','img/officina-2.jpg'];   // aggiungi qui altre foto: officina-3.jpg, ...
+const OFFICINA_BGS=['/public/bg-officina.jpg','img/officina-1.jpg','img/officina-2.jpg'];   // aggiungi qui altre foto: officina-3.jpg, ...
 function officinaBg(round){ if(ui.ofBgRound!==round){ ui.ofBgRound=round; let pool=(OFFICINA_BGS.length>1&&ui.ofBg)?OFFICINA_BGS.filter(x=>x!==ui.ofBg):OFFICINA_BGS; ui.ofBg=pool[Math.floor(Math.random()*pool.length)]; } return ui.ofBg||OFFICINA_BGS[0]; }   // mai due volte di fila la stessa foto
 function renderPrep(v){
   show('s-prep');topMeta('Round '+v.round);
@@ -1617,6 +1638,83 @@ function prepSmontaComp(idx,rid){
 }
 function pickSmonta(idx,rid,comp){closePicker();socket.emit('prep:playCard',{handIdx:idx,targetId:rid,comp});}
 function closePicker(){document.getElementById('picker').classList.remove('show');}
+/* ---- Strada · modifica tratto (roadMod) ---- */
+const RMLAB={rettilineo:'Rettilineo',citta:'Citt\u00e0',drift:'Drift'};
+let _rm=null;
+function prepRoadMod(idx){
+  const v=LAST; if(!v||!v.track||!v.track.length){toast('Pista non disponibile');return;}
+  const card=(v.pregara||[]).find(c=>c.idx===idx)||(v.handAll||[]).find(c=>c.idx===idx);
+  _rm={idx, target:(card&&card.val)||'citta', sel:null};
+  document.getElementById('rm-h').innerHTML='Tocca il tratto da trasformare in <b style="color:'+(ACCENT[_rm.target]||'#fff')+'">'+RMLAB[_rm.target]+'</b>';
+  document.getElementById('rm-confirm').classList.remove('show');
+  document.getElementById('roadpicker').classList.add('show');
+  rmDraw();
+}
+function rmDraw(){
+  const v=LAST; if(!v||!v.track)return; const track=v.track;
+  const cellW=30,H=190,yMid=104,half=15; const total=track[track.length-1].to,W=total*cellW;
+  let s=`<svg id="rmvg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  s+=`<defs><linearGradient id="rmbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3853"/><stop offset="1" stop-color="#1c2740"/></linearGradient></defs>`;
+  s+=`<rect x="0" y="0" width="${W}" height="${H}" fill="url(#rmbg)"/>`;
+  track.forEach((seg,i)=>{
+    const shown=(_rm.sel===i)?_rm.target:seg.t;
+    const xA=(seg.from-1)*cellW,xB=seg.to*cellW,W2=xB-xA,col=ACCENT[shown]||'#2fe6e0';
+    if(shown==='citta') s+=buildingsSVG(xA,xB,yMid,half,col);
+    let d; if(shown==='drift'){const a=40;d=`M ${xA},${yMid} C ${(xA+W2*0.18).toFixed(1)},${yMid-a} ${(xA+W2*0.30).toFixed(1)},${yMid-a} ${(xA+W2*0.5).toFixed(1)},${yMid} C ${(xA+W2*0.70).toFixed(1)},${yMid+a} ${(xA+W2*0.82).toFixed(1)},${yMid+a} ${xB},${yMid}`;} else d=`M ${xA},${yMid} L ${xB},${yMid}`;
+    if(_rm.sel===i) s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="${half*2+18}" stroke-linecap="round" opacity="0.30"/>`;
+    s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="${half*2+10}" stroke-linecap="round" opacity="0.12"/>`;
+    s+=`<path d="${d}" fill="none" stroke="#161d2b" stroke-width="${half*2}" stroke-linecap="round"/>`;
+    s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="3" stroke-dasharray="14 16" stroke-linecap="round" opacity="0.85"/>`;
+    const lbl=(_rm.sel===i)?(RMLAB[_rm.target]+' \u00b7 L'+seg.lvl):((seg.label||'')+' \u00b7 L'+seg.lvl);
+    s+=`<text class="t-lbl" x="${(xA+W2/2).toFixed(1)}" y="22" text-anchor="middle" fill="${col}">${lbl}</text>`;
+    s+=`<rect class="seg-hit" x="${xA}" y="0" width="${W2}" height="${H}" onclick="rmTap(${i})"/>`;
+  });
+  for(let c=1;c<=total;c++){const x=((c-0.5)*cellW).toFixed(1);const maj=(c%5===0)||c===1||c===total;s+=`<text class="t-rul" x="${x}" y="${H-6}" text-anchor="middle" fill="${maj?'#69708c':'#3a3f54'}">${c}</text>`;}
+  s+=`<line x1="${W}" y1="${yMid-32}" x2="${W}" y2="${yMid+32}" stroke="#eef1f8" stroke-width="2" stroke-dasharray="4 4" opacity="0.55"/>`;
+  s+='</svg>';
+  document.getElementById('rm-track').innerHTML=s;
+}
+function rmTap(i){
+  if(!_rm)return; _rm.sel=i; rmDraw();
+  const seg=LAST.track[i]; const same=seg.t===_rm.target;
+  document.getElementById('rm-cf-t').innerHTML='Tratto <b>'+(i+1)+'</b> \u2192 <b>'+RMLAB[_rm.target]+'</b>';
+  document.getElementById('rm-cf-s').textContent=same?('gi\u00e0 '+RMLAB[_rm.target]+' \u00b7 caselle '+seg.from+'\u2013'+seg.to+' (nessun cambiamento)'):('Era '+(seg.label||'')+' \u00b7 caselle '+seg.from+'\u2013'+seg.to);
+  document.getElementById('rm-confirm').classList.add('show');
+}
+function rmDeselect(){ if(!_rm)return; _rm.sel=null; rmDraw(); document.getElementById('rm-confirm').classList.remove('show'); }
+function rmConfirm(){
+  if(!_rm||_rm.sel==null)return; const idx=_rm.idx, seg=_rm.sel, tg=_rm.target;
+  closeRoadPicker(); _rm=null;
+  flash('Hai trasformato il Tratto '+(seg+1)+' in '+RMLAB[tg],'mine');
+  socket.emit('prep:playCard',{handIdx:idx,comp:seg});
+}
+function closeRoadPicker(){document.getElementById('roadpicker').classList.remove('show');}
+/* ---- Entra con un avversario (coop): rivale paga un TUO pezzo ---- */
+function prepCoop(idx){
+  const v=LAST; const rivals=(v.players||[]).filter(p=>p.id!==v.you.id);
+  if(!rivals.length){toast('Nessun avversario');return;}
+  const opts=document.getElementById('picker-opts'); opts.innerHTML='';
+  document.getElementById('picker-h').textContent='Chi entra con te? (paga lui)';
+  rivals.forEach(r=>{opts.innerHTML+=`<div class="opt" onclick="coopPickRival(${idx},${r.id})"><span class="pdot" style="background:${r.colorH}"></span><span class="pname">${esc(r.name)}</span></div>`;});
+  document.getElementById('picker').classList.add('show');
+}
+function coopPickRival(idx,rid){
+  const v=LAST; const r=(v.players||[]).find(p=>p.id===rid);
+  const owned=(v.me&&v.me.owned)||[]; const market=v.market||[];
+  const opts=document.getElementById('picker-opts'); opts.innerHTML='';
+  document.getElementById('picker-h').innerHTML='Quale tuo pezzo paga <b>'+esc(r?r.name:'')+'</b>?';
+  let any=false;
+  owned.forEach(o=>{ const next=o.lvl+1; const mk=market.find(m=>m.comp===o.comp&&m.lvl===next); if(!mk)return; any=true;
+    opts.innerHTML+=`<div class="opt" onclick="coopPickPiece(${idx},${rid},'${o.comp}')"><span class="pdot" style="background:var(--cyan)"></span><span class="pname">${esc(o.name)} \u00b7 L${o.lvl}\u2192L${next}</span></div>`;
+  });
+  if(!any){closePicker();toast('Nessun tuo pezzo pu\u00f2 salire');return;}
+  document.getElementById('picker').classList.add('show');
+}
+function coopPickPiece(idx,rid,comp){
+  closePicker();
+  flash('Entri con un avversario \u00b7 paga il tuo '+comp,'mine');
+  socket.emit('prep:playCard',{handIdx:idx,targetId:rid,comp});
+}
 /* ---------- POLIZIA (client) ---------- */
 function sirenHTML(v){
   if(!v.siren)return '';
@@ -1780,7 +1878,8 @@ function raceRecapHTML(v){
   const rc=v.raceRecap; if(!rc)return '';
   const hasFine=(rc.fines&&rc.fines.length);
   const hasReopen=!!rc.reopened;
-  const hasPol=(rc.blocks&&rc.blocks.length)||(rc.police&&rc.police.length)||(rc.busted&&rc.busted.length)||(rc.forfeited&&rc.forfeited.length)||hasFine||hasReopen;
+  const hasRoad=(rc.roadMods&&rc.roadMods.length);
+  const hasPol=(rc.blocks&&rc.blocks.length)||(rc.police&&rc.police.length)||(rc.busted&&rc.busted.length)||(rc.forfeited&&rc.forfeited.length)||hasFine||hasReopen||hasRoad;
   const hasBoss=(rc.bosses&&rc.bosses.length);
   const hasTie=(rc.tiebreaks&&rc.tiebreaks.length);
   if(!hasPol&&!hasBoss&&!hasTie)return '';
@@ -1789,6 +1888,7 @@ function raceRecapHTML(v){
   (rc.blocks||[]).forEach(b=>{ h+=`<div class="recap-row pol">\ud83d\udea7 Posto di blocco \u00b7 caselle ${b.from}\u2013${b.to}</div>`; });
   (rc.fines||[]).forEach(f=>{ const cls=(f.cells&&f.cells.length>1)?('caselle '+f.cells.join(', ')):('casella '+(f.cells?f.cells[0]:'?')); h+=`<div class="recap-row fine">\ud83d\udea7 ${esc(f.who)} fermato al blocco \u00b7 <b>\u2212${eur(f.total)}</b> \u00b7 ${cls}</div>`; });
   (rc.reopened)?(h+=`<div class="recap-row reopen">\ud83d\udd27 ${esc(rc.reopened)} ha riaperto l'officina a tutti \u00b7 giro extra</div>`):0;
+  (rc.roadMods||[]).forEach(m=>{ h+=`<div class="recap-row reopen">\ud83d\udee3\ufe0f ${esc(m.who)} ha trasformato il Tratto ${m.seg+1} in ${RMLAB[m.type]||m.type}</div>`; });
   (rc.police||[]).forEach(p=>{ h+=`<div class="recap-row pol">\ud83d\ude93 ${esc(p.name)} \u00b7 finita a cas. ${p.pos}</div>`; });
   (rc.busted||[]).forEach(b=>{ h+=`<div class="recap-row bust">\ud83d\udea8 ${esc(b.name)} beccato (${b.reason==='blocco'?'blocco':'polizia'}) \u00b7 niente premi</div>`; });
   (rc.forfeited||[]).forEach(f=>{ h+=`<div class="recap-row pol">\ud83d\udeab Blocco di ${esc(f.who)} annullato \u00b7 nessuno spazio in pista</div>`; });
