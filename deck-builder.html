@@ -20,11 +20,9 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{margin:0;color:var(--txt);font-family:var(--body);
-  background-color:#080b11;
-  background-image:linear-gradient(180deg,rgba(8,11,17,.72),rgba(8,11,17,.3) 26%,rgba(8,11,17,.22) 50%,rgba(8,11,17,.34) 74%,rgba(8,11,17,.82)),url("/public/bg-officina.jpg");
-  background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed}
+  background:#080b11}
 body{margin:0;background:transparent;color:var(--txt);font-family:var(--body)}
-.app{max-width:520px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.app{max-width:1440px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
 
 .status{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,rgba(8,11,17,.96),rgba(8,11,17,.82));backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 14px 10px}
 .brandrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -135,7 +133,7 @@ main{flex:1;padding:14px 14px 90px}
 .dab{font-size:12px;color:var(--txt);margin-top:5px;line-height:1.35}
 .dtype{font-family:var(--disp);font-weight:700;font-size:9.5px;letter-spacing:.8px;padding:2px 7px;border-radius:5px;background:var(--cyanDim);color:var(--cyan);align-self:center;flex-shrink:0}
 
-.foot{position:fixed;bottom:0;left:0;right:0;z-index:20;background:linear-gradient(0deg,rgba(8,11,17,.97),rgba(8,11,17,.8));backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:11px 14px;max-width:520px;margin:0 auto}
+.foot{position:fixed;bottom:0;left:0;right:0;z-index:20;background:linear-gradient(0deg,rgba(8,11,17,.97),rgba(8,11,17,.8));backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:11px 14px;max-width:1440px;margin:0 auto}
 .footrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .summary{font-size:12px;color:var(--muted);line-height:1.4}
 .summary b{font-family:var(--disp);font-size:15px;color:var(--txt);font-weight:700}
@@ -165,6 +163,22 @@ main{flex:1;padding:14px 14px 90px}
 .lockmsg b{color:#ffd0d4;font-weight:600}
 .dbtoast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(10px);z-index:60;background:var(--panel2);border:1px solid var(--line);color:var(--txt);font-size:12.5px;padding:10px 15px;border-radius:10px;opacity:0;transition:.25s;max-width:330px;text-align:center;pointer-events:none}
 .dbtoast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+/* ===== redesign: desktop a tutta larghezza + carte per livello ===== */
+@media(min-width:920px){
+  main{padding:18px 22px 96px}
+  #cats{column-width:392px;column-gap:16px}
+  #cats>.grp{break-inside:avoid}
+  #sec-officina,#sec-pilota{max-width:720px;margin:0 auto}
+}
+#cats>.grp{margin-bottom:16px}
+.lvlbody{padding:2px 12px 12px}
+.lvlgrp{margin-top:12px}
+.lvlgrp:first-child{margin-top:5px}
+.lvlhead{display:flex;align-items:center;gap:9px;margin:0 0 8px}
+.lvlhead .ltag{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.8px;color:#04121a;border-radius:6px;padding:2px 9px;flex-shrink:0}
+.lvlhead .lline{flex:1;height:1px;background:var(--line)}
+.lvlhead .lqt{font-family:var(--disp);font-size:10.5px;letter-spacing:.5px;color:var(--muted);flex-shrink:0}
+.lchips{display:flex;flex-wrap:wrap;gap:7px}
 </style>
 </head>
 <body>
@@ -173,7 +187,7 @@ main{flex:1;padding:14px 14px 90px}
     <div class="brandrow">
       <div class="brand"><b>2FAST4U</b><span>DECK PERSONALE</span></div>
       <div style="display:flex;align-items:center;gap:8px">
-        <button class="shopbtn" onclick="location.href='/mock_negozio.html'"><svg viewBox="0 0 24 24"><path d="M3 8h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg>Negozio</button>
+        <button class="shopbtn" onclick="location.href='/buste_2fast4u.html'"><svg viewBox="0 0 24 24"><path d="M3 8h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg>Negozio</button>
         <div class="pill" id="pill">DECK INCOMPLETO</div>
       </div>
     </div>
@@ -248,6 +262,28 @@ const GANGS=["Lupara Boys","Krudo","Ombre Nere","Lowlifes","I Diavoli"];
 const GANGCOL={"Lupara Boys":"#FF4747","Lowlifes":"#3D8BFF","Krudo":"#2FD98A","Ombre Nere":"#A974FF","I Diavoli":"#FFB02E"};
 const GANGLEVA={"Lupara Boys":"Velocita","Krudo":"Controllo","Ombre Nere":"NOS","Lowlifes":"Posizione","I Diavoli":"Dado"};
 const COMP_MAP={}; COMPONENTI.forEach(c=>{ (COMP_MAP[c.piece]=COMP_MAP[c.piece]||{})[c.lvl]=c.n; });
+const DEF_LVL={"Riflessi felini": 1, "Schivata all'ultimo": 1, "Lo eviti in un lampo": 1, "Colpo di reni": 1, "Scarto secco": 1, "Effetto specchio": 1, "Sterzata provvidenziale": 1, "Controsterzo da maestro": 1, "Nervi d'acciaio": 1, "Spalle coperte": 1, "Soffiata in anticipo": 1, "Niente ti scalfisce": 1, "Sempre un passo avanti": 1, "Talpa in officina": 1, "Coperto su tutto": 1, "Sesto senso": 3, "Scudo totale": 3, "Parata": 3, "Riparo": 3, "Contromossa": 3};
+const POL_LVL={"Pattuglia dietro la curva": 1, "Controllo lampo": 1, "Gazzella in agguato": 2, "Lampeggianti all'improvviso": 2, "Soffiata alle volanti": 3, "Doppia volante di traverso": 1, "Reparto mobile schierato": 1, "La strada si chiude": 3, "Maxi-retata giornaliera": 1, "Maxi-retata notturna": 2, "Città blindata": 3, "Inseguimento a sirene spiegate": 1, "Le volanti ti stanno addosso": 2, "Elicottero in caccia": 3};
+const PRE_LVL={"Bravo, aiuti il prossimo": 1, "Quando meno se lo aspettano": 1, "Mi sembra giusto cosi": 1, "Beccato": 1, "Un piccolo sgarro, ti costa caro": 1, "Non puoi andare avanti sempre così": 1, "Arriva bonifica dallo zio del Molise": 1, "Ieri sera hai vinto a Poker": 1, "Il tuo cane vince il primo premio": 1, "Arrivano le tasse arretrate": 1, "Arriva la multa per eccesso velocità": 1, "I debiti si pagano": 1, "Arrivano gli sponsor": 1, "La fortuna ti assiste": 1, "Alzi la posta in palio": 1, "Doppia o niente": 1, "Il banco raddoppia per te": 1, "Pareggiamo le cose": 1, "Pareggiamo i conti": 1, "Tagli la posta a un rivale": 1, "Il banco bara contro un rivale": 1, "Dimezzi il bottino di un rivale": 1, "La quota cala all'ultimo": 1, "Il broker ti fa un regalo di compleanno": 1, "Il broker sbaglia a segnare la quota": 1, "Quota ricalcolata": 1, "Stai antipatico al broker": 1, "Il capo officina ti deve un debito": 1, "Il figlio del capo officina ti salda il debito": 2, "Il meccanico ti fa un favore": 2, "Buono sconto": 1, "Gara lampo": 1, "Hai da fare stasera": 1, "Durante la notte smonti il pezzo al tuo acerrimo rivale": 1, "Commissioni furto ad un tuo rivale": 1, "Ogni azione ha una conseguenza": 1, "Tour privato dell'officina ti costerà caro": 2, "Visita privata all'officina": 2, "Chiedi al figlio del proprietario di riaprire l'officina": 1, "Chiedi alla moglie del proprietario di riaprire l'officina": 1, "Il proprietario riapre l'officina per tutti": 1, "Serata di porte aperte in officina": 1, "Notte di porte aperte in officina": 1, "I debidi di gioco si pagano": 1, "Favori incrociati in officina": 1, "Riscuoti un vecchio credito": 2, "Vinci una gara di bellezza": 2, "Svuoti la cassa di un rivale": 2, "Mandi gli strozzini da un rivale": 2, "Il colpo grosso della tua vita": 3, "Soffiata al fisco contro un rivale": 3, "Scommessa · quota +2": 3, "Scommessa · quota -1.5": 3, "Strada · modifica 1 tratto → Città": 4, "Strada · modifica 1 tratto → Rettilineo": 4, "Strada · modifica 1 tratto → Drift": 4};
+function leveledBody(cards, mkChip, getLvl, acc){
+  const body=document.createElement('div'); body.className='body lvlbody';
+  const byL={}; cards.forEach(c=>{ const L=getLvl(c)||1; (byL[L]=byL[L]||[]).push(c); });
+  Object.keys(byL).map(Number).sort((a,b)=>a-b).forEach(L=>{
+    const lg=document.createElement('div'); lg.className='lvlgrp';
+    const hd=document.createElement('div'); hd.className='lvlhead';
+    hd.innerHTML='<span class="ltag" style="background:'+(acc||'#1ad6ea')+'">L'+L+'</span><span class="lline"></span><span class="lqt">'+byL[L].length+' carte</span>';
+    lg.appendChild(hd);
+    const cc=document.createElement('div'); cc.className='lchips';
+    byL[L].slice().sort((a,b)=>a.n.localeCompare(b.n)).forEach(c=>cc.appendChild(mkChip(c)));
+    lg.appendChild(cc); body.appendChild(lg);
+  });
+  return body;
+}
+function leveledGroup(cat,title,sub,cards,getLvl,acc){
+  const {g,qa}=groupShell(cat,title,sub,cards.length,true);
+  g.appendChild(leveledBody(cards, c=>makeChip(cat,c), getLvl, acc));
+  wireQA(qa,cat,cards); return g;
+}
 let ADMIN = !!window.isAdmin;
 let OWNED = {}; try{ OWNED = JSON.parse(localStorage.getItem('2fast4u_owned')||'{}'); }catch(e){}
 let adminUnlock=(function(){ try{ return localStorage.getItem('2fast4u_admin_unlock')!=='0'; }catch(e){ return true; } })();
@@ -272,9 +308,7 @@ function buildEsp(){
     head.innerHTML='<div class="gtitle">NOS e Dado <em>'+bu.length+' \u00b7 base, per tutti</em></div><div style="display:flex;align-items:center"><span class="gcount" data-gc></span><span class="chev">\u25bc</span></div>';
     head.onclick=()=>grp.classList.toggle('closed');
     grp.appendChild(head);
-    const body=document.createElement('div'); body.className='body wrap';
-    bu.slice().sort((a,b)=>a.l-b.l || a.n.localeCompare(b.n)).forEach(c=>body.appendChild(makeEspChip(c)));
-    grp.appendChild(body); host.appendChild(grp);
+    grp.appendChild(leveledBody(bu, makeEspChip, c=>c.l, '#1ad6ea')); host.appendChild(grp);
   }
   GANGS.forEach(g=>{
     const cards=ESP_INGARA.filter(c=>c.g===g && !isBaseUniv(c) && owns(c.n));
@@ -285,9 +319,7 @@ function buildEsp(){
     head.innerHTML='<div class="gtitle" style="color:'+col+'">'+g+' <em>'+cards.length+' \u00b7 '+GANGLEVA[g]+'</em></div><div style="display:flex;align-items:center"><span class="gcount" data-gc></span><span class="chev">\u25bc</span></div>';
     head.onclick=()=>grp.classList.toggle('closed');
     grp.appendChild(head);
-    const body=document.createElement('div'); body.className='body wrap';
-    cards.slice().sort((a,b)=>a.l-b.l || a.n.localeCompare(b.n)).forEach(c=>body.appendChild(makeEspChip(c)));
-    grp.appendChild(body); host.appendChild(grp);
+    grp.appendChild(leveledBody(cards, makeEspChip, c=>c.l, col)); host.appendChild(grp);
   });
 }
 function espBadge(k){
@@ -343,9 +375,9 @@ function makeChip(cat,c){
 function buildCats(){
   const host = document.getElementById('cats'); host.innerHTML='';
   [1,2,3,4].forEach(lv=> host.appendChild(ingaraGroup(lv, DATA.pool.ingara.filter(c=>c.lvl===lv))) );
-  host.appendChild(flatGroup('difesa','Difesa','annulli', DATA.pool.difesa));
-  host.appendChild(flatGroup('polizia','Polizia','blocco piccolo+medio', DATA.pool.polizia));
-  host.appendChild(flatGroup('pregara','Pre-gara','economia + gara lampo', DATA.pool.pregara));
+  host.appendChild(leveledGroup('difesa','Difesa','annulli', DATA.pool.difesa, c=>DEF_LVL[c.n], '#2ee6a0'));
+  host.appendChild(leveledGroup('polizia','Polizia','blocchi + inseguimenti', DATA.pool.polizia, c=>POL_LVL[c.n], '#ff9f43'));
+  host.appendChild(leveledGroup('pregara','Pre-gara','economia + gara lampo', DATA.pool.pregara, c=>PRE_LVL[c.n], '#feca57'));
 }
 function groupShell(cat,title,sub,count,startClosed){
   const g=document.createElement('div'); g.className='grp'+(startClosed?' closed':''); g.dataset.cat=cat;
