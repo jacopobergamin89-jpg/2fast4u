@@ -92,9 +92,9 @@ function makeDeck(maxLvl){
   return shuffle(d);
 }
 
-function drawCard(G){
-  if(!G.deck||!G.deck.length){ if(G.discard&&G.discard.length){ G.deck=shuffle(G.discard); G.discard=[]; } else { G.deck=makeDeck(G.trackLevel||1); } }
-  return G.deck.length ? G.deck.pop() : null;
+function drawCard(p, trackLevel){
+  if(!p.deck||!p.deck.length){ if(p.discard&&p.discard.length){ p.deck=shuffle(p.discard); p.discard=[]; } else { p.deck=makeDeck(trackLevel||1); } }
+  return p.deck.length ? p.deck.pop() : null;
 }
 function statVal(p,k){
   const lv=p.comp[k];
@@ -129,10 +129,10 @@ function startGame(room){
   G.players.forEach((p,i)=>{ p.roll=d6(); });
   G.diceOrder=[...G.players].sort((a,b)=>b.roll-a.roll||a.id-b.id).map(p=>p.id);
   G.pilotPool=shuffle(DB.piloti.map(p=>p.id));
-  G.players.forEach((p,idx)=>{ p.pilot=null; p.drew=false; p.money=4000; p.po=0; p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0}; p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]}; p.espOwned={}; p.lastRank=idx; p.prevRank=idx; p.hand=[]; });
-  G.deck=makeDeck(1); G.discard=[];   // pack L1 completo: in-gara, pre-gara, difese e polizia L1
-  G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
-  G.players.forEach(p=>{ for(let k=0;k<3;k++){ const card=drawCard(G); if(card) p.hand.push(card); } });
+  G.players.forEach((p,idx)=>{ p.pilot=null; p.drew=false; p.money=4000; p.po=0; p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0}; p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]}; p.espOwned={}; p.deck=makeDeck(1); p.discard=[]; p.market=[]; p.lastRank=idx; p.prevRank=idx; p.hand=[]; });   // mazzo e officina PERSONALI
+  G.discard=[];
+  G.marketSeq=0; G.prevResults=null;
+  G.players.forEach(p=>{ for(let k=0;k<3;k++){ const card=drawCard(p,1); if(card) p.hand.push(card); } });
   G.round=0; room.started=true; G.policeUnlocked=true; G.scaleUnlocked={2:false,3:false,4:false}; G.blocks=[]; G.pendPolice=[]; G.bossPending=null;
   G.gameLog=[]; G.gameSeq=0;
   G.phase='reveal'; G.players.forEach(p=>{ p.ready=false; });
@@ -145,14 +145,15 @@ function restartGame(room){
   G.phase='lobby';
   G.round=0; G.R=null; G.lastResults=null; G.winner=null;
   G.gameLog=[]; G.gameSeq=0;
-  G.track=[]; G.pilotPool=null; G.deck=null; G.discard=[]; G.order=[]; G.diceOrder=[];
-  G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
+  G.track=[]; G.pilotPool=null; G.discard=[]; G.order=[]; G.diceOrder=[];
+  G.marketSeq=0; G.prevResults=null;
   G.players.forEach((p,i)=>{
     p.pilot=null; p.drew=false; p.ready=false;
     p.money=4000; p.po=0;
     p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0};
     p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]};
     p.espOwned={};
+    p.deck=null; p.discard=[]; p.market=[];
     p.hand=[]; p.bet=null;
     p.lastRank=i; p.prevRank=i; p.roll=0;
   });
@@ -178,8 +179,7 @@ function startRound(room){
   else G.order=[...G.players].sort((a,b)=>b.lastRank-a.lastRank||a.id-b.id).map(p=>p.id);
   G.maxBuys=(G.round===1)?2:1;
   G.compMaxLevel=G.trackLevel;
-  G.market=[]; G.marketUsed={};                                          // ogni officina riparte pulita: le carte invendute NON si accumulano dai round precedenti
-  revealMarket(G, G.maxBuys * G.players.length);   // PEZZI = ACQUISTI: il banco scopre tanti pezzi quanti gli acquisti totali (maxBuys a testa × giocatori). Round 1: 2 a testa · dal round 2: 1 a testa
+  G.players.forEach(p=>{ p.market=[]; revealMarketFor(G,p,G.maxBuys); });   // officina PERSONALE: ognuno scopre i propri pezzi (2 al round 1, 1 dai successivi), nessuna contesa
   G.raceLevel=G.trackLevel;
   G.entryFee=DB.roadBasePrice[G.raceLevel];
   G.raceFirstRollDone=false;
@@ -191,16 +191,25 @@ function startRound(room){
 }
 function compSlots(N,lvl){ return Math.max(1, N - Math.max(0, lvl-2)); }   // posti totali per tipo a un livello: L1-2=N, L3=N-1, L4=N-2, L5=N-3 (min 1)
 function stockAvail(G,comp,lvl){ return compSlots(G.players.length,lvl) - G.players.filter(x=>x.comp[comp]===lvl).length; }   // disponibili = posti − chi tiene già quel livello (il pezzo rientra da solo quando uno sale)
-/* ===== MERCATO a carte scoperte (regola verificata: 1° mercato N×2, successivi N; si compra solo dalle scoperte) ===== */
-function deckCountForLevel(N,lvl){ return ({1:4,2:3,3:3,4:Math.max(0,N-2),5:Math.max(0,N-3)})[lvl]||0; }   // scarsità mazzo per stat/livello
-function revealMarket(G,count){                                  // pesca `count` carte e le scopre nel mercato
-  const N=G.players.length; let guard=count*60;
-  while(count>0 && guard-->0){
-    const comp=DB.ordine[Math.floor(Math.random()*DB.ordine.length)];
-    const lvl=1+Math.floor(Math.random()*G.compMaxLevel);        // 1..livello max pista
-    const key=comp+':'+lvl; const used=G.marketUsed[key]||0;
-    if(used>=deckCountForLevel(N,lvl)) continue;                 // esaurita quella carta nel mazzo
-    G.marketUsed[key]=used+1; G.market.push({ id:++G.marketSeq, comp, lvl }); count--;
+/* ===== OFFICINA PERSONALE (pescata privata: 2 al 1° round, 1 dai successivi; nessuna contesa fra giocatori) ===== */
+function pieceOptionsFor(G,p){                                   // pezzi realmente ACQUISTABILI da p a questo livello pista
+  const opts=[];
+  DB.ordine.forEach(comp=>{
+    for(let lvl=1; lvl<=G.compMaxLevel; lvl++){
+      if(lvl>p.comp[comp] && canHaveAtLevel(p,comp,lvl)) opts.push({comp,lvl});
+    }
+  });
+  return opts;
+}
+function revealMarketFor(G,p,count){                             // scopre `count` pezzi tutti utili e distinti nel banco PERSONALE di p
+  p.market=p.market||[];
+  const have=new Set(p.market.map(c=>c.comp+':'+c.lvl));
+  const pool=shuffle(pieceOptionsFor(G,p));
+  for(const o of pool){
+    if(count<=0) break;
+    const key=o.comp+':'+o.lvl;
+    if(have.has(key)) continue;                                  // mai due volte lo stesso pezzo/livello nella stessa officina
+    have.add(key); p.market.push({ id:++G.marketSeq, comp:o.comp, lvl:o.lvl }); count--;
   }
 }
 function pOrder(G){ return G.reshop?G.reshopOrder:G.order; }
@@ -210,9 +219,8 @@ function startReshop(room){
   G.reshop=true; G.reshopQueued=false;
   const buys=G.reshopBuys||{};
   const parts=G.players.map(p=>p.id).filter(id=>(buys[id]||0)>0);   // solo chi ha un acquisto nel giro extra
-  const extraStock=parts.reduce((s,id)=>s+(buys[id]||0),0);         // 1 pezzo per giocatore attivo nel giro extra
-  G.market=[]; G.marketUsed={};                                     // anche il giro extra riparte pulito: esattamente 1 pezzo a testa, niente residui dell'officina principale
-  revealMarket(G, extraStock);
+  G.players.forEach(pp=>{ pp.market=[]; });                         // il giro extra riparte pulito per tutti
+  parts.forEach(id=>{ const pp=G.players.find(x=>x.id===id); if(pp) revealMarketFor(G,pp,buys[id]||1); });   // ogni partecipante scopre i propri pezzi extra
   let first=parts.includes(G.reshopFirst)?G.reshopFirst:parts[0];
   G.reshopOrder=[first, ...G.order.filter(id=>id!==first && parts.includes(id))];
   G.ppIdx=0;
@@ -237,8 +245,8 @@ function priceFor(G,p,comp,lvl,esp){
 function actBuy(room,p,comp,lvl,esp){
   const G=room.G; if(G.phase!=='prep'||curPrep(G).id!==p.id) return 'Non è il tuo turno.';
   lvl=+lvl; if(!DB.ordine.includes(comp)||!(lvl>=1)) return 'Ricambio non valido.';
-  const ci=(G.market||[]).findIndex(c=>c.comp===comp&&c.lvl===lvl);
-  if(ci<0) return 'Quella carta non è più al mercato.';
+  const ci=(p.market||[]).findIndex(c=>c.comp===comp&&c.lvl===lvl);
+  if(ci<0) return 'Quel pezzo non è nella tua officina.';
   if(lvl<=p.comp[comp]) return 'Livello pari o inferiore.';
   if(lvl>G.compMaxLevel) return 'Livello non ancora sbloccato.';
   if(p.buysLeft<=0) return 'Acquisti finiti.';
@@ -250,7 +258,7 @@ function actBuy(room,p,comp,lvl,esp){
   p.money-=price; p.comp[comp]=lvl; if(p.lvlOwned&&!p.lvlOwned[comp].includes(lvl)) p.lvlOwned[comp].push(lvl); p.buysLeft--; p.discountNext=false;
   p.espOwned=p.espOwned||{};
   if(esp) p.espOwned[comp]=lvl; else if(p.espOwned[comp]===lvl) delete p.espOwned[comp];   // il pezzo nuovo sostituisce l'eventuale ESP dello stesso livello
-  G.market.splice(ci,1);                                          // carta scoperta consumata
+  p.market.splice(ci,1);                                          // pezzo scoperto consumato dal tuo banco
   glog(G,p.name+' compra '+(COMPLAB[comp]||comp)+' L'+lvl+(esp?' ESP':'')+' · €'+price,'buy');
   return null;
 }
@@ -333,7 +341,7 @@ function actDefend(room, p, handIdx, mid){
   const reflect=isReflect(c);
   if(reflect){ const a=G.players.find(x=>x.id===m.attackerId) || (G.R&&G.R.police&&G.R.police.find(x=>x.id===m.attackerId)); if(a) reflectMalus(G, a, m); }
   p.incoming=(p.incoming||[]).filter(x=>x.mid!==mid);
-  G.discard.push(c); p.hand.splice(handIdx,1);
+  p.discard.push(c); p.hand.splice(handIdx,1);
   raceLog(G,{kind:'defend',who:p.name,nome:c.nome,reflect,by:m.attackerName});
   return null;
 }
@@ -357,7 +365,7 @@ function actDiscard(room,p,handIdx){
   if(!c) return 'Carta non trovata.';
   if(c.cat==='polizia') return 'Le carte polizia non si scartano: vanno giocate.';
   p.hand.splice(handIdx,1);
-  G.discard.push(c);                 // niente ripesca immediata: la mano si ricompone a 5 a fine gara
+  p.discard.push(c);                 // niente ripesca immediata: la mano si ricompone a 5 a fine gara
   return null;
 }
 function actPlayPregara(room,p,handIdx,targetId,comp){
@@ -425,7 +433,7 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
   }
   if(pregaraTarget(c)==='rival' && c.eff!=='reopenDebt' && tgt.id!==p.id) recordMalus(room, p, tgt, {phase:'pregara', eff:c.eff, val:c.val, applied:_ap, comp:_comp, lvl:_lvl});
   glog(G,p.name+' gioca «'+c.nome+'»'+(pregaraTarget(c)==='rival'&&tgt.id!==p.id?(' su '+tgt.name):''),'card');
-  G.discard.push(c); p.hand.splice(handIdx,1); return null;
+  p.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
 /* ====================== POLIZIA ====================== */
 function trackTotalCells(G){ return G.track[G.track.length-1].to; }
@@ -454,7 +462,7 @@ function actPlayPolice(room,p,handIdx,cell){
     (G.pendPolice=G.pendPolice||[]).push({by:p.id});
   }
   glog(G,p.name+' gioca «'+c.nome+'» (polizia)','card');
-  G.discard.push(c); p.hand.splice(handIdx,1); return null;
+  p.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
 function throwPoliceMalus(room, attacker, target){
   const G=room.G;
@@ -545,7 +553,7 @@ function actSetBet(room,p,targetId,amount){
 }
 function actPrepDone(room,p){
   const G=room.G; if(G.phase!=='prep'||curPrep(G).id!==p.id) return 'Non è il tuo turno.';
-  if(!G.reshop) for(let i=p.hand.length-1;i>=0;i--){ const c=p.hand[i]; if(c.cat==='polizia'&&c.kind==='blocco'&&!blockPlaceable(G,c.size)){ G.discard.push(c); p.hand.splice(i,1); (G.forfeitedBlocks=G.forfeitedBlocks||[]).push({who:p.name,nome:c.nome}); } } // blocco senza spazio: annullato
+  if(!G.reshop) for(let i=p.hand.length-1;i>=0;i--){ const c=p.hand[i]; if(c.cat==='polizia'&&c.kind==='blocco'&&!blockPlaceable(G,c.size)){ p.discard.push(c); p.hand.splice(i,1); (G.forfeitedBlocks=G.forfeitedBlocks||[]).push({who:p.name,nome:c.nome}); } } // blocco senza spazio: annullato
   if(!G.reshop && p.hand.some(c=>c.cat==='polizia')) return 'Devi prima giocare la carta polizia (gira subito).';
   if(!G.reshop && p.bet){ if(p.bet.amount>p.money){ p.bet=null; } else { p.money-=p.bet.amount; } }
   G.ppIdx++;
@@ -596,7 +604,7 @@ function actPlayPartenza(room,p,handIdx,targetId){
   tc.pendPart+=c.val;
   (G.launchLog=G.launchLog||[]).push({ who:p.name, target:target.name, targetId:target.id, nome:c.nome, val:c.val, self:(c.target!=='rival') });
   glog(G,p.name+' al via: «'+c.nome+'» '+(c.target!=='rival'?'su di sé':('su '+target.name)),'card');
-  G.discard.push(c); p.hand.splice(handIdx,1);
+  p.discard.push(c); p.hand.splice(handIdx,1);
   return null;                                                  // nessuna difesa, se ne possono giocare quante si vuole
 }
 function botsPlayPartenza(room){
@@ -665,7 +673,7 @@ function actRacePlayCard(room,p,handIdx,targetId){
     tc.dadoForza={ set:c.set.slice(), stat:c.stat, val:c.val };
     raceLog(G,{kind:'card',who:p.name,target:p.name,targetId:p.id,nome:c.nome,eff:c.eff});
     glog(G,p.name+' gioca «'+c.nome+'» (gara)','card');
-    G.discard.push(c); p.hand.splice(handIdx,1); return null;
+    p.discard.push(c); p.hand.splice(handIdx,1); return null;
   }
   /* --- carta multi-effetto (gang / NOS): ogni componente si applica al suo bersaglio;
          i malus verso i giocatori restano difendibili uno a uno --- */
@@ -699,7 +707,7 @@ function actRacePlayCard(room,p,handIdx,targetId){
     }
     raceLog(G,{kind:'card',who:p.name,target:(pickT?pickT.name:p.name),targetId:(pickT?pickT.id:p.id),nome:c.nome,eff:c.eff});
     glog(G,p.name+' gioca «'+c.nome+'»'+(pickT?(' su '+pickT.name):'')+' (gara)','card');
-    G.discard.push(c); p.hand.splice(handIdx,1); return null;
+    p.discard.push(c); p.hand.splice(handIdx,1); return null;
   }
   let target=p, isFoe=false;
   if(c.target==='rival'){
@@ -718,7 +726,7 @@ function actRacePlayCard(room,p,handIdx,targetId){
   raceLog(G,{kind:'card',who:p.name,target:target.name,targetId:target.id,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur});
   glog(G,p.name+' gioca «'+c.nome+'»'+(c.target==='rival'&&target.id!==p.id?(' su '+target.name):'')+' (gara)','card');
   if(c.target==='rival' && target.id!==p.id && !isFoe) recordMalus(room, p, target, {phase:'ingara', eff:c.eff, val:c.val, dur:c.dur, fxRef:_fx, prevDado:_prevDado});  // i boss non si difendono
-  G.discard.push(c); p.hand.splice(handIdx,1); return null;
+  p.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
 function actRoll(room,p,useNos){
   const G=room.G; if(G.phase!=='race') return 'Non in gara.';
@@ -804,7 +812,7 @@ function endRace(room){
     }
     p.bet=null;
   });
-  G.players.forEach(p=>{ while(p.hand.length<5){ const card=drawCard(G); if(!card) break; p.hand.push(card); } });
+  G.players.forEach(p=>{ while(p.hand.length<5){ const card=drawCard(p,G.trackLevel); if(!card) break; p.hand.push(card); } });
   const racedLevels=G.track.map(c=>c.lvl);
   advanceTrack(room);
   G.lastTrackInfo={ racedLevels, change:G.lastTrackChange };
@@ -889,7 +897,7 @@ function advanceTrack(room){
   change.newLevel=G.trackLevel; change.advanced=advance;
   layoutTrack(G.track);
   G.lastTrackChange=change;
-  for(const lv of [2,3,4]){ if(G.trackLevel>=lv && G.scaleUnlocked && !G.scaleUnlocked[lv]){ G.scaleUnlocked[lv]=true; G.deck=shuffle((G.deck||[]).concat(packCards(lv))); change.scaleUnlocked=(change.scaleUnlocked||[]).concat(lv); } }   // carte scalate cumulative
+  for(const lv of [2,3,4]){ if(G.trackLevel>=lv && G.scaleUnlocked && !G.scaleUnlocked[lv]){ G.scaleUnlocked[lv]=true; G.players.forEach(p=>{ p.deck=shuffle((p.deck||[]).concat(packCards(lv))); }); change.scaleUnlocked=(change.scaleUnlocked||[]).concat(lv); } }   // il pack del nuovo livello entra in ogni mazzo personale
 }
 function actNextRound(room,p){
   const G=room.G; if(G.phase!=='results') return 'Non disponibile ora.';
@@ -969,7 +977,7 @@ function buildView(room, player){
     v.trackTotal=trackTotalCells(G);
     v.order=[...G.order];
     v.lastRace=(G.round>1 && G.prevResults) ? G.prevResults.map(r=>({ id:r.id, name:r.name, colorH:r.colorH, pos:r.pos, busted:!!r.busted })) : null;
-    v.market=(G.market||[]).map(c=>{
+    v.market=(player.market||[]).map(c=>{
       const pl=player; const cap=!canHaveAtLevel(pl,c.comp,c.lvl);
       const below=c.lvl<=pl.comp[c.comp]; const overcap=c.lvl>G.compMaxLevel;
       const price=priceFor(G,pl,c.comp,c.lvl); const skip=c.lvl>pl.comp[c.comp]+1;
@@ -1085,7 +1093,7 @@ function botPrep(room,bot){
   // 2) acquisti (solo dalle carte scoperte del mercato)
   let safety=12;
   while(bot.buysLeft>0 && safety-->0){
-    const opts=(G.market||[]).filter(c=> c.lvl>bot.comp[c.comp] && c.lvl<=G.compMaxLevel && canHaveAtLevel(bot,c.comp,c.lvl) && priceFor(G,bot,c.comp,c.lvl)<=bot.money-300);
+    const opts=(bot.market||[]).filter(c=> c.lvl>bot.comp[c.comp] && c.lvl<=G.compMaxLevel && canHaveAtLevel(bot,c.comp,c.lvl) && priceFor(G,bot,c.comp,c.lvl)<=bot.money-300);
     if(!opts.length) break;
     const w={motore:3,cambio:3,sterzo:3,assetto:3,nos:2,peso:2};
     opts.sort((a,b)=>{
