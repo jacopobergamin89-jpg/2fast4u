@@ -1065,11 +1065,8 @@ function handCardDesc(c){
 }
 function ofHandPlay(c,mobile){
   if(c.cat==='esp'){
-    const oc=`socket.emit('prep:playEsp',{handIdx:${c.idx}})`;
-    const lbl=c.playable?`Potenzia \u00b7 ${eur(c.cost)}`:(c.espReason||'non disponibile');
-    return mobile
-      ? `<button class="o2-pre-go play${c.playable?'':' lock'}" ${c.playable?`onclick="${oc}"`:'disabled'}>${lbl}</button>`
-      : `<button class="btn btn-line btn-sm${c.playable?'':' off'}" ${c.playable?`onclick="${oc}"`:'disabled'}>${lbl}</button>`;
+    const oc=`socket.emit('prep:playEsp',{handIdx:${c.idx}})`;   // upgrade automatico del pezzo, come gli altri
+    return mobile ? `<button class="o2-pre-go play" onclick="${oc}">Gioca</button>` : `<button class="btn btn-line btn-sm" onclick="${oc}">Gioca</button>`;
   }
   if(c.cat!=='pregara') return '';
   const sm=c.eff==='smonta', tr=c.eff==='tratto', neg=c.target==='rival';
