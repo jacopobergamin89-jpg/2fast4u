@@ -4,6 +4,9 @@
 <title>2FAST4U · Home</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-guard.js"></script>
 <style>
 :root{--bg:#0B0518;--bg2:#140A28;--bg3:#1D1140;--line:#2C1E52;--amber:#FFC91E;--cyan:#2BA8E6;--purple:#9B3BE0;--ink:#F4EEFF;--muted:#8E7FB8;--good:#3ddc84;--danger:#ff5b6b;--disp:'Oswald',system-ui,sans-serif;}
 *{box-sizing:border-box}
@@ -89,15 +92,28 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 18px;font-size:13px;opacity:0;transition:.2s;z-index:70;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .mock-tag{position:fixed;bottom:12px;left:12px;z-index:50;background:var(--purple);color:#fff;font-size:11px;letter-spacing:.5px;padding:5px 11px;border-radius:20px}
+.userbox{display:flex;align-items:center;gap:10px}
+.userbox .whoami{font-size:12px;color:var(--muted);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.userbox .badge-admin{font-size:10px;font-weight:600;letter-spacing:1px;color:#180a05;background:linear-gradient(135deg,#FFD86A,var(--amber));padding:3px 8px;border-radius:20px;display:inline-flex;align-items:center}
+.userbox .btn-exit{font-family:inherit;font-size:12px;color:var(--ink);background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:5px 11px;cursor:pointer}
+#adminbar{display:none;align-items:center;gap:10px;flex-wrap:wrap}
+#adminbar .amber{color:var(--amber);font-weight:500}
+#adminbar #testbtn.on{border-color:var(--good);color:var(--good)}
+#adminbar #garagemode{opacity:.75;font-style:italic}
 </style></head>
 <body>
 <div class="wrap">
   <div class="top">
     <div class="logo">2<b>FAST</b>4<span>U</span></div>
     <div class="coins"><span class="ic"></span><div><b id="coins">0</b> <small>gettoni</small></div></div>
-    <div class="avatar">J</div>
+    <div class="userbox">
+      <span class="badge-admin" id="adminbadge" style="display:none">ADMIN</span>
+      <span class="whoami" id="whoami"></span>
+      <button class="btn-exit" onclick="authLogout()">Esci</button>
+      <div class="avatar" id="avatar">·</div>
+    </div>
   </div>
-  <div class="proto">Prototipo (l'admin darà i crediti) · <button onclick="grantCoins(5000)">+5.000 gettoni</button> <button onclick="resetAll()">Azzera tutto</button> <span class="note">valuta e collezione sono salvate solo su questo dispositivo</span></div>
+  <div class="proto" id="adminbar"><span class="amber">ADMIN</span> · crediti (questo dispositivo, per ora) · <button onclick="grantCoins(5000)">+5.000 gettoni</button> <button onclick="resetAll()">Azzera</button> · prova gioco: <button id="testbtn" onclick="toggleTestMode()">Provala tutta</button> <span id="garagemode" class="note"></span></div>
 
   <div class="hero"><div class="hero-in">
     <div class="hero-k">Modalità B · corse clandestine</div>
@@ -236,7 +252,22 @@ function closeOverlay(){ document.getElementById('ov').classList.remove('on'); }
 
 /* ---------- prototipo / admin ---------- */
 function grantCoins(n){ const w=loadWallet(); w.coins+=n; saveWallet(w); render(); toast('+'+n.toLocaleString('it-IT')+' gettoni'); }
-function resetAll(){ if(!confirm('Azzerare gettoni e collezione su questo dispositivo?'))return; saveWallet({coins:START_COINS}); saveColl({owned:[]}); render(); toast('Azzerato'); }
+function resetAll(){ if(!confirm('Azzerare gettoni e collezione su questo dispositivo?'))return; saveWallet({coins:START_COINS}); saveColl({owned:{}}); render(); toast('Azzerato'); }
+
+/* ---------- auth / admin ---------- */
+const UNLOCK_KEY='2f4u_admin_unlockall';
+function testModeOn(){ return localStorage.getItem(UNLOCK_KEY)==='1'; }
+function setTestMode(on){ if(on) localStorage.setItem(UNLOCK_KEY,'1'); else localStorage.removeItem(UNLOCK_KEY); syncTestBtn(); toast(on?'Modalità prova: tutte le carte sbloccate nel deck-builder':'Torni al tuo garage'); }
+function toggleTestMode(){ setTestMode(!testModeOn()); }
+function syncTestBtn(){ const b=document.getElementById('testbtn'); if(!b)return; const on=testModeOn(); b.textContent=on?'Provala tutta: ATTIVA':'Provala tutta'; b.classList.toggle('on',on); const n=document.getElementById('garagemode'); if(n) n.textContent=on?'· stai provando TUTTE le carte':'· stai usando il tuo garage'; }
+document.addEventListener('auth:ready', function(e){
+  const a=e.detail||{};
+  const who=document.getElementById('whoami'); const av=document.getElementById('avatar');
+  if(a.email){ if(who) who.textContent=a.email; if(av) av.textContent=a.email.charAt(0).toUpperCase(); }
+  const badge=document.getElementById('adminbadge'); if(badge) badge.style.display=a.isAdmin?'inline-flex':'none';
+  const bar=document.getElementById('adminbar'); if(bar) bar.style.display=a.isAdmin?'flex':'none';
+  syncTestBtn();
+});
 
 /* ---------- util ---------- */
 function esc(s){ return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }

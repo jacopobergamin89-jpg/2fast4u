@@ -4,6 +4,9 @@
 <title>2FAST4U · Costruisci il mazzo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-guard.js"></script>
 <style>
 :root{
   --bg:#0B0518; --bg2:#140A28; --bg3:#1D1140; --line:#2C1E52;
@@ -123,7 +126,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
     </div>
     <button class="save" onclick="saveDeck(event)">Salva</button>
   </div>
-  <div class="proto-bar">Prototipo · espansioni possedute: <b id="collcount">0</b> · <button onclick="unlockAllGangs()">Sblocca tutte (prova)</button> <button onclick="clearColl()">Azzera</button> <span class="proto-note">(nella versione finale le sblocchi dal negozio)</span></div>
+  <div class="proto-bar" id="protobar" style="display:none"><span style="color:var(--amber);font-weight:500">ADMIN</span> · espansioni: <b id="collcount">0</b> · prova: <button onclick="unlockAllGangs()">Provala tutta</button> <button onclick="garageMode()">Solo il mio garage</button> <span class="proto-note" id="pbnote"></span></div>
   </div>
   <div class="main">
     <div class="build">
@@ -172,7 +175,7 @@ function fnPolizia(c){ return c.kind==='blocco'?'Blocco':'Inseguimento'; }
 const COLL_KEY='2f4u_collection_v1';
 function loadColl(){ try{ const c=JSON.parse(localStorage.getItem(COLL_KEY)); if(c&&c.owned&&typeof c.owned==='object'&&!Array.isArray(c.owned)) return c; if(c&&Array.isArray(c.owned)){ const o={}; c.owned.forEach(n=>o[n]=1); return {owned:o}; } }catch(e){} return {owned:{}}; }
 function saveColl(c){ try{ localStorage.setItem(COLL_KEY, JSON.stringify(c)); }catch(e){} }
-function ownsCard(name){ return (loadColl().owned[name]||0)>0; }
+function ownsCard(name){ if(localStorage.getItem('2f4u_admin_unlockall')==='1') return true; return (loadColl().owned[name]||0)>0; }
 let RAW=null;
 function organize(raw){
   const cats=[]; const LV=['1','2','3','4'];
@@ -292,9 +295,11 @@ function load(){ try{ const s=localStorage.getItem(STORE); if(!s)return; const o
 function esc(s){ return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
 function js(s){ return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
 let _tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),1600); }
-function unlockAllGangs(){ if(!RAW)return; const owned={}; for(const lv of ['1','2','3','4']) for(const c of (RAW.carte[lv]||[])) if(c.gang) owned[c.nome]=1; for(const p of (RAW.piloti||[])) if(p.liv!=='L1') owned[p.nome]=1; saveColl({owned}); DATA=organize(RAW); refresh(); toast('Tutte le espansioni sbloccate (prova)'); }
+function unlockAllGangs(){ localStorage.setItem('2f4u_admin_unlockall','1'); if(RAW) DATA=organize(RAW); refresh(); toast('Modalità prova: tutte le carte disponibili'); }
+function garageMode(){ localStorage.removeItem('2f4u_admin_unlockall'); if(RAW) DATA=organize(RAW); refresh(); toast('Torni al tuo garage'); }
 function clearColl(){ saveColl({owned:{}}); if(RAW) DATA=organize(RAW); refresh(); toast('Collezione azzerata'); }
-function refresh(){ renderTabs(); renderContent(); renderCaps(); renderFavs(); const cc=document.getElementById('collcount'); if(cc) cc.textContent=loadColl().owned.length; }
+function refresh(){ renderTabs(); renderContent(); renderCaps(); renderFavs(); const cc=document.getElementById('collcount'); if(cc) cc.textContent=Object.keys(loadColl().owned).length; const pn=document.getElementById('pbnote'); if(pn) pn.textContent=(localStorage.getItem('2f4u_admin_unlockall')==='1')?'· tutte le carte sbloccate':'· solo ciò che possiedi'; }
+document.addEventListener('auth:ready', function(e){ const bar=document.getElementById('protobar'); if(bar) bar.style.display=(e.detail&&e.detail.isAdmin)?'flex':'none'; });
 document.getElementById('dname').addEventListener('input',e=>{ D().name=e.target.value; });
 
 /* ---------- avvio: carica la fonte dati ---------- */

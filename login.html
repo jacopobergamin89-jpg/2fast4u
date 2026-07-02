@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>2FAST4U · Accedi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0518;--bg2:#140A28;--bg3:#1D1140;--line:#2C1E52;--amber:#FFC91E;--cyan:#2BA8E6;--purple:#9B3BE0;--ink:#F4EEFF;--muted:#8E7FB8;--good:#3ddc84;--danger:#ff5b6b;--disp:'Oswald',system-ui,sans-serif;}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--disp);font-weight:300}
+body{display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(130% 90% at 50% -20%,#241150 0%,#0B0518 55%)}
+.box{width:100%;max-width:380px}
+.logo{text-align:center;font-weight:700;letter-spacing:3px;font-size:30px;margin-bottom:4px}.logo b{color:var(--amber)}.logo span{color:var(--cyan)}
+.tag{text-align:center;color:var(--muted);font-size:13px;letter-spacing:1px;margin-bottom:22px}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:22px}
+.tabs{display:flex;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:4px;margin-bottom:18px}
+.tabs button{flex:1;font:inherit;font-size:14px;letter-spacing:.5px;border:0;background:transparent;color:var(--muted);padding:9px;border-radius:8px;cursor:pointer}
+.tabs button.on{background:var(--bg3);color:var(--ink);font-weight:500}
+label{display:block;font-size:12px;letter-spacing:.5px;color:var(--muted);margin:12px 0 5px}
+input{width:100%;font:inherit;font-size:15px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:11px 12px}
+input:focus{outline:none;border-color:var(--cyan)}
+.go{width:100%;margin-top:18px;font:inherit;font-size:16px;font-weight:600;letter-spacing:.5px;border:0;border-radius:10px;padding:13px;cursor:pointer;color:#180a05;background:linear-gradient(135deg,#FFD86A,var(--amber))}
+.go:disabled{opacity:.5;cursor:default}
+.msg{margin-top:14px;font-size:13px;line-height:1.5;padding:10px 12px;border-radius:9px;display:none}
+.msg.err{display:block;background:#3a0f16;border:1px solid #6b2530;color:#ffb3bd}
+.msg.ok{display:block;background:#0f2a1a;border:1px solid #245c3a;color:#9be8b8}
+.foot{text-align:center;color:var(--muted);font-size:11px;margin-top:16px;line-height:1.6}
+.foot a{color:var(--cyan);text-decoration:none}
+.warn{background:#2a1c05;border:1px solid #6b5010;color:#ffe6a3;border-radius:12px;padding:14px 15px;font-size:12.5px;line-height:1.6;margin-bottom:16px}
+.warn b{color:var(--amber)}
+.warn code{background:#00000040;padding:1px 5px;border-radius:4px;font-family:ui-monospace,monospace;font-size:11.5px}
+</style></head>
+<body>
+<div class="box">
+  <div class="logo">2<b>FAST</b>4<span>U</span></div>
+  <div class="tag">LA STRADA È TUA</div>
+
+  <div class="warn" id="warn" style="display:none">
+    <b>Supabase non ancora configurato.</b><br>
+    Apri <code>supabase-config.js</code> e incolla <b>Project URL</b> e <b>anon key</b>
+    (Dashboard Supabase → Project Settings → API). Poi ricarica questa pagina.
+  </div>
+
+  <div class="card" id="card">
+    <div class="tabs">
+      <button id="tab-in" class="on" onclick="setMode('in')">Accedi</button>
+      <button id="tab-up" onclick="setMode('up')">Registrati</button>
+    </div>
+
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="email" placeholder="tu@email.it" spellcheck="false">
+
+    <label for="pw">Password</label>
+    <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••">
+
+    <button class="go" id="go" onclick="submit()">Entra</button>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <div class="foot">Corse clandestine · gioco di carte in tempo reale</div>
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var CFG = window.SB_CONFIG || {};
+var mode = 'in';
+var sb = null;
+var msgEl = document.getElementById('msg');
+var goEl  = document.getElementById('go');
+
+function showMsg(text, kind){ msgEl.className = 'msg ' + kind; msgEl.textContent = text; }
+function clearMsg(){ msgEl.className = 'msg'; msgEl.textContent = ''; }
+
+function setMode(m){
+  mode = m;
+  document.getElementById('tab-in').classList.toggle('on', m==='in');
+  document.getElementById('tab-up').classList.toggle('on', m==='up');
+  document.getElementById('pw').setAttribute('autocomplete', m==='in' ? 'current-password' : 'new-password');
+  goEl.textContent = m==='in' ? 'Entra' : 'Crea account';
+  clearMsg();
+}
+
+function configured(){ return !!(CFG.url && CFG.anonKey && window.supabase && window.supabase.createClient); }
+
+if(!configured()){
+  document.getElementById('warn').style.display = 'block';
+  document.getElementById('card').style.opacity = '.55';
+  goEl.disabled = true;
+  document.getElementById('email').disabled = true;
+  document.getElementById('pw').disabled = true;
+} else {
+  sb = window.supabase.createClient(CFG.url, CFG.anonKey);
+  // già loggato? vai direttamente all'area di gioco
+  sb.auth.getSession().then(function(res){
+    var s = res && res.data ? res.data.session : null;
+    if(s) location.replace(CFG.homePage || 'home.html');
+  });
+  // invio con Enter
+  document.getElementById('pw').addEventListener('keydown', function(e){ if(e.key==='Enter') submit(); });
+  document.getElementById('email').addEventListener('keydown', function(e){ if(e.key==='Enter') submit(); });
+}
+
+async function submit(){
+  if(!sb) return;
+  var email = document.getElementById('email').value.trim();
+  var pw = document.getElementById('pw').value;
+  if(!email || !pw){ showMsg('Inserisci email e password.', 'err'); return; }
+  if(mode==='up' && pw.length < 6){ showMsg('La password deve avere almeno 6 caratteri.', 'err'); return; }
+
+  goEl.disabled = true; clearMsg();
+  try {
+    if(mode==='in'){
+      var r1 = await sb.auth.signInWithPassword({ email: email, password: pw });
+      if(r1.error) throw r1.error;
+      location.replace(CFG.homePage || 'home.html');
+      return;
+    } else {
+      var r2 = await sb.auth.signUp({ email: email, password: pw });
+      if(r2.error) throw r2.error;
+      if(r2.data && r2.data.session){
+        location.replace(CFG.homePage || 'home.html');   // conferma email disattivata: dentro subito
+        return;
+      }
+      showMsg('Account creato. Ti abbiamo inviato una mail: conferma il link, poi torna qui e accedi.', 'ok');
+      setMode('in');
+    }
+  } catch(err){
+    var m = (err && err.message) ? err.message : 'Errore, riprova.';
+    if(/invalid login credentials/i.test(m)) m = 'Email o password non corretti.';
+    else if(/already registered|already exists|user already/i.test(m)) m = 'Questa email è già registrata: usa Accedi.';
+    else if(/email not confirmed/i.test(m)) m = 'Devi confermare la mail prima di accedere (controlla la posta).';
+    else if(/rate limit/i.test(m)) m = 'Troppi tentativi: attendi un minuto e riprova.';
+    showMsg(m, 'err');
+  } finally {
+    goEl.disabled = false;
+  }
+}
+</script>
+</body></html>
