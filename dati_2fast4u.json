@@ -1,0 +1,5514 @@
+{
+ "_meta": {
+  "fonte": "2FAST4U_Catalogo.xlsx + 2FAST4U_pezzi_e_strade.xlsx",
+  "nota": "Fonte unica dati Modalità B. Generata dagli Excel: non modificare a mano.",
+  "conteggi": {
+   "carte_totali": 353,
+   "carte_gang": 194,
+   "per_livello": {
+    "1": 81,
+    "2": 100,
+    "3": 90,
+    "4": 82
+   },
+   "piloti": 24,
+   "strade": 42
+  }
+ },
+ "pezzi": {
+  "ordine": [
+   "motore",
+   "cambio",
+   "sterzo",
+   "assetto",
+   "peso",
+   "nos"
+  ],
+  "nomi": {
+   "motore": "Motore",
+   "cambio": "Cambio",
+   "sterzo": "Sterzo",
+   "assetto": "Assetto",
+   "peso": "Peso",
+   "nos": "NOS"
+  },
+  "valori": {
+   "motore": [
+    2,
+    3,
+    5,
+    6,
+    8
+   ],
+   "cambio": [
+    1,
+    2,
+    4,
+    6,
+    7
+   ],
+   "sterzo": [
+    1,
+    3,
+    5,
+    7,
+    8
+   ],
+   "assetto": [
+    1,
+    2,
+    4,
+    5,
+    7
+   ],
+   "peso": [
+    -6,
+    -5,
+    -4,
+    -3,
+    -2
+   ],
+   "nos": [
+    0,
+    3,
+    5,
+    6,
+    8
+   ]
+  },
+  "prezzi": {
+   "motore": [
+    0,
+    800,
+    1600,
+    2100,
+    3200
+   ],
+   "cambio": [
+    0,
+    500,
+    1200,
+    2100,
+    2600
+   ],
+   "sterzo": [
+    0,
+    800,
+    1600,
+    2600,
+    3200
+   ],
+   "assetto": [
+    0,
+    500,
+    1200,
+    1600,
+    2600
+   ],
+   "peso": [
+    0,
+    400,
+    800,
+    1200,
+    1700
+   ],
+   "nos": [
+    0,
+    600,
+    1200,
+    1600,
+    2400
+   ]
+  },
+  "esp": {
+   "motore": {
+    "3": {
+     "v": 7,
+     "p": 2650
+    },
+    "4": {
+     "v": 9,
+     "p": 3900
+    }
+   },
+   "cambio": {
+    "3": {
+     "v": 7,
+     "p": 2600
+    },
+    "4": {
+     "v": 8,
+     "p": 3250
+    }
+   },
+   "sterzo": {
+    "3": {
+     "v": 8,
+     "p": 3200
+    },
+    "4": {
+     "v": 9,
+     "p": 3900
+    }
+   },
+   "assetto": {
+    "3": {
+     "v": 6,
+     "p": 2100
+    },
+    "4": {
+     "v": 8,
+     "p": 3250
+    }
+   },
+   "nos": {
+    "3": {
+     "v": 7,
+     "p": 2000
+    },
+    "4": {
+     "v": 9,
+     "p": 2900
+    }
+   }
+  }
+ },
+ "piloti": [
+  {
+   "id": 1,
+   "nome": "Topho 'Grugno' Ragnox",
+   "gang": "Lupara Boys",
+   "tipoLabel": "Rettilineo",
+   "liv": "L1",
+   "ab": "+1 nei Rettilinei · +1 Velocità",
+   "tratto": {
+    "t": "rettilineo",
+    "v": 1
+   },
+   "fortuna": null,
+   "bonus": {
+    "vel": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 2,
+   "nome": "Cespik 'Clippaz'",
+   "gang": "Lupara Boys",
+   "tipoLabel": "Rettilineo",
+   "liv": "L1",
+   "ab": "+2 nei Rettilinei · +1 Velocità",
+   "tratto": {
+    "t": "rettilineo",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "vel": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 3,
+   "nome": "Hoi.H4nn",
+   "gang": "Lupara Boys",
+   "tipoLabel": "Rettilineo",
+   "liv": "L2",
+   "ab": "+2 nei Rettilinei · +2 Velocità",
+   "tratto": {
+    "t": "rettilineo",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "vel": 2
+   },
+   "partenza": 0
+  },
+  {
+   "id": 4,
+   "nome": "Dmitri 'Vostok' Kozlov",
+   "gang": "Lupara Boys",
+   "tipoLabel": "Rettilineo",
+   "liv": "L3",
+   "ab": "+2 nei Rettilinei · +2 Velocità",
+   "tratto": {
+    "t": "rettilineo",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "vel": 2
+   },
+   "partenza": 0
+  },
+  {
+   "id": 5,
+   "nome": "Greta 'Autobahn' Brandt",
+   "gang": "Lupara Boys",
+   "tipoLabel": "Rettilineo",
+   "liv": "L4",
+   "ab": "+3 nei Rettilinei · +1 Velocità",
+   "tratto": {
+    "t": "rettilineo",
+    "v": 3
+   },
+   "fortuna": null,
+   "bonus": {
+    "vel": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 16,
+   "nome": "Lil' Arpa",
+   "gang": "Lowlifes",
+   "tipoLabel": "Città",
+   "liv": "L1",
+   "ab": "+1 in Città · +1 Velocità",
+   "tratto": {
+    "t": "citta",
+    "v": 1
+   },
+   "fortuna": null,
+   "bonus": {
+    "vel": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 17,
+   "nome": "K0T0R 'Blind Thrill'",
+   "gang": "Lowlifes",
+   "tipoLabel": "Città",
+   "liv": "L1",
+   "ab": "+1 in Città · +1 Controllo",
+   "tratto": {
+    "t": "citta",
+    "v": 1
+   },
+   "fortuna": null,
+   "bonus": {
+    "ctrl": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 18,
+   "nome": "MOKAH 'Drip Boss'",
+   "gang": "Lowlifes",
+   "tipoLabel": "Città",
+   "liv": "L2",
+   "ab": "+2 in Città · +1 Velocità",
+   "tratto": {
+    "t": "citta",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "vel": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 19,
+   "nome": "Emeka 'Lagos' Okafor",
+   "gang": "Lowlifes",
+   "tipoLabel": "Città",
+   "liv": "L3",
+   "ab": "+2 in Città · +1 Velocità",
+   "tratto": {
+    "t": "citta",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "vel": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 20,
+   "nome": "Yumi 'Tokyo' Takeda",
+   "gang": "Lowlifes",
+   "tipoLabel": "Città",
+   "liv": "L4",
+   "ab": "+2 in Città · +1 Controllo",
+   "tratto": {
+    "t": "citta",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "ctrl": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 6,
+   "nome": "Lil' Yanna",
+   "gang": "Krudo",
+   "tipoLabel": "Drift",
+   "liv": "L1",
+   "ab": "+1 nei Drift · −1 Velocità",
+   "tratto": {
+    "t": "drift",
+    "v": 1
+   },
+   "fortuna": null,
+   "bonus": {
+    "vel": -1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 7,
+   "nome": "Donaz 'Torque Don'",
+   "gang": "Krudo",
+   "tipoLabel": "Drift",
+   "liv": "L1",
+   "ab": "+1 nei Drift · +1 Controllo",
+   "tratto": {
+    "t": "drift",
+    "v": 1
+   },
+   "fortuna": null,
+   "bonus": {
+    "ctrl": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 8,
+   "nome": "Amara 'Dakar' Diallo",
+   "gang": "Krudo",
+   "tipoLabel": "Drift",
+   "liv": "L2",
+   "ab": "+2 nei Drift · −1 Velocità +1 Controllo",
+   "tratto": {
+    "t": "drift",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "vel": -1,
+    "ctrl": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 9,
+   "nome": "Barb'ra 'Sharp Curlz'",
+   "gang": "Krudo",
+   "tipoLabel": "Drift",
+   "liv": "L3",
+   "ab": "+2 nei Drift · +1 Controllo",
+   "tratto": {
+    "t": "drift",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "ctrl": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 10,
+   "nome": "Kenji 'Touge' Nakamura",
+   "gang": "Krudo",
+   "tipoLabel": "Drift",
+   "liv": "L4",
+   "ab": "+2 nei Drift · +1 Controllo",
+   "tratto": {
+    "t": "drift",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "ctrl": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 11,
+   "nome": "Lax 'Skid Prophet'",
+   "gang": "Ombre Nere",
+   "tipoLabel": "NOS",
+   "liv": "L1",
+   "ab": "+2 nei Rettilinei · +1 NOS",
+   "tratto": {
+    "t": "rettilineo",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "nos": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 12,
+   "nome": "GEMI.X",
+   "gang": "Ombre Nere",
+   "tipoLabel": "NOS",
+   "liv": "L1",
+   "ab": "+1 nei Rettilinei · +2 NOS",
+   "tratto": {
+    "t": "rettilineo",
+    "v": 1
+   },
+   "fortuna": null,
+   "bonus": {
+    "nos": 2
+   },
+   "partenza": 0
+  },
+  {
+   "id": 13,
+   "nome": "Klaus 'Turbo' Richter",
+   "gang": "Ombre Nere",
+   "tipoLabel": "NOS",
+   "liv": "L2",
+   "ab": "+2 nei Rettilinei · +2 NOS",
+   "tratto": {
+    "t": "rettilineo",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "nos": 2
+   },
+   "partenza": 0
+  },
+  {
+   "id": 14,
+   "nome": "Scimmiz 'Echo Noiz'",
+   "gang": "Ombre Nere",
+   "tipoLabel": "NOS",
+   "liv": "L3",
+   "ab": "+2 nei Rettilinei · +3 NOS",
+   "tratto": {
+    "t": "rettilineo",
+    "v": 2
+   },
+   "fortuna": null,
+   "bonus": {
+    "nos": 3
+   },
+   "partenza": 0
+  },
+  {
+   "id": 15,
+   "nome": "Jin 'Seoul' Park",
+   "gang": "Ombre Nere",
+   "tipoLabel": "NOS",
+   "liv": "L4",
+   "ab": "+3 nei Rettilinei · +2 NOS",
+   "tratto": {
+    "t": "rettilineo",
+    "v": 3
+   },
+   "fortuna": null,
+   "bonus": {
+    "nos": 2
+   },
+   "partenza": 0
+  },
+  {
+   "id": 21,
+   "nome": "Iri 'Rage Pulse'",
+   "gang": "I Diavoli",
+   "tipoLabel": "Fortuna",
+   "liv": "L1",
+   "ab": "+1 se 1° dado 1-2 · +1 Controllo",
+   "tratto": null,
+   "fortuna": {
+    "set": [
+     1,
+     2
+    ],
+    "v": 1
+   },
+   "bonus": {
+    "ctrl": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 22,
+   "nome": "IZ 'Blazeflip'",
+   "gang": "I Diavoli",
+   "tipoLabel": "Fortuna",
+   "liv": "L2",
+   "ab": "+2 se 1° dado 3-4-5 · +1 Controllo",
+   "tratto": null,
+   "fortuna": {
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "v": 2
+   },
+   "bonus": {
+    "ctrl": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 23,
+   "nome": "Katya 'Zima' Sokolova",
+   "gang": "I Diavoli",
+   "tipoLabel": "Fortuna",
+   "liv": "L3",
+   "ab": "+2 se 1° dado 1-2 · +1 Controllo",
+   "tratto": null,
+   "fortuna": {
+    "set": [
+     1,
+     2
+    ],
+    "v": 2
+   },
+   "bonus": {
+    "ctrl": 1
+   },
+   "partenza": 0
+  },
+  {
+   "id": 24,
+   "nome": "Antym 'RAMMER'",
+   "gang": "I Diavoli",
+   "tipoLabel": "Fortuna",
+   "liv": "L4",
+   "ab": "+2 se 1° dado 1 · +2 Controllo",
+   "tratto": null,
+   "fortuna": {
+    "set": [
+     1
+    ],
+    "v": 2
+   },
+   "bonus": {
+    "ctrl": 2
+   },
+   "partenza": 0
+  }
+ ],
+ "strade": {
+  "1": [
+   {
+    "t": "rettilineo",
+    "nm": "Run Base"
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Dritto Facile"
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Flat Line"
+   },
+   {
+    "t": "citta",
+    "nm": "Semaforo Verde",
+    "pc": {
+     "lt": 4,
+     "a": 1
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Via Libera",
+    "pc": {
+     "lt": 5,
+     "a": 1
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Start Rush",
+    "pc": {
+     "lt": 6,
+     "a": 1
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Slalom Rookie",
+    "pv": {
+     "gt": 3,
+     "a": 1
+    },
+    "pc": {
+     "lt": 5,
+     "a": 1
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Asfalto Fresco",
+    "pv": {
+     "gt": 4,
+     "a": 1
+    },
+    "pc": {
+     "lt": 5,
+     "a": 1
+    }
+   }
+  ],
+  "2": [
+   {
+    "t": "rettilineo",
+    "nm": "Tunnel Line",
+    "pcg": {
+     "gt": 4,
+     "a": 1
+    }
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Rush Corridor"
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Nitro Lane"
+   },
+   {
+    "t": "citta",
+    "nm": "Via Libera",
+    "pc": {
+     "lt": 5,
+     "a": 2
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Zona 30",
+    "pc": {
+     "lt": 6,
+     "a": 1
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Urban Clash",
+    "pc": {
+     "lt": 7,
+     "a": 2
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Cross Lanes",
+    "pc": {
+     "lt": 7,
+     "a": 2
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Slide District",
+    "pv": {
+     "gt": 5,
+     "a": 2
+    },
+    "pc": {
+     "lt": 7,
+     "a": 1
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Backstreet Slides",
+    "pv": {
+     "gt": 4,
+     "a": 1
+    },
+    "pc": {
+     "lt": 6,
+     "a": 2
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Curve Basse",
+    "pv": {
+     "gt": 4,
+     "a": 1
+    },
+    "pc": {
+     "lt": 7,
+     "a": 1
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Skid Alley",
+    "pv": {
+     "gt": 5,
+     "a": 2
+    },
+    "pc": {
+     "lt": 6,
+     "a": 2
+    }
+   }
+  ],
+  "3": [
+   {
+    "t": "rettilineo",
+    "nm": "Vento in Faccia",
+    "pcg": {
+     "gt": 7,
+     "a": 1
+    }
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Full Speed Mile",
+    "pcg": {
+     "gt": 6,
+     "a": 1
+    }
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Autostrada Chiusa"
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Rush 5th Gear"
+   },
+   {
+    "t": "citta",
+    "nm": "Fatal Cross",
+    "pc": {
+     "lt": 8,
+     "a": 2
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Midnight Run",
+    "pc": {
+     "lt": 9,
+     "a": 2
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Sirene Spente",
+    "pc": {
+     "lt": 8,
+     "a": 2
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Rincon Drift",
+    "pv": {
+     "gt": 7,
+     "a": 2
+    },
+    "pc": {
+     "lt": 10,
+     "a": 1
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Urban Slide",
+    "pv": {
+     "gt": 6,
+     "a": 1
+    },
+    "pc": {
+     "lt": 7,
+     "a": 2
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Ghost Slide",
+    "pv": {
+     "gt": 7,
+     "a": 2
+    },
+    "pc": {
+     "lt": 8,
+     "a": 2
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Neon Drift",
+    "pv": {
+     "gt": 7,
+     "a": 1
+    },
+    "pc": {
+     "lt": 7,
+     "a": 2
+    }
+   }
+  ],
+  "4": [
+   {
+    "t": "rettilineo",
+    "nm": "Iper Strada",
+    "pcg": {
+     "gt": 8,
+     "a": 1
+    }
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Hyper Lane",
+    "pcg": {
+     "gt": 9,
+     "a": 1
+    }
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Redline Rush"
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Warp Straight"
+   },
+   {
+    "t": "citta",
+    "nm": "Caos Urbano",
+    "pc": {
+     "lt": 9,
+     "a": 2
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Metropoli Blindata",
+    "pc": {
+     "lt": 10,
+     "a": 2
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Blocco Notturno",
+    "pc": {
+     "lt": 11,
+     "a": 1
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Coprifuoco Urbano",
+    "pc": {
+     "lt": 12,
+     "a": 1
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Abisso Curvo",
+    "pv": {
+     "gt": 11,
+     "a": 1
+    },
+    "pc": {
+     "lt": 9,
+     "a": 2
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Deriva Estrema",
+    "pv": {
+     "gt": 10,
+     "a": 1
+    },
+    "pc": {
+     "lt": 10,
+     "a": 1
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Vortice",
+    "pv": {
+     "gt": 12,
+     "a": 2
+    },
+    "pc": {
+     "lt": 14,
+     "a": 1
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Uragano d'Asfalto",
+    "pv": {
+     "gt": 13,
+     "a": 2
+    },
+    "pc": {
+     "lt": 14,
+     "a": 1
+    }
+   }
+  ]
+ },
+ "carte": {
+  "1": [
+   {
+    "cat": "ingara",
+    "nome": "Ti prendooooo!!!!",
+    "eff": "ctrl",
+    "val": 1,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Hai istallato le nuove sospensioni",
+    "eff": "ctrl",
+    "val": 1,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Il nuovo alettone fa il suo dovere",
+    "eff": "ctrl",
+    "val": 1,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Spettacolo le nuove minigonne",
+    "eff": "ctrl",
+    "val": 1,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Barra antirollio nuova",
+    "eff": "ctrl",
+    "val": 1,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Alettone danneggiato",
+    "eff": "ctrl",
+    "val": -1,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Ti prendooooo!!!!",
+    "eff": "ctrl",
+    "val": -1,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Olio vecchi nel motore",
+    "eff": "ctrl",
+    "val": -1,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Olio vecchio nei freni",
+    "eff": "ctrl",
+    "val": -1,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Convergenza sballata",
+    "eff": "ctrl",
+    "val": -1,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Ammortizzatore scarico",
+    "eff": "ctrl",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Bel colpo di fortuna",
+    "eff": "partenza",
+    "val": 2,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Il sonno aiuta",
+    "eff": "partenza",
+    "val": 2,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Brucia le gomme",
+    "eff": "partenza",
+    "val": 1,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Brucia le gomme",
+    "eff": "partenza",
+    "val": 1,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Buono il caffè stamattina",
+    "eff": "partenza",
+    "val": 1,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Hai messo gli occhiali sbagliati",
+    "eff": "partenza",
+    "val": -1,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Oggi va cosi…",
+    "eff": "partenza",
+    "val": -1,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Falsa partenza",
+    "eff": "partenza",
+    "val": -1,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Non è la tua giornata",
+    "eff": "partenza",
+    "val": -2,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Brutti incubi",
+    "eff": "partenza",
+    "val": -2,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Oggi devi vincere",
+    "eff": "vel",
+    "val": 2,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Corri Fooorrreeeesstttttt!!!!",
+    "eff": "vel",
+    "val": 2,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Monti un'espansione racing",
+    "eff": "vel",
+    "val": 2,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Un colpo di fortuna con il turbo",
+    "eff": "vel",
+    "val": 2,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Doppio caffe stamattina",
+    "eff": "vel",
+    "val": 2,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Veloce come il vento",
+    "eff": "vel",
+    "val": 1,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Finalmente il giusto cambio",
+    "eff": "vel",
+    "val": 1,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Hai messo benzina racing: boost temporaneo!",
+    "eff": "vel",
+    "val": 1,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Il meccanico ti sistema la centralina: +1",
+    "eff": "vel",
+    "val": 1,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Senti l'adrenalina salire: spingi di più!!!",
+    "eff": "vel",
+    "val": 1,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "La marmitta si allenta",
+    "eff": "vel",
+    "val": -1,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Una curva mal presa ti rallenta",
+    "eff": "vel",
+    "val": -1,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Benzina Sporca",
+    "eff": "vel",
+    "val": -1,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Si allenta un bullone",
+    "eff": "vel",
+    "val": -1,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Le gomme slittano",
+    "eff": "vel",
+    "val": -1,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Perdi pressione nei pneumatici",
+    "eff": "vel",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Turbo che perde pressione",
+    "eff": "vel",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Frenata d'emergenza",
+    "eff": "vel",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Gomma forata",
+    "eff": "vel",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Carburatore ingolfato",
+    "eff": "vel",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Arriva bonifica dallo zio del Molise",
+    "eff": "money",
+    "val": 250
+   },
+   {
+    "cat": "pregara",
+    "nome": "Arriva la multa per eccesso velocità",
+    "eff": "money",
+    "val": -500
+   },
+   {
+    "cat": "pregara",
+    "nome": "Arrivano le tasse arretrate",
+    "eff": "money",
+    "val": -250
+   },
+   {
+    "cat": "pregara",
+    "nome": "I debiti si pagano",
+    "eff": "money",
+    "val": -500
+   },
+   {
+    "cat": "pregara",
+    "nome": "Ieri sera hai vinto a Poker",
+    "eff": "money",
+    "val": 500
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il tuo cane vince il primo premio",
+    "eff": "money",
+    "val": 500
+   },
+   {
+    "cat": "pregara",
+    "nome": "La quota cala all'ultimo",
+    "eff": "betUp",
+    "val": 1.5
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il broker sbaglia a segnare la quota",
+    "eff": "betUp",
+    "val": 1.5
+   },
+   {
+    "cat": "pregara",
+    "nome": "Stai antipatico al broker",
+    "eff": "betDown",
+    "val": 0.6667
+   },
+   {
+    "cat": "pregara",
+    "nome": "Buono sconto",
+    "eff": "discount",
+    "val": 0.75
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il capo officina ti deve un debito",
+    "eff": "discount",
+    "val": 0.75
+   },
+   {
+    "cat": "pregara",
+    "nome": "Chiedi al figlio del proprietario di riaprire l'officina",
+    "eff": "reopenAll",
+    "val": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "Chiedi alla moglie del proprietario di riaprire l'officina",
+    "eff": "reopenAll",
+    "val": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il proprietario riapre l'officina per tutti",
+    "eff": "reopenAll",
+    "val": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "Notte di porte aperte in officina",
+    "eff": "reopenAll",
+    "val": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "Serata di porte aperte in officina",
+    "eff": "reopenAll",
+    "val": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "Strada · modifica 1 tratto → Città",
+    "eff": "tratto",
+    "val": "citta"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Strada · modifica 1 tratto → Drift",
+    "eff": "tratto",
+    "val": "drift"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Strada · modifica 1 tratto → Rettilineo",
+    "eff": "tratto",
+    "val": "rettilineo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Gara lampo",
+    "eff": "sprint",
+    "val": 28
+   },
+   {
+    "cat": "pregara",
+    "nome": "Hai da fare stasera",
+    "eff": "sprint",
+    "val": 34
+   },
+   {
+    "cat": "difesa",
+    "nome": "Colpo di reni",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Controsterzo da maestro",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Effetto specchio",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Lo eviti in un lampo",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Nervi d'acciaio",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Riflessi felini",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Scarto secco",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Schivata all'ultimo",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Sterzata provvidenziale",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Coperto su tutto",
+    "eff": "defend",
+    "val": "pregara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Niente ti scalfisce",
+    "eff": "defend",
+    "val": "pregara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Sempre un passo avanti",
+    "eff": "defend",
+    "val": "pregara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Soffiata in anticipo",
+    "eff": "defend",
+    "val": "pregara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Spalle coperte",
+    "eff": "defend",
+    "val": "pregara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Talpa in officina",
+    "eff": "defend",
+    "val": "pregara",
+    "dur": 0
+   },
+   {
+    "cat": "polizia",
+    "nome": "Pattuglia dietro la curva",
+    "kind": "blocco",
+    "size": 3
+   },
+   {
+    "cat": "polizia",
+    "nome": "Controllo lampo",
+    "kind": "blocco",
+    "size": 3
+   },
+   {
+    "cat": "polizia",
+    "nome": "Gazzella in agguato",
+    "kind": "blocco",
+    "size": 3
+   },
+   {
+    "cat": "polizia",
+    "nome": "Lampeggianti all'improvviso",
+    "kind": "blocco",
+    "size": 3
+   }
+  ],
+  "2": [
+   {
+    "cat": "ingara",
+    "nome": "Assetto azzeccato",
+    "eff": "ctrl",
+    "val": 2,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Volante preciso",
+    "eff": "ctrl",
+    "val": 2,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Gomme in temperatura",
+    "eff": "ctrl",
+    "val": 2,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Differenziale a punto",
+    "eff": "ctrl",
+    "val": 2,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sterzo molle",
+    "eff": "ctrl",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Gomme fredde",
+    "eff": "ctrl",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Assetto sfasato",
+    "eff": "ctrl",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sospensione molle",
+    "eff": "ctrl",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Reazione fulminea al verde",
+    "eff": "partenza",
+    "val": 3,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Frizione perfetta al via",
+    "eff": "partenza",
+    "val": 3,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Parti in ritardo",
+    "eff": "partenza",
+    "val": -3,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Ingolfi al semaforo",
+    "eff": "partenza",
+    "val": -3,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Turbo a pieni giri",
+    "eff": "vel",
+    "val": 3,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Iniezione racing",
+    "eff": "vel",
+    "val": 3,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Collettori liberi",
+    "eff": "vel",
+    "val": 3,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sgommata d'autore",
+    "eff": "vel",
+    "val": 3,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Gomma sgonfia",
+    "eff": "vel",
+    "val": -3,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Bullone allentato",
+    "eff": "vel",
+    "val": -3,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Frizione che pattina",
+    "eff": "vel",
+    "val": -3,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Cinghia consumata",
+    "eff": "vel",
+    "val": -3,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Colpo sicuro",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "vel",
+    "val": 2,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Velocità +2 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Gas dosato",
+    "eff": "dadoforza",
+    "set": [
+     1,
+     2
+    ],
+    "stat": "vel",
+    "val": 2,
+    "dur": 1,
+    "desc": "Dado 1-2 · Velocità +2 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos +1",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 1,
+      "tgt": "self"
+     }
+    ],
+    "dur": 0,
+    "desc": "NOS +1 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos -1",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -1,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 0,
+    "desc": "NOS -1 (1 rivale)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos +1",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 1,
+      "tgt": "self"
+     }
+    ],
+    "dur": 0,
+    "desc": "NOS +1 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos -1",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -1,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 0,
+    "desc": "NOS -1 (1 rivale)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Agguato in curva",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -2 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Avvertimento",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 3,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità +3 (te) · Velocità -1 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Baciamano",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 3,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +3 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Colpo di Lupara",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +2 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Imboscata",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -2 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Pallottola vagante",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -3,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità -3 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Pizzo sull'asfalto",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità +2 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Rispetto a tutto gas",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità +2 (te) · Velocità -1 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sgambetto d'onore",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità -2 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Soffiata ai federali",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -3,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -3 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Asfalto mio",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +1 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Gomme tagliate",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità -2 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Imboscata nel vicolo",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -2 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Padrone della via",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità +2 (te) · Controllo -1 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Re del vicolo",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +2 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sgambetto da strada",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -2 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sgommata da boss",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +2 (te) · Velocità -1 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Tassa di strada",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +2 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Trappola nel traffico",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -2 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Vetri rotti",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo -2 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Forza bruta",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +1 (te) · Controllo -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Lamiera contro lamiera",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -1 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Manata",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +2 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Schiacciato",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo -2 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Spaccatutto",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +2 (te) · Controllo -1 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Speronata",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -1 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sportellata kruda",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo -1 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sterzata kruda",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +1 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Strappo secco",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +1 (te) · Controllo -1 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Testacoda forzato",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -2 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Accecato",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -2 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Buio pesto",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Fantasma notturno",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Imboscata al buio",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -2 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Lampo nel buio",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nero su nero",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Ombra veloce",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sparizione",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Spegni i fari",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -2 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Trappola d'ombra",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -2 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Fuoco dell'inferno · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "ctrl",
+    "val": 2,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Controllo +2 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Il Sei del Diavolo",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     6
+    ],
+    "stat": "vel",
+    "val": 3,
+    "dur": 1,
+    "desc": "Dado 6 · Velocità +3 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Maledizione · 1-2",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     1,
+     2
+    ],
+    "stat": "ctrl",
+    "val": 3,
+    "dur": 1,
+    "desc": "Dado 1-2 · Controllo +3 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Mano del Demonio · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "vel",
+    "val": 3,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Velocità +3 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Marchio del Diavolo · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "ctrl",
+    "val": 3,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Controllo +3 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Patto col Diavolo · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "vel",
+    "val": 2,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Velocità +2 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Tiro infernale · 6",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     6
+    ],
+    "stat": "ctrl",
+    "val": 3,
+    "dur": 1,
+    "desc": "Dado 6 · Controllo +3 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Mano leggera",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     1,
+     2
+    ],
+    "stat": "ctrl",
+    "val": 2,
+    "dur": 1,
+    "desc": "Dado 1-2 · Controllo +2 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos +2",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos -2",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -2,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -2 (1 rivale) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Polso fermo",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "ctrl",
+    "val": 2,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Controllo +2 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Differenziale autobloccante",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 3,
+      "tgt": "self"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +3 (te) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Geometrie sballate",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -3,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -3 (1 rivale) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Gomma forata in curva",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -4,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -4 (1 rivale) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sovrappressione turbo",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 4,
+      "tgt": "self"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +4 (te) · 1 tiro"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Soffiata al fisco contro un rivale",
+    "eff": "money",
+    "val": -1500,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Svuoti la cassa di un rivale",
+    "eff": "money",
+    "val": -1000,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Vinci una gara di bellezza",
+    "eff": "money",
+    "val": 1500,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Dimezzi il bottino di un rivale",
+    "eff": "prizeDown",
+    "val": 0.6667,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il banco bara contro un rivale",
+    "eff": "prizeDown",
+    "val": 0.6667,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Pareggiamo i conti",
+    "eff": "prizeDown",
+    "val": 0.6667,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Quota ricalcolata",
+    "eff": "betUp",
+    "val": 1.5,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Scommessa · quota -1.5",
+    "eff": "betDown",
+    "val": 0.6667,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il figlio del capo officina ti salda il debito",
+    "eff": "discount",
+    "val": 0.5,
+    "gang": "Lowlifes"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il meccanico ti fa un favore",
+    "eff": "discount",
+    "val": 0.5,
+    "gang": "Lowlifes"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Tour privato dell'officina ti costerà caro",
+    "eff": "reopen",
+    "val": 500,
+    "gang": "Lowlifes"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Visita privata all'officina",
+    "eff": "reopen",
+    "val": 500,
+    "gang": "Lowlifes"
+   },
+   {
+    "cat": "difesa",
+    "nome": "Contromossa",
+    "eff": "defend",
+    "val": "both",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Parata",
+    "eff": "defend",
+    "val": "both",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Riparo",
+    "eff": "defend",
+    "val": "both",
+    "dur": 0
+   },
+   {
+    "cat": "polizia",
+    "nome": "Doppia volante di traverso",
+    "kind": "blocco",
+    "size": 5
+   },
+   {
+    "cat": "polizia",
+    "nome": "Reparto mobile schierato",
+    "kind": "blocco",
+    "size": 5
+   },
+   {
+    "cat": "polizia",
+    "nome": "La strada si chiude",
+    "kind": "blocco",
+    "size": 5
+   },
+   {
+    "cat": "polizia",
+    "nome": "Inseguimento a sirene spiegate",
+    "kind": "inseguimento",
+    "size": 0
+   }
+  ],
+  "3": [
+   {
+    "cat": "ingara",
+    "nome": "Setup da pista",
+    "eff": "ctrl",
+    "val": 4,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sterzo diretto",
+    "eff": "ctrl",
+    "val": 4,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Aderenza perfetta",
+    "eff": "ctrl",
+    "val": 4,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sospensione rotta",
+    "eff": "ctrl",
+    "val": -4,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Asfalto viscido",
+    "eff": "ctrl",
+    "val": -4,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Retrotreno ballerino",
+    "eff": "ctrl",
+    "val": -4,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Scatto da dragster",
+    "eff": "partenza",
+    "val": 4,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Stacco di frizione chirurgico",
+    "eff": "partenza",
+    "val": 4,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Spegni al semaforo",
+    "eff": "partenza",
+    "val": -4,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Ruote che fumano a vuoto",
+    "eff": "partenza",
+    "val": -4,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Mappa motore aggressiva",
+    "eff": "vel",
+    "val": 5,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Aspirazione diretta",
+    "eff": "vel",
+    "val": 5,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Antilag attivato",
+    "eff": "vel",
+    "val": 5,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Surriscaldamento motore",
+    "eff": "vel",
+    "val": -5,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Olio sull'asfalto",
+    "eff": "vel",
+    "val": -5,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Iniettore intasato",
+    "eff": "vel",
+    "val": -5,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Allungo calcolato",
+    "eff": "dadoforza",
+    "set": [
+     1,
+     2
+    ],
+    "stat": "vel",
+    "val": 3,
+    "dur": 1,
+    "desc": "Dado 1-2 · Velocità +3 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Linea da manuale",
+    "eff": "dadoforza",
+    "set": [
+     1,
+     2
+    ],
+    "stat": "ctrl",
+    "val": 3,
+    "dur": 1,
+    "desc": "Dado 1-2 · Controllo +3 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos +3",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 3,
+      "tgt": "self"
+     }
+    ],
+    "dur": 0,
+    "desc": "NOS +3 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos -3",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -3,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 0,
+    "desc": "NOS -3 (1 rivale)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos +3",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 3,
+      "tgt": "self"
+     }
+    ],
+    "dur": 0,
+    "desc": "NOS +3 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos -3",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -3,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 0,
+    "desc": "NOS -3 (1 rivale)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Bersaglio designato",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -4,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -4 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Caricatore pieno",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 5,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità +5 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Conto da saldare",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -5,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -5 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Esecuzione mirata",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -5,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -5 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Faida aperta",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 5,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +5 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "L'onore del padrino",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 6,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +6 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Mano nera",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 4,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +4 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Mira sul capo",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -6,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -6 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sgarro mortale",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 4,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità +4 (te) · Velocità -1 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Tradimento",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -4,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità -4 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Agguato al semaforo",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -5,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -5 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Chiodi sull'asfalto",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -5,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -5 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Comando io",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 4,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità +4 (te) · Controllo -1 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Contro il muro",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -4,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità -4 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Legge della strada",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 5,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +5 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Posto sbagliato",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -4,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -4 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Quartiere blindato",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 4,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +4 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sorpasso sporco",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 4,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +4 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Strada chiusa",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 4,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +4 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Strada sbarrata",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -4,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -4 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Ferro contro ferro",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 4,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +4 (te) · Controllo -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Frenata assassina",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -5,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -5 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Grezzo",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 5,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +5 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Muro di gomme",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -3,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -3 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Muso duro",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 3,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +3 (te) · Controllo -1 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Rottamato",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -4,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -4 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sangue freddo",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 4,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +4 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Senza pietà",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 3,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -1,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +3 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Spintone",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -3,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 1,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo -3 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Tamponamento",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -4,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -4 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Black out",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 3,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -2 (1 rivale) · Controllo +3 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Colpo nell'ombra",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -2 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Eclissi",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -3,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · Velocità -3 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Fuoco fatuo",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Mezzanotte",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -3,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · Velocità -3 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nebbia nera",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -3,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -3 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Notte fonda",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 3,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +3 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sabotaggio notturno",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -2,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 3,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -2 (1 rivale) · Velocità +3 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Scia nera",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -3,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · Controllo -3 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Senza luci",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 2,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -3,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +2 (te) · Controllo -3 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Asso nella manica · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "vel",
+    "val": 5,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Velocità +5 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Fortuna sfacciata · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "vel",
+    "val": 4,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Velocità +4 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Malocchio · 1-2",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     1,
+     2
+    ],
+    "stat": "ctrl",
+    "val": 5,
+    "dur": 1,
+    "desc": "Dado 1-2 · Controllo +5 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Mano di Lucifero · 6",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     6
+    ],
+    "stat": "ctrl",
+    "val": 4,
+    "dur": 1,
+    "desc": "Dado 6 · Controllo +4 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Numero della Bestia · 6",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     6
+    ],
+    "stat": "vel",
+    "val": 4,
+    "dur": 1,
+    "desc": "Dado 6 · Velocità +4 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sortilegio · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "ctrl",
+    "val": 5,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Controllo +5 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Tridente · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "ctrl",
+    "val": 4,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Controllo +4 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nervi saldi",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "ctrl",
+    "val": 3,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Controllo +3 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos +4",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 4,
+      "tgt": "self"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +4 (te) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos -4",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -4,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -4 (1 rivale) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Spinta decisa",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "vel",
+    "val": 3,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Velocità +3 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Curva cieca",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -7,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 3,
+    "desc": "Velocità -7 (1 rivale) · 3 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sorpasso fulmineo",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 7,
+      "tgt": "self"
+     }
+    ],
+    "dur": 3,
+    "desc": "Velocità +7 (te) · 3 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Telaio rigido su misura",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 5,
+      "tgt": "self"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +5 (te) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Telaio storto",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -5,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -5 (1 rivale) · 1 tiro"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Mandi gli strozzini da un rivale",
+    "eff": "money",
+    "val": -2000,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Riscuoti un vecchio credito",
+    "eff": "money",
+    "val": 2000,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il broker ti fa un regalo di compleanno",
+    "eff": "quota",
+    "val": 2.0,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Scommessa · quota +2",
+    "eff": "betUp",
+    "val": 2.0,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il broker ti taglia la quota",
+    "eff": "betDown",
+    "val": 0.5,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Sospetti sul risultato",
+    "eff": "betDown",
+    "val": 0.5,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Commissioni furto ad un tuo rivale",
+    "eff": "smonta",
+    "val": 2000,
+    "costPO": 0,
+    "gang": "Lupara Boys"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Ogni azione ha una conseguenza",
+    "eff": "smonta",
+    "val": 2000,
+    "costPO": 0,
+    "gang": "Lupara Boys"
+   },
+   {
+    "cat": "difesa",
+    "nome": "Scudo totale",
+    "eff": "defend",
+    "val": "both",
+    "dur": 1
+   },
+   {
+    "cat": "difesa",
+    "nome": "Sesto senso",
+    "eff": "defend",
+    "val": "both",
+    "dur": 1
+   },
+   {
+    "cat": "polizia",
+    "nome": "Maxi-retata giornaliera",
+    "kind": "blocco",
+    "size": 10
+   },
+   {
+    "cat": "polizia",
+    "nome": "Maxi-retata notturna",
+    "kind": "blocco",
+    "size": 10
+   },
+   {
+    "cat": "polizia",
+    "nome": "Le volanti ti stanno addosso",
+    "kind": "inseguimento",
+    "size": 0
+   }
+  ],
+  "4": [
+   {
+    "cat": "ingara",
+    "nome": "Aerodinamica da formula",
+    "eff": "ctrl",
+    "val": 6,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Grip totale sull'asfalto",
+    "eff": "ctrl",
+    "val": 6,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sbandata in rettilineo",
+    "eff": "ctrl",
+    "val": -6,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Avantreno che scappa",
+    "eff": "ctrl",
+    "val": -6,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Holeshot perfetto",
+    "eff": "partenza",
+    "val": 5,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Partenza da campionato",
+    "eff": "partenza",
+    "val": 5,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Cali il motore al via",
+    "eff": "partenza",
+    "val": -5,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Frizione bruciata in partenza",
+    "eff": "partenza",
+    "val": -5,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Motore portato al limite",
+    "eff": "vel",
+    "val": 6,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Big turbo che spinge",
+    "eff": "vel",
+    "val": 6,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Freno motore bloccato",
+    "eff": "vel",
+    "val": -6,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Cinghia esplosa",
+    "eff": "vel",
+    "val": -6,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Affondo perfetto",
+    "eff": "dadoforza",
+    "set": [
+     1,
+     2
+    ],
+    "stat": "vel",
+    "val": 4,
+    "dur": 1,
+    "desc": "Dado 1-2 · Velocità +4 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Chirurgia in curva",
+    "eff": "dadoforza",
+    "set": [
+     1,
+     2
+    ],
+    "stat": "ctrl",
+    "val": 4,
+    "dur": 1,
+    "desc": "Dado 1-2 · Controllo +4 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos +5",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 5,
+      "tgt": "self"
+     }
+    ],
+    "dur": 0,
+    "desc": "NOS +5 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos -5",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -5,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 0,
+    "desc": "NOS -5 (1 rivale)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Colpo al capofila",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -6,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -6 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Giustizia di strada",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 7,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +7 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "L'ultimo sgarro",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 7,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -3,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità +7 (te) · Velocità -3 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Lupara bianca",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 6,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità +6 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Lupara su misura",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -7,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 3,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità -7 (1 rivale) · Velocità +3 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Resa dei conti",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -7,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -7 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sangue sull'asfalto",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -7,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità -7 (1 rivale) · Velocità +2 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sentenza",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 7,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità +7 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sparatoria al semaforo",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -6,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità -6 (1 rivale) · Velocità +2 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Vendetta a tutto gas",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 6,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +6 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Affari sporchi",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 6,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +6 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Borseggio",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -6,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità -6 (1 rivale) · Controllo +2 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Colpo gobbo",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -6,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo -6 (1 rivale) · Velocità +2 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Cresta sull'incasso",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 6,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -3,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +6 (te) · Velocità -3 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Giro di vite",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 6,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Velocità +6 (te) · Controllo -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Mano pesante",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 6,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +6 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Pestaggio",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -6,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -6 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Rapina lampo",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -7,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 3,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -7 (1 rivale) · Controllo +3 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sportellata",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -6,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 3,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo -6 (1 rivale) · Velocità +3 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Tutto il blocco",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 6,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +6 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Botta secca",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -6,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -6 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Carambola",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -5,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo -5 (1 rivale) · Controllo +2 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Carne e lamiere",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 6,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +6 (te) · Controllo -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Demolizione",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 5,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +5 (te) · Controllo -2 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Fuori strada",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -6,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo -6 (1 rivale) · Controllo +2 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Incrocio chiuso",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -5,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 2,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -5 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Macello",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 6,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +6 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Pugno di ferro",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 6,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -3,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo +6 (te) · Controllo -3 (tutti i rivali) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Spinta brutale",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 5,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +5 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Stretta mortale",
+    "gang": "Krudo",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -6,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 3,
+      "tgt": "others"
+     }
+    ],
+    "dur": 2,
+    "desc": "Controllo -6 (1 rivale) · Controllo +3 (tutti gli altri) · 2 tiri"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Ala nera",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 5,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -3,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +5 (te) · Controllo -3 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Caccia notturna",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 3,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -4,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +3 (te) · Velocità -4 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Coprifuoco",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 4,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -2,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +4 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Lama nell'ombra",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -5,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 4,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -5 (1 rivale) · Velocità +4 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Predatore della notte",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 5,
+      "tgt": "self"
+     },
+     {
+      "stat": "vel",
+      "val": -4,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +5 (te) · Velocità -4 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Pugnalata",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -4,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 3,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -4 (1 rivale) · Controllo +3 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Silenzio",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 4,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -3,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +4 (te) · Controllo -3 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Spettro",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 5,
+      "tgt": "self"
+     },
+     {
+      "stat": "ctrl",
+      "val": -4,
+      "tgt": "rivals"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +5 (te) · Controllo -4 (tutti i rivali) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Tenebra",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -4,
+      "tgt": "pick"
+     },
+     {
+      "stat": "ctrl",
+      "val": 4,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -4 (1 rivale) · Controllo +4 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Tradito dal buio",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -5,
+      "tgt": "pick"
+     },
+     {
+      "stat": "vel",
+      "val": 3,
+      "tgt": "others"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -5 (1 rivale) · Velocità +3 (tutti gli altri) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Anima dannata · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "vel",
+    "val": 5,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Velocità +5 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Benedizione nera · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "ctrl",
+    "val": 6,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Controllo +6 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Carico infernale · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "ctrl",
+    "val": 5,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Controllo +5 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Dannazione · 6",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     6
+    ],
+    "stat": "ctrl",
+    "val": 5,
+    "dur": 1,
+    "desc": "Dado 6 · Controllo +5 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Jella ribaltata · 1-2",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     1,
+     2
+    ],
+    "stat": "ctrl",
+    "val": 6,
+    "dur": 1,
+    "desc": "Dado 1-2 · Controllo +6 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sei di fuoco",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     6
+    ],
+    "stat": "vel",
+    "val": 6,
+    "dur": 1,
+    "desc": "Dado 6 · Velocità +6 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Tentazione · 3-4-5",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "vel",
+    "val": 6,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Velocità +6 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Massima resa",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "vel",
+    "val": 4,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Velocità +4 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nervi di ghiaccio",
+    "gang": "I Diavoli",
+    "eff": "dadoforza",
+    "set": [
+     3,
+     4,
+     5
+    ],
+    "stat": "ctrl",
+    "val": 4,
+    "dur": 1,
+    "desc": "Dado 3-4-5 · Controllo +4 (te)"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos +6",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 6,
+      "tgt": "self"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS +6 (te) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos -6",
+    "gang": "Ombre Nere",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -6,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 1,
+    "desc": "NOS -6 (1 rivale) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Assetto da gara perfetto",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": 7,
+      "tgt": "self"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo +7 (te) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Cavallaggio scatenato",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": 8,
+      "tgt": "self"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità +8 (te) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Motore esploso",
+    "gang": "Lupara Boys",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "vel",
+      "val": -8,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 1,
+    "desc": "Velocità -8 (1 rivale) · 1 tiro"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sterzo bloccato",
+    "gang": "Lowlifes",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "ctrl",
+      "val": -7,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 1,
+    "desc": "Controllo -7 (1 rivale) · 1 tiro"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il colpo grosso della tua vita",
+    "eff": "money",
+    "val": 3000,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il colpo grosso della tua vita",
+    "eff": "money",
+    "val": 3000,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Alzi la posta in palio",
+    "eff": "prizeUp",
+    "val": 2.0,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Arrivano gli sponsor",
+    "eff": "prizeUp",
+    "val": 2.0,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Doppia o niente",
+    "eff": "prizeUp",
+    "val": 2.0,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Quota impazzita",
+    "eff": "betUp",
+    "val": 3.0,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il bookie ti spenna",
+    "eff": "betDown",
+    "val": 0.3333,
+    "gang": "Krudo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Favori incrociati in officina",
+    "eff": "reopenDebt",
+    "val": 0,
+    "gang": "Lowlifes"
+   },
+   {
+    "cat": "pregara",
+    "nome": "I debidi di gioco si pagano",
+    "eff": "reopenDebt",
+    "val": 0,
+    "gang": "Lowlifes"
+   },
+   {
+    "cat": "polizia",
+    "nome": "Città blindata",
+    "kind": "blocco",
+    "size": 10
+   },
+   {
+    "cat": "polizia",
+    "nome": "Elicottero in caccia",
+    "kind": "inseguimento",
+    "size": 0
+   }
+  ]
+ }
+}
