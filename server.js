@@ -1291,6 +1291,7 @@ if(require.main===module){
   // Avvio STANDALONE (node server.js): crea un server proprio e monta il classico
   // sul path socket.io di DEFAULT, cosi' index.html (io()) funziona come sempre.
   const app = express();
+  app.get('/', (req,res)=>res.sendFile(path.join(__dirname,'landing.html')));   // pagina d'ingresso: la home con negozio e collezione
   app.use(express.static(__dirname));
   const server = http.createServer(app);
   const io = new Server(server);
