@@ -31,6 +31,11 @@ window.Store = (function () {
       var res = await sb().from('profiles').update({ collection: collection }).eq('id', id);
       if (res.error) throw res.error;
     },
+    async setMyUnlock(on) {
+      var id = await uid(); if (!id) return;
+      var res = await sb().from('profiles').update({ full_unlock: !!on }).eq('id', id);
+      if (res.error) throw res.error;
+    },
 
     // ---- operazioni admin (consentite dalle policy solo agli admin) ----
     async listPlayers() {

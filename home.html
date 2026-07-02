@@ -7,6 +7,7 @@
 <script src="supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth-guard.js"></script>
+<script src="store.js"></script>
 <style>
 :root{--bg:#0B0518;--bg2:#140A28;--bg3:#1D1140;--line:#2C1E52;--amber:#FFC91E;--cyan:#2BA8E6;--purple:#9B3BE0;--ink:#F4EEFF;--muted:#8E7FB8;--good:#3ddc84;--danger:#ff5b6b;--disp:'Oswald',system-ui,sans-serif;}
 *{box-sizing:border-box}
@@ -167,9 +168,9 @@ const TYPE_LAB={normale:'Carta',esp:'ESP',pilota:'Pilota'};
 /* ---------- storage (condiviso col deck-builder) ---------- */
 const WKEY='2f4u_wallet_v1', CKEY='2f4u_collection_v1';
 function loadWallet(){ try{ const w=JSON.parse(localStorage.getItem(WKEY)); if(w&&typeof w.coins==='number') return w; }catch(e){} const w={coins:START_COINS}; saveWallet(w); return w; }
-function saveWallet(w){ try{ localStorage.setItem(WKEY,JSON.stringify(w)); }catch(e){} }
+function saveWallet(w){ try{ localStorage.setItem(WKEY,JSON.stringify(w)); }catch(e){} dbPushWallet(w); }
 function loadColl(){ try{ const c=JSON.parse(localStorage.getItem(CKEY)); if(c&&c.owned&&typeof c.owned==='object'&&!Array.isArray(c.owned)) return c; if(c&&Array.isArray(c.owned)){ const o={}; c.owned.forEach(n=>o[n]=1); return {owned:o}; } }catch(e){} return {owned:{}}; }
-function saveColl(c){ try{ localStorage.setItem(CKEY,JSON.stringify(c)); }catch(e){} }
+function saveColl(c){ try{ localStorage.setItem(CKEY,JSON.stringify(c)); }catch(e){} dbPushColl(c); }
 function ownsCard(name){ return (loadColl().owned[name]||0)>0; }
 function addOwned(names){ const c=loadColl(); const fresh=[]; names.forEach(n=>{ if(!(c.owned[n]>0)) fresh.push(n); c.owned[n]=(c.owned[n]||0)+1; }); saveColl(c); return fresh; }
 const RECYCLE={normale:{2:25,3:50,4:100}, esp:{3:150,4:250}, pilota:{2:250,3:400,4:600}};
@@ -252,14 +253,28 @@ function closeOverlay(){ document.getElementById('ov').classList.remove('on'); }
 
 /* ---------- prototipo / admin ---------- */
 function grantCoins(n){ const w=loadWallet(); w.coins+=n; saveWallet(w); render(); toast('+'+n.toLocaleString('it-IT')+' gettoni'); }
-function resetAll(){ if(!confirm('Azzerare gettoni e collezione su questo dispositivo?'))return; saveWallet({coins:START_COINS}); saveColl({owned:{}}); render(); toast('Azzerato'); }
+function resetAll(){ if(!confirm('Azzerare i tuoi gettoni e la tua collezione?'))return; saveWallet({coins:START_COINS}); saveColl({owned:{}}); render(); toast('Azzerato'); }
 
 /* ---------- auth / admin ---------- */
 const UNLOCK_KEY='2f4u_admin_unlockall';
 function testModeOn(){ return localStorage.getItem(UNLOCK_KEY)==='1'; }
-function setTestMode(on){ if(on) localStorage.setItem(UNLOCK_KEY,'1'); else localStorage.removeItem(UNLOCK_KEY); syncTestBtn(); toast(on?'Modalità prova: tutte le carte sbloccate nel deck-builder':'Torni al tuo garage'); }
+function setTestMode(on){ if(on) localStorage.setItem(UNLOCK_KEY,'1'); else localStorage.removeItem(UNLOCK_KEY); if(dbOn()) window.Store.setMyUnlock(on).catch(function(){}); syncTestBtn(); toast(on?'Modalità prova: tutte le carte sbloccate nel deck-builder':'Torni al tuo garage'); }
 function toggleTestMode(){ setTestMode(!testModeOn()); }
 function syncTestBtn(){ const b=document.getElementById('testbtn'); if(!b)return; const on=testModeOn(); b.textContent=on?'Provala tutta: ATTIVA':'Provala tutta'; b.classList.toggle('on',on); const n=document.getElementById('garagemode'); if(n) n.textContent=on?'· stai provando TUTTE le carte':'· stai usando il tuo garage'; }
+function dbOn(){ return !!(window.AUTH && window.AUTH.configured && window.Store && window.Store.ready()); }
+function dbPushWallet(w){ if(dbOn() && w && typeof w.coins==='number') window.Store.setMyCoins(w.coins).catch(function(){}); }
+function dbPushColl(c){ if(dbOn() && c && c.owned) window.Store.setMyCollection(c.owned).catch(function(){}); }
+function hydrateFromDB(){
+  if(!(window.AUTH && window.AUTH.configured && window.AUTH.user && window.Store)) return;
+  window.Store.myProfile().then(function(p){
+    if(!p) return;
+    try{ localStorage.setItem(WKEY, JSON.stringify({coins:(typeof p.coins==='number'?p.coins:START_COINS)})); }catch(e){}
+    try{ localStorage.setItem(CKEY, JSON.stringify({owned: p.collection||{}})); }catch(e){}
+    if(p.full_unlock) localStorage.setItem(UNLOCK_KEY,'1'); else localStorage.removeItem(UNLOCK_KEY);
+    syncTestBtn();
+    if(ELEMS.length) render();
+  }).catch(function(){});
+}
 document.addEventListener('auth:ready', function(e){
   const a=e.detail||{};
   const who=document.getElementById('whoami'); const av=document.getElementById('avatar');
@@ -267,6 +282,7 @@ document.addEventListener('auth:ready', function(e){
   const badge=document.getElementById('adminbadge'); if(badge) badge.style.display=a.isAdmin?'inline-flex':'none';
   const bar=document.getElementById('adminbar'); if(bar) bar.style.display=a.isAdmin?'flex':'none';
   syncTestBtn();
+  hydrateFromDB();
 });
 
 /* ---------- util ---------- */
