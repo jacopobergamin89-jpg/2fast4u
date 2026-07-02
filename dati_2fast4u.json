@@ -3,13 +3,13 @@
   "fonte": "2FAST4U_Catalogo.xlsx + 2FAST4U_pezzi_e_strade.xlsx",
   "nota": "Fonte unica dati Modalità B. Generata dagli Excel: non modificare a mano.",
   "conteggi": {
-   "carte_totali": 353,
-   "carte_gang": 194,
+   "carte_totali": 363,
+   "carte_gang": 204,
    "per_livello": {
     "1": 81,
     "2": 100,
-    "3": 90,
-    "4": 82
+    "3": 95,
+    "4": 87
    },
    "piloti": 24,
    "strade": 42
@@ -4261,6 +4261,61 @@
     "nome": "Le volanti ti stanno addosso",
     "kind": "inseguimento",
     "size": 0
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Sterzo L3",
+    "gang": "Lupara Boys",
+    "comp": "sterzo",
+    "lvl": 3,
+    "espVal": 8,
+    "baseVal": 7,
+    "cost": 1600,
+    "desc": "Potenzia Sterzo a L3 ESP (valore +8) · serve Sterzo L3 montato · €1600"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Assetto L3",
+    "gang": "Lowlifes",
+    "comp": "assetto",
+    "lvl": 3,
+    "espVal": 6,
+    "baseVal": 5,
+    "cost": 1500,
+    "desc": "Potenzia Assetto a L3 ESP (valore +6) · serve Assetto L3 montato · €1500"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP NOS L3",
+    "gang": "Krudo",
+    "comp": "nos",
+    "lvl": 3,
+    "espVal": 7,
+    "baseVal": 6,
+    "cost": 1400,
+    "desc": "Potenzia NOS a L3 ESP (valore +7) · serve NOS L3 montato · €1400"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Cambio L3",
+    "gang": "Ombre Nere",
+    "comp": "cambio",
+    "lvl": 3,
+    "espVal": 7,
+    "baseVal": 6,
+    "cost": 1500,
+    "desc": "Potenzia Cambio a L3 ESP (valore +7) · serve Cambio L3 montato · €1500"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Motore L3",
+    "gang": "I Diavoli",
+    "comp": "motore",
+    "lvl": 3,
+    "espVal": 7,
+    "baseVal": 6,
+    "cost": 1550,
+    "desc": "Potenzia Motore a L3 ESP (valore +7) · serve Motore L3 montato · €1550"
    }
   ],
   "4": [
@@ -5508,6 +5563,61 @@
     "nome": "Elicottero in caccia",
     "kind": "inseguimento",
     "size": 0
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Sterzo L4",
+    "gang": "Lupara Boys",
+    "comp": "sterzo",
+    "lvl": 4,
+    "espVal": 9,
+    "baseVal": 8,
+    "cost": 1700,
+    "desc": "Potenzia Sterzo a L4 ESP (valore +9) · serve Sterzo L4 montato · €1700"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Assetto L4",
+    "gang": "Lowlifes",
+    "comp": "assetto",
+    "lvl": 4,
+    "espVal": 8,
+    "baseVal": 7,
+    "cost": 1650,
+    "desc": "Potenzia Assetto a L4 ESP (valore +8) · serve Assetto L4 montato · €1650"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP NOS L4",
+    "gang": "Krudo",
+    "comp": "nos",
+    "lvl": 4,
+    "espVal": 9,
+    "baseVal": 8,
+    "cost": 1500,
+    "desc": "Potenzia NOS a L4 ESP (valore +9) · serve NOS L4 montato · €1500"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Cambio L4",
+    "gang": "Ombre Nere",
+    "comp": "cambio",
+    "lvl": 4,
+    "espVal": 8,
+    "baseVal": 7,
+    "cost": 1650,
+    "desc": "Potenzia Cambio a L4 ESP (valore +8) · serve Cambio L4 montato · €1650"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Motore L4",
+    "gang": "I Diavoli",
+    "comp": "motore",
+    "lvl": 4,
+    "espVal": 9,
+    "baseVal": 8,
+    "cost": 1700,
+    "desc": "Potenzia Motore a L4 ESP (valore +9) · serve Motore L4 montato · €1700"
    }
   ]
  }

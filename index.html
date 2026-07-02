@@ -203,12 +203,10 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .dc-top{font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:9px;color:var(--muted-2);margin-bottom:4px}
 .dc-name{font-size:13px;font-weight:500;margin-bottom:3px}
 .dc-desc{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.ctag-esp{background:#9B3BE022;color:#c88ef0;border:1px solid #9B3BE0}
 .rm-gang{font-size:9px;letter-spacing:.4px;text-transform:uppercase;color:var(--purple,#9B3BE0);border:1px solid currentColor;border-radius:4px;padding:0 4px;margin-left:6px;vertical-align:1px}
 .o2-slot{display:flex;flex-direction:column;gap:4px}
 .o2-slot .o2-card{width:100%}
-.o2-esp{font:inherit;font-size:11px;padding:5px 6px;border-radius:8px;border:1px dashed #9B3BE0;background:#9B3BE01a;color:#c88ef0;cursor:pointer}
-.o2-esp.lock{opacity:.45;cursor:default}
-.of-esp{border-style:dashed;border-color:#9B3BE0}
 .rmbot{background:#ff3b6b22;color:var(--danger);border:1px solid #ff3b6b44;border-radius:7px;width:26px;height:26px;font-size:16px;line-height:1;cursor:pointer;flex:none}
 .homelogo{display:block;width:100%;max-width:340px;margin:0 auto 14px;border-radius:14px}
 
@@ -1051,6 +1049,7 @@ function pilotTipoClass(p){ const L=((p&&p.tipoLabel)||'').toLowerCase(); return
 function cardTypeTag(c){
   if(c.cat==='difesa') return '<span class="ctag ctag-dif">\ud83d\udee1 Difesa</span>';
   if(c.cat==='ingara') return c.eff==='partenza' ? '<span class="ctag ctag-part">Partenza</span>' : '<span class="ctag ctag-gara">In gara</span>';
+  if(c.cat==='esp') return '<span class="ctag ctag-esp">\u26a1 ESP</span>';
   return '';
 }
 function handCardDesc(c){
@@ -1065,6 +1064,13 @@ function handCardDesc(c){
   return '';
 }
 function ofHandPlay(c,mobile){
+  if(c.cat==='esp'){
+    const oc=`socket.emit('prep:playEsp',{handIdx:${c.idx}})`;
+    const lbl=c.playable?`Potenzia \u00b7 ${eur(c.cost)}`:(c.espReason||'non disponibile');
+    return mobile
+      ? `<button class="o2-pre-go play${c.playable?'':' lock'}" ${c.playable?`onclick="${oc}"`:'disabled'}>${lbl}</button>`
+      : `<button class="btn btn-line btn-sm${c.playable?'':' off'}" ${c.playable?`onclick="${oc}"`:'disabled'}>${lbl}</button>`;
+  }
   if(c.cat!=='pregara') return '';
   const sm=c.eff==='smonta', tr=c.eff==='tratto', neg=c.target==='rival';
   const oc=tr?`prepTratto(${c.idx})`:sm?`prepSmonta(${c.idx})`:(neg?`prepNeg(${c.idx})`:`socket.emit('prep:playCard',{handIdx:${c.idx}})`);
@@ -1297,8 +1303,7 @@ function prepMobileHTML(v){
   const mktH=`<div class="o2-mkt-h"><span class="wr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6a4 4 0 0 1-5.2 3.8L7 18.6 5.4 17 14.2 8.2A4 4 0 0 1 18 3l-2.3 2.3 1 2.4 2.4 1L21 6Z"/></svg></span><b>Mercato</b><span>${mhSub}</span></div>`;
   let cards='';
   (v.market||[]).forEach(c=>{ const mm=ofMeta(c.comp); const skip=c.skip?'<span class="o2-skip">salto ×2</span>':''; const reason=(!c.buyable&&c.reason)?`<span class="o2-reason">${esc(c.reason)}</span>`:''; const oc=c.buyable?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'';
-    const espBtn=(c.espVal!=null)?`<button class="o2-esp${c.espBuyable?'':' lock'}" ${c.espBuyable?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl},esp:true})"`:'disabled'}>ESP · valore ${c.espVal>=0?'+':'−'}${Math.abs(c.espVal)} · ${eur(c.espPrice)}</button>`:'';
-    cards+=`<div class="o2-slot"><button class="o2-card ${c.buyable?'buy':'lock'}" style="--c:${mm.c}" ${oc} ${c.buyable?'':'disabled'}><div class="o2-ctop"><div class="o2-cic">${ofIcon(c.comp)}</div><div><div class="o2-cn">${mm.full}</div><div class="o2-clv">L${c.lvl}</div></div></div><div class="o2-cval">valore ${c.val>=0?'+':'−'}${Math.abs(c.val)}</div>${skip}<div class="o2-cfoot"><span class="o2-price">${eur(c.price)}</span>${reason}</div></button>${espBtn}</div>`;
+    cards+=`<div class="o2-slot"><button class="o2-card ${c.buyable?'buy':'lock'}" style="--c:${mm.c}" ${oc} ${c.buyable?'':'disabled'}><div class="o2-ctop"><div class="o2-cic">${ofIcon(c.comp)}</div><div><div class="o2-cn">${mm.full}</div><div class="o2-clv">L${c.lvl}</div></div></div><div class="o2-cval">valore ${c.val>=0?'+':'−'}${Math.abs(c.val)}</div>${skip}<div class="o2-cfoot"><span class="o2-price">${eur(c.price)}</span>${reason}</div></button></div>`;
   });
   const few = nM>0 && nM<=2 ? ' few':'';
   const grid = nM ? `<div class="o2-grid${few}">${cards}</div>` : '<div class="o2-grid"><div class="o2-empty">Nessuna miglioria al mercato in questo round.</div></div>';
@@ -1343,7 +1348,7 @@ function renderPrep(v){
     if(nM){
       v.market.forEach(c=>{const m=ofMeta(c.comp);const ok=c.buyable;
         bench+=`<button class="of-part${ok?'':' off'}" ${ok?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'disabled'}><div class="of-part-h"><span class="of-badge" style="--c:${m.c}">${m.full}</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">valore ${c.val>=0?'+':''}${c.val}${c.skip?' \u00b7 salto \u00d72':''}${(!ok&&c.reason)?' \u00b7 '+esc(c.reason):''}</span><span class="of-price">${eur(c.price)}</span></button>`;
-        if(c.espVal!=null) bench+=`<button class="of-part of-esp${c.espBuyable?'':' off'}" ${c.espBuyable?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl},esp:true})"`:'disabled'}><div class="of-part-h"><span class="of-badge" style="--c:#9B3BE0">${m.full} ESP</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">valore ${c.espVal>=0?'+':''}${c.espVal} \u00b7 raro</span><span class="of-price">${eur(c.espPrice)}</span></button>`;});
+        });
     } else bench+='<div class="of-bench-spect" style="grid-column:1/-1">Nessuna miglioria al mercato in questo round.</div>';
     bench+='</div>';
   }else{
