@@ -101,6 +101,10 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 #adminbar .amber{color:var(--amber);font-weight:500}
 #adminbar #testbtn.on{border-color:var(--good);color:var(--good)}
 #adminbar #garagemode{opacity:.75;font-style:italic}
+.rc .eff{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.3}
+.userbox .btn-del{font-family:inherit;font-size:11px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:8px;padding:5px 9px;cursor:pointer}
+.userbox .btn-del:hover{color:var(--danger);border-color:var(--danger)}
+.shop-h .chev{transition:transform .2s;color:var(--muted);font-size:13px}
 </style></head>
 <body>
 <div class="wrap">
@@ -110,6 +114,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
     <div class="userbox">
       <span class="badge-admin" id="adminbadge" style="display:none">ADMIN</span>
       <span class="whoami" id="whoami"></span>
+      <button class="btn-del" onclick="deleteAccount()">Elimina account</button>
       <button class="btn-exit" onclick="authLogout()">Esci</button>
       <div class="avatar" id="avatar">·</div>
     </div>
@@ -137,12 +142,14 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
   </div>
 
   <div class="shop">
-    <div class="shop-h"><span class="dot" style="width:9px;height:9px;border-radius:50%;background:var(--amber)"></span><span class="t">Negozio</span></div>
-    <div class="shop-sub">Buste da 5 carte. Rarità: L2 più comune, L4 più raro; le carte ESP e soprattutto i piloti sono i più difficili da trovare.</div>
-    <div class="shop-group">Pacchetti gang (dalla L2 alla L4)</div>
-    <div class="packs" id="packs-gang"></div>
-    <div class="shop-group">Pacchetti misti (tutte le gang, per livello)</div>
-    <div class="packs" id="packs-mix"></div>
+    <div class="shop-h" onclick="toggleShop()" style="cursor:pointer"><span class="dot" style="width:9px;height:9px;border-radius:50%;background:var(--amber)"></span><span class="t">Negozio</span><span class="chev" id="shop-chev" style="margin-left:auto">▶</span></div>
+    <div id="shop-body" style="display:none">
+      <div class="shop-sub">Buste da 5 carte. Rarità: L2 più comune, L4 più raro; le carte ESP e soprattutto i piloti sono i più difficili da trovare.</div>
+      <div class="shop-group">Pacchetti gang (dalla L2 alla L4)</div>
+      <div class="packs" id="packs-gang"></div>
+      <div class="shop-group">Pacchetti misti (tutte le gang, per livello)</div>
+      <div class="packs" id="packs-mix"></div>
+    </div>
   </div>
 </div>
 
@@ -180,9 +187,34 @@ function recycleDupes(){ const c=loadColl(); const owned=c.owned; let gained=0; 
 
 /* ---------- elementi (dal JSON) ---------- */
 let ELEMS=[];  // {n,g,t,lv}
+function eur(v){ return '€'+Number(v).toLocaleString('it-IT'); }
+function descEffect(c){
+  if(c.desc) return c.desc;
+  if(c.eff==='money') return (c.val>=0?'+':'')+eur(c.val);
+  if(c.eff==='po') return (c.val>=0?'+':'')+c.val+' Punti Onore';
+  if(c.eff==='prizeUp') return 'Montepremi ×2 (su di te)';
+  if(c.eff==='prizeDown') return 'Montepremi ÷2 (a un rivale)';
+  if(c.eff==='betUp') return 'Scommessa ×2 (su di te)';
+  if(c.eff==='betDown') return 'Scommessa ÷2 (a un rivale)';
+  if(c.eff==='quota') return 'Quota '+(c.val>=0?'+':'')+c.val+' sulla scommessa';
+  if(c.eff==='discount') return 'Sconto 50% sul prossimo acquisto';
+  if(c.eff==='smonta') return 'Smonta 1 livello a un rivale';
+  if(c.eff==='reopen') return 'Giro extra in officina solo per te';
+  if(c.eff==='reopenAll') return 'Giro extra in officina per tutti';
+  if(c.eff==='reopenDebt') return 'Giro extra per te e un rivale scelto';
+  if(c.eff==='sprint') return 'Gara breve · traguardo a '+c.val;
+  if(c.eff==='defend') return 'Difesa';
+  var r = c.target==='rival' ? ' · su un rivale' : '';
+  if(c.eff==='vel') return (c.val>=0?'+':'')+c.val+' Velocità · '+c.dur+(c.dur===1?' tiro':' tiri')+r;
+  if(c.eff==='ctrl') return (c.val>=0?'+':'')+c.val+' Controllo · '+c.dur+(c.dur===1?' tiro':' tiri')+r;
+  if(c.eff==='partenza') return 'Partenza '+(c.val>=0?'+':'')+c.val+r;
+  if(c.eff==='dado') return 'Dado fisso = '+c.val+r;
+  if(c.eff==='reach') return 'Salto di posizione';
+  return '';
+}
 function buildElems(raw){ const out=[];
-  for(const lv of ['2','3','4']) for(const c of (raw.carte[lv]||[])){ if(!c.gang) continue; out.push({n:c.nome,g:c.gang,t:c.cat==='esp'?'esp':'normale',lv:+lv}); }
-  for(const p of (raw.piloti||[])){ if(['L2','L3','L4'].includes(p.liv)) out.push({n:p.nome,g:p.gang,t:'pilota',lv:+p.liv[1]}); }
+  for(const lv of ['2','3','4']) for(const c of (raw.carte[lv]||[])){ if(!c.gang) continue; out.push({n:c.nome,g:c.gang,t:c.cat==='esp'?'esp':'normale',lv:+lv,d:descEffect(c)}); }
+  for(const p of (raw.piloti||[])){ if(['L2','L3','L4'].includes(p.liv)) out.push({n:p.nome,g:p.gang,t:'pilota',lv:+p.liv[1],d:p.ab||''}); }
   return out;
 }
 function poolGang(g){ return ELEMS.filter(e=>e.g===g).map(e=>({e,w:W_TYPE[e.t]*W_LV[e.lv]})); }
@@ -245,11 +277,22 @@ function showReveal(kind,key,cards,freshSet){
   document.getElementById('reveal').innerHTML = cards.map(c=>{
     const isNew=freshSet.has(c.n), col=GANG_COL[c.g];
     const tag=isNew?'nuova':('doppione +'+recycleValue(c.t,c.lv));
-    return `<div class="rc ${isNew?'new':'dup'}" style="--rcol:${col}"><span class="tag">${tag}</span><span class="type">${TYPE_LAB[c.t]}</span><span class="nm">${esc(c.n)}</span><span class="lv">${esc(c.g)} · L${c.lv}</span></div>`;
+    return `<div class="rc ${isNew?'new':'dup'}" style="--rcol:${col}"><span class="tag">${tag}</span><span class="type">${TYPE_LAB[c.t]}</span><span class="nm">${esc(c.n)}</span><span class="lv">${esc(c.g)} · L${c.lv}</span>${c.d?`<span class="eff">${esc(c.d)}</span>`:''}</div>`;
   }).join('');
   document.getElementById('ov').classList.add('on');
 }
 function closeOverlay(){ document.getElementById('ov').classList.remove('on'); }
+function toggleShop(){ const b=document.getElementById('shop-body'); const c=document.getElementById('shop-chev'); if(!b)return; const open=b.style.display==='none'; b.style.display=open?'block':'none'; if(c) c.style.transform=open?'rotate(90deg)':''; }
+async function deleteAccount(){
+  if(!confirm('Eliminare definitivamente il tuo account? Perderai gettoni e collezione: l\'operazione è irreversibile.')) return;
+  if(!window.sbClient){ toast('Non disponibile'); return; }
+  try{
+    const r = await window.sbClient.rpc('delete_own_account');
+    if(r.error) throw r.error;
+    await window.sbClient.auth.signOut();
+    location.replace('login.html');
+  }catch(e){ toast('Errore: '+((e&&e.message)||e)); }
+}
 
 /* ---------- prototipo / admin ---------- */
 function grantCoins(n){ const w=loadWallet(); w.coins+=n; saveWallet(w); render(); toast('+'+n.toLocaleString('it-IT')+' gettoni'); }

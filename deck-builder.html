@@ -177,7 +177,7 @@ const COLL_KEY='2f4u_collection_v1';
 function loadColl(){ try{ const c=JSON.parse(localStorage.getItem(COLL_KEY)); if(c&&c.owned&&typeof c.owned==='object'&&!Array.isArray(c.owned)) return c; if(c&&Array.isArray(c.owned)){ const o={}; c.owned.forEach(n=>o[n]=1); return {owned:o}; } }catch(e){} return {owned:{}}; }
 function saveColl(c){ try{ localStorage.setItem(COLL_KEY, JSON.stringify(c)); }catch(e){} }
 function ownsCard(name){ if(localStorage.getItem('2f4u_admin_unlockall')==='1') return true; return (loadColl().owned[name]||0)>0; }
-let RAW=null;
+let RAW=null; const openKeys=new Set();
 function organize(raw){
   const cats=[]; const LV=['1','2','3','4'];
   for(const [key,titolo,cap] of CAT_DEF){
@@ -225,10 +225,10 @@ function renderContent(){
     for(const fn in cat.lv[lv]){
       let cards=cat.lv[lv][fn]; if(only) cards=cards.filter(c=>has(D().fav,c.n)); if(!cards.length) continue;
       lvTot+=cards.length;
-      inner+=`<div class="fn"><div class="fn-h" onclick="tgl(this.parentNode)"><span class="chev">▶</span><span class="fn-t">${fn}</span><span class="fn-badge">${cards.length}</span></div><div class="fn-body">`+cards.map(cardHTML).join('')+`</div></div>`;
+      inner+=`<div class="fn${openKeys.has(tab+'|L'+lv+'|'+fn)?' open':''}" data-k="${tab}|L${lv}|${fn}"><div class="fn-h" onclick="tgl(this.parentNode)"><span class="chev">▶</span><span class="fn-t">${fn}</span><span class="fn-badge">${cards.length}</span></div><div class="fn-body">`+cards.map(cardHTML).join('')+`</div></div>`;
     }
     if(!lvTot) continue;
-    h+=`<div class="lvl"><div class="lvl-h" onclick="tgl(this.parentNode)"><span class="chev">▶</span><span class="lvl-t">Livello ${lv}</span><span class="lvl-c">${lvTot} carte</span></div><div class="lvl-body">${inner}</div></div>`;
+    h+=`<div class="lvl${openKeys.has(tab+'|L'+lv)?' open':''}" data-k="${tab}|L${lv}"><div class="lvl-h" onclick="tgl(this.parentNode)"><span class="chev">▶</span><span class="lvl-t">Livello ${lv}</span><span class="lvl-c">${lvTot} carte</span></div><div class="lvl-body">${inner}</div></div>`;
   }
   el.innerHTML=h||'<div class="empty" style="padding:20px">Nessuna carta preferita in questa scheda.</div>';
 }
@@ -275,7 +275,7 @@ function chg(name,delta){ const q=D().qty,c0=q[name]||0;
   const nv=Math.max(0,c0+delta); if(nv===0) delete q[name]; else q[name]=nv; persist(); refresh(); }
 function tgFav(name){ const f=D().fav,i=f.indexOf(name); if(i>=0)f.splice(i,1); else f.push(name); persist(); refresh(); }
 function tgPil(id){ const p=D().pilots,i=p.indexOf(id); if(i>=0)p.splice(i,1); else { if(p.length>=CAP_PIL){ toast('Puoi scegliere 6 piloti'); return; } p.push(id); } persist(); refresh(); }
-function tgl(node){ node.classList.toggle('open'); }
+function tgl(node){ node.classList.toggle('open'); const k=node.dataset.k; if(k){ if(node.classList.contains('open')) openKeys.add(k); else openKeys.delete(k); } }
 function clearDeck(){ if(!confirm('Svuotare il mazzo corrente?'))return; decks[cur]=emptyDeck(D().name); document.getElementById('dname').value=D().name; persist(); refresh(); }
 function switchDeck(n){ cur=n; document.getElementById('slot1').classList.toggle('on',n===1); document.getElementById('slot2').classList.toggle('on',n===2); document.getElementById('dname').value=D().name; refresh(); }
 function saveDeck(ev){ D().name=document.getElementById('dname').value||('Mazzo '+cur); persist(); const b=ev.target,o=b.textContent; b.textContent='Salvato ✓'; setTimeout(()=>b.textContent=o,1200); toast('Deck '+cur+' salvato'); }
@@ -299,7 +299,7 @@ let _tt; function toast(m){ const t=document.getElementById('toast'); t.textCont
 function unlockAllGangs(){ localStorage.setItem('2f4u_admin_unlockall','1'); if(dbOn()) window.Store.setMyUnlock(true).catch(function(){}); if(RAW) DATA=organize(RAW); refresh(); toast('Modalità prova: tutte le carte disponibili'); }
 function garageMode(){ localStorage.removeItem('2f4u_admin_unlockall'); if(dbOn()) window.Store.setMyUnlock(false).catch(function(){}); if(RAW) DATA=organize(RAW); refresh(); toast('Torni al tuo garage'); }
 function clearColl(){ saveColl({owned:{}}); if(RAW) DATA=organize(RAW); refresh(); toast('Collezione azzerata'); }
-function refresh(){ renderTabs(); renderContent(); renderCaps(); renderFavs(); const cc=document.getElementById('collcount'); if(cc) cc.textContent=Object.keys(loadColl().owned).length; const pn=document.getElementById('pbnote'); if(pn) pn.textContent=(localStorage.getItem('2f4u_admin_unlockall')==='1')?'· tutte le carte sbloccate':'· solo ciò che possiedi'; }
+function refresh(){ const y=window.scrollY; renderTabs(); renderContent(); renderCaps(); renderFavs(); const cc=document.getElementById('collcount'); if(cc) cc.textContent=Object.keys(loadColl().owned).length; const pn=document.getElementById('pbnote'); if(pn) pn.textContent=(localStorage.getItem('2f4u_admin_unlockall')==='1')?'· tutte le carte sbloccate':'· solo ciò che possiedi'; window.scrollTo(0,y); }
 function dbOn(){ return !!(window.AUTH && window.AUTH.configured && window.Store && window.Store.ready()); }
 function hydrateFromDB(){
   if(!(window.AUTH && window.AUTH.configured && window.AUTH.user && window.Store)) return;
