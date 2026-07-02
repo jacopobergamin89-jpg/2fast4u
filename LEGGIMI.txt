@@ -1,0 +1,30 @@
+2FAST4U — Modalità B (mazzi personali)  ·  file per il deploy
+
+DA DEPLOYARE (nel repo, insieme):
+  server.js ............ motore di gioco
+  dati_2fast4u.json .... fonte dati carte  ·  committa SEMPRE insieme a server.js
+  index.html ........... client di gioco (scelta mazzo prima della stanza + mano completa in gara)
+  deck-builder.html .... costruttore mazzo (comuni sempre visibili, gang solo se possedute)
+
+NOTE DEPLOY:
+  - server.js e dati_2fast4u.json vanno committati insieme (dipendenza runtime via require).
+  - deck-builder.html è già raggiungibile come /deck-builder.html (via express.static).
+    Per l'URL pulito /deck-builder aggiungi una rotta in index.js.
+  - Proteggi deck-builder.html con auth-guard.js come le altre pagine (l'autenticazione la gestisci tu).
+  - Nel builder c'è una barra "Prototipo" temporanea (Sblocca tutte / Azzera) per provare il gating
+    della collezione: sparirà quando ci sarà il negozio.
+
+MOCKUP (cartella mockup/ — NON deployare, solo per valutazione):
+  home-mockup.html ......... hub post-login (approvato)
+  deck-select-mockup.html .. schermata scelta mazzo (approvata, già integrata in index.html)
+  deck-builder-mockup.html . prima bozza del builder (superata dal builder reale)
+
+STATO ATTUALE:
+  Motore Modalità B completo (carte gang, ESP, regola "doppio valore solo pilota della gang",
+  mazzi e piloti personali). Deck-builder reale con gating della collezione. Collegamento
+  deck -> partita completo (scegli il mazzo prima di creare/entrare in stanza).
+
+PROSSIMI PASSI:
+  1) Negozio: pacchetti (gang x livello e misti x livello), acquisto con gettoni, apertura buste.
+  2) Home reale (dall'hub approvato): saldo, collezione, accesso a tutto.
+  3) Admin: assegnazione gettoni ai giocatori.

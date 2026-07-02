@@ -91,9 +91,21 @@ function makeDeck(maxLvl){
   for(let l=1;l<=top;l++) packCards(l).forEach(c=>d.push(c));    // il mazzo contiene tutte le carte fino al livello pista
   return shuffle(d);
 }
+/* --- mazzo PERSONALE dal deck-builder (nome carta univoco per livello) --- */
+const CARD_INDEX=(function(){ const idx={}; for(const lv of ['1','2','3','4']) for(const c of (DATI.carte[lv]||[])) if(!idx[c.nome]) idx[c.nome]={def:c,lvl:+lv}; return idx; })();
+function sanitizeDeck(deck){
+  if(!deck||typeof deck!=='object') return null;
+  const qty={}; if(deck.qty&&typeof deck.qty==='object') for(const k in deck.qty){ const v=deck.qty[k]|0; if(v>0 && CARD_INDEX[k]) qty[k]=Math.min(9,v); }
+  const pilots=Array.isArray(deck.pilots)?deck.pilots.filter(id=>DB.piloti.some(q=>q.id===id)).slice(0,6):[];
+  if(!pilots.length && !Object.keys(qty).length) return null;
+  return { qty, pilots };
+}
+function personalDeckCards(deckDef,lvl){ const out=[]; const qty=(deckDef&&deckDef.qty)||{}; for(const nome in qty){ const e=CARD_INDEX[nome]; if(!e||e.lvl!==lvl) continue; const n=qty[nome]|0; for(let k=0;k<n;k++) out.push(mkCard(e.def)); } return out; }
+function makePersonalDeck(deckDef,maxLvl){ const d=[]; const top=Math.min(maxLvl||1, DB.maxLevelRoads); for(let l=1;l<=top;l++) personalDeckCards(deckDef,l).forEach(c=>d.push(c)); return shuffle(d); }
+function pilotPoolFor(p){ if(p.deckDef && Array.isArray(p.deckDef.pilots) && p.deckDef.pilots.length) return shuffle(p.deckDef.pilots.slice()); return shuffle(DB.piloti.map(q=>q.id)).slice(0,6); }
 
 function drawCard(p, trackLevel){
-  if(!p.deck||!p.deck.length){ if(p.discard&&p.discard.length){ p.deck=shuffle(p.discard); p.discard=[]; } else { p.deck=makeDeck(trackLevel||1); } }
+  if(!p.deck||!p.deck.length){ if(p.discard&&p.discard.length){ p.deck=shuffle(p.discard); p.discard=[]; } else { p.deck = p.deckDef ? makePersonalDeck(p.deckDef, trackLevel||1) : makeDeck(trackLevel||1); } }
   return p.deck.length ? p.deck.pop() : null;
 }
 function statVal(p,k){
@@ -128,8 +140,7 @@ function startGame(room){
   const G=room.G;
   G.players.forEach((p,i)=>{ p.roll=d6(); });
   G.diceOrder=[...G.players].sort((a,b)=>b.roll-a.roll||a.id-b.id).map(p=>p.id);
-  G.pilotPool=shuffle(DB.piloti.map(p=>p.id));
-  G.players.forEach((p,idx)=>{ p.pilot=null; p.drew=false; p.money=4000; p.po=0; p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0}; p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]}; p.espOwned={}; p.deck=makeDeck(1); p.discard=[]; p.lastRank=idx; p.prevRank=idx; p.hand=[]; });   // mazzo carte PERSONALE (i pezzi restano al banco condiviso)
+  G.players.forEach((p,idx)=>{ p.pilot=null; p.drew=false; p.money=4000; p.po=0; p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0}; p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]}; p.espOwned={}; p.deck = p.deckDef ? makePersonalDeck(p.deckDef,1) : makeDeck(1); p.discard=[]; p.pilotPool=pilotPoolFor(p); p.lastRank=idx; p.prevRank=idx; p.hand=[]; });   // mazzo e piloti PERSONALI (deck-builder); bot e senza-deck usano il mazzo completo
   G.discard=[];
   G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach(p=>{ for(let k=0;k<3;k++){ const card=drawCard(p,1); if(card) p.hand.push(card); } });
@@ -145,7 +156,7 @@ function restartGame(room){
   G.phase='lobby';
   G.round=0; G.R=null; G.lastResults=null; G.winner=null;
   G.gameLog=[]; G.gameSeq=0;
-  G.track=[]; G.pilotPool=null; G.discard=[]; G.order=[]; G.diceOrder=[];
+  G.track=[]; G.discard=[]; G.order=[]; G.diceOrder=[];
   G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach((p,i)=>{
     p.pilot=null; p.drew=false; p.ready=false;
@@ -161,8 +172,8 @@ function restartGame(room){
 function actDrawPilot(room,p){
   const G=room.G; if(G.phase!=='reveal') return 'Non in fase di pesca.';
   if(p.drew) return 'Hai già pescato il pilota.';
-  if(!G.pilotPool || !G.pilotPool.length) return 'Mazzo piloti esaurito.';
-  const pid=G.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true;
+  if(!p.pilotPool || !p.pilotPool.length) return 'Nessun pilota disponibile.';
+  const pid=p.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true;
   return null;
 }
 function actReady(room,p){
@@ -664,12 +675,21 @@ function computeMove(G,p,die,useNos){
 function raceLog(G,e){ if(!G.R)return; e.id=++G.R.logId; e.t=G.R.turn; G.R.log.push(e); if(G.R.log.length>60)G.R.log.shift(); }
 function glog(G,text,kind){ if(!G)return; G.gameSeq=(G.gameSeq||0)+1; (G.gameLog=G.gameLog||[]).push({ id:G.gameSeq, round:G.round||1, phase:G.phase, kind:kind||'info', text:text }); if(G.gameLog.length>240) G.gameLog.shift(); }   // registro di TUTTA la partita
 const COMPLAB={motore:'Motore',cambio:'Cambio',sterzo:'Sterzo',assetto:'Assetto',peso:'Peso',nos:'NOS'};
+function raceHandNote(c, gangOK){
+  if(c.cat==='pregara'||c.cat==='esp') return 'in officina';
+  if(c.cat==='difesa') return 'quando ti colpiscono';
+  if(c.cat==='ingara' && c.eff==='partenza') return 'solo al via';
+  if(c.cat==='ingara' && c.gangLock && !gangOK) return 'solo pilota '+c.gang;
+  if(c.cat==='polizia') return 'gira in officina';
+  return 'non ora';
+}
 function actRacePlayCard(room,p,handIdx,targetId){
   const G=room.G; if(G.phase!=='race') return 'Non in gara.';
   if(activeRace(G).id!==p.id) return 'Non è il tuo turno.';
   if(G.R.phase!=='await') return 'Hai già tirato.';
   const c=p.hand[handIdx]; if(!c||c.cat!=='ingara') return 'Carta non valida.';
   if(c.eff==='defend') return 'Le difese si usano solo quando vieni colpito.';
+  if(c.gangLock && (!p.pilot || p.pilot.gang!==c.gang)) return 'Carta della gang '+c.gang+': la gioca solo un suo pilota.';   // carte a doppio valore = solo pilota della gang
   /* --- dado-forza: se il prossimo dado esce nel set, bonus stat per il tiro (solo su di sé) --- */
   if(c.eff==='dadoforza'){
     const tc=G.R.cars[p.id]; if(!tc) return 'Auto non pronta.';
@@ -900,7 +920,7 @@ function advanceTrack(room){
   change.newLevel=G.trackLevel; change.advanced=advance;
   layoutTrack(G.track);
   G.lastTrackChange=change;
-  for(const lv of [2,3,4]){ if(G.trackLevel>=lv && G.scaleUnlocked && !G.scaleUnlocked[lv]){ G.scaleUnlocked[lv]=true; G.players.forEach(p=>{ p.deck=shuffle((p.deck||[]).concat(packCards(lv))); }); change.scaleUnlocked=(change.scaleUnlocked||[]).concat(lv); } }   // il pack del nuovo livello entra in ogni mazzo personale
+  for(const lv of [2,3,4]){ if(G.trackLevel>=lv && G.scaleUnlocked && !G.scaleUnlocked[lv]){ G.scaleUnlocked[lv]=true; G.players.forEach(p=>{ const add = p.deckDef ? personalDeckCards(p.deckDef,lv) : packCards(lv); p.deck=shuffle((p.deck||[]).concat(add)); }); change.scaleUnlocked=(change.scaleUnlocked||[]).concat(lv); } }   // il pack del nuovo livello entra in ogni mazzo personale
 }
 function actNextRound(room,p){
   const G=room.G; if(G.phase!=='results') return 'Non disponibile ora.';
@@ -953,7 +973,7 @@ function buildView(room, player){
     const p=player;
     v.reveal={
       drawn:p.drew,
-      deckSize:(G.pilotPool?G.pilotPool.length:0),
+      deckSize:(player.pilotPool?player.pilotPool.length:0),
       pilot:p.drew?{ nome:p.pilot.nome, gang:p.pilot.gang, tipoLabel:p.pilot.tipoLabel, liv:p.pilot.liv, ab:p.pilot.ab }:null,
       roll:p.roll,
       startPos:G.diceOrder.indexOf(p.id)+1,
@@ -1036,7 +1056,7 @@ function buildView(room, player){
         segType:seg.t, segLabel:TIPO_LABEL[seg.t], firstDone:car.firstDone,
         nosOk:nosAllowed(G,p), nosVal:statVal(p,'nos'),
         fx:car.fx.map(e=>({stat:e.stat,amt:e.amt,turns:e.turns})), pendPart:car.pendPart, pendDado:car.pendDado,
-        hand:p.hand.map((c,idx)=>({idx,cat:c.cat,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur,target:c.target,gang:c.gang,desc:c.desc||cardDesc(c),needsTarget:cardNeedsTarget(c)})).filter(c=>c.cat==='ingara' && c.eff!=='defend' && c.eff!=='partenza'),
+        hand:p.hand.map((c,idx)=>{ const gOK=!c.gangLock||(!!p.pilot&&p.pilot.gang===c.gang); const playable=c.cat==='ingara'&&c.eff!=='defend'&&c.eff!=='partenza'&&gOK; return {idx,cat:c.cat,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur,target:c.target,gang:c.gang,desc:c.desc||cardDesc(c),needsTarget:cardNeedsTarget(c),gangLock:!!c.gangLock,gangOK:gOK,playable,note:playable?'':raceHandNote(c,gOK)}; }),
         rivals:[...G.players.filter(x=>x.id!==p.id).map(x=>({id:x.id,name:x.name,colorH:DB.colori[x.colorIdx].h})), ...(R.bosses||[]).map(b=>({id:b.id,name:b.name,colorH:b.kind==='boss'?'#ff3b3b':'#ffa733',isFoe:true,kind:b.kind}))]
       };
       v.rolled = R.phase==='rolled' ? (function(){ const b=R.lastBreak; return { lines:b.lines, total:b.total, die:b.die, db:b.db, useNos:b.useNos, np:Math.min(R.finish||55,car.pos+b.total), finish:(R.finish||0) }; })() : null;
@@ -1110,8 +1130,9 @@ function botRace(room,bot){
   if(R.phase==='await'){
     const reachC=bot.hand.map((c,i)=>({c,i})).filter(o=>o.c.cat==='ingara'&&o.c.eff==='reach');
     const behind=G.players.some(p=>p.id!==bot.id&&R.cars[p.id].pos>R.cars[bot.id].pos);
-    const isSelfMulti=c=>c.eff==='multi'&&(c.effects||[]).every(e=>e.tgt==='self')&&(c.effects||[]).some(e=>e.val>0);
-    const isAtkMulti=c=>c.eff==='multi'&&(c.effects||[]).some(e=>(e.tgt==='pick'||e.tgt==='rivals')&&e.val<0);
+    const gangOK=c=>!c.gangLock||(bot.pilot&&bot.pilot.gang===c.gang);   // rispetta il lock di gang
+    const isSelfMulti=c=>c.eff==='multi'&&gangOK(c)&&(c.effects||[]).every(e=>e.tgt==='self')&&(c.effects||[]).some(e=>e.val>0);
+    const isAtkMulti=c=>c.eff==='multi'&&gangOK(c)&&(c.effects||[]).some(e=>(e.tgt==='pick'||e.tgt==='rivals')&&e.val<0);
     const selfPos=bot.hand.map((c,i)=>({c,i})).filter(o=>o.c.cat==='ingara'&&((o.c.target==='self'&&(o.c.eff==='vel'||o.c.eff==='ctrl')&&o.c.val>0)||isSelfMulti(o.c)||o.c.eff==='dadoforza'));
     const rivalNeg=bot.hand.map((c,i)=>({c,i})).filter(o=>o.c.cat==='ingara'&&(o.c.target==='rival'||isAtkMulti(o.c)));
     if(reachC.length && behind && Math.random()<0.5) actRacePlayCard(room,bot,reachC[0].i);
@@ -1123,7 +1144,7 @@ function botRace(room,bot){
 }
 function botAct(room){
   const G=room.G;
-  if(G.phase==='reveal'){ G.players.forEach(p=>{ if(p.isBot){ if(!p.drew && G.pilotPool && G.pilotPool.length){ const pid=G.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true; } p.ready=true; } }); if(G.players.every(p=>p.ready)) startRound(room); return; }
+  if(G.phase==='reveal'){ G.players.forEach(p=>{ if(p.isBot){ if(!p.drew && p.pilotPool && p.pilotPool.length){ const pid=p.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true; } p.ready=true; } }); if(G.players.every(p=>p.ready)) startRound(room); return; }
   if(G.phase==='prep'){ const b=curPrep(G); if(b.isBot) botPrep(room,b); return; }
   if(G.phase==='race'){ const b=activeRace(G); if(b.isBot) botRace(room,b); return; }
 }
@@ -1142,17 +1163,17 @@ function mount(ioInstance){
   IO = ioInstance;
   IO.on('connection', (socket)=>{
 
-  socket.on('createRoom', ({name,colorIdx}, cb)=>{
+  socket.on('createRoom', ({name,colorIdx,deck}, cb)=>{
     const code=genCode();
     const room={ code, hostId:0, started:false, G:{ phase:'lobby', players:[], nextId:0, targetPO:50 } };
-    const p={ id:0, socketId:socket.id, name:cleanName(name), colorIdx: (colorIdx>=0&&colorIdx<8)?colorIdx:0, connected:true };
+    const p={ id:0, socketId:socket.id, name:cleanName(name), colorIdx: (colorIdx>=0&&colorIdx<8)?colorIdx:0, connected:true, deckDef:sanitizeDeck(deck) };
     room.G.players.push(p); room.G.nextId=1; room.hostId=0;
     rooms.set(code, room); socketToRoom.set(socket.id, code); socket.join(code);
     if(cb) cb({ ok:true, code, youId:0 });
     broadcast(room);
   });
 
-  socket.on('joinRoom', ({code,name,colorIdx}, cb)=>{
+  socket.on('joinRoom', ({code,name,colorIdx,deck}, cb)=>{
     code=(code||'').toUpperCase().trim();
     const room=rooms.get(code);
     if(!room){ if(cb) cb({ ok:false, error:'Stanza inesistente.' }); return; }
@@ -1169,7 +1190,7 @@ function mount(ioInstance){
     if(room.G.players.some(x=>x.colorIdx===ci)){ ci=freeColorIdx(room); }
     if(ci<0){ if(cb) cb({ ok:false, error:'Nessun colore libero.' }); return; }
     const id=room.G.nextId++;
-    const p={ id, socketId:socket.id, name:cleanName(name), colorIdx:ci, connected:true };
+    const p={ id, socketId:socket.id, name:cleanName(name), colorIdx:ci, connected:true, deckDef:sanitizeDeck(deck) };
     room.G.players.push(p); socketToRoom.set(socket.id, code); socket.join(code);
     if(cb) cb({ ok:true, code, youId:id });
     broadcast(room);

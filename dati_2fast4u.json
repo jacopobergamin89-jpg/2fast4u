@@ -1810,7 +1810,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -2 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -2 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -1830,7 +1831,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità +3 (te) · Velocità -1 (tutti i rivali) · 2 tiri"
+    "desc": "Velocità +3 (te) · Velocità -1 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -1850,7 +1852,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità +3 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+    "desc": "Velocità +3 (te) · Velocità -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -1870,7 +1873,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità +2 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+    "desc": "Velocità +2 (te) · Velocità -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -1890,7 +1894,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -2 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -2 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -1910,7 +1915,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità -3 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri"
+    "desc": "Velocità -3 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -1930,7 +1936,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità +2 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+    "desc": "Velocità +2 (te) · Velocità -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -1950,7 +1957,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità +2 (te) · Velocità -1 (tutti i rivali) · 2 tiri"
+    "desc": "Velocità +2 (te) · Velocità -1 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -1970,7 +1978,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità -2 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri"
+    "desc": "Velocità -2 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -1990,7 +1999,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -3 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -3 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2010,7 +2020,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +1 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +1 (te) · Velocità -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2030,7 +2041,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità -2 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri"
+    "desc": "Velocità -2 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2050,7 +2062,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -2 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -2 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2070,7 +2083,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità +2 (te) · Controllo -1 (tutti i rivali) · 2 tiri"
+    "desc": "Velocità +2 (te) · Controllo -1 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2090,7 +2104,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità +2 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+    "desc": "Velocità +2 (te) · Controllo -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2110,7 +2125,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -2 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -2 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2130,7 +2146,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +2 (te) · Velocità -1 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +2 (te) · Velocità -1 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2150,7 +2167,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo +2 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+    "desc": "Controllo +2 (te) · Velocità -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2170,7 +2188,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -2 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -2 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2190,7 +2209,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo -2 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri"
+    "desc": "Controllo -2 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2210,7 +2230,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +1 (te) · Controllo -2 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +1 (te) · Controllo -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2230,7 +2251,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -1 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -1 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2250,7 +2272,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo +2 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+    "desc": "Controllo +2 (te) · Controllo -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2270,7 +2293,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo -2 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri"
+    "desc": "Controllo -2 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2290,7 +2314,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +2 (te) · Controllo -1 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +2 (te) · Controllo -1 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2310,7 +2335,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -1 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -1 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2330,7 +2356,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo -1 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri"
+    "desc": "Controllo -1 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2350,7 +2377,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo +1 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+    "desc": "Controllo +1 (te) · Controllo -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2370,7 +2398,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +1 (te) · Controllo -1 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +1 (te) · Controllo -1 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2390,7 +2419,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -2 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -2 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2410,7 +2440,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -2 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -2 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2430,7 +2461,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +2 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +2 (te) · Controllo -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2450,7 +2482,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +2 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +2 (te) · Velocità -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2470,7 +2503,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -2 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -2 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2490,7 +2524,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +2 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +2 (te) · Velocità -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2510,7 +2545,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +2 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +2 (te) · Controllo -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2530,7 +2566,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +2 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +2 (te) · Velocità -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2550,7 +2587,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +2 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +2 (te) · Controllo -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2570,7 +2608,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -2 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -2 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -2590,7 +2629,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -2 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -2 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3170,7 +3210,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -4 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -4 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3190,7 +3231,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità +5 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+    "desc": "Velocità +5 (te) · Velocità -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3210,7 +3252,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -5 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -5 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3230,7 +3273,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -5 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -5 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3250,7 +3294,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità +5 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+    "desc": "Velocità +5 (te) · Velocità -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3270,7 +3315,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità +6 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+    "desc": "Velocità +6 (te) · Velocità -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3290,7 +3336,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità +4 (te) · Velocità -1 (tutti i rivali) · 1 tiro"
+    "desc": "Velocità +4 (te) · Velocità -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3310,7 +3357,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -6 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -6 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3330,7 +3378,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità +4 (te) · Velocità -1 (tutti i rivali) · 2 tiri"
+    "desc": "Velocità +4 (te) · Velocità -1 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3350,7 +3399,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità -4 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri"
+    "desc": "Velocità -4 (1 rivale) · Velocità +1 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3370,7 +3420,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -5 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -5 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3390,7 +3441,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -5 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -5 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3410,7 +3462,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità +4 (te) · Controllo -1 (tutti i rivali) · 2 tiri"
+    "desc": "Velocità +4 (te) · Controllo -1 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3430,7 +3483,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità -4 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri"
+    "desc": "Velocità -4 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3450,7 +3504,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo +5 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+    "desc": "Controllo +5 (te) · Velocità -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3470,7 +3525,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -4 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -4 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3490,7 +3546,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo +4 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+    "desc": "Controllo +4 (te) · Velocità -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3510,7 +3567,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +4 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +4 (te) · Velocità -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3530,7 +3588,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità +4 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+    "desc": "Velocità +4 (te) · Controllo -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3550,7 +3609,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -4 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -4 (1 rivale) · Velocità +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3570,7 +3630,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +4 (te) · Controllo -2 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +4 (te) · Controllo -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3590,7 +3651,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -5 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -5 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3610,7 +3672,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo +5 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+    "desc": "Controllo +5 (te) · Controllo -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3630,7 +3693,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -3 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -3 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3650,7 +3714,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +3 (te) · Controllo -1 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +3 (te) · Controllo -1 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3670,7 +3735,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -4 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -4 (1 rivale) · Controllo +1 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3690,7 +3756,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo +4 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+    "desc": "Controllo +4 (te) · Controllo -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3710,7 +3777,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo +3 (te) · Controllo -1 (tutti i rivali) · 1 tiro"
+    "desc": "Controllo +3 (te) · Controllo -1 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3730,7 +3798,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo -3 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri"
+    "desc": "Controllo -3 (1 rivale) · Controllo +1 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3750,7 +3819,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -4 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -4 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3770,7 +3840,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -2 (1 rivale) · Controllo +3 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -2 (1 rivale) · Controllo +3 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3790,7 +3861,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -2 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -2 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3810,7 +3882,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +2 (te) · Velocità -3 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +2 (te) · Velocità -3 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3830,7 +3903,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +2 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +2 (te) · Controllo -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3850,7 +3924,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +2 (te) · Velocità -3 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +2 (te) · Velocità -3 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3870,7 +3945,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -3 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -3 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3890,7 +3966,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +3 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +3 (te) · Velocità -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3910,7 +3987,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -2 (1 rivale) · Velocità +3 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -2 (1 rivale) · Velocità +3 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3930,7 +4008,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +2 (te) · Controllo -3 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +2 (te) · Controllo -3 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -3950,7 +4029,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +2 (te) · Controllo -3 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +2 (te) · Controllo -3 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4487,7 +4567,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -6 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -6 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4507,7 +4588,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità +7 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+    "desc": "Velocità +7 (te) · Velocità -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4527,7 +4609,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità +7 (te) · Velocità -3 (tutti i rivali) · 2 tiri"
+    "desc": "Velocità +7 (te) · Velocità -3 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4547,7 +4630,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità +6 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+    "desc": "Velocità +6 (te) · Velocità -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4567,7 +4651,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità -7 (1 rivale) · Velocità +3 (tutti gli altri) · 2 tiri"
+    "desc": "Velocità -7 (1 rivale) · Velocità +3 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4587,7 +4672,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -7 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -7 (1 rivale) · Velocità +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4607,7 +4693,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità -7 (1 rivale) · Velocità +2 (tutti gli altri) · 2 tiri"
+    "desc": "Velocità -7 (1 rivale) · Velocità +2 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4627,7 +4714,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità +7 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+    "desc": "Velocità +7 (te) · Velocità -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4647,7 +4735,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità -6 (1 rivale) · Velocità +2 (tutti gli altri) · 2 tiri"
+    "desc": "Velocità -6 (1 rivale) · Velocità +2 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4667,7 +4756,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità +6 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+    "desc": "Velocità +6 (te) · Velocità -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4687,7 +4777,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità +6 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+    "desc": "Velocità +6 (te) · Controllo -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4707,7 +4798,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità -6 (1 rivale) · Controllo +2 (tutti gli altri) · 2 tiri"
+    "desc": "Velocità -6 (1 rivale) · Controllo +2 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4727,7 +4819,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo -6 (1 rivale) · Velocità +2 (tutti gli altri) · 2 tiri"
+    "desc": "Controllo -6 (1 rivale) · Velocità +2 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4747,7 +4840,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +6 (te) · Velocità -3 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +6 (te) · Velocità -3 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4767,7 +4861,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Velocità +6 (te) · Controllo -2 (tutti i rivali) · 2 tiri"
+    "desc": "Velocità +6 (te) · Controllo -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4787,7 +4882,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo +6 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+    "desc": "Controllo +6 (te) · Velocità -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4807,7 +4903,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -6 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -6 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4827,7 +4924,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Velocità -7 (1 rivale) · Controllo +3 (tutti gli altri) · 1 tiro"
+    "desc": "Velocità -7 (1 rivale) · Controllo +3 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4847,7 +4945,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo -6 (1 rivale) · Velocità +3 (tutti gli altri) · 2 tiri"
+    "desc": "Controllo -6 (1 rivale) · Velocità +3 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4867,7 +4966,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +6 (te) · Velocità -2 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +6 (te) · Velocità -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4887,7 +4987,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -6 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -6 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4907,7 +5008,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo -5 (1 rivale) · Controllo +2 (tutti gli altri) · 2 tiri"
+    "desc": "Controllo -5 (1 rivale) · Controllo +2 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4927,7 +5029,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +6 (te) · Controllo -2 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +6 (te) · Controllo -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4947,7 +5050,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +5 (te) · Controllo -2 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +5 (te) · Controllo -2 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4967,7 +5071,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo -6 (1 rivale) · Controllo +2 (tutti gli altri) · 2 tiri"
+    "desc": "Controllo -6 (1 rivale) · Controllo +2 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -4987,7 +5092,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo -5 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro"
+    "desc": "Controllo -5 (1 rivale) · Controllo +2 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5007,7 +5113,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo +6 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+    "desc": "Controllo +6 (te) · Controllo -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5027,7 +5134,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo +6 (te) · Controllo -3 (tutti i rivali) · 2 tiri"
+    "desc": "Controllo +6 (te) · Controllo -3 (tutti i rivali) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5047,7 +5155,8 @@
      }
     ],
     "dur": 1,
-    "desc": "Controllo +5 (te) · Controllo -2 (tutti i rivali) · 1 tiro"
+    "desc": "Controllo +5 (te) · Controllo -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5067,7 +5176,8 @@
      }
     ],
     "dur": 2,
-    "desc": "Controllo -6 (1 rivale) · Controllo +3 (tutti gli altri) · 2 tiri"
+    "desc": "Controllo -6 (1 rivale) · Controllo +3 (tutti gli altri) · 2 tiri",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5087,7 +5197,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +5 (te) · Controllo -3 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +5 (te) · Controllo -3 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5107,7 +5218,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +3 (te) · Velocità -4 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +3 (te) · Velocità -4 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5127,7 +5239,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +4 (te) · Velocità -2 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +4 (te) · Velocità -2 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5147,7 +5260,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -5 (1 rivale) · Velocità +4 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -5 (1 rivale) · Velocità +4 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5167,7 +5281,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +5 (te) · Velocità -4 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +5 (te) · Velocità -4 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5187,7 +5302,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -4 (1 rivale) · Controllo +3 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -4 (1 rivale) · Controllo +3 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5207,7 +5323,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +4 (te) · Controllo -3 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +4 (te) · Controllo -3 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5227,7 +5344,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS +5 (te) · Controllo -4 (tutti i rivali) · 1 tiro"
+    "desc": "NOS +5 (te) · Controllo -4 (tutti i rivali) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5247,7 +5365,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -4 (1 rivale) · Controllo +4 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -4 (1 rivale) · Controllo +4 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
@@ -5267,7 +5386,8 @@
      }
     ],
     "dur": 1,
-    "desc": "NOS -5 (1 rivale) · Velocità +3 (tutti gli altri) · 1 tiro"
+    "desc": "NOS -5 (1 rivale) · Velocità +3 (tutti gli altri) · 1 tiro",
+    "gangLock": true
    },
    {
     "cat": "ingara",
