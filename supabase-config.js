@@ -13,8 +13,8 @@
    compaiono solo per le email elencate in adminEmails.
    ============================================================ */
 window.SB_CONFIG = {
-  url:      "",   // es. "https://xxxxxxxxxxxx.supabase.co"
-  anonKey:  "",   // es. "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....."
+  url:      "https://dnwiyqpivhmpziyawutw.supabase.co",
+  anonKey:  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRud2l5cXBpdmhtcHppeWF3dXR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MzEyNDUsImV4cCI6MjA5ODMwNzI0NX0.WIHo-wC5bnLtiMQcDaFUVY_cOHNuJyxH3OWrl6WL6kI",
 
   // Solo queste email vedono i comandi da amministratore:
   adminEmails: [

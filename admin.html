@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>2FAST4U · Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-guard.js"></script>
+<script src="store.js"></script>
+<style>
+:root{--bg:#0B0518;--bg2:#140A28;--bg3:#1D1140;--line:#2C1E52;--amber:#FFC91E;--cyan:#2BA8E6;--purple:#9B3BE0;--ink:#F4EEFF;--muted:#8E7FB8;--good:#3ddc84;--danger:#ff5b6b;--disp:'Oswald',system-ui,sans-serif;}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--disp);font-weight:300}
+body{background:radial-gradient(130% 90% at 50% -20%,#241150 0%,#0B0518 55%)}
+a{color:var(--cyan);text-decoration:none}
+.wrap{max-width:1000px;margin:0 auto;padding:0 18px 60px}
+.top{position:sticky;top:0;z-index:20;background:rgba(11,5,24,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 18px;display:flex;align-items:center;gap:14px}
+.logo{font-weight:700;letter-spacing:2px;font-size:20px}.logo b{color:var(--amber)}.logo span{color:var(--cyan)}
+.top .sp{margin-left:auto;display:flex;gap:12px;align-items:center;font-size:13px;color:var(--muted)}
+.btn{font-family:inherit;font-size:13px;color:var(--ink);background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+h1{font-weight:600;letter-spacing:.5px;font-size:22px;margin:22px 0 4px}
+.sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+.panel{background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.row{display:grid;grid-template-columns:1fr 150px 150px auto;gap:12px;align-items:center;padding:13px 16px;border-bottom:1px solid var(--line)}
+.row.head{background:#00000030;color:var(--muted);font-size:11px;letter-spacing:1px;text-transform:uppercase}
+.row:last-child{border-bottom:0}
+.email{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{font-size:10px;font-weight:600;letter-spacing:.5px;color:#180a05;background:linear-gradient(135deg,#FFD86A,var(--amber));padding:2px 7px;border-radius:20px;margin-left:8px}
+.coininp{width:110px;font-family:inherit;font-size:14px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 9px}
+.save{font-family:inherit;font-size:12px;color:#180a05;background:linear-gradient(135deg,#FFD86A,var(--amber));border:0;border-radius:8px;padding:7px 12px;cursor:pointer}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--muted)}
+.switch input{width:34px;height:18px;-webkit-appearance:none;appearance:none;background:var(--bg3);border:1px solid var(--line);border-radius:20px;position:relative;cursor:pointer;flex:none}
+.switch input:checked{background:var(--good);border-color:var(--good)}
+.switch input::after{content:'';position:absolute;top:1px;left:1px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .15s}
+.switch input:checked::after{transform:translateX(16px)}
+.notice{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:22px;color:var(--muted);line-height:1.6}
+.notice b{color:var(--ink)}
+.warn{background:#2a1c05;border:1px solid #6b5010;color:#ffe6a3;border-radius:12px;padding:16px;font-size:13px;line-height:1.6;margin-top:16px}
+.warn code{background:#00000040;padding:1px 5px;border-radius:4px;font-family:ui-monospace,monospace;font-size:12px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--line);color:var(--ink);padding:11px 18px;border-radius:11px;font-size:13px;opacity:0;transition:.25s;z-index:60}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style></head>
+<body>
+<div class="top">
+  <div class="logo">2<b>FAST</b>4<span>U</span></div>
+  <div class="sp"><span id="me"></span> · <a href="home.html">← Torna al gioco</a> · <button class="btn" onclick="authLogout()">Esci</button></div>
+</div>
+
+<div class="wrap">
+  <h1>Pannello amministratore</h1>
+  <div class="sub">Gestisci i gettoni degli utenti e sblocca a chi vuoi tutte le carte per una prova di gioco.</div>
+  <div id="content"><div class="notice">Carico…</div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var CFG = window.SB_CONFIG || {};
+var _tt;
+function toast(m){ var t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(_tt); _tt=setTimeout(function(){t.classList.remove('show');},1800); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function fmt(n){ return Number(n||0).toLocaleString('it-IT'); }
+
+function showNotice(html){ document.getElementById('content').innerHTML = html; }
+
+document.addEventListener('auth:ready', function(e){
+  var a = e.detail || {};
+  var meEl = document.getElementById('me');
+
+  if(!a.configured){
+    showNotice('<div class="notice"><b>Supabase non configurato.</b> Apri <code>supabase-config.js</code> e incolla Project URL e anon key, poi ricarica.</div>');
+    return;
+  }
+  if(!a.isAdmin){
+    showNotice('<div class="notice"><b>Accesso riservato.</b> Questa pagina è solo per gli amministratori. <a href="home.html">Torna al gioco →</a></div>');
+    return;
+  }
+  if(meEl) meEl.textContent = a.email + ' · ADMIN';
+  loadPlayers();
+});
+
+async function loadPlayers(){
+  try{
+    var players = await window.Store.listPlayers();
+    render(players);
+  }catch(err){
+    showNotice('<div class="notice"><b>Errore nel leggere gli utenti.</b><br>'+esc(err&&err.message||err)+'<div class="warn">Probabile causa: lo schema non è ancora stato eseguito su Supabase. Apri <code>schema.sql</code> nel SQL Editor e premi Run.</div></div>');
+  }
+}
+
+function render(players){
+  if(!players.length){
+    showNotice('<div class="notice">Ancora nessun utente registrato. Appena qualcuno crea un account, comparirà qui.</div>');
+    return;
+  }
+  var h = '<div class="panel"><div class="row head"><div>Utente</div><div>Gettoni</div><div>Tutto sbloccato</div><div></div></div>';
+  players.forEach(function(p){
+    var badge = p.is_admin ? '<span class="badge">ADMIN</span>' : '';
+    h += '<div class="row" data-id="'+esc(p.id)+'">'
+       +   '<div class="email">'+esc(p.email||'(senza email)')+badge+'</div>'
+       +   '<div><input class="coininp" type="number" min="0" step="100" value="'+Number(p.coins||0)+'"></div>'
+       +   '<div><label class="switch"><input type="checkbox" class="unlk" '+(p.full_unlock?'checked':'')+'><span>prova</span></label></div>'
+       +   '<div><button class="save">Salva gettoni</button></div>'
+       + '</div>';
+  });
+  h += '</div>';
+  showNotice(h);
+
+  document.querySelectorAll('.row[data-id]').forEach(function(row){
+    var id = row.getAttribute('data-id');
+    row.querySelector('.save').addEventListener('click', async function(){
+      var val = parseInt(row.querySelector('.coininp').value, 10);
+      if(isNaN(val) || val<0){ toast('Valore non valido'); return; }
+      try{ await window.Store.setPlayerCoins(id, val); toast('Gettoni aggiornati: '+fmt(val)); }
+      catch(err){ toast('Errore: '+(err&&err.message||err)); }
+    });
+    row.querySelector('.unlk').addEventListener('change', async function(){
+      var on = this.checked;
+      try{ await window.Store.setPlayerUnlock(id, on); toast(on?'Tutte le carte sbloccate per questo utente':'Sblocco rimosso'); }
+      catch(err){ this.checked=!on; toast('Errore: '+(err&&err.message||err)); }
+    });
+  });
+}
+</script>
+</body></html>
