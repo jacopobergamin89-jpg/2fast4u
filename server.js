@@ -188,7 +188,8 @@ function startRound(room){
   if(G.round===1) buildInitialTrack(G);
   if(G.round===1) G.order=[...G.diceOrder];
   else G.order=[...G.players].sort((a,b)=>b.lastRank-a.lastRank||a.id-b.id).map(p=>p.id);
-  G.maxBuys=(G.round===1)?2:1;
+  G.maxBuys=(G.round===1)?2:1;                                  // pezzi scoperti a testa (2 alla prima officina)
+  G.shopRounds=(G.round===1)?2:1; G.shopRound=1;                 // giri d'acquisto: 2 alla prima officina (1 pezzo per giro), 1 dalle successive
   G.compMaxLevel=G.trackLevel;
   G.market=[]; G.marketUsed={};                                          // banco condiviso pulito ogni officina
   revealMarket(G, G.maxBuys * G.players.length);   // pezzi scoperti = acquisti totali (maxBuys × giocatori): 2 a testa al round 1, 1 dai successivi; si compra dalle scoperte (contesa)
@@ -198,7 +199,7 @@ function startRound(room){
   G.ppIdx=0; G.phase='prep'; G.R=null; if(G.lastResults) G.prevResults=G.lastResults; G.lastResults=null; G.reshop=false; G.reshopQueued=false; G.reshopFirst=null; G.reshopBuys={}; G.reshopHalf=[]; G.sprintFinish=null;
   G.blocks=[]; G.pendPolice=[]; G.forfeitedBlocks=[];
   G.players.forEach(p=>{ p.bet=null; p.prizeMult=1; p.betMult=1; p.quotaMod=0; p.discountNext=false; p.incoming=[]; });
-  curPrep(G).buysLeft=G.maxBuys;
+  curPrep(G).buysLeft=1;                                        // 1 acquisto per giro
   glog(G,'— Round '+G.round+' · officina aperta · gara liv. '+G.raceLevel,'round');
 }
 function compSlots(N,lvl){ return Math.max(1, N - Math.max(0, lvl-2)); }   // posti totali per tipo a un livello: L1-2=N, L3=N-1, L4=N-2, L5=N-3 (min 1)
@@ -572,7 +573,8 @@ function actPrepDone(room,p){
   if(!G.reshop && p.bet){ if(p.bet.amount>p.money){ p.bet=null; } else { p.money-=p.bet.amount; } }
   G.ppIdx++;
   const o=pOrder(G);
-  if(G.ppIdx<o.length){ const cp=curPrep(G); cp.buysLeft=G.reshop?((G.reshopBuys&&G.reshopBuys[cp.id])||1):G.maxBuys; }
+  if(G.ppIdx<o.length){ const cp=curPrep(G); cp.buysLeft=G.reshop?((G.reshopBuys&&G.reshopBuys[cp.id])||1):1; }
+  else if(!G.reshop && G.shopRound<G.shopRounds){ G.shopRound++; G.ppIdx=0; const cp=curPrep(G); cp.buysLeft=1; }   // secondo giro della prima officina: si ricomincia dal primo, 1 acquisto a testa
   else if(!G.reshop && G.reshopQueued){ startReshop(room); }   // chiudi l'officina, riaprila a tutti
   else { G.reshop=false; startLaunch(room); }   // tutti pronti → semaforo di partenza
   return null;

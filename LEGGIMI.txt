@@ -1,30 +1,34 @@
-2FAST4U — Modalità B (mazzi personali)  ·  file per il deploy
+2FAST4U — Modalità B  ·  tutti i file (aggiornati)
 
-DA DEPLOYARE (nel repo, insieme):
-  server.js ............ motore di gioco
-  dati_2fast4u.json .... fonte dati carte  ·  committa SEMPRE insieme a server.js
-  index.html ........... client di gioco (scelta mazzo prima della stanza + mano completa in gara)
-  deck-builder.html .... costruttore mazzo (comuni sempre visibili, gang solo se possedute)
+DA DEPLOYARE (nel repo, stessa origine, insieme):
+  home.html ............ HUB post-login: saldo gettoni, collezione, NEGOZIO con buste, RICICLO doppioni
+  index.html ........... gioco: scelta mazzo, mano completa in gara, OFFICINA nuova, banner a fine gara
+  deck-builder.html .... costruttore mazzo (comuni sempre, gang/piloti solo se posseduti)
+  server.js ............ motore  ·  committa SEMPRE insieme a dati_2fast4u.json
+  dati_2fast4u.json .... fonte dati carte
+
+NOVITA' DI QUESTA VERSIONE:
+  - OFFICINA rifatta:
+    * desktop: layout a 3 colonne a tutto schermo, niente scroll di pagina
+      (avversari coi soldi + classifica ultima gara | mercato | tua auto + mano + "in gara e' successo")
+    * telefono: schede Mercato / Avversari / La tua mano
+    * i pezzi gia' posseduti restano visibili ma disattivati, col motivo
+  - PRIMA OFFICINA a due giri: banco pieno (2 pezzi a testa) ma si compra 1 pezzo per giro, su 2 giri;
+    dalle officine successive 1 solo giro. (regola nel motore)
+  - RICICLO doppioni: la collezione conta le copie; nella home "Ricicla i doppioni" li converte in gettoni.
+  - BANNER a fine gara: spazio pubblicitario in cima al riepilogo (id ad-slot-results, pronto per AdSense/AdMob).
+
+TAGLI GETTONI (per i pagamenti reali, fase futura con Stripe):
+  0,99 -> 500 · 2,99 -> 3.000 · 4,99 -> 7.000 · 9,99 -> 16.000
+  (nel prototipo i gettoni li da' il pulsante admin)
 
 NOTE DEPLOY:
-  - server.js e dati_2fast4u.json vanno committati insieme (dipendenza runtime via require).
-  - deck-builder.html è già raggiungibile come /deck-builder.html (via express.static).
-    Per l'URL pulito /deck-builder aggiungi una rotta in index.js.
-  - Proteggi deck-builder.html con auth-guard.js come le altre pagine (l'autenticazione la gestisci tu).
-  - Nel builder c'è una barra "Prototipo" temporanea (Sblocca tutte / Azzera) per provare il gating
-    della collezione: sparirà quando ci sarà il negozio.
+  - server.js e dati_2fast4u.json vanno committati insieme (require).
+  - Proteggi home.html e deck-builder.html con auth-guard.js come le altre pagine.
+  - I link nella home puntano a index.html e deck-builder.html; con URL puliti usa /classica e /deck-builder.
+  - Barre "Prototipo" (home: +5.000 gettoni / Azzera ; builder: Sblocca tutte / Azzera): spariranno col negozio reale.
 
-MOCKUP (cartella mockup/ — NON deployare, solo per valutazione):
-  home-mockup.html ......... hub post-login (approvato)
-  deck-select-mockup.html .. schermata scelta mazzo (approvata, già integrata in index.html)
-  deck-builder-mockup.html . prima bozza del builder (superata dal builder reale)
+MOCKUP (cartella mockup/ — NON deployare):
+  home-mockup.html · deck-select-mockup.html · deck-builder-mockup.html · officina-mockup.html
 
-STATO ATTUALE:
-  Motore Modalità B completo (carte gang, ESP, regola "doppio valore solo pilota della gang",
-  mazzi e piloti personali). Deck-builder reale con gating della collezione. Collegamento
-  deck -> partita completo (scegli il mazzo prima di creare/entrare in stanza).
-
-PROSSIMI PASSI:
-  1) Negozio: pacchetti (gang x livello e misti x livello), acquisto con gettoni, apertura buste.
-  2) Home reale (dall'hub approvato): saldo, collezione, accesso a tutto.
-  3) Admin: assegnazione gettoni ai giocatori.
+PROSSIMI PASSI: backend Supabase (admin, sicurezza) + Stripe (pagamenti); meccanica bot; grafica finale.

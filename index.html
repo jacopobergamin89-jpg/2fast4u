@@ -43,6 +43,64 @@
 .ds-empty h3{margin:0;font-family:var(--disp);font-weight:600;font-size:18px}
 .ds-empty p{margin:0;color:var(--muted-2);font-size:13px;line-height:1.5}
 .ds-empty .cta{border:1px solid var(--amber);background:var(--amber);color:#1a1000;border-radius:9px;padding:11px 20px;font-weight:600;cursor:pointer;font-family:var(--disp)}
+
+#s-prep .ofx{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--asphalt-0);overflow:hidden;z-index:5}
+.ofx-bg{position:absolute;inset:0;background:var(--of-photo) center/cover;opacity:.14;z-index:0}
+.ofx-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,5,24,.6),rgba(11,5,24,.9))}
+.ofx-in{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction:column;padding:11px 15px 13px;gap:10px}
+.ofx-top{display:flex;align-items:center;gap:14px;flex:none}
+.ofx-title{font-family:var(--disp);font-weight:600;letter-spacing:1px;font-size:18px}
+.ofx-title small{color:var(--muted-2);font-weight:400;font-size:12px;margin-left:5px}
+.ofx-me{display:flex;align-items:center;gap:9px;margin-left:auto;background:var(--asphalt-1);border:1px solid var(--line);border-radius:11px;padding:6px 13px}
+.ofx-ava{width:30px;height:30px;border-radius:50%;background:var(--c);display:flex;align-items:center;justify-content:center;font-weight:600;color:#0b0518;font-size:12px;flex:none}
+.ofx-money{font-weight:700;font-size:17px;color:var(--amber)}
+.ofx-buys{font-size:12px;color:var(--muted)}.ofx-buys b{color:var(--ink);font-size:14px}
+.ofx-watch{font-size:13px;color:var(--muted)}
+.ofx-done{flex:none}
+.ofx-body{flex:1;min-height:0;display:grid;grid-template-columns:260px 1fr 320px;gap:11px}
+@media(max-width:900px){.ofx-body{grid-template-columns:1fr}}
+.ofx-col{min-height:0;display:flex;flex-direction:column;gap:11px}
+.ofx-card{background:linear-gradient(180deg,var(--asphalt-1),#0e0722);border:1px solid var(--line);border-radius:13px;padding:11px;display:flex;flex-direction:column;min-height:0}
+.ofx-f1{flex:1}.ofx-f2{flex:1.3}
+.ofx-mkt{flex:1}
+.ofx-h{font-family:var(--disp);font-weight:600;letter-spacing:.5px;font-size:12.5px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:7px;flex:none}
+.ofx-h .n{margin-left:auto;font-size:10px;color:var(--muted-2);font-weight:400}
+.ofx-scroll{overflow:auto;min-height:0;flex:1}
+.ofx-empty{color:var(--muted-2);font-size:12px;font-style:italic;padding:6px 2px}
+.ofx-rivals{display:flex;flex-direction:column;gap:7px}
+.ofx-riv{display:flex;align-items:center;gap:9px;padding:7px 9px;border:1px solid var(--line);border-radius:10px;background:var(--asphalt-0)}
+.ofx-riv.act{border-color:var(--amber)}
+.ofx-riv-id{min-width:0;flex:1}.ofx-riv-id .nm{font-weight:500;font-size:13px}
+.ofx-now{font-size:10px;color:var(--amber)}
+.ofx-riv-st{text-align:right}.ofx-riv-st .m{font-weight:600;font-size:13px;color:var(--amber)}.ofx-riv-st .p{font-size:10px;color:var(--muted-2)}
+.ofx-rank{display:flex;flex-direction:column;gap:4px}
+.ofx-rk{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:3px 5px;border-radius:7px}
+.ofx-rk .pos{width:19px;height:19px;border-radius:50%;background:var(--asphalt-3);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;flex:none}
+.ofx-rk.p1 .pos{background:var(--amber);color:#1a1000}
+.ofx-rk .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.ofx-rk .nm{font-weight:500}.ofx-rk .bust{margin-left:auto}
+.ofx-mkt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px;align-content:start}
+.ofx-events{display:flex;flex-direction:column;gap:5px}
+.ofx-ev{font-size:11.5px;color:var(--muted);line-height:1.35;padding:3px 7px;border-left:2px solid var(--line);border-radius:0 6px 6px 0;background:rgba(255,255,255,.02)}
+.ofx-ev.k-fine{border-left-color:var(--danger)}
+.ofx-ev.k-abilita,.ofx-ev.k-fortuna{border-left-color:var(--cyan)}
+.ofx-chips{display:flex;flex-wrap:wrap;gap:6px}
+.ofx-hand{display:flex;flex-direction:column;gap:6px}
+.ofx-bet-note{font-size:11px;color:var(--muted-2);font-style:italic;margin-top:6px}
+
+.o2-tabs{display:flex;gap:6px;padding:8px 10px 0;flex:none}
+.o2-tabs button{flex:1;padding:9px 4px;border-radius:10px 10px 0 0;border:1px solid var(--line);border-bottom:none;background:var(--asphalt-1);color:var(--muted);font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.3px}
+.o2-tabs button.on{background:var(--asphalt-2);color:var(--amber);border-color:var(--amber)}
+.o2-panes{flex:1;min-height:0;overflow:auto;padding:10px}
+.o2-pane{display:none}
+.o2-pane.on{display:block}
+.o2-rail.rivals{flex-direction:column;gap:7px}
+.o2-events-c{margin-top:12px}
+.o2-events-h{font-family:var(--disp);font-weight:600;font-size:12.5px;color:var(--muted);margin-bottom:7px}
+.o2-events{display:flex;flex-direction:column;gap:5px}
+.o2-ev{font-size:12px;color:var(--muted);line-height:1.35;padding:4px 8px;border-left:2px solid var(--line);border-radius:0 7px 7px 0;background:rgba(255,255,255,.02)}
+.o2-ev.k-fine{border-left-color:var(--danger)}
+.o2-ev.k-abilita,.o2-ev.k-fortuna{border-left-color:var(--cyan)}
 </style>
 <script>setTimeout(function(){document.documentElement.style.visibility="visible";},2500);</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -122,6 +180,10 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .hand{display:flex;flex-direction:column;gap:8px}
 
 .hcard.off{opacity:.55}
+.ad-banner{margin:2px 0 14px;border:1px dashed var(--line);border-radius:12px;background:linear-gradient(180deg,var(--asphalt-1),#0e131d);min-height:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;overflow:hidden}
+.ad-banner .ad-tag{position:absolute;top:6px;left:8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted-2);background:var(--asphalt-0);padding:1px 7px;border-radius:5px}
+.ad-banner .ad-ph{color:var(--muted);font-family:var(--disp);font-weight:500;letter-spacing:1px;font-size:14px}
+.ad-banner .ad-note{color:var(--muted-2);font-size:10px;opacity:.65}
 .hcard{border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:var(--asphalt-1);display:flex;align-items:center;gap:10px;border-left:4px solid var(--hc,var(--muted-2))}
 .hcard .hi{flex:1;min-width:0}.hcard .hn{font-size:13px;font-weight:500}.hcard .he{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
 .betpick{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
@@ -1346,59 +1408,86 @@ function defenseHTML(v){
 function playDefense(idx,mid){ socket.emit('defense:play',{handIdx:idx,mid}); flash('Difesa giocata!','mine'); }
 function prepMobileHTML(v){
   const you=v.you, youP=v.players.find(p=>p.id===you.id)||null;
-  // ---- cassa ----
-  const turnLine = v.isYourTurn ? ('Tocca a te · officina · round '+v.round) : ('Tocca a '+esc(v.activeName||''));
+  const turnLine = v.isYourTurn ? ('Tocca a te \u00b7 officina \u00b7 round '+v.round) : ('Tocca a '+esc(v.activeName||''));
   let wallet;
   if(v.isYourTurn&&v.me){ const n=Math.max(0,v.me.buysLeft); let toks=''; for(let i=0;i<n;i++)toks+='<i class="o2-tok"></i>'; if(!n)toks='<i class="o2-tok off"></i>';
     wallet=`<div class="o2-euro">${eur(v.me.money)}</div><div class="o2-buys"><span>acquisti</span>${toks}</div>`;
   } else { wallet='<div class="o2-watch">Stai guardando</div>'; }
   const cassa=`<div class="o2-cassa"><div class="o2-ava" style="--c:${you.colorH}">${ini(you.name)}</div><div><div class="o2-who">${esc(you.name)}</div><div class="o2-turn">${turnLine}</div></div><div class="o2-wallet">${wallet}</div></div>`;
-  // ---- bande condizionali (difesa / giro / boost / lock polizia) ----
+
   let bars=defenseHTML(v);
-  if(v.reshop) bars+='<div class="o2-bar giro">🔧 Officina riaperta'+(v.reshopBy?(' da <b>'+esc(v.reshopBy)+'</b>'):'')+' · giro extra — '+(v.reshopBy?(esc(v.reshopBy)+' sceglie per primo, '):'')+'ognuno ricompra una volta</div>';
-  if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('×'+m):('÷'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,qm=v.me.quotaMod||0,tg=[]; if(v.sprintFinish)tg.push('⚡ Gara breve: traguardo a '+v.sprintFinish); if(pm!==1)tg.push('🎁 Montepremi '+fmt(pm)); if(bm!==1)tg.push('🎲 Scommessa '+fmt(bm)); if(qm)tg.push('📊 Quota '+(qm>0?'+':'')+qm); if(v.me.discount)tg.push('💸 Sconto 50% prossimo acquisto'); if(v.reshopComing)tg.push('🔧 Giro extra dopo la prep'+(v.reshopBy?(' (riaperto da '+esc(v.reshopBy)+')'):'')); if(tg.length)bars+='<div class="o2-bar boost">'+tg.join(' · ')+'</div>'; }
+  if(v.reshop) bars+='<div class="o2-bar giro">\ud83d\udd27 Officina riaperta'+(v.reshopBy?(' da <b>'+esc(v.reshopBy)+'</b>'):'')+' \u00b7 giro extra \u2014 '+(v.reshopBy?(esc(v.reshopBy)+' sceglie per primo, '):'')+'ognuno ricompra una volta</div>';
+  if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('\u00d7'+m):('\u00f7'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,qm=v.me.quotaMod||0,tg=[]; if(v.sprintFinish)tg.push('\u26a1 Gara breve: traguardo a '+v.sprintFinish); if(pm!==1)tg.push('\ud83c\udf81 Montepremi '+fmt(pm)); if(bm!==1)tg.push('\ud83c\udfb2 Scommessa '+fmt(bm)); if(qm)tg.push('\ud83d\udcca Quota '+(qm>0?'+':'')+qm); if(v.me.discount)tg.push('\ud83d\udcb8 Sconto 50% prossimo acquisto'); if(v.reshopComing)tg.push('\ud83d\udd27 Giro extra dopo la prep'+(v.reshopBy?(' (riaperto da '+esc(v.reshopBy)+')'):'')); if(tg.length)bars+='<div class="o2-bar boost">'+tg.join(' \u00b7 ')+'</div>'; }
   bars+=policeBannerHTML(v);
   const barsHTML = bars?`<div class="o2-bars">${bars}</div>`:'';
-  // ---- classifica ultima gara (o ordine di partenza) + soldi ----
+
+  // classifica ultima gara (o ordine) + soldi
   const byId={}; v.players.forEach(p=>byId[p.id]=p);
   let stripP, stripLabel, showPos;
   if(v.lastRace&&v.lastRace.length){ stripP=v.lastRace.map(r=>byId[r.id]).filter(Boolean); stripLabel='Classifica ultima gara'; showPos=true; }
   else { stripP=(v.order||[]).map(id=>byId[id]).filter(Boolean); if(!stripP.length)stripP=v.players.slice(); stripLabel='Ordine di partenza'; showPos=false; }
   let pills='';
   stripP.forEach((p,i)=>{ const me=p.id===you.id;
-    pills+=`<div class="o2-pill${me?' you':''}" onclick="openInspect(${p.id})">${showPos?`<div class="o2-pos">${i+1}°</div>`:''}<div class="o2-pav" style="--c:${p.colorH}">${ini(p.name)}</div><div>${me?'<div class="o2-ptag">tu</div>':''}<div class="o2-pn">${esc(p.name)}</div><div class="o2-pm">${eur(p.money)}</div></div></div>`;
+    pills+=`<div class="o2-pill${me?' you':''}" onclick="openInspect(${p.id})">${showPos?`<div class="o2-pos">${i+1}\u00b0</div>`:''}<div class="o2-pav" style="--c:${p.colorH}">${ini(p.name)}</div><div>${me?'<div class="o2-ptag">tu</div>':''}<div class="o2-pn">${esc(p.name)}</div><div class="o2-pm">${eur(p.money)}</div></div></div>`;
   });
-  const rank=`<div class="o2-rank"><div class="o2-rank-h"><b>${stripLabel}</b><span>· soldi attuali</span></div><div class="o2-rail">${pills}</div></div>`;
-  // ---- mercato a carte scoperte ----
+  const rank=`<div class="o2-rank"><div class="o2-rank-h"><b>${stripLabel}</b><span>\u00b7 soldi attuali</span></div><div class="o2-rail rivals">${pills}</div></div>`;
+
+  // in gara \u00e8 successo
+  const logs=(v.gameLog||[]).slice(-8).reverse();
+  const evHTML = logs.length ? logs.map(e=>`<div class="o2-ev k-${esc(e.kind||'info')}">${esc(e.text)}</div>`).join('') : '<div class="o2-empty">Ancora niente da segnalare.</div>';
+  const eventsPane=`<div class="o2-events-c"><div class="o2-events-h">In gara \u00e8 successo</div><div class="o2-events">${evHTML}</div></div>`;
+
+  // mercato (senza la mano)
   const nM=(v.market||[]).length;
-  const mhSub = '· '+nM+' cart'+(nM===1?'a scoperta':'e scoperte')+(nM>6?' · scorri ↓':' · condiviso');
+  const mhSub = '\u00b7 '+nM+' cart'+(nM===1?'a scoperta':'e scoperte')+(nM>6?' \u00b7 scorri \u2193':' \u00b7 condiviso');
   const mktH=`<div class="o2-mkt-h"><span class="wr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6a4 4 0 0 1-5.2 3.8L7 18.6 5.4 17 14.2 8.2A4 4 0 0 1 18 3l-2.3 2.3 1 2.4 2.4 1L21 6Z"/></svg></span><b>Mercato</b><span>${mhSub}</span></div>`;
   let cards='';
-  (v.market||[]).forEach(c=>{ const mm=ofMeta(c.comp); const skip=c.skip?'<span class="o2-skip">salto ×2</span>':''; const reason=(!c.buyable&&c.reason)?`<span class="o2-reason">${esc(c.reason)}</span>`:''; const oc=c.buyable?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'';
-    cards+=`<div class="o2-slot"><button class="o2-card ${c.buyable?'buy':'lock'}" style="--c:${mm.c}" ${oc} ${c.buyable?'':'disabled'}><div class="o2-ctop"><div class="o2-cic">${ofIcon(c.comp)}</div><div><div class="o2-cn">${mm.full}</div><div class="o2-clv">L${c.lvl}</div></div></div><div class="o2-cval">valore ${c.val>=0?'+':'−'}${Math.abs(c.val)}</div>${skip}<div class="o2-cfoot"><span class="o2-price">${eur(c.price)}</span>${reason}</div></button></div>`;
+  (v.market||[]).forEach(c=>{ const mm=ofMeta(c.comp); const skip=c.skip?'<span class="o2-skip">salto \u00d72</span>':''; const reason=(!c.buyable&&c.reason)?`<span class="o2-reason">${esc(c.reason)}</span>`:''; const oc=c.buyable?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'';
+    cards+=`<div class="o2-slot"><button class="o2-card ${c.buyable?'buy':'lock'}" style="--c:${mm.c}" ${oc} ${c.buyable?'':'disabled'}><div class="o2-ctop"><div class="o2-cic">${ofIcon(c.comp)}</div><div><div class="o2-cn">${mm.full}</div><div class="o2-clv">L${c.lvl}</div></div></div><div class="o2-cval">valore ${c.val>=0?'+':'\u2212'}${Math.abs(c.val)}</div>${skip}<div class="o2-cfoot"><span class="o2-price">${eur(c.price)}</span>${reason}</div></button></div>`;
   });
   const few = nM>0 && nM<=2 ? ' few':'';
   const grid = nM ? `<div class="o2-grid${few}">${cards}</div>` : '<div class="o2-grid"><div class="o2-empty">Nessuna miglioria al mercato in questo round.</div></div>';
-  // dentro lo scroll: polizia da giocare (in cima) + griglia + carte pre-gara + nota scommessa
-  let belowMkt='';
+  const mktPane=`${mktH}<div class="o2-mkt">${policeSectionHTML(v,true)}${grid}</div>`;
+
+  // la tua mano + garage
+  let manoInner='';
   if(v.isYourTurn){
-    if(v.handAll&&v.handAll.length){ belowMkt+='<div class="o2-handh">La tua mano \u00b7 scarta quelle che non vuoi</div>'; v.handAll.forEach(c=>{
-      belowMkt+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="o2-pre-d">${handCardDesc(c)}</span></div><div class="o2-hand-act">${ofHandPlay(c,true)}<button class="o2-pre-go scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;}); }
-    if(v.canBet) belowMkt+='<div class="o2-note">Apri 👥 <b>Piloti</b> in alto per scommettere e vedere le puntate.</div>';
+    if(v.handAll&&v.handAll.length){ manoInner+='<div class="o2-handh">La tua mano \u00b7 scarta quelle che non vuoi</div>'; v.handAll.forEach(c=>{
+      manoInner+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="o2-pre-d">${handCardDesc(c)}</span></div><div class="o2-hand-act">${ofHandPlay(c,true)}<button class="o2-pre-go scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;}); }
+    if(v.canBet) manoInner+='<div class="o2-note">Apri \ud83d\udc65 <b>Piloti</b> in alto per scommettere e vedere le puntate.</div>';
   }
-  const mkt=`${mktH}<div class="o2-mkt">${policeSectionHTML(v,true)}${grid}${belowMkt}</div>`;
-  // ---- garage ----
+  if(!manoInner) manoInner='<div class="o2-empty">Nessuna carta da giocare o scartare.</div>';
   let garageChips;
   if(v.isYourTurn&&v.me) garageChips=ofOwnedChips(v.me.owned,'Ancora nessun pezzo');
   else if(youP) garageChips=ofOwnedChips(youP.car&&youP.car.owned,'Ancora nessun pezzo');
-  else garageChips='<span class="of-empty">—</span>';
-  const garage=`<div class="o2-garage"><div class="gl">Garage</div><div class="o2-gchips">${garageChips}</div></div>`;
-  // ---- pronto ----
+  else garageChips='<span class="of-empty">\u2014</span>';
+  const garage=`<div class="o2-garage"><div class="gl">La tua auto</div><div class="o2-gchips">${garageChips}</div></div>`;
+  const manoPane=`${garage}<div class="o2-mkt">${manoInner}</div>`;
+
+  // pronto
   let pronto;
-  if(v.isYourTurn){ pronto = v.mustPlayPolice ? '<button class="o2-pronto" disabled>🚨 Gioca prima la carta polizia</button>' : '<button class="o2-pronto" onclick="prepDone()">Pronto — passa il turno →</button>'; }
-  else { pronto = `<button class="o2-pronto" disabled>Tocca a ${esc(v.activeName||'…')}</button>`; }
+  if(v.isYourTurn){ pronto = v.mustPlayPolice ? '<button class="o2-pronto" disabled>\ud83d\udea8 Gioca prima la carta polizia</button>' : '<button class="o2-pronto" onclick="prepDone()">Pronto \u2014 passa il turno \u2192</button>'; }
+  else { pronto = `<button class="o2-pronto" disabled>Tocca a ${esc(v.activeName||'\u2026')}</button>`; }
   const prontoW=`<div class="o2-pronto-w">${pronto}</div>`;
-  return `<div class="o2-app has-photo" style="--of-photo:url('${officinaBg(v.round)}')"><div class="o2-hz"></div>${cassa}${barsHTML}${rank}${mkt}${garage}${prontoW}</div>`;
+
+  // schede
+  const tab=ui.ofTab||'mercato';
+  return `<div class="o2-app has-photo" style="--of-photo:url('${officinaBg(v.round)}')"><div class="o2-hz"></div>${cassa}${barsHTML}
+    <div class="o2-tabs">
+      <button data-t="mercato" class="${tab==='mercato'?'on':''}" onclick="ofTab('mercato')">Mercato</button>
+      <button data-t="rivali" class="${tab==='rivali'?'on':''}" onclick="ofTab('rivali')">Avversari</button>
+      <button data-t="mano" class="${tab==='mano'?'on':''}" onclick="ofTab('mano')">La tua mano</button>
+    </div>
+    <div class="o2-panes">
+      <div class="o2-pane${tab==='mercato'?' on':''}" data-t="mercato">${mktPane}</div>
+      <div class="o2-pane${tab==='rivali'?' on':''}" data-t="rivali">${rank}${eventsPane}</div>
+      <div class="o2-pane${tab==='mano'?' on':''}" data-t="mano">${manoPane}</div>
+    </div>
+    ${prontoW}</div>`;
+}
+function ofTab(w){ ui.ofTab=w;
+  document.querySelectorAll('.o2-tabs button').forEach(b=>b.classList.toggle('on', b.dataset.t===w));
+  document.querySelectorAll('.o2-pane').forEach(p=>p.classList.toggle('on', p.dataset.t===w));
 }
 const OFFICINA_BGS=['img/officina-1.jpg','img/officina-2.jpg'];   // aggiungi qui altre foto: officina-3.jpg, ...
 function officinaBg(round){ if(ui.ofBgRound!==round){ ui.ofBgRound=round; let pool=(OFFICINA_BGS.length>1&&ui.ofBg)?OFFICINA_BGS.filter(x=>x!==ui.ofBg):OFFICINA_BGS; ui.ofBg=pool[Math.floor(Math.random()*pool.length)]; } return ui.ofBg||OFFICINA_BGS[0]; }   // mai due volte di fila la stessa foto
@@ -1408,38 +1497,83 @@ function renderPrep(v){
     document.querySelector('.wrap').classList.add('locked'); document.body.classList.add('locked');
     document.getElementById('s-prep').innerHTML=prepMobileHTML(v); return;
   }
-  document.querySelector('.wrap').classList.add('locked'); document.body.classList.add('locked');   // officina desktop: pagina ferma, foto a tutto schermo (vedi CSS .wrap.locked #s-prep .of-bg)
+  document.querySelector('.wrap').classList.add('locked'); document.body.classList.add('locked');
   const others=v.players.filter(p=>p.id!==v.you.id);
-  const top=[],left=[],right=[];
-  others.forEach((p,i)=>{(i%3===0?top:i%3===1?left:right).push(p);});
-  const turn=v.isYourTurn?'<div class="of-turn you">Tocca a <b>te</b> \u2014 scegli i ricambi</div>':`<div class="of-turn">Tocca a <b>${esc(v.activeName||'')}</b></div>`;
+  const m=v.me;
+
+  // --- MERCATO (pezzi già posseduti restano visibili ma disabilitati) ---
   let bench='';
   if(v.isYourTurn){
     const nM=v.market?v.market.length:0;
-    bench+='<div class="of-cap">Mercato \u00b7 '+nM+' cart'+(nM===1?'a scoperta':'e scoperte')+' \u00b7 condiviso</div><div class="of-grid" style="max-height:46vh;overflow:auto">';
     if(nM){
-      v.market.forEach(c=>{const m=ofMeta(c.comp);const ok=c.buyable;
-        bench+=`<button class="of-part${ok?'':' off'}" ${ok?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'disabled'}><div class="of-part-h"><span class="of-badge" style="--c:${m.c}">${m.full}</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">valore ${c.val>=0?'+':''}${c.val}${c.skip?' \u00b7 salto \u00d72':''}${(!ok&&c.reason)?' \u00b7 '+esc(c.reason):''}</span><span class="of-price">${eur(c.price)}</span></button>`;
-        });
-    } else bench+='<div class="of-bench-spect" style="grid-column:1/-1">Nessuna miglioria al mercato in questo round.</div>';
-    bench+='</div>';
-  }else{
-    bench=`<div class="of-bench-spect">Il banco \u00e8 di <b>${esc(v.activeName||'')}</b><br>sta scegliendo i ricambi\u2026</div>`;
+      bench+='<div class="ofx-mkt-grid">';
+      v.market.forEach(c=>{const mm=ofMeta(c.comp);const ok=c.buyable;
+        bench+=`<button class="of-part${ok?'':' off'}" ${ok?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'disabled'}><div class="of-part-h"><span class="of-badge" style="--c:${mm.c}">${mm.full}</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">valore ${c.val>=0?'+':''}${c.val}${c.skip?' \u00b7 salto \u00d72':''}${(!ok&&c.reason)?' \u00b7 '+esc(c.reason):''}</span><span class="of-price">${eur(c.price)}</span></button>`;
+      });
+      bench+='</div>';
+    } else bench+='<div class="ofx-empty">Nessuna miglioria al mercato in questo round.</div>';
+  } else {
+    bench=`<div class="ofx-empty">Il banco \u00e8 di <b>${esc(v.activeName||'')}</b> \u2014 sta scegliendo i ricambi\u2026</div>`;
   }
-  let you;
-  if(v.isYourTurn){const m=v.me;
-    you=`<div class="of-ava" style="--c:${v.you.colorH}">${ini(v.you.name)}</div><div><div class="of-you-id">${esc(v.you.name)}<span class="of-you-tag">tocca a te</span></div><div class="of-you-stat"><span class="money">${eur(m.money)}</span> \u00b7 acquisti: <b>${m.buysLeft}</b></div></div><div class="of-you-bought">${ofOwnedChips(m.owned,'Qui compaiono i tuoi ricambi')}</div><button class="btn btn-primary of-done" ${v.mustPlayPolice?'disabled style="opacity:.5"':'onclick="prepDone()"'}>${v.mustPlayPolice?'🚨 Gioca la carta polizia':'Pronto \u2014 passa il turno \u2192'}</button>`;
-  }else{
-    you=`<div class="of-ava" style="--c:${v.you.colorH}">${ini(v.you.name)}</div><div><div class="of-you-id">${esc(v.you.name)}</div><div class="of-you-stat of-watch">Stai guardando \u2014 tocca a <b>${esc(v.activeName||'')}</b></div></div>`;
+
+  // --- MANO (gioca / scarta) ---
+  let hand='';
+  if(v.isYourTurn && v.handAll && v.handAll.length){
+    v.handAll.forEach(c=>{hand+=`<div class="of-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="of-pre-d">${handCardDesc(c)}</span></div><div class="of-hand-act">${ofHandPlay(c,false)}<button class="btn btn-line btn-sm btn-scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;});
   }
-  let extra='';
-  if(v.isYourTurn){
-    if(v.handAll&&v.handAll.length){extra+='<div class="of-extra"><div class="of-extra-h">La tua mano <span class="of-extra-sub">\u2014 scarta quelle che non vuoi</span></div>';
-      v.handAll.forEach(c=>{extra+=`<div class="of-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="of-pre-d">${handCardDesc(c)}</span></div><div class="of-hand-act">${ofHandPlay(c,false)}<button class="btn btn-line btn-sm btn-scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;});
-      extra+='</div>';}
-    if(v.canBet)extra+='<div class="of-bet-note">Apri \ud83d\udc65 <b>Piloti</b> in alto a destra per scommettere e vedere le puntate.</div>';
-  }
-  const html=`<div class="of-scene"><div class="of-bg has-photo" style="--of-photo:url('${officinaBg(v.round)}')"></div><div class="of-inner"><div class="of-head"><div class="of-title">Officina \u00b7 Ricambi <small>Round ${v.round}</small></div>${turn}</div>${policeBannerHTML(v)}${v.reshop?('<div class="of-giro">\ud83d\udd27 OFFICINA RIAPERTA'+(v.reshopBy?(' DA '+esc(v.reshopBy).toUpperCase()):' A TUTTI')+' \u00b7 GIRO EXTRA \u2014 '+(v.reshopBy?(esc(v.reshopBy)+' sceglie per primo, '):'')+'ognuno ricompra una volta</div>'):''}<div class="of-table"><div class="of-top">${top.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-left">${left.map(p=>ofSeat(p,v.activeId)).join('')}</div><div class="of-center"><div class="of-bench"><div class="of-felt"><div class="of-lots">${bench}</div></div></div></div><div class="of-right">${right.map(p=>ofSeat(p,v.activeId)).join('')}</div></div><div class="of-you">${you}</div><div class="of-others-h">Altri giocatori</div>${policeSectionHTML(v,false)}${extra}</div></div>`;
+
+  // --- AVVERSARI (coi soldi e i PO) ---
+  const rivals=others.map(p=>`<div class="ofx-riv${p.id===v.activeId?' act':''}"><div class="ofx-ava" style="--c:${p.colorH}">${ini(p.name)}</div><div class="ofx-riv-id"><div class="nm">${esc(p.name)}</div>${p.id===v.activeId?'<div class="ofx-now">sta scegliendo\u2026</div>':''}</div><div class="ofx-riv-st"><div class="m">${eur(p.money)}</div><div class="p">${p.po} PO</div></div></div>`).join('');
+
+  // --- CLASSIFICA ULTIMA GARA ---
+  let rank='';
+  if(v.lastRace && v.lastRace.length){
+    rank=v.lastRace.map(r=>`<div class="ofx-rk${r.pos===1?' p1':''}"><span class="pos">${r.pos}</span><span class="dot" style="background:${r.colorH}"></span><span class="nm">${esc(r.name)}${r.id===v.you.id?' (tu)':''}</span>${r.busted?'<span class="bust">\ud83d\udea8</span>':''}</div>`).join('');
+  } else rank='<div class="ofx-empty">La prima gara non \u00e8 ancora stata corsa.</div>';
+
+  // --- IN GARA \u00c8 SUCCESSO (log recenti) ---
+  let ev='';
+  const logs=(v.gameLog||[]).slice(-8).reverse();
+  if(logs.length) ev=logs.map(e=>`<div class="ofx-ev k-${esc(e.kind||'info')}">${esc(e.text)}</div>`).join('');
+  else ev='<div class="ofx-empty">Ancora niente da segnalare.</div>';
+
+  // --- TOPBAR ---
+  const meInfo=v.isYourTurn?`<span class="ofx-money">${eur(m.money)}</span><span class="ofx-buys">acquisti <b>${m.buysLeft}</b></span>`:`<span class="ofx-watch">tocca a <b>${esc(v.activeName||'')}</b></span>`;
+  const doneBtn=v.isYourTurn?`<button class="btn btn-primary ofx-done" ${v.mustPlayPolice?'disabled style="opacity:.5"':'onclick="prepDone()"'}>${v.mustPlayPolice?'\ud83d\udea8 Gioca la carta polizia':'Pronto \u2014 passa \u2192'}</button>`:'';
+
+  // --- LA TUA AUTO ---
+  const meP=v.players.find(p=>p.id===v.you.id)||{};
+  const myCar=v.isYourTurn?ofOwnedChips(m.owned,'Qui compaiono i tuoi ricambi'):ofOwnedChips(meP.car&&meP.car.owned,'\u2014');
+
+  const betNote=(v.isYourTurn&&v.canBet)?'<div class="ofx-bet-note">Apri \ud83d\udc65 <b>Piloti</b> in alto a destra per scommettere.</div>':'';
+
+  const html=`<div class="ofx">
+    <div class="ofx-bg" style="--of-photo:url('${officinaBg(v.round)}')"></div>
+    <div class="ofx-in">
+      <div class="ofx-top">
+        <div class="ofx-title">Officina <small>Round ${v.round}</small></div>
+        <div class="ofx-me"><span class="ofx-ava" style="--c:${v.you.colorH}">${ini(v.you.name)}</span>${meInfo}</div>
+        ${doneBtn}
+      </div>
+      ${policeBannerHTML(v)}
+      ${v.reshop?('<div class="of-giro">\ud83d\udd27 OFFICINA RIAPERTA'+(v.reshopBy?(' DA '+esc(v.reshopBy).toUpperCase()):' A TUTTI')+' \u00b7 GIRO EXTRA \u2014 ognuno ricompra una volta</div>'):''}
+      <div class="ofx-body">
+        <div class="ofx-col">
+          <div class="ofx-card ofx-f1"><div class="ofx-h">Avversari <span class="n">${others.length}</span></div><div class="ofx-scroll ofx-rivals">${rivals||'<div class="ofx-empty">\u2014</div>'}</div></div>
+          <div class="ofx-card ofx-f1"><div class="ofx-h">Classifica ultima gara</div><div class="ofx-scroll ofx-rank">${rank}</div></div>
+        </div>
+        <div class="ofx-col ofx-col-mid">
+          <div class="ofx-card ofx-mkt"><div class="ofx-h">Mercato ricambi <span class="n">condiviso \u00b7 solo acquistabili attivi</span></div><div class="ofx-scroll ofx-mkt-body">${bench}</div></div>
+        </div>
+        <div class="ofx-col">
+          <div class="ofx-card"><div class="ofx-h">La tua auto</div><div class="ofx-chips">${myCar}</div></div>
+          <div class="ofx-card ofx-f2"><div class="ofx-h">La tua mano</div><div class="ofx-scroll ofx-hand">${hand||'<div class="ofx-empty">Nessuna carta da giocare o scartare.</div>'}${betNote}</div></div>
+          <div class="ofx-card ofx-f1"><div class="ofx-h">In gara \u00e8 successo</div><div class="ofx-scroll ofx-events">${ev}</div></div>
+        </div>
+      </div>
+      ${policeSectionHTML(v,false)}
+    </div>
+  </div>`;
   document.getElementById('s-prep').innerHTML=defenseHTML(v)+html;
 }
 
@@ -1841,6 +1975,7 @@ function voteCardHTML(v){
 function renderResults(v){
   show('s-results');topMeta('Round '+v.round);
   let h=`<div class="eyebrow">Traguardo · gara liv. ${v.raceLevel}</div><h1 class="title">Risultati gara</h1>`;
+  h+=`<div class="ad-banner" id="ad-slot-results"><span class="ad-tag">Pubblicità</span><div class="ad-ph">Spazio banner</div><div class="ad-note">qui va la pubblicità di fine gara</div></div>`;
   v.results.forEach(r=>{
     if(r.busted){
       const reason=r.bustReason==='blocco'?'fermato al blocco':'beccato dalla polizia';

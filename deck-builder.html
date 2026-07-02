@@ -167,9 +167,9 @@ function fnDifesa(c){ return {ingara:'In gara',pregara:'Pre-gara',both:'Universa
 function fnPolizia(c){ return c.kind==='blocco'?'Blocco':'Inseguimento'; }
 
 const COLL_KEY='2f4u_collection_v1';
-function loadColl(){ try{ const c=JSON.parse(localStorage.getItem(COLL_KEY)); return (c&&Array.isArray(c.owned))?c:{owned:[]}; }catch(e){ return {owned:[]}; } }
+function loadColl(){ try{ const c=JSON.parse(localStorage.getItem(COLL_KEY)); if(c&&c.owned&&typeof c.owned==='object'&&!Array.isArray(c.owned)) return c; if(c&&Array.isArray(c.owned)){ const o={}; c.owned.forEach(n=>o[n]=1); return {owned:o}; } }catch(e){} return {owned:{}}; }
 function saveColl(c){ try{ localStorage.setItem(COLL_KEY, JSON.stringify(c)); }catch(e){} }
-function ownsCard(name){ return loadColl().owned.indexOf(name)>=0; }
+function ownsCard(name){ return (loadColl().owned[name]||0)>0; }
 let RAW=null;
 function organize(raw){
   const cats=[]; const LV=['1','2','3','4'];
@@ -239,7 +239,7 @@ function cardHTML(c){
     </div></div></div>`;
 }
 function renderPiloti(){
-  const byGang={}; DATA.piloti.forEach(p=>{ (byGang[p.g]=byGang[p.g]||[]).push(p); });
+  const byGang={}; DATA.piloti.forEach(p=>{ if(p.liv!=='L1' && !ownsCard(p.n)) return; (byGang[p.g]=byGang[p.g]||[]).push(p); });   // piloti L2-L4 solo se sbloccati
   let h='';
   for(const g in byGang){
     h+=`<div class="lvl open"><div class="lvl-h" onclick="tgl(this.parentNode)"><span class="chev">▶</span><span class="lvl-t">${g}</span><span class="lvl-c">${byGang[g].length} piloti</span></div><div class="lvl-body"><div class="plist">`+
@@ -289,8 +289,8 @@ function load(){ try{ const s=localStorage.getItem(STORE); if(!s)return; const o
 function esc(s){ return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
 function js(s){ return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
 let _tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),1600); }
-function unlockAllGangs(){ if(!RAW)return; const owned=[]; for(const lv of ['1','2','3','4']) for(const c of (RAW.carte[lv]||[])) if(c.gang) owned.push(c.nome); saveColl({owned}); DATA=organize(RAW); refresh(); toast('Tutte le espansioni sbloccate (prova)'); }
-function clearColl(){ saveColl({owned:[]}); if(RAW) DATA=organize(RAW); refresh(); toast('Collezione azzerata'); }
+function unlockAllGangs(){ if(!RAW)return; const owned={}; for(const lv of ['1','2','3','4']) for(const c of (RAW.carte[lv]||[])) if(c.gang) owned[c.nome]=1; for(const p of (RAW.piloti||[])) if(p.liv!=='L1') owned[p.nome]=1; saveColl({owned}); DATA=organize(RAW); refresh(); toast('Tutte le espansioni sbloccate (prova)'); }
+function clearColl(){ saveColl({owned:{}}); if(RAW) DATA=organize(RAW); refresh(); toast('Collezione azzerata'); }
 function refresh(){ renderTabs(); renderContent(); renderCaps(); renderFavs(); const cc=document.getElementById('collcount'); if(cc) cc.textContent=loadColl().owned.length; }
 document.getElementById('dname').addEventListener('input',e=>{ D().name=e.target.value; });
 

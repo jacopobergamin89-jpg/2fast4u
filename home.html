@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>2FAST4U · Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0518;--bg2:#140A28;--bg3:#1D1140;--line:#2C1E52;--amber:#FFC91E;--cyan:#2BA8E6;--purple:#9B3BE0;--ink:#F4EEFF;--muted:#8E7FB8;--good:#3ddc84;--danger:#ff5b6b;--disp:'Oswald',system-ui,sans-serif;}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--disp);font-weight:300}
+body{background:radial-gradient(130% 90% at 50% -20%,#241150 0%,#0B0518 55%)}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.wrap{max-width:1500px;margin:0 auto;padding-bottom:60px}
+.top{position:sticky;top:0;z-index:30;background:rgba(11,5,24,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;gap:16px}
+.logo{font-weight:700;letter-spacing:2px;font-size:21px}.logo b{color:var(--amber)}.logo span{color:var(--cyan)}
+.coins{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:22px;padding:6px 14px 6px 10px}
+.coins .ic{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe,var(--amber));box-shadow:0 0 0 2px #b8890f inset;display:inline-block;flex:none}
+.coins b{font-weight:600;font-size:15px;letter-spacing:.5px}.coins small{color:var(--muted);font-size:11px}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;flex:none}
+.proto{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--muted);background:#1a0f3a;border-bottom:1px solid var(--line);padding:8px 20px}
+.proto button{font:inherit;font-size:11px;border:1px solid var(--line);background:var(--bg3);color:var(--ink);border-radius:7px;padding:4px 10px;cursor:pointer}
+.proto .note{opacity:.7;font-style:italic}
+
+.hero{margin:20px;border-radius:20px;overflow:hidden;position:relative;border:1px solid var(--line);min-height:210px;display:flex;align-items:flex-end;background:linear-gradient(120deg,#2a1560 0%,#0d0722 60%),radial-gradient(80% 120% at 85% 20%,#9B3BE055,transparent)}
+.hero-in{position:relative;padding:26px;z-index:2}
+.hero-k{font-size:12px;letter-spacing:3px;color:var(--amber);text-transform:uppercase}
+.hero-h{font-weight:700;font-size:32px;line-height:1.05;margin:6px 0 4px}
+.hero-s{color:var(--muted);font-size:14px;margin-bottom:18px;max-width:440px}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+.b-primary{padding:13px 26px;border-radius:11px;border:none;background:var(--amber);color:#1a1000;font-weight:600;letter-spacing:.5px;font-size:15px}
+.b-ghost{padding:13px 20px;border-radius:11px;border:1px solid var(--line);background:rgba(11,5,24,.5);color:var(--ink);font-weight:500;letter-spacing:.5px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0 20px}
+@media(max-width:820px){.grid2{grid-template-columns:1fr}.hero-h{font-size:26px}}
+.card{border:1px solid var(--line);border-radius:16px;background:var(--bg2);padding:18px;display:flex;flex-direction:column}
+.card-h{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.card-h .dot{width:9px;height:9px;border-radius:50%}
+.card-t{font-weight:600;font-size:18px;letter-spacing:.5px}
+.card-s{color:var(--muted);font-size:13px;margin-bottom:14px}
+.deck-act{display:flex;gap:8px;margin-top:auto}
+.a-line{flex:1;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--bg3);color:var(--ink);font-weight:500;font-size:13.5px;text-align:center;text-decoration:none}
+.a-cyan{flex:1;padding:11px;border-radius:10px;border:1px solid var(--cyan);background:var(--cyan);color:#05131f;font-weight:600;font-size:13.5px;text-align:center;text-decoration:none}
+.coll{display:flex;flex-direction:column;gap:8px}
+.coll-r{display:flex;align-items:center;gap:9px;font-size:12.5px}
+.coll-r .cn{width:96px;color:var(--ink);font-weight:500}
+.coll-r .cb{flex:1;height:6px;border-radius:3px;background:var(--bg3);overflow:hidden}
+.coll-r .cb>i{display:block;height:100%}
+.coll-r .cv{width:52px;text-align:right;color:var(--muted);font-size:11.5px}
+.dupes{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.dupes-t{font-size:12.5px;color:var(--muted)}.dupes-t b{color:var(--ink);font-weight:600}
+.dupes-b{margin-left:auto;padding:8px 14px;border-radius:9px;border:1px solid var(--amber);background:transparent;color:var(--amber);font-weight:600;font-size:12.5px;cursor:pointer}
+.dupes-b:disabled{opacity:.4;cursor:default;border-color:var(--line);color:var(--muted)}
+
+.shop{margin:22px 20px 0}
+.shop-h{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.shop-h .t{font-weight:600;font-size:20px;letter-spacing:.5px}
+.shop-sub{color:var(--muted);font-size:12.5px;margin-bottom:14px}
+.shop-group{font-weight:500;letter-spacing:.5px;color:var(--muted);font-size:12px;text-transform:uppercase;margin:16px 0 10px}
+.packs{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:13px}
+.pack{border:1px solid var(--line);border-radius:15px;overflow:hidden;background:var(--bg2);display:flex;flex-direction:column;transition:.15s}
+.pack:hover{transform:translateY(-3px);border-color:var(--pc)}
+.pack-art{height:104px;position:relative;display:flex;align-items:center;justify-content:center;background:radial-gradient(70% 90% at 50% 25%,var(--pc) 0%,transparent 70%),var(--bg3)}
+.pack-art .badge{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:1px;color:#fff;text-shadow:0 2px 8px #000;padding:5px 11px;border:1.5px solid rgba(255,255,255,.5);border-radius:8px;background:rgba(0,0,0,.25);text-align:center}
+.pack-b{padding:11px 12px 13px}
+.pack-n{font-weight:600;font-size:14px}
+.pack-d{color:var(--muted);font-size:11px;margin:2px 0 10px;min-height:28px;line-height:1.3}
+.pack-buy{width:100%;padding:10px;border-radius:9px;border:none;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--pc);color:#0b0518}
+.pack-buy:disabled{opacity:.4;cursor:not-allowed}
+.pack-buy .ci{width:14px;height:14px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 1.5px #b8890f inset}
+
+/* overlay apertura busta */
+.ov{position:fixed;inset:0;z-index:60;background:rgba(6,3,15,.86);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
+.ov.on{display:flex}
+.ov-in{width:100%;max-width:640px;background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:22px;text-align:center}
+.ov-h{font-weight:600;font-size:20px;letter-spacing:.5px;margin-bottom:3px}
+.ov-s{color:var(--muted);font-size:12.5px;margin-bottom:16px}
+.reveal{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:18px}
+@media(max-width:560px){.reveal{grid-template-columns:repeat(2,1fr)}}
+.rc{border:1px solid var(--line);border-radius:11px;padding:11px 8px;background:var(--bg);display:flex;flex-direction:column;gap:5px;position:relative;min-height:118px;justify-content:center;--rcol:var(--muted)}
+.rc.new{border-color:var(--rcol);box-shadow:0 0 0 1px var(--rcol),0 8px 22px -12px var(--rcol)}
+.rc .type{font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--rcol);font-weight:600}
+.rc .nm{font-weight:600;font-size:12.5px;line-height:1.2}
+.rc .lv{font-size:10px;color:var(--muted)}
+.rc .tag{position:absolute;top:6px;right:7px;font-size:8px;letter-spacing:.5px;text-transform:uppercase;padding:1px 6px;border-radius:10px}
+.rc.new .tag{background:var(--good);color:#04210f}
+.rc.dup .tag{background:var(--bg3);color:var(--muted)}
+.ov-close{padding:12px 30px;border-radius:10px;border:1px solid var(--amber);background:var(--amber);color:#1a1000;font-weight:600;letter-spacing:.5px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 18px;font-size:13px;opacity:0;transition:.2s;z-index:70;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.mock-tag{position:fixed;bottom:12px;left:12px;z-index:50;background:var(--purple);color:#fff;font-size:11px;letter-spacing:.5px;padding:5px 11px;border-radius:20px}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="logo">2<b>FAST</b>4<span>U</span></div>
+    <div class="coins"><span class="ic"></span><div><b id="coins">0</b> <small>gettoni</small></div></div>
+    <div class="avatar">J</div>
+  </div>
+  <div class="proto">Prototipo (l'admin darà i crediti) · <button onclick="grantCoins(5000)">+5.000 gettoni</button> <button onclick="resetAll()">Azzera tutto</button> <span class="note">valuta e collezione sono salvate solo su questo dispositivo</span></div>
+
+  <div class="hero"><div class="hero-in">
+    <div class="hero-k">Modalità B · corse clandestine</div>
+    <div class="hero-h">Pronto a correre?</div>
+    <div class="hero-s">Scegli il tuo mazzo e sfida gli altri in tempo reale, oppure allenati contro i bot.</div>
+    <div class="hero-btns"><a class="b-primary" href="index.html">Gioca</a><a class="b-ghost" href="deck-builder.html">Organizza il mazzo</a></div>
+  </div></div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-h"><span class="dot" style="background:var(--cyan)"></span><span class="card-t">Il mio deck</span></div>
+      <div class="card-s">Sistema i mazzi e sfoglia le carte che possiedi — non serve una gara.</div>
+      <div class="deck-act"><a class="a-cyan" href="deck-builder.html">Apri il deck-builder</a></div>
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="dot" style="background:var(--purple)"></span><span class="card-t">La mia collezione</span></div>
+      <div class="card-s">Quante espansioni possiedi per ogni gang (piloti L2–L4 inclusi).</div>
+      <div class="coll" id="coll"></div>
+    </div>
+  </div>
+
+  <div class="shop">
+    <div class="shop-h"><span class="dot" style="width:9px;height:9px;border-radius:50%;background:var(--amber)"></span><span class="t">Negozio</span></div>
+    <div class="shop-sub">Buste da 5 carte. Rarità: L2 più comune, L4 più raro; le carte ESP e soprattutto i piloti sono i più difficili da trovare.</div>
+    <div class="shop-group">Pacchetti gang (dalla L2 alla L4)</div>
+    <div class="packs" id="packs-gang"></div>
+    <div class="shop-group">Pacchetti misti (tutte le gang, per livello)</div>
+    <div class="packs" id="packs-mix"></div>
+  </div>
+</div>
+
+<div class="ov" id="ov"><div class="ov-in">
+  <div class="ov-h" id="ov-h">Busta aperta</div>
+  <div class="ov-s" id="ov-s"></div>
+  <div class="reveal" id="reveal"></div>
+  <button class="ov-close" onclick="closeOverlay()">Continua</button>
+</div></div>
+<div class="toast" id="toast"></div>
+<div class="mock-tag">Prototipo</div>
+
+<script>
+/* ---------- parametri ---------- */
+const GANGS=['Lupara Boys','Ombre Nere','Krudo','Lowlifes','I Diavoli'];
+const GANG_COL={'Lupara Boys':'#e0563b','Ombre Nere':'#64748b','Krudo':'#8b5cf6','Lowlifes':'#3ba0e0','I Diavoli':'#ef4444'};
+const PRICE_GANG={'Lupara Boys':1000,'Ombre Nere':1500,'Krudo':2000,'Lowlifes':5000,'I Diavoli':6500};
+const PRICE_MIX={2:2000,3:3000,4:4500};
+const W_TYPE={normale:6,esp:2,pilota:1}, W_LV={2:3,3:2,4:1}, W_GANG={'Lupara Boys':5,'Ombre Nere':4,'Krudo':3,'Lowlifes':2,'I Diavoli':1};
+const START_COINS=4500, PACK_SIZE=5;
+const TYPE_LAB={normale:'Carta',esp:'ESP',pilota:'Pilota'};
+
+/* ---------- storage (condiviso col deck-builder) ---------- */
+const WKEY='2f4u_wallet_v1', CKEY='2f4u_collection_v1';
+function loadWallet(){ try{ const w=JSON.parse(localStorage.getItem(WKEY)); if(w&&typeof w.coins==='number') return w; }catch(e){} const w={coins:START_COINS}; saveWallet(w); return w; }
+function saveWallet(w){ try{ localStorage.setItem(WKEY,JSON.stringify(w)); }catch(e){} }
+function loadColl(){ try{ const c=JSON.parse(localStorage.getItem(CKEY)); if(c&&c.owned&&typeof c.owned==='object'&&!Array.isArray(c.owned)) return c; if(c&&Array.isArray(c.owned)){ const o={}; c.owned.forEach(n=>o[n]=1); return {owned:o}; } }catch(e){} return {owned:{}}; }
+function saveColl(c){ try{ localStorage.setItem(CKEY,JSON.stringify(c)); }catch(e){} }
+function ownsCard(name){ return (loadColl().owned[name]||0)>0; }
+function addOwned(names){ const c=loadColl(); const fresh=[]; names.forEach(n=>{ if(!(c.owned[n]>0)) fresh.push(n); c.owned[n]=(c.owned[n]||0)+1; }); saveColl(c); return fresh; }
+const RECYCLE={normale:{2:25,3:50,4:100}, esp:{3:150,4:250}, pilota:{2:250,3:400,4:600}};
+function recycleValue(t,lv){ return (RECYCLE[t]&&RECYCLE[t][lv])||25; }
+function dupeInfo(){ const owned=loadColl().owned; let count=0, value=0; for(const e of ELEMS){ const q=owned[e.n]||0; if(q>1){ const extra=q-1; count+=extra; value+=extra*recycleValue(e.t,e.lv); } } return {count,value}; }
+function recycleDupes(){ const c=loadColl(); const owned=c.owned; let gained=0; for(const e of ELEMS){ const q=owned[e.n]||0; if(q>1){ gained+=(q-1)*recycleValue(e.t,e.lv); owned[e.n]=1; } } if(gained<=0){ toast('Nessun doppione da riciclare'); return; } saveColl(c); const w=loadWallet(); w.coins+=gained; saveWallet(w); render(); toast('Riciclati doppioni: +'+gained.toLocaleString('it-IT')+' gettoni'); }
+
+/* ---------- elementi (dal JSON) ---------- */
+let ELEMS=[];  // {n,g,t,lv}
+function buildElems(raw){ const out=[];
+  for(const lv of ['2','3','4']) for(const c of (raw.carte[lv]||[])){ if(!c.gang) continue; out.push({n:c.nome,g:c.gang,t:c.cat==='esp'?'esp':'normale',lv:+lv}); }
+  for(const p of (raw.piloti||[])){ if(['L2','L3','L4'].includes(p.liv)) out.push({n:p.nome,g:p.gang,t:'pilota',lv:+p.liv[1]}); }
+  return out;
+}
+function poolGang(g){ return ELEMS.filter(e=>e.g===g).map(e=>({e,w:W_TYPE[e.t]*W_LV[e.lv]})); }
+function poolMix(lv){ return ELEMS.filter(e=>e.lv===lv).map(e=>({e,w:W_TYPE[e.t]*W_LV[e.lv]*W_GANG[e.g]})); }
+
+/* ---------- apertura busta ---------- */
+function drawFrom(weighted, k){
+  const avail=weighted.map(o=>({...o})); const out=[];
+  for(let i=0;i<Math.min(k,avail.length);i++){
+    let tot=avail.reduce((s,o)=>s+o.w,0), r=Math.random()*tot, idx=0;
+    for(;idx<avail.length;idx++){ r-=avail[idx].w; if(r<=0) break; }
+    idx=Math.min(idx,avail.length-1);
+    out.push(avail[idx].e); avail.splice(idx,1);
+  }
+  return out;
+}
+function openPack(kind,key){
+  const price = kind==='gang'?PRICE_GANG[key]:PRICE_MIX[key];
+  const w=loadWallet();
+  if(w.coins<price){ toast('Gettoni insufficienti'); return; }
+  const weighted = kind==='gang'?poolGang(key):poolMix(+key);
+  const cards = drawFrom(weighted, PACK_SIZE);
+  w.coins-=price; saveWallet(w);
+  const freshSet=new Set(addOwned(cards.map(c=>c.n)));
+  showReveal(kind,key,cards,freshSet);
+  render();
+}
+
+/* ---------- render ---------- */
+function render(){
+  document.getElementById('coins').textContent = loadWallet().coins.toLocaleString('it-IT');
+  // collezione per gang
+  const owned=loadColl().owned;
+  const coll=document.getElementById('coll');
+  let html = GANGS.map(g=>{
+    const all=ELEMS.filter(e=>e.g===g), have=all.filter(e=>(owned[e.n]||0)>0).length;
+    const pct=all.length?Math.round(have/all.length*100):0;
+    return `<div class="coll-r"><span class="cn">${g}</span><div class="cb"><i style="width:${pct}%;background:${GANG_COL[g]}"></i></div><span class="cv">${have}/${all.length}</span></div>`;
+  }).join('');
+  const dup=dupeInfo();
+  html += `<div class="dupes"><div class="dupes-t">Doppioni: <b>${dup.count}</b>${dup.count?` · valgono <b>${dup.value.toLocaleString('it-IT')}</b> gettoni`:''}</div><button class="dupes-b" ${dup.count?'':'disabled'} onclick="recycleDupes()">Ricicla i doppioni</button></div>`;
+  coll.innerHTML = html;
+  // pacchetti
+  const coins=loadWallet().coins;
+  document.getElementById('packs-gang').innerHTML = GANGS.map(g=>packHTML('gang',g,PRICE_GANG[g],GANG_COL[g],'Gang '+g,'Carte, ESP e piloti '+g+', dai livelli 2 a 4.',coins)).join('');
+  document.getElementById('packs-mix').innerHTML = [2,3,4].map(lv=>packHTML('mix',lv,PRICE_MIX[lv],'#FFC91E','Misto L'+lv,'Carte di tutte le gang, livello '+lv+'. Le gang rare escono meno spesso.',coins)).join('');
+}
+function packHTML(kind,key,price,col,title,desc,coins){
+  const can=coins>=price;
+  return `<div class="pack" style="--pc:${col}">
+    <div class="pack-art"><span class="badge">${esc(title)}</span></div>
+    <div class="pack-b"><div class="pack-n">${esc(title)}</div><div class="pack-d">${esc(desc)}</div>
+      <button class="pack-buy" ${can?'':'disabled'} onclick="openPack('${kind}','${key}')"><span class="ci"></span>${price.toLocaleString('it-IT')}</button></div>
+  </div>`;
+}
+function showReveal(kind,key,cards,freshSet){
+  document.getElementById('ov-h').textContent = kind==='gang'?('Busta '+key):('Busta Misto L'+key);
+  const nuovi=cards.filter(c=>freshSet.has(c.n)).length;
+  document.getElementById('ov-s').textContent = nuovi+' '+(nuovi===1?'carta nuova':'carte nuove')+' su '+cards.length+(nuovi<cards.length?' · i doppioni li potrai riciclare':'');
+  document.getElementById('reveal').innerHTML = cards.map(c=>{
+    const isNew=freshSet.has(c.n), col=GANG_COL[c.g];
+    const tag=isNew?'nuova':('doppione +'+recycleValue(c.t,c.lv));
+    return `<div class="rc ${isNew?'new':'dup'}" style="--rcol:${col}"><span class="tag">${tag}</span><span class="type">${TYPE_LAB[c.t]}</span><span class="nm">${esc(c.n)}</span><span class="lv">${esc(c.g)} · L${c.lv}</span></div>`;
+  }).join('');
+  document.getElementById('ov').classList.add('on');
+}
+function closeOverlay(){ document.getElementById('ov').classList.remove('on'); }
+
+/* ---------- prototipo / admin ---------- */
+function grantCoins(n){ const w=loadWallet(); w.coins+=n; saveWallet(w); render(); toast('+'+n.toLocaleString('it-IT')+' gettoni'); }
+function resetAll(){ if(!confirm('Azzerare gettoni e collezione su questo dispositivo?'))return; saveWallet({coins:START_COINS}); saveColl({owned:[]}); render(); toast('Azzerato'); }
+
+/* ---------- util ---------- */
+function esc(s){ return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+let _tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),1600); }
+
+/* ---------- avvio ---------- */
+fetch('dati_2fast4u.json').then(r=>{ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
+  .then(raw=>{ ELEMS=buildElems(raw); render(); })
+  .catch(e=>{ toast('Impossibile caricare le carte ('+e.message+')'); });
+</script>
+</body></html>
