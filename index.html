@@ -1493,7 +1493,7 @@ function ofTab(w){ ui.ofTab=w;
   document.querySelectorAll('.o2-tabs button').forEach(b=>b.classList.toggle('on', b.dataset.t===w));
   document.querySelectorAll('.o2-pane').forEach(p=>p.classList.toggle('on', p.dataset.t===w));
 }
-const OFFICINA_BGS=['img/officina-1.jpg','img/officina-2.jpg'];   // aggiungi qui altre foto: officina-3.jpg, ...
+const OFFICINA_BGS=['img/officina-1.jpg','img/officina-2.jpg','img/bg-officina.jpg'];   // le 3 foto officina a rotazione
 function officinaBg(round){ if(ui.ofBgRound!==round){ ui.ofBgRound=round; let pool=(OFFICINA_BGS.length>1&&ui.ofBg)?OFFICINA_BGS.filter(x=>x!==ui.ofBg):OFFICINA_BGS; ui.ofBg=pool[Math.floor(Math.random()*pool.length)]; } return ui.ofBg||OFFICINA_BGS[0]; }   // mai due volte di fila la stessa foto
 function renderPrep(v){
   show('s-prep');topMeta('Round '+v.round);
