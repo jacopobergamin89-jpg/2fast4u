@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>2FAST4U · Negozio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-guard.js"></script>
+<script src="store.js"></script>
+<style>
+:root{--bg:#0B0518;--bg2:#140A28;--bg3:#1D1140;--line:#2C1E52;--amber:#FFC91E;--cyan:#2BA8E6;--purple:#9B3BE0;--ink:#F4EEFF;--muted:#B9A9E6;--good:#3ddc84;--danger:#ff5b6b;}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100vh;color:var(--ink);font-family:'Oswald',system-ui,sans-serif;font-weight:300}
+body{background:linear-gradient(180deg,rgba(11,5,24,.72) 0%,rgba(11,5,24,.82) 45%,rgba(11,5,24,.94) 100%),url('/img/bg-negozio.jpg') center/cover fixed no-repeat,#0B0518}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 70px}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;padding:14px 20px;margin:0 -20px 8px;background:linear-gradient(180deg,rgba(11,5,24,.92),rgba(11,5,24,.55));backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.back{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-size:14px;font-weight:500;color:var(--ink);background:var(--bg3);border:1px solid var(--line);border-radius:20px;padding:8px 15px}
+.back:hover{background:#2a1b4d}
+.logo{font-weight:700;letter-spacing:2px;font-size:21px}.logo b{color:var(--amber)}.logo span{color:var(--cyan)}
+.coins{margin-left:auto;display:flex;align-items:center;gap:8px;background:rgba(20,10,40,.75);border:1px solid var(--line);border-radius:22px;padding:6px 14px 6px 10px}
+.coins .ic{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe,var(--amber));box-shadow:0 0 0 2px #b8890f inset;flex:none}
+.coins b{font-weight:600;font-size:15px}.coins small{color:var(--muted);font-size:11px}
+.head{padding:26px 4px 4px}
+.head h1{font-weight:700;letter-spacing:1px;font-size:34px;margin:0;text-shadow:0 2px 18px #000}
+.head p{color:var(--muted);font-size:14px;margin:8px 0 0;max-width:640px;line-height:1.5}
+.group{font-weight:500;letter-spacing:1px;color:#d9ccff;font-size:13px;text-transform:uppercase;margin:26px 4px 12px;text-shadow:0 1px 8px #000}
+.packs{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.pack{background:rgba(20,10,40,.82);border:1px solid var(--line);border-radius:14px;overflow:hidden;backdrop-filter:blur(3px);transition:transform .12s,border-color .12s}
+.pack:hover{transform:translateY(-3px);border-color:var(--pc)}
+.pack-art{height:104px;position:relative;background:radial-gradient(120% 120% at 30% 0%,color-mix(in srgb,var(--pc) 70%,transparent) 0%,transparent 60%),linear-gradient(135deg,color-mix(in srgb,var(--pc) 45%,#140A28),#140A28)}
+.pack-art .badge{position:absolute;left:12px;bottom:10px;font-weight:600;font-size:13px;letter-spacing:.5px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:4px 9px}
+.pack-b{padding:13px 14px 15px}
+.pack-n{font-weight:600;font-size:16px;letter-spacing:.3px}
+.pack-d{color:var(--muted);font-size:12px;margin:5px 0 12px;line-height:1.4;min-height:32px}
+.pack-buy{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14px;color:#180a05;background:linear-gradient(135deg,#FFD86A,var(--amber));border:0;border-radius:9px;padding:8px 14px}
+.pack-buy:disabled{opacity:.45;cursor:default;filter:grayscale(.35)}
+.pack-buy .ci{width:15px;height:15px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#e0a400)}
+.ov{position:fixed;inset:0;z-index:60;background:rgba(6,3,15,.86);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
+.ov.on{display:flex}
+.ov-in{width:100%;max-width:640px;background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:22px;text-align:center}
+.ov-h{font-weight:600;font-size:20px;letter-spacing:.5px;margin-bottom:3px}
+.ov-s{color:var(--muted);font-size:12.5px;margin-bottom:16px}
+.reveal{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:18px}
+@media(max-width:560px){.reveal{grid-template-columns:repeat(2,1fr)}}
+.rc{border:1px solid var(--line);border-radius:11px;padding:11px 8px;background:var(--bg);display:flex;flex-direction:column;gap:5px;position:relative;min-height:118px;justify-content:center;--rcol:var(--muted)}
+.rc.new{border-color:var(--rcol);box-shadow:0 0 0 1px var(--rcol),0 8px 22px -12px var(--rcol)}
+.rc .type{font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--rcol);font-weight:600}
+.rc .nm{font-weight:600;font-size:12.5px;line-height:1.2}
+.rc .lv{font-size:10px;color:var(--muted)}
+.rc .eff{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.3}
+.rc .tag{position:absolute;top:6px;right:7px;font-size:8px;letter-spacing:.5px;text-transform:uppercase;padding:1px 6px;border-radius:10px}
+.rc.new .tag{background:var(--good);color:#04210f}
+.rc.dup .tag{background:var(--bg3);color:var(--muted)}
+.ov-close{padding:12px 30px;border-radius:10px;border:1px solid var(--amber);background:var(--amber);color:#1a1000;font-weight:600;letter-spacing:.5px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--line);color:var(--ink);padding:11px 18px;border-radius:11px;font-size:13px;opacity:0;transition:.25s;z-index:70}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style></head>
+<body>
+<div class="top">
+  <a class="back" href="home.html">← Home</a>
+  <div class="logo">2<b>FAST</b>4<span>U</span></div>
+  <div class="coins"><span class="ic"></span><div><b id="coins">0</b> <small>gettoni</small></div></div>
+</div>
+<div class="wrap">
+  <div class="head">
+    <h1>Negozio</h1>
+    <p>Buste da 5 carte. Rarità: L2 più comune, L4 più raro; le carte ESP e soprattutto i piloti sono i più difficili da trovare.</p>
+  </div>
+  <div class="group">Pacchetti gang (dalla L2 alla L4)</div>
+  <div class="packs" id="packs-gang"></div>
+  <div class="group">Pacchetti misti (tutte le gang, per livello)</div>
+  <div class="packs" id="packs-mix"></div>
+</div>
+
+<div class="ov" id="ov"><div class="ov-in">
+  <div class="ov-h" id="ov-h">Busta aperta</div>
+  <div class="ov-s" id="ov-s"></div>
+  <div class="reveal" id="reveal"></div>
+  <button class="ov-close" onclick="closeOverlay()">Continua</button>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- parametri ---------- */
+const GANGS=['Lupara Boys','Ombre Nere','Krudo','Lowlifes','I Diavoli'];
+const GANG_COL={'Lupara Boys':'#e0563b','Ombre Nere':'#64748b','Krudo':'#8b5cf6','Lowlifes':'#3ba0e0','I Diavoli':'#ef4444'};
+const PRICE_GANG={'Lupara Boys':1000,'Ombre Nere':1500,'Krudo':2000,'Lowlifes':5000,'I Diavoli':6500};
+const PRICE_MIX={2:2000,3:3000,4:4500};
+const W_TYPE={normale:6,esp:2,pilota:1}, W_LV={2:3,3:2,4:1}, W_GANG={'Lupara Boys':5,'Ombre Nere':4,'Krudo':3,'Lowlifes':2,'I Diavoli':1};
+const START_COINS=4500, PACK_SIZE=5;
+const TYPE_LAB={normale:'Carta',esp:'ESP',pilota:'Pilota'};
+
+/* ---------- storage (stesse chiavi della home, sincronizzate col DB) ---------- */
+const WKEY='2f4u_wallet_v1', CKEY='2f4u_collection_v1';
+function loadWallet(){ try{ const w=JSON.parse(localStorage.getItem(WKEY)); if(w&&typeof w.coins==='number') return w; }catch(e){} const w={coins:START_COINS}; saveWallet(w); return w; }
+function saveWallet(w){ try{ localStorage.setItem(WKEY,JSON.stringify(w)); }catch(e){} dbPushWallet(w); }
+function loadColl(){ try{ const c=JSON.parse(localStorage.getItem(CKEY)); if(c&&c.owned&&typeof c.owned==='object'&&!Array.isArray(c.owned)) return c; if(c&&Array.isArray(c.owned)){ const o={}; c.owned.forEach(n=>o[n]=1); return {owned:o}; } }catch(e){} return {owned:{}}; }
+function saveColl(c){ try{ localStorage.setItem(CKEY,JSON.stringify(c)); }catch(e){} dbPushColl(c); }
+function addOwned(names){ const c=loadColl(); const fresh=[]; names.forEach(n=>{ if(!(c.owned[n]>0)) fresh.push(n); c.owned[n]=(c.owned[n]||0)+1; }); saveColl(c); return fresh; }
+
+/* ---------- descrizione effetto ---------- */
+function eur(v){ return '€'+Number(v).toLocaleString('it-IT'); }
+function descEffect(c){
+  if(c.desc) return c.desc;
+  if(c.eff==='money') return (c.val>=0?'+':'')+eur(c.val);
+  if(c.eff==='po') return (c.val>=0?'+':'')+c.val+' Punti Onore';
+  if(c.eff==='prizeUp') return 'Montepremi ×2 (su di te)';
+  if(c.eff==='prizeDown') return 'Montepremi ÷2 (a un rivale)';
+  if(c.eff==='betUp') return 'Scommessa ×2 (su di te)';
+  if(c.eff==='betDown') return 'Scommessa ÷2 (a un rivale)';
+  if(c.eff==='quota') return 'Quota '+(c.val>=0?'+':'')+c.val+' sulla scommessa';
+  if(c.eff==='discount') return 'Sconto 50% sul prossimo acquisto';
+  if(c.eff==='smonta') return 'Smonta 1 livello a un rivale';
+  if(c.eff==='reopen') return 'Giro extra in officina solo per te';
+  if(c.eff==='reopenAll') return 'Giro extra in officina per tutti';
+  if(c.eff==='reopenDebt') return 'Giro extra per te e un rivale scelto';
+  if(c.eff==='sprint') return 'Gara breve · traguardo a '+c.val;
+  if(c.eff==='defend') return 'Difesa';
+  var r = c.target==='rival' ? ' · su un rivale' : '';
+  if(c.eff==='vel') return (c.val>=0?'+':'')+c.val+' Velocità · '+c.dur+(c.dur===1?' tiro':' tiri')+r;
+  if(c.eff==='ctrl') return (c.val>=0?'+':'')+c.val+' Controllo · '+c.dur+(c.dur===1?' tiro':' tiri')+r;
+  if(c.eff==='partenza') return 'Partenza '+(c.val>=0?'+':'')+c.val+r;
+  if(c.eff==='dado') return 'Dado fisso = '+c.val+r;
+  if(c.eff==='reach') return 'Salto di posizione';
+  return '';
+}
+
+/* ---------- elementi (dal JSON) ---------- */
+let ELEMS=[];
+function buildElems(raw){ const out=[];
+  for(const lv of ['2','3','4']) for(const c of (raw.carte[lv]||[])){ if(!c.gang) continue; out.push({n:c.nome,g:c.gang,t:c.cat==='esp'?'esp':'normale',lv:+lv,d:descEffect(c)}); }
+  for(const p of (raw.piloti||[])){ if(['L2','L3','L4'].includes(p.liv)) out.push({n:p.nome,g:p.gang,t:'pilota',lv:+p.liv[1],d:p.ab||''}); }
+  return out;
+}
+function poolGang(g){ return ELEMS.filter(e=>e.g===g).map(e=>({e,w:W_TYPE[e.t]*W_LV[e.lv]})); }
+function poolMix(lv){ return ELEMS.filter(e=>e.lv===lv).map(e=>({e,w:W_TYPE[e.t]*W_LV[e.lv]*W_GANG[e.g]})); }
+
+/* ---------- apertura busta ---------- */
+function drawFrom(weighted, k){
+  const avail=weighted.map(o=>({...o})); const out=[];
+  for(let i=0;i<Math.min(k,avail.length);i++){
+    let tot=avail.reduce((s,o)=>s+o.w,0), r=Math.random()*tot, idx=0;
+    for(;idx<avail.length;idx++){ r-=avail[idx].w; if(r<=0) break; }
+    idx=Math.min(idx,avail.length-1);
+    out.push(avail[idx].e); avail.splice(idx,1);
+  }
+  return out;
+}
+function openPack(kind,key){
+  const price = kind==='gang'?PRICE_GANG[key]:PRICE_MIX[key];
+  const w=loadWallet();
+  if(w.coins<price){ toast('Gettoni insufficienti'); return; }
+  const weighted = kind==='gang'?poolGang(key):poolMix(+key);
+  const cards = drawFrom(weighted, PACK_SIZE);
+  w.coins-=price; saveWallet(w);
+  const freshSet=new Set(addOwned(cards.map(c=>c.n)));
+  showReveal(kind,key,cards,freshSet);
+  render();
+}
+
+/* ---------- render ---------- */
+function render(){
+  document.getElementById('coins').textContent = loadWallet().coins.toLocaleString('it-IT');
+  const coins=loadWallet().coins;
+  document.getElementById('packs-gang').innerHTML = GANGS.map(g=>packHTML('gang',g,PRICE_GANG[g],GANG_COL[g],'Gang '+g,'Carte, ESP e piloti '+g+', dai livelli 2 a 4.',coins)).join('');
+  document.getElementById('packs-mix').innerHTML = [2,3,4].map(lv=>packHTML('mix',lv,PRICE_MIX[lv],'#FFC91E','Misto L'+lv,'Carte di tutte le gang, livello '+lv+'. Le gang rare escono meno spesso.',coins)).join('');
+}
+function packHTML(kind,key,price,col,title,desc,coins){
+  const can=coins>=price;
+  return `<div class="pack" style="--pc:${col}">
+    <div class="pack-art"><span class="badge">${esc(title)}</span></div>
+    <div class="pack-b"><div class="pack-n">${esc(title)}</div><div class="pack-d">${esc(desc)}</div>
+      <button class="pack-buy" ${can?'':'disabled'} onclick="openPack('${kind}','${key}')"><span class="ci"></span>${price.toLocaleString('it-IT')}</button></div>
+  </div>`;
+}
+function showReveal(kind,key,cards,freshSet){
+  document.getElementById('ov-h').textContent = kind==='gang'?('Busta '+key):('Busta Misto L'+key);
+  const nuovi=cards.filter(c=>freshSet.has(c.n)).length;
+  document.getElementById('ov-s').textContent = nuovi+' '+(nuovi===1?'carta nuova':'carte nuove')+' su '+cards.length+(nuovi<cards.length?' · i doppioni li potrai riciclare':'');
+  document.getElementById('reveal').innerHTML = cards.map(c=>{
+    const isNew=freshSet.has(c.n), col=GANG_COL[c.g];
+    const tag=isNew?'nuova':'doppione';
+    return `<div class="rc ${isNew?'new':'dup'}" style="--rcol:${col}"><span class="tag">${tag}</span><span class="type">${TYPE_LAB[c.t]}</span><span class="nm">${esc(c.n)}</span><span class="lv">${esc(c.g)} · L${c.lv}</span>${c.d?`<span class="eff">${esc(c.d)}</span>`:''}</div>`;
+  }).join('');
+  document.getElementById('ov').classList.add('on');
+}
+function closeOverlay(){ document.getElementById('ov').classList.remove('on'); }
+
+/* ---------- DB ---------- */
+function dbOn(){ return !!(window.AUTH && window.AUTH.configured && window.Store && window.Store.ready()); }
+function dbPushWallet(w){ if(dbOn() && w && typeof w.coins==='number') window.Store.setMyCoins(w.coins).catch(function(){}); }
+function dbPushColl(c){ if(dbOn() && c && c.owned) window.Store.setMyCollection(c.owned).catch(function(){}); }
+function hydrateFromDB(){
+  if(!(window.AUTH && window.AUTH.configured && window.AUTH.user && window.Store)) return;
+  window.Store.myProfile().then(function(p){
+    if(!p) return;
+    try{ localStorage.setItem(WKEY, JSON.stringify({coins:(typeof p.coins==='number'?p.coins:START_COINS)})); }catch(e){}
+    try{ localStorage.setItem(CKEY, JSON.stringify({owned: p.collection||{}})); }catch(e){}
+    render();
+  }).catch(function(){});
+}
+document.addEventListener('auth:ready', function(){ hydrateFromDB(); });
+
+/* ---------- util ---------- */
+function esc(s){ return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+let _tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),1600); }
+
+/* ---------- avvio ---------- */
+fetch('dati_2fast4u.json').then(r=>{ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
+  .then(raw=>{ ELEMS=buildElems(raw); render(); })
+  .catch(e=>{ toast('Impossibile caricare le carte ('+e.message+')'); });
+</script>
+</body></html>

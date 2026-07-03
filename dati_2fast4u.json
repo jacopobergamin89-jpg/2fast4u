@@ -180,7 +180,7 @@
    "gang": "Lupara Boys",
    "tipoLabel": "Rettilineo",
    "liv": "L1",
-   "ab": "+1 nei Rettilinei · +1 Velocità",
+   "ab": "+1 Partenza · +1 Velocità nei Rettilinei",
    "tratto": {
     "t": "rettilineo",
     "v": 1
@@ -197,7 +197,7 @@
    "gang": "Lupara Boys",
    "tipoLabel": "Rettilineo",
    "liv": "L1",
-   "ab": "+2 nei Rettilinei · +1 Velocità",
+   "ab": "+2 Partenza · +1 Velocità nei Rettilinei",
    "tratto": {
     "t": "rettilineo",
     "v": 2
@@ -214,7 +214,7 @@
    "gang": "Lupara Boys",
    "tipoLabel": "Rettilineo",
    "liv": "L2",
-   "ab": "+2 nei Rettilinei · +2 Velocità",
+   "ab": "+2 Partenza · +2 Velocità nei Rettilinei",
    "tratto": {
     "t": "rettilineo",
     "v": 2
@@ -231,7 +231,7 @@
    "gang": "Lupara Boys",
    "tipoLabel": "Rettilineo",
    "liv": "L3",
-   "ab": "+2 nei Rettilinei · +2 Velocità",
+   "ab": "+2 Partenza · +2 Velocità nei Rettilinei",
    "tratto": {
     "t": "rettilineo",
     "v": 2
@@ -248,7 +248,7 @@
    "gang": "Lupara Boys",
    "tipoLabel": "Rettilineo",
    "liv": "L4",
-   "ab": "+3 nei Rettilinei · +1 Velocità",
+   "ab": "+3 Partenza · +1 Velocità nei Rettilinei",
    "tratto": {
     "t": "rettilineo",
     "v": 3
@@ -265,7 +265,7 @@
    "gang": "Lowlifes",
    "tipoLabel": "Città",
    "liv": "L1",
-   "ab": "+1 in Città · +1 Velocità",
+   "ab": "+1 Partenza · +1 Velocità in Città",
    "tratto": {
     "t": "citta",
     "v": 1
@@ -282,7 +282,7 @@
    "gang": "Lowlifes",
    "tipoLabel": "Città",
    "liv": "L1",
-   "ab": "+1 in Città · +1 Controllo",
+   "ab": "+1 Partenza · +1 Controllo in Città",
    "tratto": {
     "t": "citta",
     "v": 1
@@ -299,7 +299,7 @@
    "gang": "Lowlifes",
    "tipoLabel": "Città",
    "liv": "L2",
-   "ab": "+2 in Città · +1 Velocità",
+   "ab": "+2 Partenza · +1 Velocità in Città",
    "tratto": {
     "t": "citta",
     "v": 2
@@ -316,7 +316,7 @@
    "gang": "Lowlifes",
    "tipoLabel": "Città",
    "liv": "L3",
-   "ab": "+2 in Città · +1 Velocità",
+   "ab": "+2 Partenza · +1 Velocità in Città",
    "tratto": {
     "t": "citta",
     "v": 2
@@ -333,7 +333,7 @@
    "gang": "Lowlifes",
    "tipoLabel": "Città",
    "liv": "L4",
-   "ab": "+2 in Città · +1 Controllo",
+   "ab": "+2 Partenza · +1 Controllo in Città",
    "tratto": {
     "t": "citta",
     "v": 2
@@ -350,7 +350,7 @@
    "gang": "Krudo",
    "tipoLabel": "Drift",
    "liv": "L1",
-   "ab": "+1 nei Drift · −1 Velocità",
+   "ab": "+1 Partenza · −1 Velocità nei Drift",
    "tratto": {
     "t": "drift",
     "v": 1
@@ -367,7 +367,7 @@
    "gang": "Krudo",
    "tipoLabel": "Drift",
    "liv": "L1",
-   "ab": "+1 nei Drift · +1 Controllo",
+   "ab": "+1 Partenza · +1 Controllo nei Drift",
    "tratto": {
     "t": "drift",
     "v": 1
@@ -384,7 +384,7 @@
    "gang": "Krudo",
    "tipoLabel": "Drift",
    "liv": "L2",
-   "ab": "+2 nei Drift · −1 Velocità +1 Controllo",
+   "ab": "+2 Partenza · −1 Velocità +1 Controllo nei Drift",
    "tratto": {
     "t": "drift",
     "v": 2
@@ -402,7 +402,7 @@
    "gang": "Krudo",
    "tipoLabel": "Drift",
    "liv": "L3",
-   "ab": "+2 nei Drift · +1 Controllo",
+   "ab": "+2 Partenza · +1 Controllo nei Drift",
    "tratto": {
     "t": "drift",
     "v": 2
@@ -419,7 +419,7 @@
    "gang": "Krudo",
    "tipoLabel": "Drift",
    "liv": "L4",
-   "ab": "+2 nei Drift · +1 Controllo",
+   "ab": "+2 Partenza · +1 Controllo nei Drift",
    "tratto": {
     "t": "drift",
     "v": 2
@@ -436,7 +436,7 @@
    "gang": "Ombre Nere",
    "tipoLabel": "NOS",
    "liv": "L1",
-   "ab": "+2 nei Rettilinei · +1 NOS",
+   "ab": "+2 Partenza · +1 NOS nei Rettilinei",
    "tratto": {
     "t": "rettilineo",
     "v": 2
@@ -453,7 +453,7 @@
    "gang": "Ombre Nere",
    "tipoLabel": "NOS",
    "liv": "L1",
-   "ab": "+1 nei Rettilinei · +2 NOS",
+   "ab": "+1 Partenza · +2 NOS nei Rettilinei",
    "tratto": {
     "t": "rettilineo",
     "v": 1
@@ -470,7 +470,7 @@
    "gang": "Ombre Nere",
    "tipoLabel": "NOS",
    "liv": "L2",
-   "ab": "+2 nei Rettilinei · +2 NOS",
+   "ab": "+2 Partenza · +2 NOS nei Rettilinei",
    "tratto": {
     "t": "rettilineo",
     "v": 2
@@ -487,7 +487,7 @@
    "gang": "Ombre Nere",
    "tipoLabel": "NOS",
    "liv": "L3",
-   "ab": "+2 nei Rettilinei · +3 NOS",
+   "ab": "+2 Partenza · +3 NOS nei Rettilinei",
    "tratto": {
     "t": "rettilineo",
     "v": 2
@@ -504,7 +504,7 @@
    "gang": "Ombre Nere",
    "tipoLabel": "NOS",
    "liv": "L4",
-   "ab": "+3 nei Rettilinei · +2 NOS",
+   "ab": "+3 Partenza · +2 NOS nei Rettilinei",
    "tratto": {
     "t": "rettilineo",
     "v": 3
@@ -1014,7 +1014,7 @@
    },
    {
     "cat": "ingara",
-    "nome": "Ti prendooooo!!!!",
+    "nome": "Perdi il controllo!!!!",
     "eff": "ctrl",
     "val": -1,
     "dur": 1,
@@ -1065,14 +1065,6 @@
     "nome": "Il sonno aiuta",
     "eff": "partenza",
     "val": 2,
-    "dur": 0,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Brucia le gomme",
-    "eff": "partenza",
-    "val": 1,
     "dur": 0,
     "target": "self"
    },
@@ -1735,34 +1727,6 @@
     "val": 2,
     "dur": 1,
     "desc": "Dado 1-2 · Velocità +2 (te)"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Nos +1",
-    "eff": "multi",
-    "effects": [
-     {
-      "stat": "nosmod",
-      "val": 1,
-      "tgt": "self"
-     }
-    ],
-    "dur": 0,
-    "desc": "NOS +1 (te)"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Nos -1",
-    "eff": "multi",
-    "effects": [
-     {
-      "stat": "nosmod",
-      "val": -1,
-      "tgt": "pick"
-     }
-    ],
-    "dur": 0,
-    "desc": "NOS -1 (1 rivale)"
    },
    {
     "cat": "ingara",
@@ -3166,34 +3130,6 @@
    },
    {
     "cat": "ingara",
-    "nome": "Nos +3",
-    "eff": "multi",
-    "effects": [
-     {
-      "stat": "nosmod",
-      "val": 3,
-      "tgt": "self"
-     }
-    ],
-    "dur": 0,
-    "desc": "NOS +3 (te)"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Nos -3",
-    "eff": "multi",
-    "effects": [
-     {
-      "stat": "nosmod",
-      "val": -3,
-      "tgt": "pick"
-     }
-    ],
-    "dur": 0,
-    "desc": "NOS -3 (1 rivale)"
-   },
-   {
-    "cat": "ingara",
     "nome": "Bersaglio designato",
     "gang": "Lupara Boys",
     "eff": "multi",
@@ -4270,14 +4206,14 @@
     "cat": "pregara",
     "nome": "Il broker ti fa un regalo di compleanno",
     "eff": "quota",
-    "val": 2.0,
+    "val": 2,
     "gang": "Krudo"
    },
    {
     "cat": "pregara",
     "nome": "Scommessa · quota +2",
     "eff": "betUp",
-    "val": 2.0,
+    "val": 2,
     "gang": "Krudo"
    },
    {
@@ -5627,28 +5563,28 @@
     "cat": "pregara",
     "nome": "Alzi la posta in palio",
     "eff": "prizeUp",
-    "val": 2.0,
+    "val": 2,
     "gang": "Krudo"
    },
    {
     "cat": "pregara",
     "nome": "Arrivano gli sponsor",
     "eff": "prizeUp",
-    "val": 2.0,
+    "val": 2,
     "gang": "Krudo"
    },
    {
     "cat": "pregara",
     "nome": "Doppia o niente",
     "eff": "prizeUp",
-    "val": 2.0,
+    "val": 2,
     "gang": "Krudo"
    },
    {
     "cat": "pregara",
     "nome": "Quota impazzita",
     "eff": "betUp",
-    "val": 3.0,
+    "val": 3,
     "gang": "Krudo"
    },
    {

@@ -1251,7 +1251,7 @@ function renderReveal(v){
     h+=`<div class="hint">Tocca una carta coperta per pescare (${r.deckSize} piloti nel mazzo).</div>`;
     host.innerHTML=h;return;
   }
-  let h=`<div class="eyebrow">Setup · pilota pescato</div><h1 class="title">Il tuo <em>pilota</em></h1><p class="sub">Eccolo. <b>Tienilo nascosto</b> agli avversari (potranno comunque ispezionarlo in gara), poi premi Pronto.</p>`;
+  let h=`<div class="eyebrow">Setup · il tuo pilota</div><h1 class="title">Il tuo <em>pilota</em></h1><p class="sub">Il pilota del tuo mazzo. Gli avversari potranno ispezionarlo in gara. Premi Pronto per continuare.</p>`;
   h+=`<div class="flipwrap flipped"><div class="flipinner">
     <div class="flipface flipback"><div class="qmark">?</div></div>
     <div class="flipface flipfront" style="--pc:${v.you.colorH}">
@@ -1265,7 +1265,7 @@ function renderReveal(v){
   h+=`<div class="sec-h">Le tue carte iniziali (${r.hand.length})</div><div class="deal">`;
   r.hand.forEach((c,i)=>{h+=`<div class="dealcard" style="--i:${i};--hc:${c.cat==='pregara'?'var(--po)':'var(--cyan)'}"><div class="dc-top">${c.cat==='pregara'?'Pre-gara':'In gara'}</div><div class="dc-name">${esc(c.nome)}</div><div class="dc-desc">${cardDesc(c)}</div></div>`;});
   h+='</div>';
-  h+=`<button class="btn btn-primary foot" onclick="socket.emit('setup:ready')">Pronto — ho visto il pilota</button>`;
+  h+=`<button class="btn btn-primary foot" onclick="socket.emit('setup:ready')">Pronto — vai</button>`;
   host.innerHTML=h;
 }
 function drawPilot(i){ socket.emit('setup:drawPilot',{cardIndex:i}); }

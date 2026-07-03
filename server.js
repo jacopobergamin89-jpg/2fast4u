@@ -146,7 +146,7 @@ function startGame(room){
   G.players.forEach(p=>{ for(let k=0;k<3;k++){ const card=drawCard(p,1); if(card) p.hand.push(card); } });
   G.round=0; room.started=true; G.policeUnlocked=true; G.scaleUnlocked={2:false,3:false,4:false}; G.blocks=[]; G.pendPolice=[]; G.bossPending=null;
   G.gameLog=[]; G.gameSeq=0;
-  G.phase='reveal'; G.players.forEach(p=>{ p.ready=false; });
+  G.phase='reveal'; G.players.forEach(p=>{ p.ready=false; if(p.pilotPool && p.pilotPool.length){ const pid=p.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true; } });   // pilota unico assegnato in automatico: niente pescaggio
 }
 function restartGame(room){
   const G=room.G;
@@ -656,15 +656,17 @@ function computeMove(G,p,die,useNos){
   if(fxVel){ total+=fxVel; lines.push({k:'Carte velocità',v:fxVel,cls:fxVel>0?'pos':'neg'}); }
   if(fxCtrl){ total+=fxCtrl; lines.push({k:'Carte controllo',v:fxCtrl,cls:fxCtrl>0?'pos':'neg'}); }
   const db=dieBonus(die); total+=db; lines.push({k:'Dado '+die,v:db,cls:'pos'});
-  const pb=(p.pilot&&p.pilot.bonus)||{};                                             // bonus fissi del pilota
-  if(pb.vel){ total+=pb.vel; vel+=pb.vel; lines.push({k:'Pilota · Velocità',v:pb.vel,cls:pb.vel>0?'pos':'neg'}); }
-  if(pb.ctrl){ total+=pb.ctrl; ctrl+=pb.ctrl; lines.push({k:'Pilota · Controllo',v:pb.ctrl,cls:pb.ctrl>0?'pos':'neg'}); }
-  if(first && p.pilot.partenza){ total+=p.pilot.partenza; lines.push({k:'Partenza pilota',v:p.pilot.partenza,cls:'pos'}); }
+  const pb=(p.pilot&&p.pilot.bonus)||{};                                             // bonus del pilota
+  const hasTratto = !!(p.pilot.tratto && p.pilot.tratto.t);
+  const onTratto = !hasTratto || (p.pilot.tratto.t===seg.t);                          // senza tratto (Diavoli): il bonus vale ovunque
+  const trattoLbl = hasTratto ? ' ('+TIPO_LABEL[seg.t]+')' : '';
+  if(onTratto && pb.vel){ total+=pb.vel; vel+=pb.vel; lines.push({k:'Pilota · Velocità'+trattoLbl,v:pb.vel,cls:pb.vel>0?'pos':'neg'}); }
+  if(onTratto && pb.ctrl){ total+=pb.ctrl; ctrl+=pb.ctrl; lines.push({k:'Pilota · Controllo'+trattoLbl,v:pb.ctrl,cls:pb.ctrl>0?'pos':'neg'}); }
+  if(first){ const pStart=(hasTratto?(p.pilot.tratto.v||0):0)+(p.pilot.partenza||0); if(pStart){ total+=pStart; lines.push({k:'Partenza pilota',v:pStart,cls:pStart>0?'pos':'neg'}); } }
   if(car.pendPart){ total+=car.pendPart; lines.push({k:'Carta partenza',v:car.pendPart,cls:car.pendPart>0?'pos':'neg'}); }
-  if(!first && p.pilot.tratto && p.pilot.tratto.t===seg.t){ const tv=p.pilot.tratto.v; total+=tv; ctrl+=tv; lines.push({k:'Abilità '+TIPO_LABEL[seg.t],v:tv,cls:tv>0?'pos':'neg'}); }
   if(first && p.pilot.fortuna && p.pilot.fortuna.set.includes(die)){ const fv=p.pilot.fortuna.v; total+=fv; vel+=fv; lines.push({k:'Fortuna 1° tiro',v:fv,cls:'pos'}); }
   if(car.dadoForza && car.dadoForza.set.includes(die)){ const df=car.dadoForza; total+=df.val; if(df.stat==='vel') vel+=df.val; else if(df.stat==='ctrl') ctrl+=df.val; lines.push({k:'Dado-forza ('+die+')',v:df.val,cls:'pos'}); }
-  if(useNos){ let nv=Math.max(0,statVal(p,'nos')+(car.nosMod||0)); if(seg.t==='citta') nv=Math.max(0,nv-1); const add=nv+(pb.nos||0); total+=add; lines.push({k:'NOS'+(seg.t==='citta'?' (–1 città)':'')+(pb.nos?' +pilota':''),v:add,cls:'nos'}); }
+  if(useNos){ let nv=Math.max(0,statVal(p,'nos')+(car.nosMod||0)); if(seg.t==='citta') nv=Math.max(0,nv-1); const add=nv+(onTratto?(pb.nos||0):0); total+=add; lines.push({k:'NOS'+(seg.t==='citta'?' (–1 città)':'')+((onTratto&&pb.nos)?' +pilota':''),v:add,cls:'nos'}); }
   if(!noPen){
     if(seg.pv && vel>seg.pv.gt){ total-=seg.pv.a; lines.push({k:'Pen. Drift (Vel '+vel+'>'+seg.pv.gt+')',v:-seg.pv.a,cls:'neg'}); }
     if(seg.pc && ctrl<seg.pc.lt){ total-=seg.pc.a; lines.push({k:'Pen. Controllo (Ctrl '+ctrl+'<'+seg.pc.lt+')',v:-seg.pc.a,cls:'neg'}); }

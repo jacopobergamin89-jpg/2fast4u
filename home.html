@@ -125,7 +125,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
     <div class="hero-k">Modalità B · corse clandestine</div>
     <div class="hero-h">Pronto a correre?</div>
     <div class="hero-s">Scegli il tuo mazzo e sfida gli altri in tempo reale, oppure allenati contro i bot.</div>
-    <div class="hero-btns"><a class="b-primary" href="index.html">Gioca</a><a class="b-ghost" href="deck-builder.html">Organizza il mazzo</a></div>
+    <div class="hero-btns"><a class="b-primary" href="index.html">Gioca</a><a class="b-ghost" href="deck-builder.html">Organizza il mazzo</a><a class="b-ghost" href="negozio.html">Negozio</a></div>
   </div></div>
 
   <div class="grid2">
@@ -141,16 +141,6 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
     </div>
   </div>
 
-  <div class="shop">
-    <div class="shop-h" onclick="toggleShop()" style="cursor:pointer"><span class="dot" style="width:9px;height:9px;border-radius:50%;background:var(--amber)"></span><span class="t">Negozio</span><span class="chev" id="shop-chev" style="margin-left:auto">▶</span></div>
-    <div id="shop-body" style="display:none">
-      <div class="shop-sub">Buste da 5 carte. Rarità: L2 più comune, L4 più raro; le carte ESP e soprattutto i piloti sono i più difficili da trovare.</div>
-      <div class="shop-group">Pacchetti gang (dalla L2 alla L4)</div>
-      <div class="packs" id="packs-gang"></div>
-      <div class="shop-group">Pacchetti misti (tutte le gang, per livello)</div>
-      <div class="packs" id="packs-mix"></div>
-    </div>
-  </div>
 </div>
 
 <div class="ov" id="ov"><div class="ov-in">
@@ -257,10 +247,6 @@ function render(){
   const dup=dupeInfo();
   html += `<div class="dupes"><div class="dupes-t">Doppioni: <b>${dup.count}</b>${dup.count?` · valgono <b>${dup.value.toLocaleString('it-IT')}</b> gettoni`:''}</div><button class="dupes-b" ${dup.count?'':'disabled'} onclick="recycleDupes()">Ricicla i doppioni</button></div>`;
   coll.innerHTML = html;
-  // pacchetti
-  const coins=loadWallet().coins;
-  document.getElementById('packs-gang').innerHTML = GANGS.map(g=>packHTML('gang',g,PRICE_GANG[g],GANG_COL[g],'Gang '+g,'Carte, ESP e piloti '+g+', dai livelli 2 a 4.',coins)).join('');
-  document.getElementById('packs-mix').innerHTML = [2,3,4].map(lv=>packHTML('mix',lv,PRICE_MIX[lv],'#FFC91E','Misto L'+lv,'Carte di tutte le gang, livello '+lv+'. Le gang rare escono meno spesso.',coins)).join('');
 }
 function packHTML(kind,key,price,col,title,desc,coins){
   const can=coins>=price;
