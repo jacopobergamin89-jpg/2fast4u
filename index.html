@@ -48,15 +48,15 @@
 .ofx-bg{position:absolute;inset:0;background:var(--of-photo) center/cover;opacity:.14;z-index:0}
 .ofx-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,5,24,.6),rgba(11,5,24,.9))}
 .ofx-in{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction:column;padding:60px 15px 13px;gap:10px}
-.ofx-top{display:flex;align-items:center;gap:14px;flex:none}
+.ofx-top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex:none}
 .ofx-title{font-family:var(--disp);font-weight:600;letter-spacing:1px;font-size:18px}
 .ofx-title small{color:var(--muted-2);font-weight:400;font-size:12px;margin-left:5px}
-.ofx-me{display:flex;align-items:center;gap:9px;margin-left:auto;background:var(--asphalt-1);border:1px solid var(--line);border-radius:11px;padding:6px 13px}
+.ofx-me{display:flex;align-items:center;gap:9px;order:2;background:var(--asphalt-1);border:1px solid var(--line);border-radius:11px;padding:6px 13px}
 .ofx-ava{width:30px;height:30px;border-radius:50%;background:var(--c);display:flex;align-items:center;justify-content:center;font-weight:600;color:#0b0518;font-size:12px;flex:none}
 .ofx-money{font-weight:700;font-size:17px;color:var(--amber)}
 .ofx-buys{font-size:12px;color:var(--muted)}.ofx-buys b{color:var(--ink);font-size:14px}
 .ofx-watch{font-size:13px;color:var(--muted)}
-.ofx-done{flex:none}
+.ofx-done{order:1;width:auto;flex:0 1 auto;min-width:260px;max-width:520px;text-align:center}
 .ofx-body{flex:1;min-height:0;display:grid;grid-template-columns:260px 1fr 320px;gap:11px}
 @media(max-width:900px){.ofx-body{grid-template-columns:1fr}}
 .ofx-col{min-height:0;display:flex;flex-direction:column;gap:11px}
@@ -970,7 +970,7 @@ body.locked{overflow:hidden;overscroll-behavior:none}
       <div class="home-hero"><img src="img/bg-home.jpg" alt="2FAST4U" onerror="this.closest('.home-hero').classList.add('noimg')"></div>
       <div class="home-card">
         <div class="field-lab">Il tuo nome</div>
-        <input class="nameinput" id="home-name" maxlength="8" placeholder="Es. Jacopo" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <input class="nameinput" id="home-name" maxlength="12" placeholder="Es. Jacopo" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <div class="field-lab">Colore auto</div>
         <div class="swatches" id="home-colors"></div>
         <button class="btn btn-primary" style="width:100%;margin-top:15px" onclick="doCreate()">Crea nuova partita</button>
@@ -1051,6 +1051,10 @@ const COLORS=[{n:'Rosso',h:'#e74c3c'},{n:'Blu',h:'#3498db'},{n:'Verde',h:'#2ecc7
 const LV_COLOR=['var(--muted-2)','var(--lv1)','var(--lv2)','var(--lv3)','var(--lv4)','var(--lv5)'];
 let socket=io();
 let ME={id:null,code:null,name:'',colorIdx:0,joined:false};
+/* nome del giocatore preso dall'account loggato (registrazione) */
+function applyAuthNick(a){ if(!a||!a.email) return; var nick=String(a.email).split('@')[0].split('.')[0].slice(0,12)||'Pilota'; var el=document.getElementById('home-name'); if(el){ el.value=nick; el.readOnly=true; el.style.opacity='.92'; el.title='Nome dal tuo account'; } ME.name=nick; }
+document.addEventListener('auth:ready', function(e){ applyAuthNick(e.detail); });
+if(window.AUTH && window.AUTH.email) applyAuthNick(window.AUTH);
 // --- sessione persistente: rientro automatico dopo back/refresh/chiusura tab ---
 const SESS_KEY='2fast4u_session';
 function saveSession(){ try{ localStorage.setItem(SESS_KEY, JSON.stringify({code:ME.code,name:ME.name,colorIdx:ME.colorIdx})); }catch(e){} }
@@ -1470,7 +1474,7 @@ function prepMobileHTML(v){
 
   // pronto
   let pronto;
-  if(v.isYourTurn){ pronto = v.mustPlayPolice ? '<button class="o2-pronto" disabled>\ud83d\udea8 Gioca prima la carta polizia</button>' : '<button class="o2-pronto" onclick="prepDone()">Pronto \u2014 passa il turno \u2192</button>'; }
+  if(v.isYourTurn){ pronto = v.mustPlayPolice ? '<button class="o2-pronto" disabled>\ud83d\udea8 Gioca prima la carta polizia</button>' : '<button class="o2-pronto" onclick="prepDone()">\ud83c\udfc1 Pronto \u2014 alla griglia</button>'; }
   else { pronto = `<button class="o2-pronto" disabled>Tocca a ${esc(v.activeName||'\u2026')}</button>`; }
   const prontoW=`<div class="o2-pronto-w">${pronto}</div>`;
 
@@ -1551,7 +1555,7 @@ function renderPrep(v){
 
   // --- TOPBAR ---
   const meInfo=v.isYourTurn?`<span class="ofx-money">${eur(m.money)}</span><span class="ofx-buys">acquisti <b>${m.buysLeft}</b></span>`:`<span class="ofx-watch">tocca a <b>${esc(v.activeName||'')}</b></span>`;
-  const doneBtn=v.isYourTurn?`<button class="btn btn-primary ofx-done" ${v.mustPlayPolice?'disabled style="opacity:.5"':'onclick="prepDone()"'}>${v.mustPlayPolice?'\ud83d\udea8 Gioca la carta polizia':'Pronto \u2014 passa \u2192'}</button>`:'';
+  const doneBtn=v.isYourTurn?`<button class="btn btn-primary ofx-done" ${v.mustPlayPolice?'disabled style="opacity:.5"':'onclick="prepDone()"'}>${v.mustPlayPolice?'\ud83d\udea8 Gioca la carta polizia':'\ud83c\udfc1 Pronto \u2014 alla griglia'}</button>`:'';
 
   // --- LA TUA AUTO ---
   const meP=v.players.find(p=>p.id===v.you.id)||{};
