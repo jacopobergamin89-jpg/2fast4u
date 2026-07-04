@@ -47,7 +47,7 @@
 #s-prep .ofx{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--asphalt-0);overflow:hidden;z-index:5}
 .ofx-bg{position:absolute;inset:0;background:var(--of-photo) center/cover;opacity:.14;z-index:0}
 .ofx-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,5,24,.6),rgba(11,5,24,.9))}
-.ofx-in{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction:column;padding:11px 15px 13px;gap:10px}
+.ofx-in{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction:column;padding:60px 15px 13px;gap:10px}
 .ofx-top{display:flex;align-items:center;gap:14px;flex:none}
 .ofx-title{font-family:var(--disp);font-weight:600;letter-spacing:1px;font-size:18px}
 .ofx-title small{color:var(--muted-2);font-weight:400;font-size:12px;margin-left:5px}
@@ -1517,7 +1517,15 @@ function renderPrep(v){
       bench+='</div>';
     } else bench+='<div class="ofx-empty">Nessuna miglioria al mercato in questo round.</div>';
   } else {
-    bench=`<div class="ofx-empty">Il banco \u00e8 di <b>${esc(v.activeName||'')}</b> \u2014 sta scegliendo i ricambi\u2026</div>`;
+    const nM=v.market?v.market.length:0;
+    bench=`<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Sta scegliendo <b>${esc(v.activeName||'')}</b> \u2014 ecco cosa \u00e8 ancora disponibile:</div>`;
+    if(nM){
+      bench+='<div class="ofx-mkt-grid">';
+      v.market.forEach(c=>{const mm=ofMeta(c.comp);
+        bench+=`<div class="of-part off"><div class="of-part-h"><span class="of-badge" style="--c:${mm.c}">${mm.full}</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">valore ${c.val>=0?'+':''}${c.val}${c.skip?' \u00b7 salto \u00d72':''}</span><span class="of-price">${eur(c.price)}</span></div>`;
+      });
+      bench+='</div>';
+    } else bench+='<div class="ofx-empty">Nessuna miglioria al mercato in questo round.</div>';
   }
 
   // --- MANO (gioca / scarta) ---
