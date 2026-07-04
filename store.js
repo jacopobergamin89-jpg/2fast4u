@@ -40,7 +40,7 @@ window.Store = (function () {
     // ---- operazioni admin (consentite dalle policy solo agli admin) ----
     async listPlayers() {
       var res = await sb().from('profiles')
-        .select('id,email,coins,full_unlock,is_admin,updated_at')
+        .select('id,email,nickname,coins,full_unlock,is_admin,updated_at')
         .order('is_admin', { ascending: false })
         .order('email', { ascending: true });
       if (res.error) throw res.error;

@@ -49,6 +49,11 @@ input:focus{outline:none;border-color:var(--cyan)}
       <button id="tab-up" onclick="setMode('up')">Registrati</button>
     </div>
 
+    <div id="nick-wrap" style="display:none">
+      <label for="nick">Nickname (nome in gioco)</label>
+      <input id="nick" type="text" maxlength="12" placeholder="Es. Jacopo" autocomplete="off" spellcheck="false">
+    </div>
+
     <label for="email">Email</label>
     <input id="email" type="email" autocomplete="email" placeholder="tu@email.it" spellcheck="false">
 
@@ -78,6 +83,7 @@ function setMode(m){
   mode = m;
   document.getElementById('tab-in').classList.toggle('on', m==='in');
   document.getElementById('tab-up').classList.toggle('on', m==='up');
+  document.getElementById('nick-wrap').style.display = (m==='up') ? 'block' : 'none';
   document.getElementById('pw').setAttribute('autocomplete', m==='in' ? 'current-password' : 'new-password');
   goEl.textContent = m==='in' ? 'Entra' : 'Crea account';
   clearMsg();
@@ -91,6 +97,7 @@ if(!configured()){
   goEl.disabled = true;
   document.getElementById('email').disabled = true;
   document.getElementById('pw').disabled = true;
+  document.getElementById('nick').disabled = true;
 } else {
   sb = window.supabase.createClient(CFG.url, CFG.anonKey);
   // già loggato? vai direttamente all'area di gioco
@@ -109,6 +116,11 @@ async function submit(){
   var pw = document.getElementById('pw').value;
   if(!email || !pw){ showMsg('Inserisci email e password.', 'err'); return; }
   if(mode==='up' && pw.length < 6){ showMsg('La password deve avere almeno 6 caratteri.', 'err'); return; }
+  var nick = '';
+  if(mode==='up'){
+    nick = document.getElementById('nick').value.trim();
+    if(!/^[A-Za-z0-9_.\- ]{3,12}$/.test(nick)){ showMsg('Nickname: 3–12 caratteri (lettere, numeri, spazio, _ . -).', 'err'); return; }
+  }
 
   goEl.disabled = true; clearMsg();
   try {
@@ -118,7 +130,10 @@ async function submit(){
       location.replace(CFG.homePage || 'home.html');
       return;
     } else {
-      var r2 = await sb.auth.signUp({ email: email, password: pw });
+      var av = await sb.rpc('nickname_available', { nick: nick });
+      if(av.error) throw av.error;
+      if(av.data === false){ showMsg('Nickname già in uso: scegline un altro.', 'err'); return; }
+      var r2 = await sb.auth.signUp({ email: email, password: pw, options: { data: { nickname: nick } } });
       if(r2.error) throw r2.error;
       if(r2.data && r2.data.session){
         location.replace(CFG.homePage || 'home.html');   // conferma email disattivata: dentro subito
@@ -131,6 +146,8 @@ async function submit(){
     var m = (err && err.message) ? err.message : 'Errore, riprova.';
     if(/invalid login credentials/i.test(m)) m = 'Email o password non corretti.';
     else if(/already registered|already exists|user already/i.test(m)) m = 'Questa email è già registrata: usa Accedi.';
+    else if(/duplicate key|unique|nickname/i.test(m)) m = 'Nickname già in uso: scegline un altro.';
+    else if(/database error/i.test(m)) m = 'Nickname forse già preso: prova con un altro.';
     else if(/email not confirmed/i.test(m)) m = 'Devi confermare la mail prima di accedere (controlla la posta).';
     else if(/rate limit/i.test(m)) m = 'Troppi tentativi: attendi un minuto e riprova.';
     showMsg(m, 'err');

@@ -98,7 +98,7 @@ function render(players){
   players.forEach(function(p){
     var badge = p.is_admin ? '<span class="badge">ADMIN</span>' : '';
     h += '<div class="row" data-id="'+esc(p.id)+'">'
-       +   '<div class="email">'+esc(p.email||'(senza email)')+badge+'</div>'
+       +   '<div class="email">'+(p.nickname?'<b>'+esc(p.nickname)+'</b> · ':'')+'<span style="color:var(--muted);font-size:12px">'+esc(p.email||'(senza email)')+'</span>'+badge+'</div>'
        +   '<div><input class="coininp" type="number" min="0" step="100" value="'+Number(p.coins||0)+'"></div>'
        +   '<div><label class="switch"><input type="checkbox" class="unlk" '+(p.full_unlock?'checked':'')+'><span>prova</span></label></div>'
        +   '<div><button class="save">Salva gettoni</button></div>'

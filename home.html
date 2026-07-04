@@ -310,7 +310,7 @@ function hydrateFromDB(){
 document.addEventListener('auth:ready', function(e){
   const a=e.detail||{};
   const who=document.getElementById('whoami'); const av=document.getElementById('avatar');
-  if(a.email){ if(who) who.textContent=a.email; if(av) av.textContent=a.email.charAt(0).toUpperCase(); }
+  if(a.email){ const nk=(a.user&&a.user.user_metadata&&a.user.user_metadata.nickname)||a.email; if(who) who.textContent=nk; if(av) av.textContent=String(nk).charAt(0).toUpperCase(); }
   const badge=document.getElementById('adminbadge'); if(badge) badge.style.display=a.isAdmin?'inline-flex':'none';
   const bar=document.getElementById('adminbar'); if(bar) bar.style.display=a.isAdmin?'flex':'none';
   syncTestBtn();

@@ -1052,7 +1052,7 @@ const LV_COLOR=['var(--muted-2)','var(--lv1)','var(--lv2)','var(--lv3)','var(--l
 let socket=io();
 let ME={id:null,code:null,name:'',colorIdx:0,joined:false};
 /* nome del giocatore preso dall'account loggato (registrazione) */
-function applyAuthNick(a){ if(!a||!a.email) return; var nick=String(a.email).split('@')[0].split('.')[0].slice(0,12)||'Pilota'; var el=document.getElementById('home-name'); if(el){ el.value=nick; el.readOnly=true; el.style.opacity='.92'; el.title='Nome dal tuo account'; } ME.name=nick; }
+function applyAuthNick(a){ if(!a) return; var nick=''; try{ nick=(a.user&&a.user.user_metadata&&a.user.user_metadata.nickname)||''; }catch(e){} if(!nick && a.email) nick=String(a.email).split('@')[0].split('.')[0]; nick=String(nick).slice(0,12)||'Pilota'; var el=document.getElementById('home-name'); if(el){ el.value=nick; el.readOnly=true; el.style.opacity='.92'; el.title='Nome dal tuo account'; } ME.name=nick; }
 document.addEventListener('auth:ready', function(e){ applyAuthNick(e.detail); });
 if(window.AUTH && window.AUTH.email) applyAuthNick(window.AUTH);
 // --- sessione persistente: rientro automatico dopo back/refresh/chiusura tab ---
