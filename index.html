@@ -995,6 +995,8 @@ body.locked{overflow:hidden;overscroll-behavior:none}
     <h1 class="title">Codice partita</h1>
     <div class="codebig" id="lob-code">····</div>
     <p class="hint" style="margin-top:0;margin-bottom:16px">Condividi questo codice con i tuoi amici. Lo digitano nella schermata iniziale per entrare.</p>
+    <button class="btn btn-primary" id="lob-start" onclick="doStart()">Avvia partita</button>
+    <div class="hint" id="lob-hint" style="margin-bottom:16px"></div>
     <div class="panel">
       <div class="panel-h">Giocatori <span id="lob-count"></span></div>
       <div class="plist" id="lob-players"></div>
@@ -1008,8 +1010,6 @@ body.locked{overflow:hidden;overscroll-behavior:none}
       <div class="field-lab" style="margin-top:0">Cambia colore</div>
       <div class="swatches" id="lob-colors"></div>
     </div>
-    <button class="btn btn-primary" id="lob-start" onclick="doStart()">Avvia partita</button>
-    <div class="hint" id="lob-hint"></div>
   </section>
 
   <!-- REVEAL (pesca pilota segreto + carte iniziali) -->
@@ -1460,8 +1460,8 @@ function prepMobileHTML(v){
   // la tua mano + garage
   let manoInner='';
   if(v.isYourTurn){
-    if(v.handAll&&v.handAll.length){ manoInner+='<div class="o2-handh">La tua mano \u00b7 scarta quelle che non vuoi</div>'; v.handAll.forEach(c=>{
-      manoInner+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="o2-pre-d">${handCardDesc(c)}</span></div><div class="o2-hand-act">${ofHandPlay(c,true)}<button class="o2-pre-go scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;}); }
+    if(v.handAll&&v.handAll.length){ manoInner+='<div class="o2-handh">'+(v.reshop?'La tua mano \u00b7 giro extra: solo acquisti':'La tua mano \u00b7 scarta quelle che non vuoi')+'</div>'; v.handAll.forEach(c=>{
+      manoInner+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="o2-pre-d">${handCardDesc(c)}</span></div>${v.reshop?'':`<div class="o2-hand-act">${ofHandPlay(c,true)}<button class="o2-pre-go scarta" onclick="discard(${c.idx})">Scarta</button></div>`}</div>`;}); }
     if(v.canBet) manoInner+='<div class="o2-note">Apri \ud83d\udc65 <b>Piloti</b> in alto per scommettere e vedere le puntate.</div>';
   }
   if(!manoInner) manoInner='<div class="o2-empty">Nessuna carta da giocare o scartare.</div>';
@@ -1535,7 +1535,8 @@ function renderPrep(v){
   // --- MANO (gioca / scarta) ---
   let hand='';
   if(v.isYourTurn && v.handAll && v.handAll.length){
-    v.handAll.forEach(c=>{hand+=`<div class="of-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="of-pre-d">${handCardDesc(c)}</span></div><div class="of-hand-act">${ofHandPlay(c,false)}<button class="btn btn-line btn-sm btn-scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;});
+    if(v.reshop) hand='<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Giro extra: puoi solo comprare \u2014 le carte le giochi al prossimo round.</div>';
+    v.handAll.forEach(c=>{hand+=`<div class="of-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="of-pre-d">${handCardDesc(c)}</span></div>${v.reshop?'':`<div class="of-hand-act">${ofHandPlay(c,false)}<button class="btn btn-line btn-sm btn-scarta" onclick="discard(${c.idx})">Scarta</button></div>`}</div>`;});
   }
 
   // --- AVVERSARI (coi soldi e i PO) ---

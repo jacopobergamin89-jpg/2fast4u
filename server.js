@@ -1019,7 +1019,7 @@ function buildView(room, player){
       v.track=trackView(G);
       v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:!!p.discountNext };
       v.pregara = G.reshop ? [] : p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c), costPO:(c.costPO||0) })).filter(c=>c.cat==='pregara' && c.eff!=='defend');
-      v.handAll = G.reshop ? [] : p.hand.map((c,idx)=>{ const o={ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, dur:c.dur, costPO:(c.costPO||0), gang:c.gang, desc:c.desc||cardDesc(c), needsTarget:cardNeedsTarget(c) }; if(c.cat==='pregara') o.target=pregaraTarget(c); if(c.cat==='esp'){ o.comp=c.comp; o.lvl=c.lvl; o.cost=c.cost; o.espVal=c.espVal; } return o; }).filter(c=>c.cat!=='polizia');
+      v.handAll = p.hand.map((c,idx)=>{ const o={ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, dur:c.dur, costPO:(c.costPO||0), gang:c.gang, desc:c.desc||cardDesc(c), needsTarget:cardNeedsTarget(c) }; if(c.cat==='pregara') o.target=pregaraTarget(c); if(c.cat==='esp'){ o.comp=c.comp; o.lvl=c.lvl; o.cost=c.cost; o.espVal=c.espVal; } return o; }).filter(c=>c.cat!=='polizia');
       v.canBet = !G.reshop && G.round>=2;
       if(v.canBet){
         v.betTargets=G.players.map(t=>({ id:t.id, name:t.name, colorH:DB.colori[t.colorIdx].h, quote:Math.max(1.05, Math.min(6, DB.quoteScommessa[Math.min(7,t.lastRank)]+(p.quotaMod||0))), you:t.id===p.id }));
