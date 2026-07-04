@@ -962,7 +962,7 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 
   <!-- HOME -->
   <section id="s-home" class="screen active">
-    <a href="home.html" class="gohome">🏠 Home</a>
+    <a href="home.html" class="gohome" onclick="return confirmLeaveGame(event)">🏠 Home</a>
     <div class="home-bg"></div>
     <div class="home-scrim"></div>
     <div class="home-stage">
@@ -1059,6 +1059,7 @@ if(window.AUTH && window.AUTH.email) applyAuthNick(window.AUTH);
 const SESS_KEY='2fast4u_session';
 function saveSession(){ try{ localStorage.setItem(SESS_KEY, JSON.stringify({code:ME.code,name:ME.name,colorIdx:ME.colorIdx})); }catch(e){} }
 function clearSession(){ try{ localStorage.removeItem(SESS_KEY); }catch(e){} }
+function confirmLeaveGame(e){ try{ if(ME&&ME.joined){ const home=document.getElementById('s-home'); if(!home||!home.classList.contains('active')){ if(!confirm('Vuoi uscire dalla partita in corso? Perderai la gara.')){ if(e&&e.preventDefault)e.preventDefault(); return false; } } } }catch(x){} return true; }
 function loadSession(){ try{ const s=JSON.parse(localStorage.getItem(SESS_KEY)||'null'); if(s&&s.code&&s.name){ ME.code=s.code; ME.name=s.name; ME.colorIdx=(s.colorIdx>=0&&s.colorIdx<8)?s.colorIdx:0; ME.joined=true; } }catch(e){} }
 loadSession();   // se c'era una partita in corso, l'handler 'connect' qui sotto rientra da solo
 let ui={nosArmed:false,lastActive:undefined,lastPhase:null,raceTab:'tiro'};
@@ -1408,8 +1409,7 @@ function defenseHTML(v){
     return h+'</div>';
   }
   if(v.myDefenses&&v.myDefenses.length){
-    const names=v.myDefenses.map(d=>esc(d.nome)+(d.reflect?' \u21a9':'')).join(', ');
-    return `<div class="def-hold">\ud83d\udee1\ufe0f Difese in mano: ${names} \u00b7 scattano quando vieni colpito</div>`;
+    return '';   // banner 'Difese in mano' rimosso su richiesta
   }
   return '';
 }
@@ -2004,13 +2004,13 @@ function renderResults(v){
     const bonus=(r.bossList||[]).map(b=>`<span class="res-bonus${b.kind==='miniboss'?' mini':''}">+${eur(b.reward)}</span>`).join('');
     h+=`<div class="res-row${r.pos===1?' p1':''}"><div class="res-pos">${r.pos}</div><span class="res-dot" style="background:${r.colorH}"></span><div class="res-nm">${esc(r.name)}${r.id===v.you.id?' (tu)':''}${r.cell!=null?' <span class="res-cell">cas. '+r.cell+'</span>':''}</div><div class="res-rew">${r.po>0?'<span class="po">+'+r.po+' PO</span>':'<span style="color:var(--muted-2)">—</span>'}<div class="mn">+${eur(r.money)}</div>${bonus}${bet}</div></div>`;
   });
+  if(v.canNext)h+='<button class="btn btn-primary foot" style="margin:8px 0 14px" onclick="socket.emit(\'results:next\')">Prossima gara</button>';
+  else h+='<div class="spectate" style="padding:12px"><div class="stext">In attesa che l\'host avvii la prossima gara…</div></div>';
   if(v.raceRecap&&v.raceRecap.quota)h+=`<div style="text-align:center;color:var(--muted-2);font-size:12px;margin:8px 2px 2px">Quota d'ingresso: \u20ac${v.raceRecap.quota.toLocaleString('it-IT')} a testa \u00b7 pagata da tutti per correre</div>`;
   h+=voteCardHTML(v);
   h+=trackInfoHTML(v);
   h+=raceRecapHTML(v);
   h+=`<div class="panel" style="margin-top:6px"><div class="panel-h">Classifica campionato — obiettivo 50</div>${champHTML(v)}</div>`;
-  if(v.canNext)h+='<button class="btn btn-primary foot" onclick="socket.emit(\'results:next\')">Prossima gara</button>';
-  else h+='<div class="spectate" style="padding:14px"><div class="stext">In attesa che l\'host avvii la prossima gara…</div></div>';
   document.getElementById('s-results').innerHTML=h;
   if(v.vote&&v.vote.stage==='voting')startVoteTick(v.vote.endsAt,20000); else if(v.vote&&v.vote.stage==='video')startVoteTick(v.vote.videoEndsAt,30000); else stopVoteTick();
 }
