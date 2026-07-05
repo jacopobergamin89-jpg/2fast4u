@@ -1177,6 +1177,7 @@ function renderLobby(v){
   document.getElementById('lob-hint').textContent=v.you.isHost?(v.canStart?'Avvia quando siete pronti — o aggiungi una CPU per giocarci contro.':'Aggiungi una CPU o aspetta un altro giocatore per iniziare.'):'In attesa che l\'host avvii la partita…';
 }
 function copyCode(){ var c=(document.getElementById('lob-code')||{}).textContent||''; if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(c).then(function(){toast('Codice copiato: '+c);},function(){toast('Codice: '+c);}); } else toast('Codice: '+c); }
+function doAdvance(){ if(ui.autoMoveTimer){ clearTimeout(ui.autoMoveTimer); ui.autoMoveTimer=null; } socket.emit('race:move'); }
 function doStart(){socket.emit('startGame');}
 
 /* ---------- REVEAL (pilota segreto + carte iniziali) ---------- */
@@ -1687,7 +1688,7 @@ function renderRaceMobile(v){
     h+=`<div class="rm-act"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${mm.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato \u26a1':'Usa NOS'}${mm.nosVal>0?' (+'+mm.nosVal+')':''}</button></div>`;
   }else if(yt&&rolled){
     const b=rolled;
-    h+=`<div class="rm-act"><button class="btn btn-cyan" style="flex:1" onclick="socket.emit('race:move')">${b.np>=(b.finish||1e9)?'Tagli il traguardo \u2192':'Avanza a casella '+b.np+' \u2192'}</button></div>`;
+    h+=`<div class="rm-act"><button class="btn btn-cyan" style="flex:1" onclick="doAdvance()">${b.np>=(b.finish||1e9)?'Tagli il traguardo \u2192':'Avanza a casella '+b.np+' \u2192'}</button></div>`;
   }
   h+='</div>';
   host.innerHTML=h;
@@ -1797,7 +1798,7 @@ function dashHTML(v){
     h+=`<div class="dice-area"><div class="dice-info"><div class="di-big">🎯 Spinta +${b.db}</div>${b.useNos?'<span style="color:var(--cyan)">NOS ⚡</span>':''}</div></div>`;
     h+=`<div class="breakdown">${ls}<div class="bd-total"><span>Movimento</span><b>${b.total}</b></div></div>`;
     h+='</div>';
-    h+=`<div class="race-act"><button class="btn btn-cyan" style="width:100%" onclick="socket.emit('race:move')">${b.np>=(b.finish||1e9)?'Tagli il traguardo →':'Avanza a casella '+b.np+' →'}</button></div>`;
+    h+=`<div class="race-act"><button class="btn btn-cyan" style="width:100%" onclick="doAdvance()">${b.np>=(b.finish||1e9)?'Tagli il traguardo →':'Avanza a casella '+b.np+' →'}</button></div>`;
   }
   h+='</div>';return h;
 }
@@ -2372,6 +2373,9 @@ function render(v){
   else if(v.phase==='race')renderRace(v);
   else if(v.phase==='results')renderResults(v);
   else if(v.phase==='win')renderWin(v);
+  // auto-avanza dopo il colpo di gas: mostra il risultato un attimo, poi muove da solo
+  if(v.phase==='race' && v.isYourTurn && v.rolled){ if(!ui.autoMoveTimer) ui.autoMoveTimer=setTimeout(function(){ ui.autoMoveTimer=null; socket.emit('race:move'); }, 1200); }
+  else if(ui.autoMoveTimer){ clearTimeout(ui.autoMoveTimer); ui.autoMoveTimer=null; }
   renderDrawer(v);
   renderLog(v);
   checkIncoming(v);
