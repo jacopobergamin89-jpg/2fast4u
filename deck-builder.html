@@ -163,7 +163,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 
 <script>
 const NOMI_PEZZO={motore:'Motore',cambio:'Cambio',sterzo:'Sterzo',assetto:'Assetto',peso:'Peso',nos:'NOS'};
-const CAT_DEF=[['ingara','In gara',60],['pregara','Pre-gara',10],['difesa','Difesa',15],['polizia','Polizia',8],['esp','ESP',7]];
+const CAT_DEF=[['ingara','In gara',50],['pregara','Pre-gara',13],['difesa','Difesa',10],['polizia','Polizia',8],['esp','ESP',8]];
 const CAPS={}; CAT_DEF.forEach(c=>CAPS[c[0]]=c[2]); const CAP_PIL=1;
 const ESP_CAP_LV={3:4,4:3};
 function cardLv(name){ if(!DATA) return null; for(const cat of DATA.cats) for(const lv in cat.lv) for(const fn in cat.lv[lv]) for(const c of cat.lv[lv][fn]) if(c.n===name) return +lv; return null; }
