@@ -375,9 +375,9 @@ function actDiscard(room,p,handIdx){
 }
 function actPlayPregara(room,p,handIdx,targetId,comp){
   const G=room.G; if(G.phase!=='prep'||curPrep(G).id!==p.id) return 'Non è il tuo turno.';
-  if(G.reshop) return 'Nel giro extra puoi solo comprare.';
   const c=p.hand[handIdx]; if(!c||c.cat!=='pregara') return 'Carta non valida.';
   if(c.eff==='defend') return 'Le difese si usano solo quando vieni colpito.';
+  if(G.reshop && (c.eff==='reopen'||c.eff==='reopenAll'||c.eff==='reopenDebt')) return 'Non puoi riaprire di nuovo nel giro extra.';
   let tgt=p; let _ap=0,_comp=null,_lvl=null;
   if(pregaraTarget(c)==='rival'){ const t=G.players.find(x=>x.id===targetId && x.id!==p.id); if(!t) return 'Scegli un avversario valido.'; tgt=t; }
   if(c.eff==='smonta'){
@@ -1022,8 +1022,8 @@ function buildView(room, player){
       v.policeHand=p.hand.map((c,idx)=>({c,idx})).filter(o=>o.c.cat==='polizia').map(o=>({idx:o.idx,nome:o.c.nome,kind:o.c.kind,size:o.c.size}));
       v.mustPlayPolice=p.hand.some(c=>c.cat==='polizia');
       v.track=trackView(G);
-      v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:!!p.discountNext };
-      v.pregara = G.reshop ? [] : p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c), costPO:(c.costPO||0) })).filter(c=>c.cat==='pregara' && c.eff!=='defend');
+      v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:(p.discountNext||0) };
+      v.pregara = p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c), costPO:(c.costPO||0) })).filter(c=>c.cat==='pregara' && c.eff!=='defend' && !(G.reshop && (c.eff==='reopen'||c.eff==='reopenAll'||c.eff==='reopenDebt')));
       v.handAll = p.hand.map((c,idx)=>{ const o={ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, dur:c.dur, costPO:(c.costPO||0), gang:c.gang, desc:c.desc||cardDesc(c), needsTarget:cardNeedsTarget(c) }; if(c.cat==='pregara') o.target=pregaraTarget(c); if(c.cat==='esp'){ o.comp=c.comp; o.lvl=c.lvl; o.cost=c.cost; o.espVal=c.espVal; } return o; }).filter(c=>c.cat!=='polizia');
       v.canBet = !G.reshop && G.round>=2;
       if(v.canBet){

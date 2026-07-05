@@ -5232,12 +5232,6 @@
    },
    {
     "cat": "pregara",
-    "nome": "Il colpo della vita",
-    "eff": "money",
-    "val": 3000
-   },
-   {
-    "cat": "pregara",
     "nome": "Alzi la posta in palio",
     "eff": "prizeUp",
     "val": 2

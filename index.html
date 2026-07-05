@@ -1178,6 +1178,9 @@ function renderLobby(v){
 }
 function copyCode(){ var c=(document.getElementById('lob-code')||{}).textContent||''; if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(c).then(function(){toast('Codice copiato: '+c);},function(){toast('Codice: '+c);}); } else toast('Codice: '+c); }
 function doAdvance(){ if(ui.autoMoveTimer){ clearTimeout(ui.autoMoveTimer); ui.autoMoveTimer=null; } socket.emit('race:move'); }
+function ensurePrepClock(){ var b=document.getElementById('prepClock'); if(!b){ b=document.createElement('div'); b.id='prepClock'; b.style.cssText='position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:600;background:#1a1030;border:2px solid #FFC91E;color:#FFC91E;font-family:var(--disp,Oswald);font-weight:700;padding:8px 18px;border-radius:22px;font-size:15px;letter-spacing:.5px;box-shadow:0 6px 20px rgba(0,0,0,.6)'; document.body.appendChild(b); } return b; }
+function stopPrepTimer(){ if(ui.prepTimer){ clearInterval(ui.prepTimer); ui.prepTimer=null; } var b=document.getElementById('prepClock'); if(b) b.style.display='none'; }
+function startPrepTimer(){ stopPrepTimer(); var left=8; var b=ensurePrepClock(); b.style.display='block'; var upd=function(){ b.textContent='\u23f1 Tocca a te \u00b7 '+left+'s'; var d=left<=3; b.style.borderColor=d?'#ff3b6b':'#FFC91E'; b.style.color=d?'#ff3b6b':'#FFC91E'; }; upd(); ui.prepTimer=setInterval(function(){ left--; if(left<=0){ stopPrepTimer(); socket.emit('prep:done'); } else upd(); }, 1000); }
 function doStart(){socket.emit('startGame');}
 
 /* ---------- REVEAL (pilota segreto + carte iniziali) ---------- */
@@ -1190,7 +1193,7 @@ function cardDesc(c){
   if(c.eff==='betUp')return 'Scommessa ×2 (su di te)';
   if(c.eff==='betDown')return 'Scommessa ÷2 (a un rivale)';
   if(c.eff==='quota')return 'Quota '+(c.val>=0?'+':'')+c.val+' sulla scommessa'+(c.val<0?' (a un rivale)':' (su di te)');
-  if(c.eff==='discount')return 'Sconto 50% sul prossimo acquisto';
+  if(c.eff==='discount')return 'Sconto '+Math.round((1-c.val)*100)+'% sul prossimo acquisto';
   if(c.eff==='smonta'){const co=[];if(c.val)co.push(eur(c.val));if(c.costPO)co.push(c.costPO+' Rispetto');return 'Smonta 1 livello a un rivale'+(co.length?' · costa '+co.join(' e '):'');}
   if(c.eff==='reopen')return 'Giro extra in officina solo per te \u00b7 1 pezzo'+(c.val?' · costa '+eur(c.val):'');
   if(c.eff==='reopenAll')return 'Giro extra in officina per tutti · 1 pezzo a testa (tu per primo)';
@@ -1242,7 +1245,7 @@ function pregaraDesc(c){
   if(c.eff==='betUp')return 'Scommessa ×2';
   if(c.eff==='betDown')return 'Scommessa ÷2';
   if(c.eff==='quota')return 'Quota '+(c.val>=0?'+':'')+c.val;
-  if(c.eff==='discount')return 'Sconto 50% prossimo acquisto';
+  if(c.eff==='discount')return 'Sconto '+Math.round((1-c.val)*100)+'% prossimo acquisto';
   if(c.eff==='smonta'){const co=[];if(c.val)co.push(eur(c.val));if(c.costPO)co.push(c.costPO+' Rispetto');return 'Smonta 1 livello'+(co.length?' · costa '+co.join(' e '):'');}
   if(c.eff==='reopen')return 'Giro extra in officina solo per te · 1 pezzo'+(c.val?' · costa '+eur(c.val):'');
   if(c.eff==='reopenAll')return 'Giro extra in officina per tutti · 1 pezzo a testa';
@@ -1440,7 +1443,7 @@ function prepMobileHTML(v){
 
   let bars=defenseHTML(v);
   if(v.reshop) bars+='<div class="o2-bar giro">\ud83d\udd27 Officina riaperta'+(v.reshopBy?(' da <b>'+esc(v.reshopBy)+'</b>'):'')+' \u00b7 giro extra \u2014 '+(v.reshopBy?(esc(v.reshopBy)+' sceglie per primo, '):'')+'ognuno ricompra una volta</div>';
-  if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('\u00d7'+m):('\u00f7'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,qm=v.me.quotaMod||0,tg=[]; if(v.sprintFinish)tg.push('\u26a1 Gara breve: traguardo a '+v.sprintFinish); if(pm!==1)tg.push('\ud83c\udf81 Montepremi '+fmt(pm)); if(bm!==1)tg.push('\ud83c\udfb2 Scommessa '+fmt(bm)); if(qm)tg.push('\ud83d\udcca Quota '+(qm>0?'+':'')+qm); if(v.me.discount)tg.push('\ud83d\udcb8 Sconto 50% prossimo acquisto'); if(v.reshopComing)tg.push('\ud83d\udd27 Giro extra dopo la prep'+(v.reshopBy?(' (riaperto da '+esc(v.reshopBy)+')'):'')); if(tg.length)bars+='<div class="o2-bar boost">'+tg.join(' \u00b7 ')+'</div>'; }
+  if(v.isYourTurn&&v.me){ const fmt=m=>m>1?('\u00d7'+m):('\u00f7'+Math.round(1/m)); const pm=v.me.prizeMult||1,bm=v.me.betMult||1,qm=v.me.quotaMod||0,tg=[]; if(v.sprintFinish)tg.push('\u26a1 Gara breve: traguardo a '+v.sprintFinish); if(pm!==1)tg.push('\ud83c\udf81 Montepremi '+fmt(pm)); if(bm!==1)tg.push('\ud83c\udfb2 Scommessa '+fmt(bm)); if(qm)tg.push('\ud83d\udcca Quota '+(qm>0?'+':'')+qm); if(v.me.discount)tg.push('\ud83d\udcb8 Sconto '+Math.round((1-v.me.discount)*100)+'% prossimo acquisto'); if(v.reshopComing)tg.push('\ud83d\udd27 Giro extra dopo la prep'+(v.reshopBy?(' (riaperto da '+esc(v.reshopBy)+')'):'')); if(tg.length)bars+='<div class="o2-bar boost">'+tg.join(' \u00b7 ')+'</div>'; }
   bars+=policeBannerHTML(v);
   const barsHTML = bars?`<div class="o2-bars">${bars}</div>`:'';
 
@@ -1475,8 +1478,8 @@ function prepMobileHTML(v){
   // la tua mano + garage
   let manoInner='';
   if(v.isYourTurn){
-    if(v.handAll&&v.handAll.length){ manoInner+='<div class="o2-handh">'+(v.reshop?'La tua mano \u00b7 giro extra: solo acquisti':'La tua mano \u00b7 scarta quelle che non vuoi')+'</div>'; v.handAll.forEach(c=>{
-      manoInner+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="o2-pre-d">${handCardDesc(c)}</span></div>${v.reshop?'':`<div class="o2-hand-act">${ofHandPlay(c,true)}<button class="o2-pre-go scarta" onclick="discard(${c.idx})">Scarta</button></div>`}</div>`;}); }
+    if(v.handAll&&v.handAll.length){ manoInner+='<div class="o2-handh">'+(v.reshop?'La tua mano \u00b7 giro extra':'La tua mano \u00b7 scarta quelle che non vuoi')+'</div>'; v.handAll.forEach(c=>{
+      manoInner+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="o2-pre-d">${handCardDesc(c)}</span></div><div class="o2-hand-act">${ofHandPlay(c,true)}<button class="o2-pre-go scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;}); }
     if(v.canBet) manoInner+='<div class="o2-note">Apri \ud83d\udc65 <b>Piloti</b> in alto per scommettere e vedere le puntate.</div>';
   }
   if(!manoInner) manoInner='<div class="o2-empty">Nessuna carta da giocare o scartare.</div>';
@@ -1550,8 +1553,8 @@ function renderPrep(v){
   // --- MANO (gioca / scarta) ---
   let hand='';
   if(v.isYourTurn && v.handAll && v.handAll.length){
-    if(v.reshop) hand='<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Giro extra: puoi solo comprare \u2014 le carte le giochi al prossimo round.</div>';
-    v.handAll.forEach(c=>{hand+=`<div class="of-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="of-pre-d">${handCardDesc(c)}</span></div>${v.reshop?'':`<div class="of-hand-act">${ofHandPlay(c,false)}<button class="btn btn-line btn-sm btn-scarta" onclick="discard(${c.idx})">Scarta</button></div>`}</div>`;});
+    if(v.reshop) hand='<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Giro extra \u2014 puoi comprare e giocare le carte (non riaprire di nuovo).</div>';
+    v.handAll.forEach(c=>{hand+=`<div class="of-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="of-pre-d">${handCardDesc(c)}</span></div><div class="of-hand-act">${ofHandPlay(c,false)}<button class="btn btn-line btn-sm btn-scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;});
   }
 
   // --- AVVERSARI (coi soldi e i PO) ---
@@ -2376,6 +2379,7 @@ function render(v){
   // auto-avanza dopo il colpo di gas: mostra il risultato un attimo, poi muove da solo
   if(v.phase==='race' && v.isYourTurn && v.rolled){ if(!ui.autoMoveTimer) ui.autoMoveTimer=setTimeout(function(){ ui.autoMoveTimer=null; socket.emit('race:move'); }, 1200); }
   else if(ui.autoMoveTimer){ clearTimeout(ui.autoMoveTimer); ui.autoMoveTimer=null; }
+  if(v.phase==='prep' && v.isYourTurn){ startPrepTimer(); } else { stopPrepTimer(); }
   renderDrawer(v);
   renderLog(v);
   checkIncoming(v);
