@@ -965,30 +965,6 @@
  "carte": {
   "1": [
    {
-    "cat": "polizia",
-    "nome": "Pattuglia dietro la curva",
-    "kind": "blocco",
-    "size": 3
-   },
-   {
-    "cat": "polizia",
-    "nome": "Controllo lampo",
-    "kind": "blocco",
-    "size": 3
-   },
-   {
-    "cat": "polizia",
-    "nome": "Gazzella in agguato",
-    "kind": "blocco",
-    "size": 3
-   },
-   {
-    "cat": "polizia",
-    "nome": "Lampeggianti all'improvviso",
-    "kind": "blocco",
-    "size": 3
-   },
-   {
     "cat": "ingara",
     "nome": "Ti prendooooo!!!!",
     "eff": "ctrl",
@@ -1335,6 +1311,18 @@
     "eff": "defend",
     "val": "pregara",
     "dur": 0
+   },
+   {
+    "cat": "polizia",
+    "nome": "Pattuglia dietro la curva",
+    "kind": "blocco",
+    "size": 3
+   },
+   {
+    "cat": "polizia",
+    "nome": "Controllo lampo",
+    "kind": "blocco",
+    "size": 3
    }
   ],
   "2": [
@@ -2453,30 +2441,6 @@
     "desc": "Velocità +4 (te) · 1 tiro"
    },
    {
-    "cat": "polizia",
-    "nome": "Doppia volante di traverso",
-    "kind": "blocco",
-    "size": 5
-   },
-   {
-    "cat": "polizia",
-    "nome": "Reparto mobile schierato",
-    "kind": "blocco",
-    "size": 5
-   },
-   {
-    "cat": "polizia",
-    "nome": "La strada si chiude",
-    "kind": "blocco",
-    "size": 5
-   },
-   {
-    "cat": "polizia",
-    "nome": "Inseguimento a sirene spiegate",
-    "kind": "inseguimento",
-    "size": 0
-   },
-   {
     "cat": "ingara",
     "nome": "Assetto azzeccato",
     "eff": "ctrl",
@@ -2620,6 +2584,18 @@
     "eff": "defend",
     "val": "both",
     "dur": 0
+   },
+   {
+    "cat": "polizia",
+    "nome": "Doppia volante di traverso",
+    "kind": "blocco",
+    "size": 5
+   },
+   {
+    "cat": "polizia",
+    "nome": "Reparto mobile schierato",
+    "kind": "blocco",
+    "size": 5
    }
   ],
   "3": [
@@ -3738,24 +3714,6 @@
     "desc": "Controllo -5 (1 rivale) · 1 tiro"
    },
    {
-    "cat": "polizia",
-    "nome": "Maxi-retata giornaliera",
-    "kind": "blocco",
-    "size": 10
-   },
-   {
-    "cat": "polizia",
-    "nome": "Maxi-retata notturna",
-    "kind": "blocco",
-    "size": 10
-   },
-   {
-    "cat": "polizia",
-    "nome": "Le volanti ti stanno addosso",
-    "kind": "inseguimento",
-    "size": 0
-   },
-   {
     "cat": "esp",
     "nome": "ESP Sterzo L3",
     "gang": "Lupara Boys",
@@ -3996,6 +3954,24 @@
     "eff": "defend",
     "val": "both",
     "dur": 1
+   },
+   {
+    "cat": "polizia",
+    "nome": "Maxi-retata giornaliera",
+    "kind": "blocco",
+    "size": 10
+   },
+   {
+    "cat": "polizia",
+    "nome": "Maxi-retata notturna",
+    "kind": "blocco",
+    "size": 10
+   },
+   {
+    "cat": "polizia",
+    "nome": "Inseguimento a sirene spiegate",
+    "kind": "inseguimento",
+    "size": 0
    }
   ],
   "4": [
@@ -5114,18 +5090,6 @@
     "desc": "Controllo -7 (1 rivale) · 1 tiro"
    },
    {
-    "cat": "polizia",
-    "nome": "Città blindata",
-    "kind": "blocco",
-    "size": 10
-   },
-   {
-    "cat": "polizia",
-    "nome": "Elicottero in caccia",
-    "kind": "inseguimento",
-    "size": 0
-   },
-   {
     "cat": "esp",
     "nome": "ESP Sterzo L4",
     "gang": "Lupara Boys",
@@ -5347,6 +5311,24 @@
     "eff": "defend",
     "val": "both",
     "dur": 1
+   },
+   {
+    "cat": "polizia",
+    "nome": "Città blindata",
+    "kind": "blocco",
+    "size": 13
+   },
+   {
+    "cat": "polizia",
+    "nome": "La strada si chiude",
+    "kind": "blocco",
+    "size": 13
+   },
+   {
+    "cat": "polizia",
+    "nome": "Elicottero in caccia",
+    "kind": "inseguimento",
+    "size": 0
    }
   ]
  }
