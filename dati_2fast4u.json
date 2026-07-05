@@ -965,268 +965,6 @@
  "carte": {
   "1": [
    {
-    "cat": "ingara",
-    "nome": "Ti prendooooo!!!!",
-    "eff": "ctrl",
-    "val": 1,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Hai istallato le nuove sospensioni",
-    "eff": "ctrl",
-    "val": 1,
-    "dur": 2,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Alettone danneggiato",
-    "eff": "ctrl",
-    "val": -1,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Perdi il controllo!!!!",
-    "eff": "ctrl",
-    "val": -1,
-    "dur": 2,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Ammortizzatore scarico",
-    "eff": "ctrl",
-    "val": -2,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Bel colpo di fortuna",
-    "eff": "partenza",
-    "val": 2,
-    "dur": 0,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Brucia le gomme",
-    "eff": "partenza",
-    "val": 1,
-    "dur": 0,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Hai messo gli occhiali sbagliati",
-    "eff": "partenza",
-    "val": -1,
-    "dur": 0,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Non è la tua giornata",
-    "eff": "partenza",
-    "val": -2,
-    "dur": 0,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Oggi devi vincere",
-    "eff": "vel",
-    "val": 2,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Corri Fooorrreeeesstttttt!!!!",
-    "eff": "vel",
-    "val": 2,
-    "dur": 2,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Veloce come il vento",
-    "eff": "vel",
-    "val": 1,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Finalmente il giusto cambio",
-    "eff": "vel",
-    "val": 1,
-    "dur": 2,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "La marmitta si allenta",
-    "eff": "vel",
-    "val": -1,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Una curva mal presa ti rallenta",
-    "eff": "vel",
-    "val": -1,
-    "dur": 2,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Perdi pressione nei pneumatici",
-    "eff": "vel",
-    "val": -2,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Turbo che perde pressione",
-    "eff": "vel",
-    "val": -2,
-    "dur": 2,
-    "target": "rival"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Arriva bonifica dallo zio del Molise",
-    "eff": "money",
-    "val": 250
-   },
-   {
-    "cat": "pregara",
-    "nome": "Arriva la multa per eccesso velocità",
-    "eff": "money",
-    "val": -500
-   },
-   {
-    "cat": "pregara",
-    "nome": "Arrivano le tasse arretrate",
-    "eff": "money",
-    "val": -250
-   },
-   {
-    "cat": "pregara",
-    "nome": "I debiti si pagano",
-    "eff": "money",
-    "val": -500
-   },
-   {
-    "cat": "pregara",
-    "nome": "Ieri sera hai vinto a Poker",
-    "eff": "money",
-    "val": 500
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il tuo cane vince il primo premio",
-    "eff": "money",
-    "val": 500
-   },
-   {
-    "cat": "pregara",
-    "nome": "La quota cala all'ultimo",
-    "eff": "betUp",
-    "val": 1.5
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il broker sbaglia a segnare la quota",
-    "eff": "betUp",
-    "val": 1.5
-   },
-   {
-    "cat": "pregara",
-    "nome": "Stai antipatico al broker",
-    "eff": "betDown",
-    "val": 0.6667
-   },
-   {
-    "cat": "pregara",
-    "nome": "Buono sconto",
-    "eff": "discount",
-    "val": 0.75
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il capo officina ti deve un debito",
-    "eff": "discount",
-    "val": 0.75
-   },
-   {
-    "cat": "pregara",
-    "nome": "Chiedi al figlio del proprietario di riaprire l'officina",
-    "eff": "reopenAll",
-    "val": 0
-   },
-   {
-    "cat": "pregara",
-    "nome": "Chiedi alla moglie del proprietario di riaprire l'officina",
-    "eff": "reopenAll",
-    "val": 0
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il proprietario riapre l'officina per tutti",
-    "eff": "reopenAll",
-    "val": 0
-   },
-   {
-    "cat": "pregara",
-    "nome": "Notte di porte aperte in officina",
-    "eff": "reopenAll",
-    "val": 0
-   },
-   {
-    "cat": "pregara",
-    "nome": "Serata di porte aperte in officina",
-    "eff": "reopenAll",
-    "val": 0
-   },
-   {
-    "cat": "pregara",
-    "nome": "Strada · modifica 1 tratto → Città",
-    "eff": "tratto",
-    "val": "citta"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Strada · modifica 1 tratto → Drift",
-    "eff": "tratto",
-    "val": "drift"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Strada · modifica 1 tratto → Rettilineo",
-    "eff": "tratto",
-    "val": "rettilineo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Gara lampo",
-    "eff": "sprint",
-    "val": 28
-   },
-   {
-    "cat": "pregara",
-    "nome": "Hai da fare stasera",
-    "eff": "sprint",
-    "val": 34
-   },
-   {
     "cat": "difesa",
     "nome": "Colpo di reni",
     "eff": "defend",
@@ -1357,94 +1095,294 @@
    },
    {
     "cat": "ingara",
-    "nome": "Ammortizzatore scarico (a lungo)",
+    "nome": "Ti prendooooo!!!!",
     "eff": "ctrl",
-    "val": -2,
-    "dur": 2,
-    "target": "rival"
-   }
-  ],
-  "2": [
-   {
-    "cat": "ingara",
-    "nome": "Assetto azzeccato",
-    "eff": "ctrl",
-    "val": 2,
+    "val": 1,
     "dur": 1,
     "target": "self"
    },
    {
     "cat": "ingara",
-    "nome": "Volante preciso",
+    "nome": "Hai istallato le nuove sospensioni",
     "eff": "ctrl",
-    "val": 2,
+    "val": 1,
     "dur": 2,
     "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Alettone danneggiato",
+    "eff": "ctrl",
+    "val": -1,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Perdi il controllo!!!!",
+    "eff": "ctrl",
+    "val": -1,
+    "dur": 2,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Ammortizzatore scarico",
+    "eff": "ctrl",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
    },
    {
     "cat": "ingara",
     "nome": "Sterzo molle",
     "eff": "ctrl",
     "val": -2,
+    "dur": 2,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Bel colpo di fortuna",
+    "eff": "partenza",
+    "val": 2,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Brucia le gomme",
+    "eff": "partenza",
+    "val": 1,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Hai messo gli occhiali sbagliati",
+    "eff": "partenza",
+    "val": -1,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Non è la tua giornata",
+    "eff": "partenza",
+    "val": -2,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Oggi devi vincere",
+    "eff": "vel",
+    "val": 2,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Corri Fooorrreeeesstttttt!!!!",
+    "eff": "vel",
+    "val": 2,
+    "dur": 2,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Veloce come il vento",
+    "eff": "vel",
+    "val": 1,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Finalmente il giusto cambio",
+    "eff": "vel",
+    "val": 1,
+    "dur": 2,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "La marmitta si allenta",
+    "eff": "vel",
+    "val": -1,
     "dur": 1,
     "target": "rival"
    },
    {
     "cat": "ingara",
-    "nome": "Gomme fredde",
-    "eff": "ctrl",
+    "nome": "Una curva mal presa ti rallenta",
+    "eff": "vel",
+    "val": -1,
+    "dur": 2,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Perdi pressione nei pneumatici",
+    "eff": "vel",
+    "val": -2,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Turbo che perde pressione",
+    "eff": "vel",
     "val": -2,
     "dur": 2,
     "target": "rival"
    },
    {
-    "cat": "ingara",
-    "nome": "Reazione fulminea al verde",
-    "eff": "partenza",
-    "val": 3,
-    "dur": 0,
-    "target": "self"
+    "cat": "pregara",
+    "nome": "Arriva bonifica dallo zio del Molise",
+    "eff": "money",
+    "val": 250
    },
    {
-    "cat": "ingara",
-    "nome": "Parti in ritardo",
-    "eff": "partenza",
-    "val": -3,
-    "dur": 0,
-    "target": "rival"
+    "cat": "pregara",
+    "nome": "Mancia inaspettata",
+    "eff": "money",
+    "val": 250
    },
    {
-    "cat": "ingara",
-    "nome": "Turbo a pieni giri",
-    "eff": "vel",
-    "val": 3,
-    "dur": 1,
-    "target": "self"
+    "cat": "pregara",
+    "nome": "Arriva la multa per eccesso velocità",
+    "eff": "money",
+    "val": -500
    },
    {
-    "cat": "ingara",
-    "nome": "Iniezione racing",
-    "eff": "vel",
-    "val": 3,
-    "dur": 2,
-    "target": "self"
+    "cat": "pregara",
+    "nome": "I debiti si pagano",
+    "eff": "money",
+    "val": -500
    },
    {
-    "cat": "ingara",
-    "nome": "Gomma sgonfia",
-    "eff": "vel",
-    "val": -3,
-    "dur": 1,
-    "target": "rival"
+    "cat": "pregara",
+    "nome": "Arrivano le tasse arretrate",
+    "eff": "money",
+    "val": -250
    },
    {
-    "cat": "ingara",
-    "nome": "Bullone allentato",
-    "eff": "vel",
-    "val": -3,
-    "dur": 2,
-    "target": "rival"
+    "cat": "pregara",
+    "nome": "Piccola multa",
+    "eff": "money",
+    "val": -250
    },
+   {
+    "cat": "pregara",
+    "nome": "Ieri sera hai vinto a Poker",
+    "eff": "money",
+    "val": 500
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il tuo cane vince il primo premio",
+    "eff": "money",
+    "val": 500
+   },
+   {
+    "cat": "pregara",
+    "nome": "La quota cala all'ultimo",
+    "eff": "betUp",
+    "val": 1.5
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il broker sbaglia a segnare la quota",
+    "eff": "betUp",
+    "val": 1.5
+   },
+   {
+    "cat": "pregara",
+    "nome": "Stai antipatico al broker",
+    "eff": "betDown",
+    "val": 0.6667
+   },
+   {
+    "cat": "pregara",
+    "nome": "Giornata storta al banco",
+    "eff": "betDown",
+    "val": 0.6667
+   },
+   {
+    "cat": "pregara",
+    "nome": "Buono sconto",
+    "eff": "discount",
+    "val": 0.75
+   },
+   {
+    "cat": "pregara",
+    "nome": "Chiedi al figlio del proprietario di riaprire l'officina",
+    "eff": "reopenAll",
+    "val": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "Strada · modifica 1 tratto → Città",
+    "eff": "tratto",
+    "val": "citta"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Deviazione in centro",
+    "eff": "tratto",
+    "val": "citta"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Strada · modifica 1 tratto → Drift",
+    "eff": "tratto",
+    "val": "drift"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Scorciatoia tra i tornanti",
+    "eff": "tratto",
+    "val": "drift"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Strada · modifica 1 tratto → Rettilineo",
+    "eff": "tratto",
+    "val": "rettilineo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Trovi il rettifilo",
+    "eff": "tratto",
+    "val": "rettilineo"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Gara lampo",
+    "eff": "sprint",
+    "val": 28
+   },
+   {
+    "cat": "pregara",
+    "nome": "Sfida al volo",
+    "eff": "sprint",
+    "val": 28
+   },
+   {
+    "cat": "pregara",
+    "nome": "Hai da fare stasera",
+    "eff": "sprint",
+    "val": 34
+   },
+   {
+    "cat": "pregara",
+    "nome": "Corsa improvvisata",
+    "eff": "sprint",
+    "val": 34
+   }
+  ],
+  "2": [
    {
     "cat": "ingara",
     "nome": "Colpo sicuro",
@@ -2687,89 +2625,73 @@
     "nome": "Inseguimento a sirene spiegate",
     "kind": "inseguimento",
     "size": 0
+   },
+   {
+    "cat": "ingara",
+    "nome": "Assetto azzeccato",
+    "eff": "ctrl",
+    "val": 2,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Volante preciso",
+    "eff": "ctrl",
+    "val": 2,
+    "dur": 2,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Reazione fulminea al verde",
+    "eff": "partenza",
+    "val": 3,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Parti in ritardo",
+    "eff": "partenza",
+    "val": -3,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Turbo a pieni giri",
+    "eff": "vel",
+    "val": 3,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Iniezione racing",
+    "eff": "vel",
+    "val": 3,
+    "dur": 2,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Gomma sgonfia",
+    "eff": "vel",
+    "val": -3,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Bullone allentato",
+    "eff": "vel",
+    "val": -3,
+    "dur": 2,
+    "target": "rival"
    }
   ],
   "3": [
-   {
-    "cat": "ingara",
-    "nome": "Setup da pista",
-    "eff": "ctrl",
-    "val": 4,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Sterzo diretto",
-    "eff": "ctrl",
-    "val": 4,
-    "dur": 2,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Sospensione rotta",
-    "eff": "ctrl",
-    "val": -4,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Asfalto viscido",
-    "eff": "ctrl",
-    "val": -4,
-    "dur": 2,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Scatto da dragster",
-    "eff": "partenza",
-    "val": 4,
-    "dur": 0,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Spegni al semaforo",
-    "eff": "partenza",
-    "val": -4,
-    "dur": 0,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Mappa motore aggressiva",
-    "eff": "vel",
-    "val": 5,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Aspirazione diretta",
-    "eff": "vel",
-    "val": 5,
-    "dur": 2,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Surriscaldamento motore",
-    "eff": "vel",
-    "val": -5,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Olio sull'asfalto",
-    "eff": "vel",
-    "val": -5,
-    "dur": 2,
-    "target": "rival"
-   },
    {
     "cat": "ingara",
     "nome": "Allungo calcolato",
@@ -4028,89 +3950,89 @@
     "baseVal": 6,
     "cost": 1550,
     "desc": "Potenzia Motore a L3 ESP (valore +7) · serve Motore L3 montato · €1550"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Setup da pista",
+    "eff": "ctrl",
+    "val": 4,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sterzo diretto",
+    "eff": "ctrl",
+    "val": 4,
+    "dur": 2,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sospensione rotta",
+    "eff": "ctrl",
+    "val": -4,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Asfalto viscido",
+    "eff": "ctrl",
+    "val": -4,
+    "dur": 2,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Scatto da dragster",
+    "eff": "partenza",
+    "val": 4,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Spegni al semaforo",
+    "eff": "partenza",
+    "val": -4,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Mappa motore aggressiva",
+    "eff": "vel",
+    "val": 5,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Aspirazione diretta",
+    "eff": "vel",
+    "val": 5,
+    "dur": 2,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Surriscaldamento motore",
+    "eff": "vel",
+    "val": -5,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Olio sull'asfalto",
+    "eff": "vel",
+    "val": -5,
+    "dur": 2,
+    "target": "rival"
    }
   ],
   "4": [
-   {
-    "cat": "ingara",
-    "nome": "Aerodinamica da formula",
-    "eff": "ctrl",
-    "val": 6,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Grip totale sull'asfalto",
-    "eff": "ctrl",
-    "val": 6,
-    "dur": 2,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Sbandata in rettilineo",
-    "eff": "ctrl",
-    "val": -6,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Avantreno che scappa",
-    "eff": "ctrl",
-    "val": -6,
-    "dur": 2,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Holeshot perfetto",
-    "eff": "partenza",
-    "val": 5,
-    "dur": 0,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Cali il motore al via",
-    "eff": "partenza",
-    "val": -5,
-    "dur": 0,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Motore portato al limite",
-    "eff": "vel",
-    "val": 6,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Big turbo che spinge",
-    "eff": "vel",
-    "val": 6,
-    "dur": 2,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Freno motore bloccato",
-    "eff": "vel",
-    "val": -6,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Cinghia esplosa",
-    "eff": "vel",
-    "val": -6,
-    "dur": 2,
-    "target": "rival"
-   },
    {
     "cat": "ingara",
     "nome": "Affondo perfetto",
@@ -5354,6 +5276,86 @@
     "baseVal": 8,
     "cost": 1700,
     "desc": "Potenzia Motore a L4 ESP (valore +9) · serve Motore L4 montato · €1700"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Aerodinamica da formula",
+    "eff": "ctrl",
+    "val": 6,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Grip totale sull'asfalto",
+    "eff": "ctrl",
+    "val": 6,
+    "dur": 2,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sbandata in rettilineo",
+    "eff": "ctrl",
+    "val": -6,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Avantreno che scappa",
+    "eff": "ctrl",
+    "val": -6,
+    "dur": 2,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Holeshot perfetto",
+    "eff": "partenza",
+    "val": 5,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Cali il motore al via",
+    "eff": "partenza",
+    "val": -5,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Motore portato al limite",
+    "eff": "vel",
+    "val": 6,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Big turbo che spinge",
+    "eff": "vel",
+    "val": 6,
+    "dur": 2,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Freno motore bloccato",
+    "eff": "vel",
+    "val": -6,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Cinghia esplosa",
+    "eff": "vel",
+    "val": -6,
+    "dur": 2,
+    "target": "rival"
    }
   ]
  }
