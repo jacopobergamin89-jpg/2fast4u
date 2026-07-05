@@ -85,10 +85,13 @@ function mkCard(c){
   o.desc=cardDesc(o);
   return o;
 }
-function packCards(lvl){ return (CARD_PACKS[lvl]||[]).map(mkCard); }
+// --- POLIZIA AUTOMATICA: 1 carta a caso per livello in ogni mazzo ---
+const POLICE_BY_LEVEL=(function(){ const m={1:[],2:[],3:[],4:[]}; for(const lv of ['1','2','3','4']) (DATI.carte[lv]||[]).forEach(c=>{ if(c.cat==='polizia') m[+lv].push(c); }); return m; })();
+function addRandomPolice(arr,lvl){ const pool=POLICE_BY_LEVEL[lvl]||[]; if(pool.length) arr.push(mkCard(pool[Math.floor(Math.random()*pool.length)])); return arr; }
+function packCards(lvl){ return (CARD_PACKS[lvl]||[]).filter(c=>c.cat!=='polizia').map(mkCard); }   // esclude la polizia (entra a parte, 1 a caso per livello)
 function makeDeck(maxLvl){
   const d=[]; const top=Math.min(maxLvl||1, DB.maxLevelRoads);
-  for(let l=1;l<=top;l++) packCards(l).forEach(c=>d.push(c));    // il mazzo contiene tutte le carte fino al livello pista
+  for(let l=1;l<=top;l++){ packCards(l).forEach(c=>d.push(c)); addRandomPolice(d,l); }    // tutte le carte fino al livello + 1 polizia a caso per livello
   return shuffle(d);
 }
 /* --- mazzo PERSONALE dal deck-builder (nome carta univoco per livello) --- */
@@ -100,7 +103,7 @@ function sanitizeDeck(deck){
   if(!pilots.length && !Object.keys(qty).length) return null;
   return { qty, pilots };
 }
-function personalDeckCards(deckDef,lvl){ const out=[]; const qty=(deckDef&&deckDef.qty)||{}; for(const nome in qty){ const e=CARD_INDEX[nome]; if(!e||e.lvl!==lvl) continue; const n=qty[nome]|0; for(let k=0;k<n;k++) out.push(mkCard(e.def)); } return out; }
+function personalDeckCards(deckDef,lvl){ const out=[]; const qty=(deckDef&&deckDef.qty)||{}; for(const nome in qty){ const e=CARD_INDEX[nome]; if(!e||e.lvl!==lvl||e.def.cat==='polizia') continue; const n=qty[nome]|0; for(let k=0;k<n;k++) out.push(mkCard(e.def)); } addRandomPolice(out,lvl); return out; }
 function makePersonalDeck(deckDef,maxLvl){ const d=[]; const top=Math.min(maxLvl||1, DB.maxLevelRoads); for(let l=1;l<=top;l++) personalDeckCards(deckDef,l).forEach(c=>d.push(c)); return shuffle(d); }
 function pilotPoolFor(p){ if(p.deckDef && Array.isArray(p.deckDef.pilots) && p.deckDef.pilots.length) return shuffle(p.deckDef.pilots.slice()); return shuffle(DB.piloti.map(q=>q.id)).slice(0,6); }
 
@@ -925,7 +928,7 @@ function advanceTrack(room){
   change.newLevel=G.trackLevel; change.advanced=advance;
   layoutTrack(G.track);
   G.lastTrackChange=change;
-  for(const lv of [2,3,4]){ if(G.trackLevel>=lv && G.scaleUnlocked && !G.scaleUnlocked[lv]){ G.scaleUnlocked[lv]=true; G.players.forEach(p=>{ const add = p.deckDef ? personalDeckCards(p.deckDef,lv) : packCards(lv); p.deck=shuffle((p.deck||[]).concat(add)); }); change.scaleUnlocked=(change.scaleUnlocked||[]).concat(lv); } }   // il pack del nuovo livello entra in ogni mazzo personale
+  for(const lv of [2,3,4]){ if(G.trackLevel>=lv && G.scaleUnlocked && !G.scaleUnlocked[lv]){ G.scaleUnlocked[lv]=true; G.players.forEach(p=>{ const add = p.deckDef ? personalDeckCards(p.deckDef,lv) : addRandomPolice(packCards(lv),lv); p.deck=shuffle((p.deck||[]).concat(add)); }); change.scaleUnlocked=(change.scaleUnlocked||[]).concat(lv); } }   // il pack del nuovo livello (+1 polizia a caso) entra in ogni mazzo
 }
 function actNextRound(room,p){
   const G=room.G; if(G.phase!=='results') return 'Non disponibile ora.';
