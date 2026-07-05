@@ -965,111 +965,6 @@
  "carte": {
   "1": [
    {
-    "cat": "difesa",
-    "nome": "Colpo di reni",
-    "eff": "defend",
-    "val": "ingara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Controsterzo da maestro",
-    "eff": "defend",
-    "val": "ingara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Effetto specchio",
-    "eff": "defend",
-    "val": "ingara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Lo eviti in un lampo",
-    "eff": "defend",
-    "val": "ingara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Nervi d'acciaio",
-    "eff": "defend",
-    "val": "ingara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Riflessi felini",
-    "eff": "defend",
-    "val": "ingara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Scarto secco",
-    "eff": "defend",
-    "val": "ingara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Schivata all'ultimo",
-    "eff": "defend",
-    "val": "ingara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Sterzata provvidenziale",
-    "eff": "defend",
-    "val": "ingara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Coperto su tutto",
-    "eff": "defend",
-    "val": "pregara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Niente ti scalfisce",
-    "eff": "defend",
-    "val": "pregara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Sempre un passo avanti",
-    "eff": "defend",
-    "val": "pregara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Soffiata in anticipo",
-    "eff": "defend",
-    "val": "pregara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Spalle coperte",
-    "eff": "defend",
-    "val": "pregara",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Talpa in officina",
-    "eff": "defend",
-    "val": "pregara",
-    "dur": 0
-   },
-   {
     "cat": "polizia",
     "nome": "Pattuglia dietro la curva",
     "kind": "blocco",
@@ -1398,6 +1293,48 @@
     "nome": "Il guardiano riapre per una mancia",
     "eff": "reopenAll",
     "val": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Colpo di reni",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Controsterzo da maestro",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Lo eviti in un lampo",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Coperto su tutto",
+    "eff": "defend",
+    "val": "pregara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Niente ti scalfisce",
+    "eff": "defend",
+    "val": "pregara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Sempre un passo avanti",
+    "eff": "defend",
+    "val": "pregara",
+    "dur": 0
    }
   ],
   "2": [
@@ -2516,27 +2453,6 @@
     "desc": "Velocità +4 (te) · 1 tiro"
    },
    {
-    "cat": "difesa",
-    "nome": "Contromossa",
-    "eff": "defend",
-    "val": "both",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Parata",
-    "eff": "defend",
-    "val": "both",
-    "dur": 0
-   },
-   {
-    "cat": "difesa",
-    "nome": "Riparo",
-    "eff": "defend",
-    "val": "both",
-    "dur": 0
-   },
-   {
     "cat": "polizia",
     "nome": "Doppia volante di traverso",
     "kind": "blocco",
@@ -2683,6 +2599,27 @@
     "nome": "Sconto amici e parenti",
     "eff": "discount",
     "val": 0.5
+   },
+   {
+    "cat": "difesa",
+    "nome": "Contromossa",
+    "eff": "defend",
+    "val": "both",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Parata",
+    "eff": "defend",
+    "val": "both",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Riparo",
+    "eff": "defend",
+    "val": "both",
+    "dur": 0
    }
   ],
   "3": [
@@ -3801,20 +3738,6 @@
     "desc": "Controllo -5 (1 rivale) · 1 tiro"
    },
    {
-    "cat": "difesa",
-    "nome": "Scudo totale",
-    "eff": "defend",
-    "val": "both",
-    "dur": 1
-   },
-   {
-    "cat": "difesa",
-    "nome": "Sesto senso",
-    "eff": "defend",
-    "val": "both",
-    "dur": 1
-   },
-   {
     "cat": "polizia",
     "nome": "Maxi-retata giornaliera",
     "kind": "blocco",
@@ -4052,6 +3975,27 @@
     "nome": "Paghi di tasca per riaprire",
     "eff": "reopen",
     "val": 500
+   },
+   {
+    "cat": "difesa",
+    "nome": "Scudo totale",
+    "eff": "defend",
+    "val": "both",
+    "dur": 1
+   },
+   {
+    "cat": "difesa",
+    "nome": "Sesto senso",
+    "eff": "defend",
+    "val": "both",
+    "dur": 1
+   },
+   {
+    "cat": "difesa",
+    "nome": "Effetto specchio",
+    "eff": "defend",
+    "val": "both",
+    "dur": 1
    }
   ],
   "4": [
@@ -5375,6 +5319,34 @@
     "nome": "L'officina ti fa credito",
     "eff": "reopenDebt",
     "val": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Nervi d'acciaio",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Soffiata in anticipo",
+    "eff": "defend",
+    "val": "pregara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Barriera totale",
+    "eff": "defend",
+    "val": "both",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Gioco di specchi",
+    "eff": "defend",
+    "val": "both",
+    "dur": 1
    }
   ]
  }
