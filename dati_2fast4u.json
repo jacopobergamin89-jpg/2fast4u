@@ -977,31 +977,7 @@
     "nome": "Hai istallato le nuove sospensioni",
     "eff": "ctrl",
     "val": 1,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Il nuovo alettone fa il suo dovere",
-    "eff": "ctrl",
-    "val": 1,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Spettacolo le nuove minigonne",
-    "eff": "ctrl",
-    "val": 1,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Barra antirollio nuova",
-    "eff": "ctrl",
-    "val": 1,
-    "dur": 1,
+    "dur": 2,
     "target": "self"
    },
    {
@@ -1017,31 +993,7 @@
     "nome": "Perdi il controllo!!!!",
     "eff": "ctrl",
     "val": -1,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Olio vecchi nel motore",
-    "eff": "ctrl",
-    "val": -1,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Olio vecchio nei freni",
-    "eff": "ctrl",
-    "val": -1,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Convergenza sballata",
-    "eff": "ctrl",
-    "val": -1,
-    "dur": 1,
+    "dur": 2,
     "target": "rival"
    },
    {
@@ -1062,23 +1014,7 @@
    },
    {
     "cat": "ingara",
-    "nome": "Il sonno aiuta",
-    "eff": "partenza",
-    "val": 2,
-    "dur": 0,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
     "nome": "Brucia le gomme",
-    "eff": "partenza",
-    "val": 1,
-    "dur": 0,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Buono il caffè stamattina",
     "eff": "partenza",
     "val": 1,
     "dur": 0,
@@ -1094,31 +1030,7 @@
    },
    {
     "cat": "ingara",
-    "nome": "Oggi va cosi…",
-    "eff": "partenza",
-    "val": -1,
-    "dur": 0,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Falsa partenza",
-    "eff": "partenza",
-    "val": -1,
-    "dur": 0,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
     "nome": "Non è la tua giornata",
-    "eff": "partenza",
-    "val": -2,
-    "dur": 0,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Brutti incubi",
     "eff": "partenza",
     "val": -2,
     "dur": 0,
@@ -1137,31 +1049,7 @@
     "nome": "Corri Fooorrreeeesstttttt!!!!",
     "eff": "vel",
     "val": 2,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Monti un'espansione racing",
-    "eff": "vel",
-    "val": 2,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Un colpo di fortuna con il turbo",
-    "eff": "vel",
-    "val": 2,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Doppio caffe stamattina",
-    "eff": "vel",
-    "val": 2,
-    "dur": 1,
+    "dur": 2,
     "target": "self"
    },
    {
@@ -1177,31 +1065,7 @@
     "nome": "Finalmente il giusto cambio",
     "eff": "vel",
     "val": 1,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Hai messo benzina racing: boost temporaneo!",
-    "eff": "vel",
-    "val": 1,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Il meccanico ti sistema la centralina: +1",
-    "eff": "vel",
-    "val": 1,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Senti l'adrenalina salire: spingi di più!!!",
-    "eff": "vel",
-    "val": 1,
-    "dur": 1,
+    "dur": 2,
     "target": "self"
    },
    {
@@ -1217,31 +1081,7 @@
     "nome": "Una curva mal presa ti rallenta",
     "eff": "vel",
     "val": -1,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Benzina Sporca",
-    "eff": "vel",
-    "val": -1,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Si allenta un bullone",
-    "eff": "vel",
-    "val": -1,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Le gomme slittano",
-    "eff": "vel",
-    "val": -1,
-    "dur": 1,
+    "dur": 2,
     "target": "rival"
    },
    {
@@ -1257,31 +1097,7 @@
     "nome": "Turbo che perde pressione",
     "eff": "vel",
     "val": -2,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Frenata d'emergenza",
-    "eff": "vel",
-    "val": -2,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Gomma forata",
-    "eff": "vel",
-    "val": -2,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Carburatore ingolfato",
-    "eff": "vel",
-    "val": -2,
-    "dur": 1,
+    "dur": 2,
     "target": "rival"
    },
    {
@@ -1538,6 +1354,14 @@
     "nome": "Lampeggianti all'improvviso",
     "kind": "blocco",
     "size": 3
+   },
+   {
+    "cat": "ingara",
+    "nome": "Ammortizzatore scarico (a lungo)",
+    "eff": "ctrl",
+    "val": -2,
+    "dur": 2,
+    "target": "rival"
    }
   ],
   "2": [
@@ -1554,23 +1378,7 @@
     "nome": "Volante preciso",
     "eff": "ctrl",
     "val": 2,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Gomme in temperatura",
-    "eff": "ctrl",
-    "val": 2,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Differenziale a punto",
-    "eff": "ctrl",
-    "val": 2,
-    "dur": 1,
+    "dur": 2,
     "target": "self"
    },
    {
@@ -1586,23 +1394,7 @@
     "nome": "Gomme fredde",
     "eff": "ctrl",
     "val": -2,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Assetto sfasato",
-    "eff": "ctrl",
-    "val": -2,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Sospensione molle",
-    "eff": "ctrl",
-    "val": -2,
-    "dur": 1,
+    "dur": 2,
     "target": "rival"
    },
    {
@@ -1615,23 +1407,7 @@
    },
    {
     "cat": "ingara",
-    "nome": "Frizione perfetta al via",
-    "eff": "partenza",
-    "val": 3,
-    "dur": 0,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
     "nome": "Parti in ritardo",
-    "eff": "partenza",
-    "val": -3,
-    "dur": 0,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Ingolfi al semaforo",
     "eff": "partenza",
     "val": -3,
     "dur": 0,
@@ -1650,23 +1426,7 @@
     "nome": "Iniezione racing",
     "eff": "vel",
     "val": 3,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Collettori liberi",
-    "eff": "vel",
-    "val": 3,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Sgommata d'autore",
-    "eff": "vel",
-    "val": 3,
-    "dur": 1,
+    "dur": 2,
     "target": "self"
    },
    {
@@ -1682,23 +1442,7 @@
     "nome": "Bullone allentato",
     "eff": "vel",
     "val": -3,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Frizione che pattina",
-    "eff": "vel",
-    "val": -3,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Cinghia consumata",
-    "eff": "vel",
-    "val": -3,
-    "dur": 1,
+    "dur": 2,
     "target": "rival"
    },
    {
@@ -2959,15 +2703,7 @@
     "nome": "Sterzo diretto",
     "eff": "ctrl",
     "val": 4,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Aderenza perfetta",
-    "eff": "ctrl",
-    "val": 4,
-    "dur": 1,
+    "dur": 2,
     "target": "self"
    },
    {
@@ -2983,15 +2719,7 @@
     "nome": "Asfalto viscido",
     "eff": "ctrl",
     "val": -4,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Retrotreno ballerino",
-    "eff": "ctrl",
-    "val": -4,
-    "dur": 1,
+    "dur": 2,
     "target": "rival"
    },
    {
@@ -3004,23 +2732,7 @@
    },
    {
     "cat": "ingara",
-    "nome": "Stacco di frizione chirurgico",
-    "eff": "partenza",
-    "val": 4,
-    "dur": 0,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
     "nome": "Spegni al semaforo",
-    "eff": "partenza",
-    "val": -4,
-    "dur": 0,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Ruote che fumano a vuoto",
     "eff": "partenza",
     "val": -4,
     "dur": 0,
@@ -3039,15 +2751,7 @@
     "nome": "Aspirazione diretta",
     "eff": "vel",
     "val": 5,
-    "dur": 1,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Antilag attivato",
-    "eff": "vel",
-    "val": 5,
-    "dur": 1,
+    "dur": 2,
     "target": "self"
    },
    {
@@ -3063,15 +2767,7 @@
     "nome": "Olio sull'asfalto",
     "eff": "vel",
     "val": -5,
-    "dur": 1,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Iniettore intasato",
-    "eff": "vel",
-    "val": -5,
-    "dur": 1,
+    "dur": 2,
     "target": "rival"
    },
    {
@@ -4348,7 +4044,7 @@
     "nome": "Grip totale sull'asfalto",
     "eff": "ctrl",
     "val": 6,
-    "dur": 1,
+    "dur": 2,
     "target": "self"
    },
    {
@@ -4364,7 +4060,7 @@
     "nome": "Avantreno che scappa",
     "eff": "ctrl",
     "val": -6,
-    "dur": 1,
+    "dur": 2,
     "target": "rival"
    },
    {
@@ -4377,23 +4073,7 @@
    },
    {
     "cat": "ingara",
-    "nome": "Partenza da campionato",
-    "eff": "partenza",
-    "val": 5,
-    "dur": 0,
-    "target": "self"
-   },
-   {
-    "cat": "ingara",
     "nome": "Cali il motore al via",
-    "eff": "partenza",
-    "val": -5,
-    "dur": 0,
-    "target": "rival"
-   },
-   {
-    "cat": "ingara",
-    "nome": "Frizione bruciata in partenza",
     "eff": "partenza",
     "val": -5,
     "dur": 0,
@@ -4412,7 +4092,7 @@
     "nome": "Big turbo che spinge",
     "eff": "vel",
     "val": 6,
-    "dur": 1,
+    "dur": 2,
     "target": "self"
    },
    {
@@ -4428,7 +4108,7 @@
     "nome": "Cinghia esplosa",
     "eff": "vel",
     "val": -6,
-    "dur": 1,
+    "dur": 2,
     "target": "rival"
    },
    {
