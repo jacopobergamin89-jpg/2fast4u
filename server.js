@@ -637,6 +637,7 @@ function botsPlayPartenza(room){
 }
 function activeRace(G){ return G.players.find(p=>p.id===G.R.turnOrder[G.R.ptr]); }
 function dieBonus(d){ return d<=2?1:d<=5?2:3; }
+const REACT_DIE={perfetto:6,quasi:4,mancato:1};   // Reazione (colpo di gas): perfetto=+3, quasi=+2, mancato=+1
 function fxSum(R,p,stat){ return R.cars[p.id].fx.filter(e=>e.stat===stat).reduce((s,e)=>s+e.amt,0); }
 function nosAllowed(G,p){ const car=G.R.cars[p.id]; const seg=segOf(G,Math.max(1,car.pos)); if(car.nosUsed) return false; if(!car.firstDone) return false; if(seg.t==='drift') return false; if((statVal(p,'nos')+(car.nosMod||0))<=0) return false; return true; }
 
@@ -759,14 +760,14 @@ function actRacePlayCard(room,p,handIdx,targetId){
   if(c.target==='rival' && target.id!==p.id && !isFoe) recordMalus(room, p, target, {phase:'ingara', eff:c.eff, val:c.val, dur:c.dur, fxRef:_fx, prevDado:_prevDado, cardNome:c.nome});  // i boss non si difendono
   p.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
-function actRoll(room,p,useNos){
+function actRoll(room,p,useNos,reaction){
   const G=room.G; if(G.phase!=='race') return 'Non in gara.';
   if(activeRace(G).id!==p.id) return 'Non è il tuo turno.';
   if(G.R.phase!=='await') return 'Hai già tirato.';
   p.incoming=(p.incoming||[]).filter(m=>m.phase!=='ingara');   // finestra di difesa chiusa: ora il malus fa effetto
   const car=G.R.cars[p.id];
   const realNos = !!useNos && nosAllowed(G,p);
-  const die = car.pendDado || d6();
+  const die = car.pendDado || (reaction && REACT_DIE[reaction]) || d6();   // Reazione del giocatore; dado truccato ha precedenza; bot (no reaction) → d6
   (G.R.turnDice=G.R.turnDice||[]).push(die);
   G.R.lastBreak = computeMove(G,p,die,realNos);
   G.R.phase='rolled';
@@ -1261,7 +1262,7 @@ function mount(ioInstance){
   socket.on('prep:done', handle((room,p)=>actPrepDone(room,p)));
   socket.on('launch:play', handle((room,p,d)=>actPlayPartenza(room,p,d.handIdx,d.targetId)));
   socket.on('race:playCard', handle((room,p,d)=>actRacePlayCard(room,p,d.handIdx,d.targetId)));
-  socket.on('race:roll', handle((room,p,d)=>actRoll(room,p,d.useNos)));
+  socket.on('race:roll', handle((room,p,d)=>actRoll(room,p,d.useNos,d.reaction)));
   socket.on('race:move', handle((room,p)=>actConfirmMove(room,p)));
   socket.on('defend', handle((room,p,d)=>actDefend(room,p,d.handIdx,d.mid)));
   socket.on('defense:play', handle((room,p,d)=>actDefend(room,p,d.handIdx,d.mid)));
