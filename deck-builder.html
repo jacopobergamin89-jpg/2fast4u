@@ -60,8 +60,14 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .fn-body{display:none;padding:2px 0 8px}
 .fn.open .fn-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:8px}
 .fn.open>.fn-h .chev{transform:rotate(90deg)}
-.card{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:9px 10px;display:flex;flex-direction:column;gap:6px;position:relative}
+.card{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:9px 10px;display:flex;flex-direction:column;gap:6px;position:relative;cursor:pointer;transition:border-color .12s,box-shadow .12s}
+.card:hover{border-color:var(--muted)}
 .card.sel{border-color:var(--cyan);box-shadow:inset 0 0 0 1px var(--cyan)}
+.card.capfull{opacity:.45;cursor:not-allowed}
+.card.capfull:hover{border-color:var(--line)}
+.in-deck{color:#3ddc84;font-weight:600;font-size:12px;letter-spacing:.3px}
+.add-hint{color:var(--muted);font-size:12px}
+.espflat{display:grid !important;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:8px;padding:4px 0 8px}
 .card.lock{opacity:.85}
 .c-top{display:flex;align-items:flex-start;gap:6px}
 .c-n{font-weight:500;font-size:13.5px;line-height:1.2;flex:1}
@@ -265,10 +271,16 @@ function renderContent(){
   const cat=DATA.cats.find(c=>c.key===tab); const only=favOnly(); let h='';
   for(const lv of ['1','2','3','4']){
     if(!cat.lv[lv]) continue; let inner=''; let lvTot=0;
-    for(const fn in cat.lv[lv]){
-      let cards=cat.lv[lv][fn]; if(only) cards=cards.filter(c=>has(D().fav,c.n)); if(!cards.length) continue;
-      lvTot+=cards.length;
-      inner+=`<div class="fn${openKeys.has(tab+'|L'+lv+'|'+fn)?' open':''}" data-k="${tab}|L${lv}|${fn}"><div class="fn-h" onclick="tgl(this.parentNode)"><span class="chev">▶</span><span class="fn-t">${fn}</span><span class="fn-badge">${cards.length}</span></div><div class="fn-body">`+cards.map(cardHTML).join('')+`</div></div>`;
+    if(tab==='esp'){                                            // ESP: solo per livello, carte dirette (niente tipo)
+      let cards=[]; for(const fn in cat.lv[lv]) cards=cards.concat(cat.lv[lv][fn]);
+      if(only) cards=cards.filter(c=>has(D().fav,c.n));
+      if(cards.length){ lvTot=cards.length; inner=`<div class="fn-body espflat">`+cards.map(cardHTML).join('')+`</div>`; }
+    } else {
+      for(const fn in cat.lv[lv]){
+        let cards=cat.lv[lv][fn]; if(only) cards=cards.filter(c=>has(D().fav,c.n)); if(!cards.length) continue;
+        lvTot+=cards.length;
+        inner+=`<div class="fn${openKeys.has(tab+'|L'+lv+'|'+fn)?' open':''}" data-k="${tab}|L${lv}|${fn}"><div class="fn-h" onclick="tgl(this.parentNode)"><span class="chev">▶</span><span class="fn-t">${fn}</span><span class="fn-badge">${cards.length}</span></div><div class="fn-body">`+cards.map(cardHTML).join('')+`</div></div>`;
+      }
     }
     if(!lvTot) continue;
     h+=`<div class="lvl${openKeys.has(tab+'|L'+lv)?' open':''}" data-k="${tab}|L${lv}"><div class="lvl-h" onclick="tgl(this.parentNode)"><span class="chev">▶</span><span class="lvl-t">Livello ${lv}</span><span class="lvl-c">${lvTot} carte</span></div><div class="lvl-body">${inner}</div></div>`;
@@ -278,15 +290,19 @@ function renderContent(){
 function cardHTML(c){
   const q=D().qty[c.n]||0, fav=has(D().fav,c.n), capFull=catCount(tab)>=CAPS[tab];
   const gang=c.g?`<span class="c-gang">${c.g}${c.lock?' · solo gang':''}</span>`:'';
-  return `<div class="card ${q>0?'sel':''} ${c.lock?'lock':''}">
+  const disabled = q<=0 && capFull;
+  const oc = disabled ? '' : `onclick="tgCard('${js(c.n)}')"`;
+  const foot = q>0 ? '<span class="in-deck">✓ Nel mazzo</span>' : (capFull ? '<span class="add-hint">Limite raggiunto</span>' : '<span class="add-hint">+ Tocca per aggiungere</span>');
+  return `<div class="card ${q>0?'sel':''} ${c.lock?'lock':''} ${disabled?'capfull':''}" ${oc}>
     <div class="c-top"><div class="c-n">${esc(c.n)}${gang}</div>
-      <button class="c-star ${fav?'on':''}" title="Preferito" onclick="tgFav('${js(c.n)}')">${fav?'★':'☆'}</button></div>
+      <button class="c-star ${fav?'on':''}" title="Preferito" onclick="event.stopPropagation();tgFav('${js(c.n)}')">${fav?'★':'☆'}</button></div>
     ${c.l?`<div class="c-d">${esc(c.l)}</div>`:''}
-    <div class="c-foot"><div class="qty">
-      <button class="qb" ${q<=0?'disabled':''} onclick="chg('${js(c.n)}',-1)">–</button>
-      <span class="qn">${q}</span>
-      <button class="qb" ${(q>=1||(capFull&&q<=0))?'disabled':''} onclick="chg('${js(c.n)}',1)">+</button>
-    </div></div></div>`;
+    <div class="c-foot">${foot}</div></div>`;
+}
+function tgCard(name){ const q=D().qty;
+  if(q[name]>0){ delete q[name]; }
+  else { if(catCount(tab)>=CAPS[tab]){ toast('Limite '+CAPS[tab]+' raggiunto per '+DATA.cats.find(c=>c.key===tab).titolo); return; } q[name]=1; }
+  persist(); refresh();
 }
 function renderPiloti(){
   const byGang={}; DATA.piloti.forEach(p=>{ if(p.liv!=='L1' && !ownsCard(p.n)) return; (byGang[p.g]=byGang[p.g]||[]).push(p); });   // piloti L2-L4 solo se sbloccati
@@ -334,7 +350,7 @@ function deckSummary(deck){
 }
 function persist(){ try{ const out={}; [1,2].forEach(n=>{ const d=decks[n]; out[n]={name:d.name,qty:d.qty,fav:d.fav,pilots:d.pilots, summary:(DATA?deckSummary(d):null)}; }); localStorage.setItem(STORE, JSON.stringify(out)); }catch(e){} }
 function load(){ try{ const s=localStorage.getItem(STORE); if(!s)return; const o=JSON.parse(s);
-  [1,2].forEach(n=>{ if(o[n]) decks[n]={name:o[n].name||('Mazzo '+n),qty:o[n].qty||{},fav:o[n].fav||[],pilots:o[n].pilots||[]}; });
+  [1,2].forEach(n=>{ if(o[n]) decks[n]={name:o[n].name||('Mazzo '+n),qty:o[n].qty||{},fav:o[n].fav||[],pilots:(o[n].pilots||[]).slice(0,CAP_PIL)}; });
   }catch(e){} }
 
 /* ---------- util ---------- */
