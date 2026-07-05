@@ -1305,7 +1305,7 @@
    },
    {
     "cat": "pregara",
-    "nome": "Giornata storta al banco",
+    "nome": "Il banco si copre",
     "eff": "betDown",
     "val": 0.6667
    },
@@ -1380,6 +1380,24 @@
     "nome": "Corsa improvvisata",
     "eff": "sprint",
     "val": 34
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il meccanico ti fa un favore",
+    "eff": "discount",
+    "val": 0.75
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il capofficina fa gli straordinari",
+    "eff": "reopenAll",
+    "val": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il guardiano riapre per una mancia",
+    "eff": "reopenAll",
+    "val": 0
    }
   ],
   "2": [
@@ -2498,90 +2516,6 @@
     "desc": "Velocità +4 (te) · 1 tiro"
    },
    {
-    "cat": "pregara",
-    "nome": "Soffiata al fisco contro un rivale",
-    "eff": "money",
-    "val": -1500,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Svuoti la cassa di un rivale",
-    "eff": "money",
-    "val": -1000,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Vinci una gara di bellezza",
-    "eff": "money",
-    "val": 1500,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Dimezzi il bottino di un rivale",
-    "eff": "prizeDown",
-    "val": 0.6667,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il banco bara contro un rivale",
-    "eff": "prizeDown",
-    "val": 0.6667,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Pareggiamo i conti",
-    "eff": "prizeDown",
-    "val": 0.6667,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Quota ricalcolata",
-    "eff": "betUp",
-    "val": 1.5,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il banco si copre",
-    "eff": "betDown",
-    "val": 0.6667,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il figlio del capo officina ti salda il debito",
-    "eff": "discount",
-    "val": 0.5,
-    "gang": "Lowlifes"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il meccanico ti fa un favore",
-    "eff": "discount",
-    "val": 0.5,
-    "gang": "Lowlifes"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Tour privato dell'officina ti costerà caro",
-    "eff": "reopen",
-    "val": 500,
-    "gang": "Lowlifes"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Visita privata all'officina",
-    "eff": "reopen",
-    "val": 500,
-    "gang": "Lowlifes"
-   },
-   {
     "cat": "difesa",
     "nome": "Contromossa",
     "eff": "defend",
@@ -2689,6 +2623,66 @@
     "val": -3,
     "dur": 2,
     "target": "rival"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Soffiata al fisco contro un rivale",
+    "eff": "money",
+    "val": -1500
+   },
+   {
+    "cat": "pregara",
+    "nome": "Guai col fisco",
+    "eff": "money",
+    "val": -1500
+   },
+   {
+    "cat": "pregara",
+    "nome": "Svuoti la cassa di un rivale",
+    "eff": "money",
+    "val": -1000
+   },
+   {
+    "cat": "pregara",
+    "nome": "Pizzo da pagare",
+    "eff": "money",
+    "val": -1000
+   },
+   {
+    "cat": "pregara",
+    "nome": "Vinci una gara di bellezza",
+    "eff": "money",
+    "val": 1500
+   },
+   {
+    "cat": "pregara",
+    "nome": "Vincita grossa al poker",
+    "eff": "money",
+    "val": 1500
+   },
+   {
+    "cat": "pregara",
+    "nome": "Dimezzi il bottino di un rivale",
+    "eff": "prizeDown",
+    "val": 0.6667
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il banco bara contro un rivale",
+    "eff": "prizeDown",
+    "val": 0.6667
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il figlio del capo officina ti salda il debito",
+    "eff": "discount",
+    "val": 0.5
+   },
+   {
+    "cat": "pregara",
+    "nome": "Sconto amici e parenti",
+    "eff": "discount",
+    "val": 0.5
    }
   ],
   "3": [
@@ -3807,64 +3801,6 @@
     "desc": "Controllo -5 (1 rivale) · 1 tiro"
    },
    {
-    "cat": "pregara",
-    "nome": "Mandi gli strozzini da un rivale",
-    "eff": "money",
-    "val": -2000,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Riscuoti un vecchio credito",
-    "eff": "money",
-    "val": 2000,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il broker ti fa un regalo di compleanno",
-    "eff": "quota",
-    "val": 2,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il broker raddoppia",
-    "eff": "betUp",
-    "val": 2,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il broker ti taglia la quota",
-    "eff": "betDown",
-    "val": 0.5,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Sospetti sul risultato",
-    "eff": "betDown",
-    "val": 0.5,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Commissioni furto ad un tuo rivale",
-    "eff": "smonta",
-    "val": 2000,
-    "costPO": 0,
-    "gang": "Lupara Boys"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Ogni azione ha una conseguenza",
-    "eff": "smonta",
-    "val": 2000,
-    "costPO": 0,
-    "gang": "Lupara Boys"
-   },
-   {
     "cat": "difesa",
     "nome": "Scudo totale",
     "eff": "defend",
@@ -4030,6 +3966,92 @@
     "val": -5,
     "dur": 2,
     "target": "rival"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Mandi gli strozzini da un rivale",
+    "eff": "money",
+    "val": -2000
+   },
+   {
+    "cat": "pregara",
+    "nome": "Debito con gli strozzini",
+    "eff": "money",
+    "val": -2000
+   },
+   {
+    "cat": "pregara",
+    "nome": "Riscuoti un vecchio credito",
+    "eff": "money",
+    "val": 2000
+   },
+   {
+    "cat": "pregara",
+    "nome": "Bottino della serata",
+    "eff": "money",
+    "val": 2000
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il broker ti fa un regalo di compleanno",
+    "eff": "quota",
+    "val": 2
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il broker raddoppia la posta",
+    "eff": "quota",
+    "val": 2
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il broker raddoppia",
+    "eff": "betUp",
+    "val": 2
+   },
+   {
+    "cat": "pregara",
+    "nome": "Scommessa raddoppiata",
+    "eff": "betUp",
+    "val": 2
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il broker ti taglia la quota",
+    "eff": "betDown",
+    "val": 0.5
+   },
+   {
+    "cat": "pregara",
+    "nome": "Sospetti sul risultato",
+    "eff": "betDown",
+    "val": 0.5
+   },
+   {
+    "cat": "pregara",
+    "nome": "Commissioni furto ad un tuo rivale",
+    "eff": "smonta",
+    "val": 2000,
+    "costPO": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "Ogni azione ha una conseguenza",
+    "eff": "smonta",
+    "val": 2000,
+    "costPO": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "Tour privato dell'officina ti costerà caro",
+    "eff": "reopen",
+    "val": 500
+   },
+   {
+    "cat": "pregara",
+    "nome": "Paghi di tasca per riaprire",
+    "eff": "reopen",
+    "val": 500
    }
   ],
   "4": [
@@ -5148,69 +5170,6 @@
     "desc": "Controllo -7 (1 rivale) · 1 tiro"
    },
    {
-    "cat": "pregara",
-    "nome": "Il colpo grosso della tua vita",
-    "eff": "money",
-    "val": 3000,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il colpo grosso della tua vita",
-    "eff": "money",
-    "val": 3000,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Alzi la posta in palio",
-    "eff": "prizeUp",
-    "val": 2,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Arrivano gli sponsor",
-    "eff": "prizeUp",
-    "val": 2,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Doppia o niente",
-    "eff": "prizeUp",
-    "val": 2,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Quota impazzita",
-    "eff": "betUp",
-    "val": 3,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Il bookie ti spenna",
-    "eff": "betDown",
-    "val": 0.3333,
-    "gang": "Krudo"
-   },
-   {
-    "cat": "pregara",
-    "nome": "Favori incrociati in officina",
-    "eff": "reopenDebt",
-    "val": 0,
-    "gang": "Lowlifes"
-   },
-   {
-    "cat": "pregara",
-    "nome": "I debidi di gioco si pagano",
-    "eff": "reopenDebt",
-    "val": 0,
-    "gang": "Lowlifes"
-   },
-   {
     "cat": "polizia",
     "nome": "Città blindata",
     "kind": "blocco",
@@ -5356,6 +5315,66 @@
     "val": -6,
     "dur": 2,
     "target": "rival"
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il colpo grosso della tua vita",
+    "eff": "money",
+    "val": 3000
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il colpo della vita",
+    "eff": "money",
+    "val": 3000
+   },
+   {
+    "cat": "pregara",
+    "nome": "Alzi la posta in palio",
+    "eff": "prizeUp",
+    "val": 2
+   },
+   {
+    "cat": "pregara",
+    "nome": "Arrivano gli sponsor",
+    "eff": "prizeUp",
+    "val": 2
+   },
+   {
+    "cat": "pregara",
+    "nome": "Quota impazzita",
+    "eff": "betUp",
+    "val": 3
+   },
+   {
+    "cat": "pregara",
+    "nome": "Tripla sulla gara",
+    "eff": "betUp",
+    "val": 3
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il bookie ti spenna",
+    "eff": "betDown",
+    "val": 0.3333
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il banco ti stronca la quota",
+    "eff": "betDown",
+    "val": 0.3333
+   },
+   {
+    "cat": "pregara",
+    "nome": "Favori incrociati in officina",
+    "eff": "reopenDebt",
+    "val": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "L'officina ti fa credito",
+    "eff": "reopenDebt",
+    "val": 0
    }
   ]
  }
