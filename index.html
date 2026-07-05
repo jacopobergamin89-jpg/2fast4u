@@ -1672,7 +1672,7 @@ function renderRaceMobile(v){
     if(yt&&rolled){
       const b=rolled;
       let ls=b.lines.map(l=>`<div class="bd-line"><span>${l.k}</span><span class="${l.cls||''}">${l.info?'min 0':(l.v>=0?'+':'')+l.v}</span></div>`).join('');
-      h+=`<div class="dice-area"><div class="die" id="die">${dieFaces(b.die)}</div><div class="dice-info"><div class="di-big">Dado ${b.die} \u2192 +${b.db}</div>${b.useNos?'<span style="color:var(--cyan)">NOS \u26a1</span>':''}</div></div>`;
+      h+=`<div class="dice-area"><div class="dice-info"><div class="di-big">🎯 Spinta +${b.db}</div>${b.useNos?'<span style="color:var(--cyan)">NOS \u26a1</span>':''}</div></div>`;
       h+=`<div class="breakdown">${ls}<div class="bd-total"><span>Movimento</span><b>${b.total}</b></div></div>`;
     }else{
       h+=rmSegCard(v);
@@ -1682,7 +1682,7 @@ function renderRaceMobile(v){
   }
   // barra azione fissa
   if(yt&&!rolled){
-    h+=`<div class="rm-act"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${mm.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato \u26a1':'Usa NOS'}${mm.nosVal>0?' (+'+mm.nosVal+')':''}</button><button class="btn btn-dado" onclick="doRoll()">${v.turn>=5?'\ud83c\udfc1 Ultimo lancio':'Tira il dado'}</button></div>`;
+    h+=`<div class="rm-act"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${mm.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato \u26a1':'Usa NOS'}${mm.nosVal>0?' (+'+mm.nosVal+')':''}</button><button class="btn btn-dado" onclick="doRoll()">${v.turn>=5?'\ud83c\udfc1 Ultimo colpo':'🎯 Colpo di gas'}</button></div>`;
   }else if(yt&&rolled){
     const b=rolled;
     h+=`<div class="rm-act"><button class="btn btn-cyan" style="flex:1" onclick="socket.emit('race:move')">${b.np>=(b.finish||1e9)?'Tagli il traguardo \u2192':'Avanza a casella '+b.np+' \u2192'}</button></div>`;
@@ -1786,11 +1786,11 @@ function dashHTML(v){
   }
   if(!v.rolled){
     h+='</div>';
-    h+=`<div class="race-act"><div class="car-actions"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${m.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato ⚡':'Usa NOS'}${m.nosVal>0?' (+'+m.nosVal+')':''}</button><button class="btn btn-dado" onclick="doRoll()">${v.turn>=5?'🏁 Ultimo lancio':'Tira il dado'}</button></div></div>`;
+    h+=`<div class="race-act"><div class="car-actions"><button class="btn btn-line nos-btn btn-nos ${ui.nosArmed?'armed':''}" ${m.nosOk?'':'disabled'} onclick="toggleNos()">${ui.nosArmed?'NOS armato ⚡':'Usa NOS'}${m.nosVal>0?' (+'+m.nosVal+')':''}</button><button class="btn btn-dado" onclick="doRoll()">${v.turn>=5?'🏁 Ultimo colpo':'🎯 Colpo di gas'}</button></div></div>`;
   }else{
     const b=v.rolled;
     let ls=b.lines.map(l=>`<div class="bd-line"><span>${l.k}</span><span class="${l.cls||''}">${l.info?'min 0':(l.v>=0?'+':'')+l.v}</span></div>`).join('');
-    h+=`<div class="dice-area"><div class="die" id="die">${dieFaces(b.die)}</div><div class="dice-info"><div class="di-big">Dado ${b.die} → +${b.db}</div>${b.useNos?'<span style="color:var(--cyan)">NOS ⚡</span>':''}</div></div>`;
+    h+=`<div class="dice-area"><div class="dice-info"><div class="di-big">🎯 Spinta +${b.db}</div>${b.useNos?'<span style="color:var(--cyan)">NOS ⚡</span>':''}</div></div>`;
     h+=`<div class="breakdown">${ls}<div class="bd-total"><span>Movimento</span><b>${b.total}</b></div></div>`;
     h+='</div>';
     h+=`<div class="race-act"><button class="btn btn-cyan" style="width:100%" onclick="socket.emit('race:move')">${b.np>=(b.finish||1e9)?'Tagli il traguardo →':'Avanza a casella '+b.np+' →'}</button></div>`;
@@ -1798,10 +1798,59 @@ function dashHTML(v){
   h+='</div>';return h;
 }
 function toggleNos(){ui.nosArmed=!ui.nosArmed;renderRace(LAST);}
-function doRoll(){
-  const die=document.getElementById('die');if(die){die.classList.add('rolling');let t=0;const iv=setInterval(()=>{die.innerHTML=dieFaces(1+Math.floor(Math.random()*6));if(++t>8){clearInterval(iv);}},60);}
-  socket.emit('race:roll',{useNos:ui.nosArmed});
+/* ===== REAZIONE (colpo di gas) — sostituisce il tiro del dado ===== */
+var RX={SP:{1:2.2,2:2.85,3:3.3,4:4.3,5:5.6},GW:6,REACT:1500,raf:null,pos:0,dir:1,gc:50,t0:0,phase:'idle',lvl:1};
+function ensureRx(){
+  if(document.getElementById('rxOv')) return;
+  var css='<style>'
+   +'.rx-ov{position:fixed;inset:0;background:rgba(6,4,13,.94);z-index:9000;display:none;align-items:center;justify-content:center;padding:18px}'
+   +'.rx-ov.on{display:flex}.rx-box{width:100%;max-width:440px}'
+   +'.rx-ttl{text-align:center;font-family:var(--disp,Oswald);font-weight:700;font-style:italic;font-size:21px;letter-spacing:1px;margin-bottom:2px;color:#F4EEFF}'
+   +'.rx-sub{text-align:center;color:#B9A9E6;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}'
+   +'.rx-cd{position:relative;height:10px;border-radius:6px;background:#1c1730;overflow:hidden;margin-bottom:6px;border:1px solid #2C1E52}'
+   +'.rx-cd i{display:block;height:0;height:100%;width:0;background:linear-gradient(90deg,#ff3b6b,#FFC91E,#34c759)}'
+   +'.rx-cdt{text-align:center;font-size:11px;color:#B9A9E6;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;min-height:14px}.rx-cdt b{color:#F4EEFF;font-size:13px}'
+   +'.rx-race{position:relative;height:80px;border-radius:12px;overflow:hidden;border:1px solid #000;background:linear-gradient(180deg,#17131f,#0b0912);box-shadow:inset 0 0 26px #000}'
+   +'.rx-edge{position:absolute;left:0;right:0;height:5px;background:repeating-linear-gradient(90deg,#e01e1e 0 14px,#fff 14px 28px);opacity:.45}.rx-edge.t{top:0}.rx-edge.b{bottom:0}'
+   +'.rx-ll{position:absolute;left:0;right:0;top:50%;height:3px;transform:translateY(-50%);background:repeating-linear-gradient(90deg,rgba(255,255,255,.33) 0 16px,transparent 16px 36px)}'
+   +'.rx-zy{position:absolute;top:5px;bottom:5px;background:linear-gradient(180deg,rgba(255,184,0,.4),rgba(255,184,0,.13))}'
+   +'.rx-zg{position:absolute;top:5px;bottom:5px;background:repeating-conic-gradient(rgba(255,255,255,.8) 0 25%,#000 0 50%) 0/10px 10px,linear-gradient(180deg,rgba(52,199,89,.47),rgba(28,156,67,.27));border-left:2px solid #fff;border-right:2px solid #fff;box-shadow:0 0 16px rgba(52,199,89,.8)}'
+   +'.rx-nd{position:absolute;top:6px;bottom:6px;width:11px;left:0;z-index:5;border-radius:5px;background:linear-gradient(180deg,#fff,#66d0ff);box-shadow:0 0 14px #66d0ff,0 0 30px rgba(43,168,230,.8),0 0 0 1px #fff;opacity:.55}.rx-nd.live{opacity:1}'
+   +'.rx-fl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--disp,Oswald);font-weight:700;font-style:italic;font-size:26px;letter-spacing:1px;opacity:0;pointer-events:none;text-shadow:0 2px 12px #000}'
+   +'.rx-fl.show{animation:rxpop .7s ease}@keyframes rxpop{0%{opacity:0;transform:scale(.7)}18%{opacity:1;transform:scale(1.06)}82%{opacity:1}100%{opacity:0}}'
+   +'.rx-btn{display:flex;align-items:center;gap:14px;width:100%;margin-top:14px;background:linear-gradient(180deg,#100b1c,#070510);border:2px solid #221a34;border-radius:14px;padding:14px 18px;cursor:pointer}'
+   +'.rx-btn:active{filter:brightness(1.1)}.rx-btn.go{border-color:#34c759;box-shadow:0 0 16px rgba(52,199,89,.33)}'
+   +'.rx-hou{display:flex;flex-direction:column;gap:6px;background:#000;border:1px solid #241a34;border-radius:9px;padding:7px}'
+   +'.rx-lite{width:22px;height:22px;border-radius:50%;background:#160e18;box-shadow:inset 0 0 6px #000}'
+   +'.rx-btn .rx-red.on{background:radial-gradient(circle at 35% 30%,#ff8a8a,#e01e1e);box-shadow:0 0 12px #ff2e2e}'
+   +'.rx-btn .rx-grn.on{background:radial-gradient(circle at 35% 30%,#8affa0,#1fbf46);box-shadow:0 0 14px #2fff5e}'
+   +'.rx-lbl{flex:1;text-align:center;font-family:var(--disp,Oswald);font-weight:700;font-style:italic;font-size:22px;letter-spacing:1.5px;text-transform:uppercase;color:#F4EEFF}'
+   +'</style>';
+  var html='<div id="rxOv" class="rx-ov"><div class="rx-box">'
+   +'<div class="rx-ttl">🎯 COLPO DI GAS</div><div class="rx-sub">premi il via · 1,5s per colpire il verde</div>'
+   +'<div class="rx-cd"><i id="rxCdi"></i></div><div class="rx-cdt" id="rxCdt">premi il semaforo per partire</div>'
+   +'<div class="rx-race" id="rxRace"><div class="rx-edge t"></div><div class="rx-edge b"></div><div class="rx-ll"></div><div class="rx-zy" id="rxZy"></div><div class="rx-zg" id="rxZg"></div><div class="rx-nd" id="rxNd"></div><div class="rx-fl" id="rxFl"></div></div>'
+   +'<div class="rx-btn" id="rxBtn"><div class="rx-hou"><div class="rx-lite rx-red on" id="rxRed"></div><div class="rx-lite rx-grn" id="rxGrn"></div></div><div class="rx-lbl" id="rxBtnL">Via</div></div>'
+   +'</div></div>';
+  document.body.insertAdjacentHTML('beforeend', css+html);
+  document.getElementById('rxBtn').addEventListener('click', rxTap);
 }
+function rxBuzz(p){ if(navigator.vibrate){try{navigator.vibrate(p);}catch(e){}} }
+function rxTl(s){ document.getElementById('rxRed').className='rx-lite rx-red'+(s==='red'?' on':''); document.getElementById('rxGrn').className='rx-lite rx-grn'+(s==='green'?' on':''); document.getElementById('rxBtn').classList.toggle('go',s==='green'); }
+function rxLayout(){ var yw=RX.GW+18; document.getElementById('rxZy').style.left=(RX.gc-yw/2)+'%'; document.getElementById('rxZy').style.width=yw+'%'; document.getElementById('rxZg').style.left=(RX.gc-RX.GW/2)+'%'; document.getElementById('rxZg').style.width=RX.GW+'%'; }
+function openReaction(){
+  ensureRx(); RX.lvl=(LAST&&LAST.raceLevel)||1;
+  document.getElementById('rxOv').classList.add('on');
+  RX.phase='ready'; RX.gc=18+Math.random()*64; RX.pos=0; RX.dir=1;
+  document.getElementById('rxNd').style.left='0%'; document.getElementById('rxNd').classList.remove('live');
+  rxLayout(); rxTl('red'); document.getElementById('rxBtnL').textContent='Via'; document.getElementById('rxCdi').style.width='0%'; document.getElementById('rxCdt').textContent='premi il semaforo per partire';
+}
+function rxTap(){ if(RX.phase==='ready') rxLaunch(); else if(RX.phase==='run') rxHit(); }
+function rxLaunch(){ RX.phase='run'; document.getElementById('rxNd').classList.add('live'); rxTl('green'); rxBuzz(25); document.getElementById('rxBtnL').textContent='Colpisci!'; RX.t0=performance.now(); RX.raf=requestAnimationFrame(rxLoop); }
+function rxLoop(){ if(RX.phase!=='run') return; var left=Math.max(0,RX.REACT-(performance.now()-RX.t0)); document.getElementById('rxCdi').style.width=(left/RX.REACT*100)+'%'; document.getElementById('rxCdt').innerHTML='COLPISCI! · <b>'+(left/1000).toFixed(1)+'s</b>'; if(left<=0){ rxResult('mancato','TEMPO!','#c9b8ee',[15]); return; } var sp=RX.SP[RX.lvl]||2.85; RX.pos+=RX.dir*sp; if(RX.pos>=100){RX.pos=100;RX.dir=-1;} if(RX.pos<=0){RX.pos=0;RX.dir=1;} document.getElementById('rxNd').style.left=RX.pos+'%'; RX.raf=requestAnimationFrame(rxLoop); }
+function rxHit(){ var nd=document.getElementById('rxNd'),race=document.getElementById('rxRace'); var carW=nd.offsetWidth/race.offsetWidth*100,cL=RX.pos,cR=RX.pos+carW,gL=RX.gc-RX.GW/2,gR=RX.gc+RX.GW/2; var ov=Math.max(0,Math.min(cR,gR)-Math.max(cL,gL)),pctIn=carW>0?ov/carW:0; var Cc=RX.pos+carW/2,dd=Math.abs(Cc-RX.gc); if(pctIn>=0.94) rxResult('perfetto','PERFETTO','#8affa0',[0,55,35,55]); else if(pctIn>0||dd<=RX.GW/2+7) rxResult('quasi','QUASI','#ffd86a',[40]); else rxResult('mancato','MANCATO','#c9b8ee',[15]); }
+function rxResult(outcome,name,col,vp){ cancelAnimationFrame(RX.raf); RX.phase='done'; rxTl('red'); var fl=document.getElementById('rxFl'); fl.textContent=name; fl.style.color=col; fl.classList.remove('show'); void fl.offsetWidth; fl.classList.add('show'); rxBuzz(vp); document.getElementById('rxCdt').textContent='spinta +'+(outcome==='perfetto'?3:outcome==='quasi'?2:1); setTimeout(function(){ var ov=document.getElementById('rxOv'); if(ov) ov.classList.remove('on'); socket.emit('race:roll',{useNos:ui.nosArmed,reaction:outcome}); }, 750); }
+function doRoll(){ openReaction(); }
 function _cardNm(idx){const hh=(LAST&&LAST.me&&LAST.me.hand)||[];const c=hh.find(x=>x.idx===idx);return c?c.nome:'carta';}
 function _rivNm(tid){const r=(LAST&&LAST.me&&LAST.me.rivals)||[];const x=r.find(y=>y.id===tid);return x?x.name:'rivale';}
 function jsTid(id){ return typeof id==='number'?id:("'"+String(id).replace(/'/g,'')+"'"); }
