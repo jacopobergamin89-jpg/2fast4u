@@ -97,3 +97,30 @@ returns void language sql security definer set search_path = public, auth as $$
 $$;
 revoke all on function public.delete_own_account() from public;
 grant execute on function public.delete_own_account() to authenticated;
+
+-- ============================================================
+-- 8) NICKNAME unico (per il nome in gioco)
+-- ============================================================
+alter table public.profiles add column if not exists nickname text;
+create unique index if not exists profiles_nickname_lower_uniq
+  on public.profiles (lower(nickname)) where nickname is not null;
+
+-- il profilo alla registrazione prende anche il nickname dai metadati
+create or replace function public.handle_new_user()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  insert into public.profiles (id, email, is_admin, nickname)
+  values (new.id, new.email, public.is_admin_email(new.email),
+          nullif(trim(new.raw_user_meta_data->>'nickname'),''))
+  on conflict (id) do nothing;
+  return new;
+end;
+$$;
+
+-- controllo disponibilità nickname (usato dalla registrazione, anche da anon)
+create or replace function public.nickname_available(nick text)
+returns boolean language sql security definer set search_path = public as $$
+  select not exists (select 1 from public.profiles where lower(nickname) = lower(trim(nick)));
+$$;
+revoke all on function public.nickname_available(text) from public;
+grant execute on function public.nickname_available(text) to anon, authenticated;

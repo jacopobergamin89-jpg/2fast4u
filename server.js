@@ -223,14 +223,14 @@ function startReshop(room){
   G.reshop=true; G.reshopQueued=false;
   const buys=G.reshopBuys||{};
   const parts=G.players.map(p=>p.id).filter(id=>(buys[id]||0)>0);   // solo chi ha un acquisto nel giro extra
-  const extraStock=parts.reduce((s,id)=>s+(buys[id]||0),0);         // 1 pezzo per giocatore attivo nel giro extra
+  const extraStock=parts.length;                                   // giro extra: 1 pezzo per giocatore (N pezzi, più contesa)
   G.market=[]; G.marketUsed={};                                     // il giro extra riparte pulito
   revealMarket(G, extraStock);
   let first=parts.includes(G.reshopFirst)?G.reshopFirst:parts[0];
   G.reshopOrder=[first, ...G.order.filter(id=>id!==first && parts.includes(id))];
   G.ppIdx=0;
   G.players.forEach(pp=>{ pp.buysLeft=0; });
-  if(G.reshopOrder.length){ const cp=curPrep(G); cp.buysLeft=buys[cp.id]||1; }
+  if(G.reshopOrder.length){ const cp=curPrep(G); cp.buysLeft=1; }
   const fn=(G.players.find(x=>x.id===first)||{}).name||'?';
   glog(G, parts.length>1 ? ('Giro extra in officina · primo a scegliere: '+fn) : ('Giro extra in officina · '+fn+' riapre'), 'round');
 }
@@ -331,7 +331,7 @@ function reflectMalus(G, a, m){
   }
 }
 function incomingFor(player){
-  return (player.incoming||[]).map(m=>({ mid:m.mid, label:m.label, by:m.attackerName,
+  return (player.incoming||[]).map(m=>({ mid:m.mid, label:m.label, by:m.attackerName, cardNome:m.cardNome,
     defenders: player.hand.map((c,i)=>({c,i})).filter(o=>canDefend(o.c,m)).map(o=>({ handIdx:o.i, nome:o.c.nome, reflect:isReflect(o.c) })) })).filter(x=>x.defenders.length>0);
 }
 function actDefend(room, p, handIdx, mid){
@@ -433,7 +433,7 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
     if(G.sprintFinish) return 'Un\'altra gara breve è già stata organizzata. Riprova la prossima.';
     G.sprintFinish=c.val;
   }
-  if(pregaraTarget(c)==='rival' && c.eff!=='reopenDebt' && tgt.id!==p.id) recordMalus(room, p, tgt, {phase:'pregara', eff:c.eff, val:c.val, applied:_ap, comp:_comp, lvl:_lvl});
+  if(pregaraTarget(c)==='rival' && c.eff!=='reopenDebt' && tgt.id!==p.id) recordMalus(room, p, tgt, {phase:'pregara', eff:c.eff, val:c.val, applied:_ap, comp:_comp, lvl:_lvl, cardNome:c.nome});
   glog(G,p.name+' gioca «'+c.nome+'»'+(pregaraTarget(c)==='rival'&&tgt.id!==p.id?(' su '+tgt.name):''),'card');
   p.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
@@ -488,7 +488,7 @@ function throwPoliceMalus(room, attacker, target){
   if(eff==='vel'||eff==='ctrl'){ _fx={stat:eff,amt:val,turns:dur}; tc.fx.push(_fx); }
   else if(eff==='partenza') tc.pendPart+=val;
   else if(eff==='dado'){ _prevDado=tc.pendDado; tc.pendDado=val; }
-  recordMalus(room, attacker, target, {phase:'ingara', eff, val, dur, fxRef:_fx, prevDado:_prevDado});
+  recordMalus(room, attacker, target, {phase:'ingara', eff, val, dur, fxRef:_fx, prevDado:_prevDado, cardNome:pick[0]});
   raceLog(G,{kind:'police',who:attacker.name,target:target.name,nome:pick[0]});
 }
 function spawnPolice(room){
@@ -573,7 +573,7 @@ function actPrepDone(room,p){
   if(!G.reshop && p.bet){ if(p.bet.amount>p.money){ p.bet=null; } else { p.money-=p.bet.amount; } }
   G.ppIdx++;
   const o=pOrder(G);
-  if(G.ppIdx<o.length){ const cp=curPrep(G); cp.buysLeft=G.reshop?((G.reshopBuys&&G.reshopBuys[cp.id])||1):1; }
+  if(G.ppIdx<o.length){ const cp=curPrep(G); cp.buysLeft=1; }
   else if(!G.reshop && G.shopRound<G.shopRounds){ G.shopRound++; G.ppIdx=0; const cp=curPrep(G); cp.buysLeft=1; }   // secondo giro della prima officina: si ricomincia dal primo, 1 acquisto a testa
   else if(!G.reshop && G.reshopQueued){ startReshop(room); }   // chiudi l'officina, riaprila a tutti
   else { G.reshop=false; startLaunch(room); }   // tutti pronti → semaforo di partenza
@@ -679,6 +679,7 @@ function computeMove(G,p,die,useNos){
 function raceLog(G,e){ if(!G.R)return; e.id=++G.R.logId; e.t=G.R.turn; G.R.log.push(e); if(G.R.log.length>60)G.R.log.shift(); }
 function glog(G,text,kind){ if(!G)return; G.gameSeq=(G.gameSeq||0)+1; (G.gameLog=G.gameLog||[]).push({ id:G.gameSeq, round:G.round||1, phase:G.phase, kind:kind||'info', text:text }); if(G.gameLog.length>240) G.gameLog.shift(); }   // registro di TUTTA la partita
 const COMPLAB={motore:'Motore',cambio:'Cambio',sterzo:'Sterzo',assetto:'Assetto',peso:'Peso',nos:'NOS'};
+const COMP_STAT={motore:'vel',cambio:'vel',sterzo:'ctrl',assetto:'ctrl',peso:'mov',nos:'nos'};   // su quale stat incide ogni componente
 function raceHandNote(c, gangOK){
   if(c.cat==='pregara'||c.cat==='esp') return 'in officina';
   if(c.cat==='difesa') return 'quando ti colpiscono';
@@ -725,10 +726,10 @@ function actRacePlayCard(room,p,handIdx,targetId){
         const isPlayerFoe = (tg!==p) && !tg.kind && !tg.isPolice;                  // solo i giocatori si difendono
         if(e.stat==='nosmod'){
           tcCar.nosMod=(tcCar.nosMod||0)+e.val;
-          if(isPlayerFoe && e.val<0) recordMalus(room, p, tg, {phase:'ingara', eff:'nosmod', val:e.val});
+          if(isPlayerFoe && e.val<0) recordMalus(room, p, tg, {phase:'ingara', eff:'nosmod', val:e.val, cardNome:c.nome});
         } else {
           const fx={stat:e.stat, amt:e.val, turns:dur}; tcCar.fx.push(fx);
-          if(isPlayerFoe && e.val<0) recordMalus(room, p, tg, {phase:'ingara', eff:e.stat, val:e.val, dur, fxRef:fx});
+          if(isPlayerFoe && e.val<0) recordMalus(room, p, tg, {phase:'ingara', eff:e.stat, val:e.val, dur, fxRef:fx, cardNome:c.nome});
         }
       }
     }
@@ -752,7 +753,7 @@ function actRacePlayCard(room,p,handIdx,targetId){
   else if(c.eff==='reach') tc.pendReach={ref:c.val,off:c.dur};
   raceLog(G,{kind:'card',who:p.name,target:target.name,targetId:target.id,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur});
   glog(G,p.name+' gioca «'+c.nome+'»'+(c.target==='rival'&&target.id!==p.id?(' su '+target.name):'')+' (gara)','card');
-  if(c.target==='rival' && target.id!==p.id && !isFoe) recordMalus(room, p, target, {phase:'ingara', eff:c.eff, val:c.val, dur:c.dur, fxRef:_fx, prevDado:_prevDado});  // i boss non si difendono
+  if(c.target==='rival' && target.id!==p.id && !isFoe) recordMalus(room, p, target, {phase:'ingara', eff:c.eff, val:c.val, dur:c.dur, fxRef:_fx, prevDado:_prevDado, cardNome:c.nome});  // i boss non si difendono
   p.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
 function actRoll(room,p,useNos){
@@ -1010,7 +1011,7 @@ function buildView(room, player){
       const price=priceFor(G,pl,c.comp,c.lvl); const skip=c.lvl>pl.comp[c.comp]+1;
       const buyable=v.isYourTurn && !cap && !below && !overcap && pl.buysLeft>0 && pl.money>=price;
       let reason=''; if(below)reason='hai già L'+pl.comp[c.comp]; else if(overcap)reason='pista L'+G.compMaxLevel; else if(cap)reason='tetto pieno'; else if(pl.money<price)reason='soldi insuff.'; else if(pl.buysLeft<=0)reason='niente acquisti';
-      return { comp:c.comp, name:DB.nomi[c.comp], lvl:c.lvl, val:DB.valori[c.comp][c.lvl], price, skip, buyable, reason };
+      return { comp:c.comp, name:DB.nomi[c.comp], lvl:c.lvl, val:DB.valori[c.comp][c.lvl], stat:COMP_STAT[c.comp], delta:DB.valori[c.comp][c.lvl]-statVal(pl,c.comp), price, skip, buyable, reason };
     });
     if(v.isYourTurn){
       const p=player;
@@ -1182,7 +1183,7 @@ function mount(ioInstance){
     const room=rooms.get(code);
     if(!room){ if(cb) cb({ ok:false, error:'Stanza inesistente.' }); return; }
     const ex=room.G.players.find(x=>x.name.toLowerCase()===cleanName(name).toLowerCase());
-    if(ex && !ex.connected){                                     // riaggancio per nome (lobby o partita in corso)
+    if(ex && (room.started || !ex.connected)){                  // riaggancio per nome: in partita sempre, in lobby se disconnesso
       ex.socketId=socket.id; ex.connected=true; socketToRoom.set(socket.id, code); socket.join(code);
       if(ex._dcTimer){ clearTimeout(ex._dcTimer); ex._dcTimer=null; }
       if(cb) cb({ ok:true, code, youId:ex.id, rejoined:true }); broadcast(room); return;

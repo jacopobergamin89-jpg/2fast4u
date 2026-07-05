@@ -1060,6 +1060,17 @@ const SESS_KEY='2fast4u_session';
 function saveSession(){ try{ localStorage.setItem(SESS_KEY, JSON.stringify({code:ME.code,name:ME.name,colorIdx:ME.colorIdx})); }catch(e){} }
 function clearSession(){ try{ localStorage.removeItem(SESS_KEY); }catch(e){} }
 function confirmLeaveGame(e){ try{ if(ME&&ME.joined){ const home=document.getElementById('s-home'); if(!home||!home.classList.contains('active')){ if(!confirm('Vuoi uscire dalla partita in corso? Perderai la gara.')){ if(e&&e.preventDefault)e.preventDefault(); return false; } } } }catch(x){} return true; }
+/* intrappola il tasto/gesto INDIETRO del browser durante la partita: per sbaglio non esci dalla pagina */
+window.addEventListener('popstate', function(){
+  if(ME && ME.joined){
+    const home=document.getElementById('s-home');
+    if(!home || !home.classList.contains('active')){
+      try{ history.pushState(null,'',location.href); }catch(e){}
+      try{ toast('Sei ancora in partita \u2014 per uscire usa \ud83c\udfe0 Home in alto a sinistra'); }catch(e){}
+    }
+  }
+});
+try{ history.pushState(null,'',location.href); }catch(e){}
 function loadSession(){ try{ const s=JSON.parse(localStorage.getItem(SESS_KEY)||'null'); if(s&&s.code&&s.name){ ME.code=s.code; ME.name=s.name; ME.colorIdx=(s.colorIdx>=0&&s.colorIdx<8)?s.colorIdx:0; ME.joined=true; } }catch(e){} }
 loadSession();   // se c'era una partita in corso, l'handler 'connect' qui sotto rientra da solo
 let ui={nosArmed:false,lastActive:undefined,lastPhase:null,raceTab:'tiro'};
@@ -1394,7 +1405,7 @@ function ofIcon(comp){const I={
   peso:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 9v6M8 7v10M16 7v10M19 9v6M8 12h8"/></svg>',
   nos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9.5 3h5v3l1 2v11a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V8l1-2z"/><path d="M9.5 12h5"/></svg>'};
   return I[comp]||'';}
-function defenseHTML(v){
+function defenseHTML(v){ return '';   // difese ora si giocano dalla mano; il segnale 'sei colpito' resta in alto (renderDefenseBanner)
   const inc=(v&&v.incoming)||[];
   if(inc.length && !(ui.defHidden && ui.defSig===defSig(v))){
     let h='<div class="def-cards"><div class="def-ch">\ud83d\udee1\ufe0f SEI COLPITO \u2014 DIFENDITI</div><div class="def-csub">Le tue carte difesa qui sotto \u00b7 giocabili anche fuori dal tuo turno</div>';
@@ -1414,6 +1425,7 @@ function defenseHTML(v){
   return '';
 }
 function playDefense(idx,mid){ socket.emit('defense:play',{handIdx:idx,mid}); flash('Difesa giocata!','mine'); }
+function mktVal(c){ const L={vel:'Velocità',ctrl:'Controllo',mov:'Movimento',nos:'NOS'}; const st=L[c.stat]||'Valore'; const d=(c.delta!=null?c.delta:c.val); return st+' '+(d>=0?'+':'\u2212')+Math.abs(d); }
 function prepMobileHTML(v){
   const you=v.you, youP=v.players.find(p=>p.id===you.id)||null;
   const turnLine = v.isYourTurn ? ('Tocca a te \u00b7 officina \u00b7 round '+v.round) : ('Tocca a '+esc(v.activeName||''));
@@ -1451,7 +1463,7 @@ function prepMobileHTML(v){
   const mktH=`<div class="o2-mkt-h"><span class="wr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6a4 4 0 0 1-5.2 3.8L7 18.6 5.4 17 14.2 8.2A4 4 0 0 1 18 3l-2.3 2.3 1 2.4 2.4 1L21 6Z"/></svg></span><b>Mercato</b><span>${mhSub}</span></div>`;
   let cards='';
   (v.market||[]).forEach(c=>{ const mm=ofMeta(c.comp); const skip=c.skip?'<span class="o2-skip">salto \u00d72</span>':''; const reason=(!c.buyable&&c.reason)?`<span class="o2-reason">${esc(c.reason)}</span>`:''; const oc=c.buyable?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'';
-    cards+=`<div class="o2-slot"><button class="o2-card ${c.buyable?'buy':'lock'}" style="--c:${mm.c}" ${oc} ${c.buyable?'':'disabled'}><div class="o2-ctop"><div class="o2-cic">${ofIcon(c.comp)}</div><div><div class="o2-cn">${mm.full}</div><div class="o2-clv">L${c.lvl}</div></div></div><div class="o2-cval">valore ${c.val>=0?'+':'\u2212'}${Math.abs(c.val)}</div>${skip}<div class="o2-cfoot"><span class="o2-price">${eur(c.price)}</span>${reason}</div></button></div>`;
+    cards+=`<div class="o2-slot"><button class="o2-card ${c.buyable?'buy':'lock'}" style="--c:${mm.c}" ${oc} ${c.buyable?'':'disabled'}><div class="o2-ctop"><div class="o2-cic">${ofIcon(c.comp)}</div><div><div class="o2-cn">${mm.full}</div><div class="o2-clv">L${c.lvl}</div></div></div><div class="o2-cval">${mktVal(c)}</div>${skip}<div class="o2-cfoot"><span class="o2-price">${eur(c.price)}</span>${reason}</div></button></div>`;
   });
   const few = nM>0 && nM<=2 ? ' few':'';
   const grid = nM ? `<div class="o2-grid${few}">${cards}</div>` : '<div class="o2-grid"><div class="o2-empty">Nessuna miglioria al mercato in questo round.</div></div>';
@@ -1516,7 +1528,7 @@ function renderPrep(v){
     if(nM){
       bench+='<div class="ofx-mkt-grid">';
       v.market.forEach(c=>{const mm=ofMeta(c.comp);const ok=c.buyable;
-        bench+=`<button class="of-part${ok?'':' off'}" ${ok?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'disabled'}><div class="of-part-h"><span class="of-badge" style="--c:${mm.c}">${mm.full}</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">valore ${c.val>=0?'+':''}${c.val}${c.skip?' \u00b7 salto \u00d72':''}${(!ok&&c.reason)?' \u00b7 '+esc(c.reason):''}</span><span class="of-price">${eur(c.price)}</span></button>`;
+        bench+=`<button class="of-part${ok?'':' off'}" ${ok?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'disabled'}><div class="of-part-h"><span class="of-badge" style="--c:${mm.c}">${mm.full}</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">${mktVal(c)}${c.skip?' \u00b7 salto \u00d72':''}${(!ok&&c.reason)?' \u00b7 '+esc(c.reason):''}</span><span class="of-price">${eur(c.price)}</span></button>`;
       });
       bench+='</div>';
     } else bench+='<div class="ofx-empty">Nessuna miglioria al mercato in questo round.</div>';
@@ -1526,7 +1538,7 @@ function renderPrep(v){
     if(nM){
       bench+='<div class="ofx-mkt-grid">';
       v.market.forEach(c=>{const mm=ofMeta(c.comp);
-        bench+=`<div class="of-part off"><div class="of-part-h"><span class="of-badge" style="--c:${mm.c}">${mm.full}</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">valore ${c.val>=0?'+':''}${c.val}${c.skip?' \u00b7 salto \u00d72':''}</span><span class="of-price">${eur(c.price)}</span></div>`;
+        bench+=`<div class="of-part off"><div class="of-part-h"><span class="of-badge" style="--c:${mm.c}">${mm.full}</span><span class="of-lvtag">L${c.lvl}</span></div><span class="of-val">${mktVal(c)}${c.skip?' \u00b7 salto \u00d72':''}</span><span class="of-price">${eur(c.price)}</span></div>`;
       });
       bench+='</div>';
     } else bench+='<div class="ofx-empty">Nessuna miglioria al mercato in questo round.</div>';
@@ -1634,7 +1646,6 @@ function renderRaceMobile(v){
   const tabs=yt&&!rolled&&cards.length>0;
   const tab=ui.raceTab==='carte'?'carte':'tiro';
   let h='<div class="rm">';
-  h+=defenseHTML(v);
   h+=sirenHTML(v);
   h+=bossBannerHTML(v);
   // chip di stato
@@ -1655,7 +1666,7 @@ function renderRaceMobile(v){
   if(tabs){
     h+=`<div class="rm-seg"><button class="${tab==='tiro'?'on':''}" onclick="rmTab('tiro')">Tiro</button><button class="${tab==='carte'?'on':''}" onclick="rmTab('carte')">Carte <span class="rm-seg-n">${cards.length}</span></button></div>`;
     h+=`<div class="rm-pane rm-pane-tiro${tab==='tiro'?' on':''}">`+rmSegCard(v)+'</div>';
-    h+=`<div class="rm-pane rm-pane-carte${tab==='carte'?' on':''}">`+rmCardsHTML(cards)+'</div>';
+    h+=`<div class="rm-pane rm-pane-carte${tab==='carte'?' on':''}">`+rmCardsHTML(cards,v)+'</div>';
   }else{
     h+='<div class="rm-main">';
     if(yt&&rolled){
@@ -1681,7 +1692,8 @@ function renderRaceMobile(v){
   startTokens(v);
   centerTrackOnMe(v);
 }
-function rmCardsHTML(cards){
+function rmCardsHTML(cards,v){
+  const dm=_defMap(v);
   let h='';
   cards.forEach(c=>{
     let desc=c.desc||'';const good=(c.eff==='multi'||c.eff==='dadoforza')?!c.needsTarget:((c.eff==='dado')?(c.val===6):(c.val>0));
@@ -1693,6 +1705,7 @@ function rmCardsHTML(cards){
     else if(c.eff==='reach')desc=(c.val===2&&c.dur===0)?'Raggiungi il 2°':(c.val===1&&c.dur===-1)?'Una casella dietro il 1°':'Salto di posizione';
     }
     const gangTag=c.gang?` <span class="rm-gang">${esc(c.gang)}</span>`:'';
+    if(dm[c.idx]){ const d=dm[c.idx]; h+=`<div class="rm-crow good"><div class="rm-cbar"></div><div class="rm-cmain"><div class="rm-ct">\ud83d\udee1\ufe0f ${esc(c.nome)}</div><div class="rm-cm">${d.cardNome?'contro \u00ab'+esc(d.cardNome)+'\u00bb \u00b7 ':''}${d.reflect?'\u21a9 Rimanda a '+esc(d.by):'Annulla il colpo'} \u00b7 ${esc(d.label)}</div></div><button class="rm-cgo" onclick="defend(${c.idx},${d.mid})">${d.reflect?'\u21a9 Rimanda':'Para'}</button></div>`; return; }
     if(!c.playable){                                   // carta in mano, visibile ma non attivabile ora
       const note=c.note||'non ora';
       h+=`<div class="rm-crow off"><div class="rm-cbar"></div><div class="rm-cmain"><div class="rm-ct">${esc(c.nome)}${gangTag}</div><div class="rm-cm">${desc} \u00b7 <i>${esc(note)}</i></div></div><button class="rm-cgo" disabled style="opacity:.4">${esc(note)}</button></div>`;
@@ -1709,7 +1722,6 @@ function renderRace(v){
   if(isMobileRace()){renderRaceMobile(v);return;}
   const host=document.getElementById('s-race');
   let h=`<div class="race-head"><div class="eyebrow" style="margin:0">Gara</div><div class="rh-turn">Turno <b>${v.turn}</b><span style="color:var(--muted-2)">/5</span></div></div>`;
-  h+=defenseHTML(v);
   h+=sirenHTML(v);
   h+=bossBannerHTML(v);
   h+=trackHTML(v);
@@ -1726,9 +1738,11 @@ function renderRace(v){
   centerTrackOnMe(v);
 }
 function actColor(v){const a=v.players.find(p=>p.id===v.activeId);return a?a.colorH:'var(--amber)';}
+function _defMap(v){ const dm={}; ((v&&v.incoming)||[]).forEach(mm=>{ (mm.defenders||[]).forEach(d=>{ dm[d.handIdx]={mid:mm.mid,reflect:d.reflect,by:mm.by,label:mm.label,cardNome:mm.cardNome}; }); }); return dm; }
 function cardsMenuHTML(v){
   const m=v.isYourTurn?v.me:null;
   const cards=(m&&m.hand)?m.hand:[];
+  const dm=_defMap(v);
   let body='';
   if(!v.isYourTurn){ body='<div class="cards-empty">Le tue carte compaiono qui nel tuo turno.</div>'; }
   else if(!cards.length){ body='<div class="cards-empty">Nessuna carta in mano.</div>'; }
@@ -1742,6 +1756,7 @@ function cardsMenuHTML(v){
     else if(c.eff==='dado'){desc='Dado = '+c.val;col=c.val===6?'var(--good)':'var(--danger)';}
     else if(c.eff==='reach'){desc=(c.val===2&&c.dur===0)?'Raggiungi il 2°':(c.val===1&&c.dur===-1)?'Una casella dietro il 1°':'Salto di posizione';col='var(--good)';}
     }
+    if(dm[c.idx]){ const d=dm[c.idx]; body+=`<div class="hcard" style="--hc:var(--good)"><div class="hi"><div class="hn">\ud83d\udee1\ufe0f ${esc(c.nome)}</div><div class="he">${d.cardNome?'contro \u00ab'+esc(d.cardNome)+'\u00bb \u00b7 ':''}${d.reflect?'\u21a9 Rimanda a '+esc(d.by):'Annulla il colpo'} \u00b7 ${esc(d.label)}</div></div><button class="btn btn-primary btn-sm" onclick="defend(${c.idx},${d.mid})">${d.reflect?'\u21a9 Rimanda':'Para'}</button></div>`; return; }
     if(!c.playable){                                   // visibile ma non attivabile ora
       const note=c.note||'non ora';
       body+=`<div class="hcard off" style="--hc:var(--muted-2)"><div class="hi"><div class="hn">${esc(c.nome)}</div><div class="he">${desc} · <i>${esc(note)}</i></div></div><button class="btn btn-line btn-sm" disabled style="opacity:.4">${esc(note)}</button></div>`;
@@ -2240,13 +2255,15 @@ function renderDefenseBanner(v){
   ui._notified=ui._notified||{};
   const fresh=inc.filter(m=>!ui._notified[m.mid]);           // notifico solo i colpi NUOVI
   if(!fresh.length) return;                                  // già notificati: lascio sparire la notifica dopo ~2.5s
-  el.innerHTML=fresh.map(m=>`<div class="def-row"><div class="def-txt">\u26a0\ufe0f <b>${esc(m.by)}</b> ti colpisce \u00b7 <span class="def-mal">${esc(m.label)}</span></div></div>`).join('');
+  el.innerHTML=fresh.map(m=>`<div class="def-row"><div class="def-txt">\u26a0\ufe0f <b>${esc(m.by)}</b> ti colpisce${m.cardNome?' con \u00ab'+esc(m.cardNome)+'\u00bb':''} \u00b7 <span class="def-mal">${esc(m.label)}</span></div></div>`).join('');
   el.classList.add('show');
   fresh.forEach(m=>ui._notified[m.mid]=true);
   if(_defToastTimer) clearTimeout(_defToastTimer);
   _defToastTimer=setTimeout(()=>{ el.classList.remove('show'); }, 2500);
 }
 function defend(handIdx,mid){ socket.emit('defend',{handIdx,mid}); flash('Difesa giocata!','mine'); }
+/* mappa: handIdx -> colpo che quella carta può parare (da v.incoming) */
+function _defMap(v){ const m={}; ((v&&v.incoming)||[]).forEach(inc=>{ (inc.defenders||[]).forEach(d=>{ m[d.handIdx]={mid:inc.mid,reflect:d.reflect,by:inc.by,label:inc.label,cardNome:inc.cardNome}; }); }); return m; }
 function defSig(v){ return ((v&&v.incoming)||[]).map(m=>m.mid).sort().join(','); }
 function defDismiss(){ ui.defHidden=true; ui.defSig=defSig(LAST); if(LAST) render(LAST); }
 

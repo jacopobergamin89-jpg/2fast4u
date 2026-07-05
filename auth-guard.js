@@ -40,7 +40,7 @@
     console.warn("[2FAST4U] Supabase non configurato (supabase-config.js): guardia di sessione inattiva.");
     reveal();
     fireReady({ user: null, email: null, isAdmin: false, configured: false });
-    window.authLogout = function () { location.href = CFG.loginPage || "login.html"; };
+    window.authLogout = function () { if (!confirm('Vuoi davvero uscire?')) return; location.href = CFG.loginPage || "login.html"; };
     return;
   }
 
@@ -54,6 +54,7 @@
   window.sbClient = sb;
 
   window.authLogout = function () {
+    if (!confirm('Vuoi davvero uscire?')) return;
     sb.auth.signOut().finally(function () { location.replace(CFG.loginPage || "login.html"); });
   };
 

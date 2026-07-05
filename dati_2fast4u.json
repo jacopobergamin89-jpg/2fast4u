@@ -2866,7 +2866,7 @@
    },
    {
     "cat": "pregara",
-    "nome": "Scommessa · quota -1.5",
+    "nome": "Il banco si copre",
     "eff": "betDown",
     "val": 0.6667,
     "gang": "Krudo"
@@ -4211,7 +4211,7 @@
    },
    {
     "cat": "pregara",
-    "nome": "Scommessa · quota +2",
+    "nome": "Il broker raddoppia",
     "eff": "betUp",
     "val": 2,
     "gang": "Krudo"
