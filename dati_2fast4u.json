@@ -5717,12 +5717,12 @@
    },
    {
     "cat": "ingara",
-    "nome": "Nos +6",
+    "nome": "Nos +8",
     "eff": "multi",
     "effects": [
      {
       "stat": "nosmod",
-      "val": 6,
+      "val": 8,
       "tgt": "self"
      }
     ],
@@ -5730,12 +5730,12 @@
    },
    {
     "cat": "ingara",
-    "nome": "Nos -6",
+    "nome": "Nos -8",
     "eff": "multi",
     "effects": [
      {
       "stat": "nosmod",
-      "val": -6,
+      "val": -8,
       "tgt": "pick"
      }
     ],
