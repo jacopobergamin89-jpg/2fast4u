@@ -1180,7 +1180,7 @@ function copyCode(){ var c=(document.getElementById('lob-code')||{}).textContent
 function doAdvance(){ if(ui.autoMoveTimer){ clearTimeout(ui.autoMoveTimer); ui.autoMoveTimer=null; } socket.emit('race:move'); }
 function ensurePrepClock(){ var b=document.getElementById('prepClock'); if(!b){ b=document.createElement('div'); b.id='prepClock'; b.style.cssText='position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:600;background:#1a1030;border:2px solid #FFC91E;color:#FFC91E;font-family:var(--disp,Oswald);font-weight:700;padding:8px 18px;border-radius:22px;font-size:15px;letter-spacing:.5px;box-shadow:0 6px 20px rgba(0,0,0,.6)'; document.body.appendChild(b); } return b; }
 function stopPrepTimer(){ if(ui.prepTimer){ clearInterval(ui.prepTimer); ui.prepTimer=null; } var b=document.getElementById('prepClock'); if(b) b.style.display='none'; }
-function startPrepTimer(){ stopPrepTimer(); var left=8; var b=ensurePrepClock(); b.style.display='block'; var upd=function(){ b.textContent='\u23f1 Tocca a te \u00b7 '+left+'s'; var d=left<=3; b.style.borderColor=d?'#ff3b6b':'#FFC91E'; b.style.color=d?'#ff3b6b':'#FFC91E'; }; upd(); ui.prepTimer=setInterval(function(){ left--; if(left<=0){ stopPrepTimer(); socket.emit('prep:done'); } else upd(); }, 1000); }
+function startPrepTimer(){ stopPrepTimer(); var left=15; var b=ensurePrepClock(); b.style.display='block'; var upd=function(){ b.textContent='\u23f1 Tocca a te \u00b7 '+left+'s'; var d=left<=3; b.style.borderColor=d?'#ff3b6b':'#FFC91E'; b.style.color=d?'#ff3b6b':'#FFC91E'; }; upd(); ui.prepTimer=setInterval(function(){ left--; if(left<=0){ stopPrepTimer(); socket.emit('prep:done'); } else upd(); }, 1000); }
 function doStart(){socket.emit('startGame');}
 
 /* ---------- REVEAL (pilota segreto + carte iniziali) ---------- */
@@ -1846,7 +1846,7 @@ function rxTap(){ if(RX.phase==='ready') rxLaunch(); else if(RX.phase==='run') r
 function rxLaunch(){ RX.active=true; RX.phase='run'; var nd=rxEl('rxNd'); if(nd)nd.classList.add('live'); rxTl('green'); rxBuzz(25); var l=rxEl('rxBtnL'); if(l)l.textContent='Colpisci!'; RX.t0=performance.now(); RX.raf=requestAnimationFrame(rxLoop); }
 function rxLoop(){ if(RX.phase!=='run') return; var left=Math.max(0,RX.REACT-(performance.now()-RX.t0)); var cdi=rxEl('rxCdi'); if(cdi)cdi.style.width=(left/RX.REACT*100)+'%'; var cdt=rxEl('rxCdt'); if(cdt)cdt.innerHTML='colpisci! <b>'+(left/1000).toFixed(1)+'s</b>'; if(left<=0){ rxResult('mancato','TEMPO!','#c9b8ee',[15]); return; } var sp=RX.SP[RX.lvl]||2.85; RX.pos+=RX.dir*sp; if(RX.pos>=100){RX.pos=100;RX.dir=-1;} if(RX.pos<=0){RX.pos=0;RX.dir=1;} var nd=rxEl('rxNd'); if(nd)nd.style.left=RX.pos+'%'; RX.raf=requestAnimationFrame(rxLoop); }
 function rxHit(){ var nd=rxEl('rxNd'),race=rxEl('rxRace'); if(!nd||!race)return; var carW=nd.offsetWidth/race.offsetWidth*100,cL=RX.pos,cR=RX.pos+carW,gL=RX.gc-RX.GW/2,gR=RX.gc+RX.GW/2; var ov=Math.max(0,Math.min(cR,gR)-Math.max(cL,gL)),pctIn=carW>0?ov/carW:0; var Cc=RX.pos+carW/2,dd=Math.abs(Cc-RX.gc); if(pctIn>=0.94) rxResult('perfetto','PERFETTO','#8affa0',[0,55,35,55]); else if(pctIn>0||dd<=RX.GW/2+7) rxResult('quasi','QUASI','#ffd86a',[40]); else rxResult('mancato','MANCATO','#c9b8ee',[15]); }
-function rxResult(outcome,name,col,vp){ cancelAnimationFrame(RX.raf); RX.phase='done'; rxTl('red'); var fl=rxEl('rxFl'); if(fl){fl.textContent=name;fl.style.color=col;fl.classList.remove('show');void fl.offsetWidth;fl.classList.add('show');} rxBuzz(vp); var cdt=rxEl('rxCdt'); if(cdt)cdt.textContent='spinta +'+(outcome==='perfetto'?3:outcome==='quasi'?2:1); setTimeout(function(){ RX.active=false; socket.emit('race:roll',{useNos:ui.nosArmed,reaction:outcome}); }, 800); }
+function rxResult(outcome,name,col,vp){ cancelAnimationFrame(RX.raf); RX.phase='done'; rxTl('red'); var fl=rxEl('rxFl'); if(fl){fl.textContent=name;fl.style.color=col;fl.classList.remove('show');void fl.offsetWidth;fl.classList.add('show');} rxBuzz(vp); var cdt=rxEl('rxCdt'); if(cdt)cdt.textContent='spinta +'+(outcome==='perfetto'?3:outcome==='quasi'?2:1); setTimeout(function(){ RX.active=false; socket.emit('race:roll',{useNos:ui.nosArmed,reaction:outcome}); setTimeout(function(){ socket.emit('race:move'); }, 1100); }, 700); }
 function doRoll(){ /* compat: la reazione e' inline, parte dal semaforo */ }
 function _cardNm(idx){const hh=(LAST&&LAST.me&&LAST.me.hand)||[];const c=hh.find(x=>x.idx===idx);return c?c.nome:'carta';}
 function _rivNm(tid){const r=(LAST&&LAST.me&&LAST.me.rivals)||[];const x=r.find(y=>y.id===tid);return x?x.name:'rivale';}
@@ -2279,7 +2279,7 @@ function playIntroSequence(list){
   const vid=getIntroVid();vid.style.display='';if(vid.parentNode)vid.parentNode.removeChild(vid);
   ov.appendChild(vid);document.body.appendChild(ov);
   let i=0,ended=false,clipTimer=null;
-  const closeOv=()=>{if(ended)return;ended=true;if(clipTimer)clearTimeout(clipTimer);vid.onended=null;vid.onerror=null;ov.classList.add('hide');setTimeout(()=>{if(ov.parentNode)ov.remove();},400);};
+  const closeOv=()=>{if(ended)return;ended=true;if(clipTimer)clearTimeout(clipTimer);vid.onended=null;vid.onerror=null;ov.classList.add('hide');setTimeout(()=>{if(ov.parentNode)ov.remove(); try{if(typeof LAST!=='undefined'&&LAST&&LAST.phase==='prep'&&LAST.isYourTurn&&!document.getElementById('of-intro'))startPrepTimer();}catch(e){}},400);};
   const next=()=>{
     if(clipTimer){clearTimeout(clipTimer);clipTimer=null;}
     if(i>=list.length){closeOv();return;}
@@ -2376,10 +2376,8 @@ function render(v){
   else if(v.phase==='race')renderRace(v);
   else if(v.phase==='results')renderResults(v);
   else if(v.phase==='win')renderWin(v);
-  // auto-avanza dopo il colpo di gas: mostra il risultato un attimo, poi muove da solo
-  if(v.phase==='race' && v.isYourTurn && v.rolled){ if(!ui.autoMoveTimer) ui.autoMoveTimer=setTimeout(function(){ ui.autoMoveTimer=null; socket.emit('race:move'); }, 1200); }
-  else if(ui.autoMoveTimer){ clearTimeout(ui.autoMoveTimer); ui.autoMoveTimer=null; }
-  if(v.phase==='prep' && v.isYourTurn){ startPrepTimer(); } else { stopPrepTimer(); }
+  // timer officina: parte solo quando l'officina è visibile (non durante i video intro)
+  if(v.phase==='prep' && v.isYourTurn){ if(!document.getElementById('of-intro')) startPrepTimer(); } else stopPrepTimer();
   renderDrawer(v);
   renderLog(v);
   checkIncoming(v);

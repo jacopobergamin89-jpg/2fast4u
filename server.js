@@ -211,8 +211,9 @@ function stockAvail(G,comp,lvl){ return compSlots(G.players.length,lvl) - G.play
 function deckCountForLevel(N,lvl){ return ({1:4,2:3,3:3,4:Math.max(0,N-2),5:Math.max(0,N-3)})[lvl]||0; }   // scarsità mazzo per stat/livello
 function revealMarket(G,count){                                  // pesca `count` pezzi e li scopre nel banco condiviso
   const N=G.players.length; let guard=count*60;
+  const marketPool = G.round<=1 ? DB.ordine.filter(c=>c!=='nos') : DB.ordine;   // NOS non disponibile al primo mercato (round 1)
   while(count>0 && guard-->0){
-    const comp=DB.ordine[Math.floor(Math.random()*DB.ordine.length)];
+    const comp=marketPool[Math.floor(Math.random()*marketPool.length)];
     const lvl=1+Math.floor(Math.random()*G.compMaxLevel);        // 1..livello max pista
     const key=comp+':'+lvl; const used=G.marketUsed[key]||0;
     if(used>=deckCountForLevel(N,lvl)) continue;                 // esaurita quella carta nel mazzo
