@@ -201,7 +201,7 @@ function startRound(room){
   G.raceFirstRollDone=false;
   G.ppIdx=0; G.phase='prep'; G.R=null; if(G.lastResults) G.prevResults=G.lastResults; G.lastResults=null; G.reshop=false; G.reshopQueued=false; G.reshopFirst=null; G.reshopBuys={}; G.reshopHalf=[]; G.sprintFinish=null;
   G.blocks=[]; G.pendPolice=[]; G.forfeitedBlocks=[];
-  G.players.forEach(p=>{ p.bet=null; p.prizeMult=1; p.betMult=1; p.quotaMod=0; p.discountNext=false; p.incoming=[]; });
+  G.players.forEach(p=>{ p.bet=null; p.prizeMult=1; p.betMult=1; p.quotaMod=0; p.discountNext=false; p.incoming=[]; p.nosBombs=(G.trackLevel>=4)?[0,0]:null; });
   curPrep(G).buysLeft=1;                                        // 1 acquisto per giro
   glog(G,'— Round '+G.round+' · officina aperta · gara liv. '+G.raceLevel,'round');
 }
@@ -316,7 +316,7 @@ function revertMalus(G, t, m){
     case 'quota': t.quotaMod=(t.quotaMod||0)-m.val; break;
     case 'smonta': { const cp=m.comp, lv=m.lvl; if(cp!=null){ if(t.lvlOwned[cp]&&!t.lvlOwned[cp].includes(lv)) t.lvlOwned[cp].push(lv); t.comp[cp]=Math.max(...t.lvlOwned[cp]); } break; }
     case 'vel': case 'ctrl': { const car=G.R&&G.R.cars[t.id]; if(car&&m.fxRef) car.fx=car.fx.filter(e=>e!==m.fxRef); break; }
-    case 'nosmod': { const car=G.R&&G.R.cars[t.id]; if(car) car.nosMod=(car.nosMod||0)-m.val; break; }
+    case 'nosmod': { const tp=G.players.find(x=>x.id===t.id); const car=G.R&&G.R.cars[t.id]; if(tp&&tp.nosBombs) bombAddCharge(tp,-m.val); else if(car) car.nosMod=(car.nosMod||0)-m.val; break; }
     case 'partenza': { const car=G.R&&G.R.cars[t.id]; if(car) car.pendPart-=m.val; break; }
     case 'dado': { const car=G.R&&G.R.cars[t.id]; if(car) car.pendDado=(m.prevDado!==undefined?m.prevDado:null); break; }
   }
@@ -330,7 +330,7 @@ function reflectMalus(G, a, m){
     case 'quota': a.quotaMod=(a.quotaMod||0)+m.val; break;
     case 'smonta': smontaBest(G, a); break;
     case 'vel': case 'ctrl': { const car=G.R&&G.R.cars[a.id]; if(car) car.fx.push({stat:m.eff,amt:m.val,turns:m.dur}); break; }
-    case 'nosmod': { const car=G.R&&G.R.cars[a.id]; if(car) car.nosMod=(car.nosMod||0)+m.val; break; }
+    case 'nosmod': { const ap=G.players.find(x=>x.id===a.id); const car=G.R&&G.R.cars[a.id]; if(ap&&ap.nosBombs) bombAddCharge(ap,m.val); else if(car) car.nosMod=(car.nosMod||0)+m.val; break; }
     case 'partenza': { const car=G.R&&G.R.cars[a.id]; if(car) car.pendPart+=m.val; break; }
     case 'dado': { const car=G.R&&G.R.cars[a.id]; if(car) car.pendDado=m.val; break; }
   }
@@ -641,7 +641,15 @@ function activeRace(G){ return G.players.find(p=>p.id===G.R.turnOrder[G.R.ptr]);
 function dieBonus(d){ return d<=2?1:d<=5?2:3; }
 const REACT_DIE={perfetto:6,quasi:4,mancato:1};   // Reazione (colpo di gas): perfetto=+3, quasi=+2, mancato=+1
 function fxSum(R,p,stat){ return R.cars[p.id].fx.filter(e=>e.stat===stat).reduce((s,e)=>s+e.amt,0); }
-function nosAllowed(G,p){ const car=G.R.cars[p.id]; const seg=segOf(G,Math.max(1,car.pos)); if(car.nosUsed) return false; if(!car.firstDone) return false; if(seg.t==='drift') return false; if((statVal(p,'nos')+(car.nosMod||0))<=0) return false; return true; }
+function nosOwned(p){ return statVal(p,'nos'); }                                  // NOS che possiedi = valore del componente NOS montato
+function bombSet(p,a,b){ if(!p.nosBombs) return false; a=Math.max(0,Math.min(13,a|0)); b=Math.max(0,Math.min(13,b|0)); if(a+b>nosOwned(p)) return false; p.nosBombs=[a,b]; return true; }
+function bombPickFire(p){ if(!p.nosBombs) return -1; let best=-1,bv=0; p.nosBombs.forEach((c,i)=>{ if(c>=1&&c>bv){bv=c;best=i;} }); return best; }   // di default attiva la bombola più carica
+function bombAddCharge(p,val){ if(!p.nosBombs) return;
+  if(val>=0){ let i=(p.nosBombs[1]<p.nosBombs[0])?1:0; p.nosBombs[i]+=val; if(p.nosBombs[i]>13) p.nosBombs[i]=Math.floor(p.nosBombs[i]/2); }   // bonus sulla meno carica; sballo oltre 13 → dimezza
+  else { let i=(p.nosBombs[1]>p.nosBombs[0])?1:0; p.nosBombs[i]=Math.max(0,p.nosBombs[i]+val); } }   // malus sulla più carica
+function nosAllowed(G,p){ const car=G.R.cars[p.id]; const seg=segOf(G,Math.max(1,car.pos)); if(!car.firstDone) return false; if(seg.t==='drift') return false;
+  if(p.nosBombs){ const cd=(car.nosTurn||0); const ready=(cd===0||G.R.turn>=cd+2); return ready && p.nosBombs.some(c=>c>=1); }   // L4+: bombola carica e fuori cooldown (1 tiro)
+  if(car.nosUsed) return false; if((statVal(p,'nos')+(car.nosMod||0))<=0) return false; return true; }
 
 function computeMove(G,p,die,useNos){
   const R=G.R; const car=R.cars[p.id]; const first=!car.firstDone; const seg=segOf(G,Math.max(1,car.pos));
@@ -672,7 +680,10 @@ function computeMove(G,p,die,useNos){
   if(car.pendPart){ total+=car.pendPart; lines.push({k:'Carta partenza',v:car.pendPart,cls:car.pendPart>0?'pos':'neg'}); }
   if(first && p.pilot.fortuna && p.pilot.fortuna.set.includes(die)){ const fv=p.pilot.fortuna.v; total+=fv; vel+=fv; lines.push({k:'Fortuna 1° tiro',v:fv,cls:'pos'}); }
   if(car.dadoForza && car.dadoForza.set.includes(die)){ const df=car.dadoForza; total+=df.val; if(df.stat==='vel') vel+=df.val; else if(df.stat==='ctrl') ctrl+=df.val; lines.push({k:'Dado-forza ('+die+')',v:df.val,cls:'pos'}); }
-  if(useNos){ let nv=Math.max(0,statVal(p,'nos')+(car.nosMod||0)); if(seg.t==='citta') nv=Math.max(0,nv-1); const add=nv+(onTratto?(pb.nos||0):0); total+=add; lines.push({k:'NOS'+(seg.t==='citta'?' (–1 città)':'')+((onTratto&&pb.nos)?' +pilota':''),v:add,cls:'nos'}); }
+  if(useNos){ let nv;
+    if(p.nosBombs){ const bi=(car.pendBomb!=null)?car.pendBomb:bombPickFire(p); nv=(bi>=0)?p.nosBombs[bi]:0; }
+    else { nv=statVal(p,'nos')+(car.nosMod||0); }
+    nv=Math.max(0,nv); if(seg.t==='citta') nv=Math.max(0,nv-1); const add=nv+(onTratto?(pb.nos||0):0); total+=add; lines.push({k:'NOS'+(seg.t==='citta'?' (–1 città)':'')+((onTratto&&pb.nos)?' +pilota':''),v:add,cls:'nos'}); }
   if(!noPen){
     if(seg.pv && vel>seg.pv.gt){ total-=seg.pv.a; lines.push({k:'Pen. Drift (Vel '+vel+'>'+seg.pv.gt+')',v:-seg.pv.a,cls:'neg'}); }
     if(seg.pc && ctrl<seg.pc.lt){ total-=seg.pc.a; lines.push({k:'Pen. Controllo (Ctrl '+ctrl+'<'+seg.pc.lt+')',v:-seg.pc.a,cls:'neg'}); }
@@ -733,7 +744,7 @@ function actRacePlayCard(room,p,handIdx,targetId){
         const tcCar=G.R.cars[tg.id]; if(!tcCar) continue;
         const isPlayerFoe = (tg!==p) && !tg.kind && !tg.isPolice;                  // solo i giocatori si difendono
         if(e.stat==='nosmod'){
-          tcCar.nosMod=(tcCar.nosMod||0)+e.val;
+          if(tg.nosBombs) bombAddCharge(tg,e.val); else tcCar.nosMod=(tcCar.nosMod||0)+e.val;
           if(isPlayerFoe && e.val<0) recordMalus(room, p, tg, {phase:'ingara', eff:'nosmod', val:e.val, cardNome:c.nome});
         } else {
           const fx={stat:e.stat, amt:e.val, turns:dur}; tcCar.fx.push(fx);
@@ -764,13 +775,14 @@ function actRacePlayCard(room,p,handIdx,targetId){
   if(c.target==='rival' && target.id!==p.id && !isFoe) recordMalus(room, p, target, {phase:'ingara', eff:c.eff, val:c.val, dur:c.dur, fxRef:_fx, prevDado:_prevDado, cardNome:c.nome});  // i boss non si difendono
   p.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
-function actRoll(room,p,useNos,reaction){
+function actRoll(room,p,useNos,reaction,bombIdx){
   const G=room.G; if(G.phase!=='race') return 'Non in gara.';
   if(activeRace(G).id!==p.id) return 'Non è il tuo turno.';
   if(G.R.phase!=='await') return 'Hai già tirato.';
   p.incoming=(p.incoming||[]).filter(m=>m.phase!=='ingara');   // finestra di difesa chiusa: ora il malus fa effetto
   const car=G.R.cars[p.id];
   const realNos = !!useNos && nosAllowed(G,p);
+  if(realNos && p.nosBombs){ car.pendBomb=(bombIdx!=null && p.nosBombs[bombIdx]>=1)?bombIdx:bombPickFire(p); } else { car.pendBomb=null; }
   const die = car.pendDado || (reaction && REACT_DIE[reaction]) || d6();   // Reazione del giocatore; dado truccato ha precedenza; bot (no reaction) → d6
   (G.R.turnDice=G.R.turnDice||[]).push(die);
   G.R.lastBreak = computeMove(G,p,die,realNos);
@@ -782,7 +794,7 @@ function actConfirmMove(room,p){
   if(activeRace(G).id!==p.id) return 'Non è il tuo turno.';
   if(G.R.phase!=='rolled') return 'Prima tira il dado.';
   const car=G.R.cars[p.id]; const b=G.R.lastBreak;
-  if(b.useNos) car.nosUsed=true;
+  if(b.useNos){ if(p.nosBombs && car.pendBomb!=null){ p.nosBombs[car.pendBomb]=0; car.nosTurn=G.R.turn; car.pendBomb=null; } else { car.nosUsed=true; } }
   car.firstDone=true; G.raceFirstRollDone=true;
   car.dist=(car.dist||0)+b.total;                       // distanza reale percorsa (non tappata) → classifica photo-finish
   car.pos=Math.min(G.R.finish||55,car.pos+b.total);
@@ -1026,7 +1038,7 @@ function buildView(room, player){
       v.policeHand=p.hand.map((c,idx)=>({c,idx})).filter(o=>o.c.cat==='polizia').map(o=>({idx:o.idx,nome:o.c.nome,kind:o.c.kind,size:o.c.size}));
       v.mustPlayPolice=p.hand.some(c=>c.cat==='polizia');
       v.track=trackView(G);
-      v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:(p.discountNext||0) };
+      v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:(p.discountNext||0), nosBombs:p.nosBombs, nosOwned:nosOwned(p) };
       v.pregara = p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c), costPO:(c.costPO||0) })).filter(c=>c.cat==='pregara' && c.eff!=='defend' && !(G.reshop && (c.eff==='reopen'||c.eff==='reopenAll'||c.eff==='reopenDebt')));
       v.handAll = p.hand.map((c,idx)=>{ const o={ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, dur:c.dur, costPO:(c.costPO||0), gang:c.gang, desc:c.desc||cardDesc(c), needsTarget:cardNeedsTarget(c) }; if(c.cat==='pregara') o.target=pregaraTarget(c); if(c.cat==='esp'){ o.comp=c.comp; o.lvl=c.lvl; o.cost=c.cost; o.espVal=c.espVal; } return o; }).filter(c=>c.cat!=='polizia');
       v.canBet = !G.reshop && G.round>=2;
@@ -1067,7 +1079,7 @@ function buildView(room, player){
         vel:statVal(p,'motore')+statVal(p,'cambio')+fxVel, ctrl:statVal(p,'sterzo')+statVal(p,'assetto')+fxCtrl,
         mov:statVal(p,'motore')+statVal(p,'cambio')+statVal(p,'sterzo')+statVal(p,'assetto')+statVal(p,'peso'),
         segType:seg.t, segLabel:TIPO_LABEL[seg.t], firstDone:car.firstDone,
-        nosOk:nosAllowed(G,p), nosVal:statVal(p,'nos'),
+        nosOk:nosAllowed(G,p), nosVal:statVal(p,'nos'), nosBombs:p.nosBombs,
         fx:car.fx.map(e=>({stat:e.stat,amt:e.amt,turns:e.turns})), pendPart:car.pendPart, pendDado:car.pendDado,
         hand:p.hand.map((c,idx)=>{ const gOK=!c.gangLock||(!!p.pilot&&p.pilot.gang===c.gang); const playable=c.cat==='ingara'&&c.eff!=='defend'&&c.eff!=='partenza'&&gOK; return {idx,cat:c.cat,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur,target:c.target,gang:c.gang,desc:c.desc||cardDesc(c),needsTarget:cardNeedsTarget(c),gangLock:!!c.gangLock,gangOK:gOK,playable,note:playable?'':raceHandNote(c,gOK)}; }),
         rivals:[...G.players.filter(x=>x.id!==p.id).map(x=>({id:x.id,name:x.name,colorH:DB.colori[x.colorIdx].h})), ...(R.bosses||[]).map(b=>({id:b.id,name:b.name,colorH:b.kind==='boss'?'#ff3b3b':'#ffa733',isFoe:true,kind:b.kind}))]
@@ -1136,6 +1148,7 @@ function botPrep(room,bot){
   for(let i=bot.hand.length-1;i>=0;i--){ const c=bot.hand[i]; if(c.cat!=='esp') continue;   // carte ESP: potenzia se hai il pezzo base a quel livello e i soldi
     if(bot.comp[c.comp]===c.lvl && !(bot.espOwned&&bot.espOwned[c.comp]===c.lvl) && bot.money>=c.cost+300) actPlayEsp(room,bot,i);
   }
+  if(bot.nosBombs){ const n=nosOwned(bot); bombSet(bot, Math.min(13,n), Math.max(0,n-13)); }   // bot: riempi A, il resto in B
   actPrepDone(room,bot);
 }
 function botRace(room,bot){
@@ -1266,7 +1279,8 @@ function mount(ioInstance){
   socket.on('prep:done', handle((room,p)=>actPrepDone(room,p)));
   socket.on('launch:play', handle((room,p,d)=>actPlayPartenza(room,p,d.handIdx,d.targetId)));
   socket.on('race:playCard', handle((room,p,d)=>actRacePlayCard(room,p,d.handIdx,d.targetId)));
-  socket.on('race:roll', handle((room,p,d)=>actRoll(room,p,d.useNos,d.reaction)));
+  socket.on('race:roll', handle((room,p,d)=>actRoll(room,p,d.useNos,d.reaction,d.bombIdx)));
+  socket.on('bomb:set', handle((room,p,d)=>{ bombSet(p, d.a, d.b); return null; }));
   socket.on('race:move', handle((room,p)=>actConfirmMove(room,p)));
   socket.on('defend', handle((room,p,d)=>actDefend(room,p,d.handIdx,d.mid)));
   socket.on('defense:play', handle((room,p,d)=>actDefend(room,p,d.handIdx,d.mid)));
