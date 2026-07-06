@@ -165,7 +165,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 const NOMI_PEZZO={motore:'Motore',cambio:'Cambio',sterzo:'Sterzo',assetto:'Assetto',peso:'Peso',nos:'NOS'};
 const CAT_DEF=[['ingara','In gara',50],['pregara','Pre-gara',13],['difesa','Difesa',10],['esp','ESP',8]];
 const CAPS={}; CAT_DEF.forEach(c=>CAPS[c[0]]=c[2]); const CAP_PIL=1;
-const ESP_CAP_LV={3:4,4:3};
+const ESP_CAP_LV={3:4,4:3,5:3};
 function cardLv(name){ if(!DATA) return null; for(const cat of DATA.cats) for(const lv in cat.lv) for(const fn in cat.lv[lv]) for(const c of cat.lv[lv][fn]) if(c.n===name) return +lv; return null; }
 function espCount(lv){ if(!DATA) return 0; let n=0; const cat=DATA.cats.find(c=>c.key==='esp'); if(cat&&cat.lv[lv]) for(const fn in cat.lv[lv]) for(const c of cat.lv[lv][fn]) n+=(D().qty[c.n]||0); return n; }
 const TOTCAP=CAT_DEF.reduce((s,c)=>s+c[2],0);
@@ -228,7 +228,7 @@ function saveColl(c){ try{ localStorage.setItem(COLL_KEY, JSON.stringify(c)); }c
 function ownsCard(name){ if(localStorage.getItem('2f4u_admin_unlockall')==='1') return true; return (loadColl().owned[name]||0)>0; }
 let RAW=null; const openKeys=new Set();
 function organize(raw){
-  const cats=[]; const LV=['1','2','3','4'];
+  const cats=[]; const LV=['1','2','3','4','5'];
   for(const [key,titolo,cap] of CAT_DEF){
     const cat={key,titolo,cap,lv:{}};
     for(const lv of LV){
@@ -269,7 +269,7 @@ function renderContent(){
   const el=document.getElementById('content');
   if(tab==='piloti'){ el.innerHTML=renderPiloti(); return; }
   const cat=DATA.cats.find(c=>c.key===tab); const only=favOnly(); let h='';
-  for(const lv of ['1','2','3','4']){
+  for(const lv of ['1','2','3','4','5']){
     if(!cat.lv[lv]) continue; let inner=''; let lvTot=0;
     if(tab==='esp'){                                            // ESP: solo per livello, carte dirette (niente tipo)
       let cards=[]; for(const fn in cat.lv[lv]) cards=cards.concat(cat.lv[lv][fn]);
@@ -381,7 +381,7 @@ function applyPreset(kind){
     for(const gk of (order[kind]||order.velocita)){ for(const c of by[gk]){ if(added>=CAP)break; add(c); } if(added>=CAP)break; }
   }
   [['difesa',CAPS.difesa],['pregara',CAPS.pregara]].forEach(([k,cap])=>{ let n=0; for(const c of cardsOf(k)){ if(n>=cap)break; if(!q[c.n]){ q[c.n]=1; n++; } } });
-  ['3','4'].forEach(lv=>{ const cap=ESP_CAP_LV[+lv]||0; let n=0; const cat=DATA.cats.find(c=>c.key==='esp'); if(cat&&cat.lv[lv]) for(const fn in cat.lv[lv]) for(const c of cat.lv[lv][fn]){ if(n>=cap)break; if(!q[c.n]){ q[c.n]=1; n++; } } });
+  ['3','4','5'].forEach(lv=>{ const cap=ESP_CAP_LV[+lv]||0; let n=0; const cat=DATA.cats.find(c=>c.key==='esp'); if(cat&&cat.lv[lv]) for(const fn in cat.lv[lv]) for(const c of cat.lv[lv][fn]){ if(n>=cap)break; if(!q[c.n]){ q[c.n]=1; n++; } } });
   persist(); refresh();
   const lab={velocita:'Velocità',controllo:'Controllo',nos:'NOS',equilibrato:'Equilibrato'}[kind]||kind;
   toast('Preset «'+lab+'» applicato');

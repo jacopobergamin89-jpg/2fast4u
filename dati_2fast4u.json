@@ -38,28 +38,32 @@
     3,
     5,
     6,
-    8
+    8,
+    11
    ],
    "cambio": [
     1,
     2,
     4,
     6,
-    7
+    7,
+    9
    ],
    "sterzo": [
     1,
     3,
     5,
     7,
-    8
+    8,
+    10
    ],
    "assetto": [
     1,
     2,
     4,
     5,
-    7
+    7,
+    10
    ],
    "peso": [
     -7,
@@ -74,7 +78,8 @@
     3,
     5,
     6,
-    8
+    8,
+    11
    ]
   },
   "prezzi": {
@@ -83,42 +88,48 @@
     800,
     1600,
     2100,
-    3200
+    3200,
+    4400
    ],
    "cambio": [
     0,
     500,
     1200,
     2100,
-    2600
+    2600,
+    3600
    ],
    "sterzo": [
     0,
     800,
     1600,
     2600,
-    3200
+    3200,
+    4400
    ],
    "assetto": [
     0,
     500,
     1200,
     1600,
-    2600
+    2600,
+    3600
    ],
    "peso": [
     0,
     400,
     800,
     1200,
-    1700
+    1700,
+    2300
    ],
    "nos": [
     0,
     600,
     1200,
     1600,
-    2400
+    2400,
+    3400
    ]
   },
   "esp": {
@@ -130,6 +141,10 @@
     "4": {
      "v": 9,
      "p": 3900
+    },
+    "5": {
+     "v": 13,
+     "p": 5300
     }
    },
    "cambio": {
@@ -140,6 +155,10 @@
     "4": {
      "v": 8,
      "p": 3250
+    },
+    "5": {
+     "v": 11,
+     "p": 4300
     }
    },
    "sterzo": {
@@ -150,6 +169,10 @@
     "4": {
      "v": 9,
      "p": 3900
+    },
+    "5": {
+     "v": 11,
+     "p": 5000
     }
    },
    "assetto": {
@@ -160,6 +183,10 @@
     "4": {
      "v": 8,
      "p": 3250
+    },
+    "5": {
+     "v": 12,
+     "p": 4500
     }
    },
    "nos": {
@@ -170,6 +197,10 @@
     "4": {
      "v": 9,
      "p": 2900
+    },
+    "5": {
+     "v": 13,
+     "p": 4100
     }
    },
    "peso": {
@@ -611,15 +642,31 @@
   "1": [
    {
     "t": "rettilineo",
-    "nm": "Run Base"
+    "nm": "Run Base",
+    "bv": {
+     "gt": 4,
+     "a": 2
+    }
    },
    {
     "t": "rettilineo",
-    "nm": "Dritto Facile"
+    "nm": "Dritto Facile",
+    "bv": {
+     "gt": 4,
+     "a": 2
+    },
+    "pcg": {
+     "gt": 3,
+     "a": 1
+    }
    },
    {
     "t": "rettilineo",
-    "nm": "Flat Line"
+    "nm": "Flat Line",
+    "bv": {
+     "gt": 4,
+     "a": 2
+    }
    },
    {
     "t": "citta",
@@ -641,7 +688,7 @@
     "t": "citta",
     "nm": "Start Rush",
     "pc": {
-     "lt": 6,
+     "lt": 4,
      "a": 1
     }
    },
@@ -649,12 +696,12 @@
     "t": "drift",
     "nm": "Slalom Rookie",
     "pv": {
-     "gt": 3,
+     "gt": 4,
      "a": 1
     },
     "pc": {
-     "lt": 5,
-     "a": 1
+     "lt": 4,
+     "a": 2
     }
    },
    {
@@ -662,7 +709,7 @@
     "nm": "Asfalto Fresco",
     "pv": {
      "gt": 4,
-     "a": 1
+     "a": 2
     },
     "pc": {
      "lt": 5,
@@ -674,32 +721,43 @@
    {
     "t": "rettilineo",
     "nm": "Tunnel Line",
-    "pcg": {
-     "gt": 4,
+    "bv": {
+     "gt": 6,
      "a": 1
     }
    },
    {
     "t": "rettilineo",
-    "nm": "Rush Corridor"
+    "nm": "Rush Corridor",
+    "bv": {
+     "gt": 7,
+     "a": 2
+    },
+    "pcg": {
+     "gt": 5,
+     "a": 1
+    }
    },
    {
     "t": "rettilineo",
-    "nm": "Nitro Lane"
+    "nm": "Nitro Lane",
+    "al": {
+     "a": 3
+    }
    },
    {
     "t": "citta",
     "nm": "Via Libera",
     "pc": {
-     "lt": 5,
-     "a": 2
+     "lt": 8,
+     "a": 1
     }
    },
    {
     "t": "citta",
     "nm": "Zona 30",
     "pc": {
-     "lt": 6,
+     "lt": 8,
      "a": 1
     }
    },
@@ -723,7 +781,7 @@
     "t": "drift",
     "nm": "Slide District",
     "pv": {
-     "gt": 5,
+     "gt": 6,
      "a": 2
     },
     "pc": {
@@ -735,7 +793,7 @@
     "t": "drift",
     "nm": "Backstreet Slides",
     "pv": {
-     "gt": 4,
+     "gt": 5,
      "a": 1
     },
     "pc": {
@@ -747,8 +805,8 @@
     "t": "drift",
     "nm": "Curve Basse",
     "pv": {
-     "gt": 4,
-     "a": 1
+     "gt": 6,
+     "a": 2
     },
     "pc": {
      "lt": 7,
@@ -760,7 +818,7 @@
     "nm": "Skid Alley",
     "pv": {
      "gt": 5,
-     "a": 2
+     "a": 1
     },
     "pc": {
      "lt": 6,
@@ -772,97 +830,108 @@
    {
     "t": "rettilineo",
     "nm": "Vento in Faccia",
-    "pcg": {
-     "gt": 7,
-     "a": 1
+    "bv": {
+     "gt": 9,
+     "a": 3
     }
    },
    {
     "t": "rettilineo",
     "nm": "Full Speed Mile",
+    "bv": {
+     "gt": 10,
+     "a": 4
+    },
     "pcg": {
-     "gt": 6,
-     "a": 1
+     "gt": 8,
+     "a": 3
     }
    },
    {
     "t": "rettilineo",
-    "nm": "Autostrada Chiusa"
+    "nm": "Autostrada Chiusa",
+    "bv": {
+     "gt": 9,
+     "a": 4
+    }
    },
    {
     "t": "rettilineo",
-    "nm": "Rush 5th Gear"
+    "nm": "Rush 5th Gear",
+    "al": {
+     "a": 5
+    }
    },
    {
     "t": "citta",
     "nm": "Fatal Cross",
     "pc": {
-     "lt": 8,
-     "a": 2
+     "lt": 11,
+     "a": 3
     }
    },
    {
     "t": "citta",
     "nm": "Midnight Run",
     "pc": {
-     "lt": 9,
-     "a": 2
+     "lt": 11,
+     "a": 3
     }
    },
    {
     "t": "citta",
     "nm": "Sirene Spente",
     "pc": {
-     "lt": 8,
-     "a": 2
+     "lt": 10,
+     "a": 4
     }
    },
    {
     "t": "drift",
     "nm": "Rincon Drift",
     "pv": {
-     "gt": 7,
-     "a": 2
+     "gt": 9,
+     "a": 4
     },
     "pc": {
      "lt": 10,
-     "a": 1
+     "a": 3
     }
    },
    {
     "t": "drift",
     "nm": "Urban Slide",
     "pv": {
-     "gt": 6,
-     "a": 1
+     "gt": 8,
+     "a": 3
     },
     "pc": {
-     "lt": 7,
-     "a": 2
+     "lt": 9,
+     "a": 4
     }
    },
    {
     "t": "drift",
     "nm": "Ghost Slide",
     "pv": {
-     "gt": 7,
-     "a": 2
+     "gt": 9,
+     "a": 4
     },
     "pc": {
-     "lt": 8,
-     "a": 2
+     "lt": 10,
+     "a": 3
     }
    },
    {
     "t": "drift",
     "nm": "Neon Drift",
     "pv": {
-     "gt": 7,
-     "a": 1
+     "gt": 8,
+     "a": 3
     },
     "pc": {
-     "lt": 7,
-     "a": 2
+     "lt": 9,
+     "a": 4
     }
    }
   ],
@@ -870,81 +939,92 @@
    {
     "t": "rettilineo",
     "nm": "Iper Strada",
-    "pcg": {
-     "gt": 8,
-     "a": 1
+    "bv": {
+     "gt": 12,
+     "a": 4
     }
    },
    {
     "t": "rettilineo",
     "nm": "Hyper Lane",
+    "bv": {
+     "gt": 13,
+     "a": 6
+    },
     "pcg": {
-     "gt": 9,
-     "a": 1
+     "gt": 11,
+     "a": 4
     }
    },
    {
     "t": "rettilineo",
-    "nm": "Redline Rush"
+    "nm": "Redline Rush",
+    "bv": {
+     "gt": 12,
+     "a": 6
+    }
    },
    {
     "t": "rettilineo",
-    "nm": "Warp Straight"
+    "nm": "Warp Straight",
+    "al": {
+     "a": 7
+    }
    },
    {
     "t": "citta",
     "nm": "Caos Urbano",
     "pc": {
-     "lt": 9,
-     "a": 2
+     "lt": 14,
+     "a": 4
     }
    },
    {
     "t": "citta",
     "nm": "Metropoli Blindata",
     "pc": {
-     "lt": 10,
-     "a": 2
+     "lt": 14,
+     "a": 4
     }
    },
    {
     "t": "citta",
     "nm": "Blocco Notturno",
     "pc": {
-     "lt": 11,
-     "a": 1
+     "lt": 13,
+     "a": 6
     }
    },
    {
     "t": "citta",
     "nm": "Coprifuoco Urbano",
     "pc": {
-     "lt": 12,
-     "a": 1
+     "lt": 13,
+     "a": 6
     }
    },
    {
     "t": "drift",
     "nm": "Abisso Curvo",
     "pv": {
-     "gt": 11,
-     "a": 1
+     "gt": 12,
+     "a": 6
     },
     "pc": {
-     "lt": 9,
-     "a": 2
+     "lt": 13,
+     "a": 4
     }
    },
    {
     "t": "drift",
     "nm": "Deriva Estrema",
     "pv": {
-     "gt": 10,
-     "a": 1
+     "gt": 11,
+     "a": 4
     },
     "pc": {
-     "lt": 10,
-     "a": 1
+     "lt": 12,
+     "a": 6
     }
    },
    {
@@ -952,23 +1032,140 @@
     "nm": "Vortice",
     "pv": {
      "gt": 12,
-     "a": 2
+     "a": 6
     },
     "pc": {
-     "lt": 14,
-     "a": 1
+     "lt": 13,
+     "a": 4
     }
    },
    {
     "t": "drift",
     "nm": "Uragano d'Asfalto",
     "pv": {
-     "gt": 13,
-     "a": 2
+     "gt": 11,
+     "a": 4
     },
     "pc": {
-     "lt": 14,
-     "a": 1
+     "lt": 12,
+     "a": 6
+    }
+   }
+  ],
+  "5": [
+   {
+    "t": "rettilineo",
+    "nm": "Velocità Luce",
+    "bv": {
+     "gt": 17,
+     "a": 6
+    }
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Oltre il Limite",
+    "bv": {
+     "gt": 18,
+     "a": 7
+    },
+    "pcg": {
+     "gt": 16,
+     "a": 6
+    }
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Traiettoria Zero",
+    "bv": {
+     "gt": 17,
+     "a": 7
+    }
+   },
+   {
+    "t": "rettilineo",
+    "nm": "Muro del Suono",
+    "al": {
+     "a": 9
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Inferno Metropolitano",
+    "pc": {
+     "lt": 19,
+     "a": 6
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Zona Rossa",
+    "pc": {
+     "lt": 19,
+     "a": 6
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Assedio Urbano",
+    "pc": {
+     "lt": 18,
+     "a": 7
+    }
+   },
+   {
+    "t": "citta",
+    "nm": "Coprifuoco Totale",
+    "pc": {
+     "lt": 18,
+     "a": 7
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Curva della Morte",
+    "pv": {
+     "gt": 17,
+     "a": 7
+    },
+    "pc": {
+     "lt": 18,
+     "a": 6
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Vertigine",
+    "pv": {
+     "gt": 16,
+     "a": 6
+    },
+    "pc": {
+     "lt": 17,
+     "a": 7
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Apocalisse in Derapata",
+    "pv": {
+     "gt": 17,
+     "a": 7
+    },
+    "pc": {
+     "lt": 18,
+     "a": 6
+    }
+   },
+   {
+    "t": "drift",
+    "nm": "Ultimo Respiro",
+    "pv": {
+     "gt": 16,
+     "a": 6
+    },
+    "pc": {
+     "lt": 17,
+     "a": 7
     }
    }
   ]
@@ -5334,6 +5531,85 @@
     "nome": "Elicottero in caccia",
     "kind": "inseguimento",
     "size": 0
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Peso L4",
+    "gang": "",
+    "comp": "peso",
+    "lvl": 4,
+    "espVal": -2,
+    "baseVal": -3,
+    "cost": 1400,
+    "desc": "Potenzia Peso a L4 ESP (valore −2) · serve Peso L4 montato · €1400"
+   }
+  ],
+  "5": [
+   {
+    "cat": "esp",
+    "nome": "ESP Motore L5",
+    "gang": "I Diavoli",
+    "comp": "motore",
+    "lvl": 5,
+    "espVal": 13,
+    "baseVal": 11,
+    "cost": 1850,
+    "desc": "Potenzia Motore a L5 ESP (valore +13) · serve Motore L5 montato · €1850"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Cambio L5",
+    "gang": "Ombre Nere",
+    "comp": "cambio",
+    "lvl": 5,
+    "espVal": 11,
+    "baseVal": 9,
+    "cost": 1800,
+    "desc": "Potenzia Cambio a L5 ESP (valore +11) · serve Cambio L5 montato · €1800"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Sterzo L5",
+    "gang": "Lupara Boys",
+    "comp": "sterzo",
+    "lvl": 5,
+    "espVal": 11,
+    "baseVal": 10,
+    "cost": 1850,
+    "desc": "Potenzia Sterzo a L5 ESP (valore +11) · serve Sterzo L5 montato · €1850"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Assetto L5",
+    "gang": "Lowlifes",
+    "comp": "assetto",
+    "lvl": 5,
+    "espVal": 12,
+    "baseVal": 10,
+    "cost": 1800,
+    "desc": "Potenzia Assetto a L5 ESP (valore +12) · serve Assetto L5 montato · €1800"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP NOS L5",
+    "gang": "Krudo",
+    "comp": "nos",
+    "lvl": 5,
+    "espVal": 13,
+    "baseVal": 11,
+    "cost": 1650,
+    "desc": "Potenzia NOS a L5 ESP (valore +13) · serve NOS L5 montato · €1650"
+   },
+   {
+    "cat": "esp",
+    "nome": "ESP Peso L5",
+    "gang": "",
+    "comp": "peso",
+    "lvl": 5,
+    "espVal": 0,
+    "baseVal": -1,
+    "cost": 1550,
+    "desc": "Potenzia Peso a L5 ESP (valore +0) · serve Peso L5 montato · €1550"
    }
   ]
  }

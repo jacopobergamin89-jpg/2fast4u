@@ -32,7 +32,7 @@ const DB = {
   premiPO: [5,3,1,0,0,0,0,0],
   quoteScommessa: [1.05,1.2,1.5,2,2.5,3,4,5],
   obiettivo: 50,
-  maxLevelRoads: 4,
+  maxLevelRoads: 5,
   colori: [
     { n:'Rosso', h:'#e74c3c' }, { n:'Blu', h:'#3498db' }, { n:'Verde', h:'#2ecc71' }, { n:'Giallo', h:'#f39c12' },
     { n:'Viola', h:'#9b59b6' }, { n:'Turchese', h:'#1abc9c' }, { n:'Arancio', h:'#e67e22' }, { n:'Rosa', h:'#e91e63' }
@@ -40,8 +40,8 @@ const DB = {
   piloti: DATI.piloti                                           // 24 piloti: tratto {t,v} · fortuna {set,v} · bonus {vel|ctrl|nos}
 };
 const TIPO_LABEL = { rettilineo:'Rettilineo', citta:'Città', drift:'Drift' };
-const ROADS = { 1:DATI.strade['1'], 2:DATI.strade['2'], 3:DATI.strade['3'], 4:DATI.strade['4'] };
-const CARD_PACKS = { 1:DATI.carte['1'], 2:DATI.carte['2'], 3:DATI.carte['3'], 4:DATI.carte['4'] };   // ogni pack: ingara+pregara+difesa+polizia di quel livello
+const ROADS = { 1:DATI.strade['1'], 2:DATI.strade['2'], 3:DATI.strade['3'], 4:DATI.strade['4'], 5:DATI.strade['5'] };
+const CARD_PACKS = { 1:DATI.carte['1'], 2:DATI.carte['2'], 3:DATI.carte['3'], 4:DATI.carte['4'], 5:DATI.carte['5'] };   // ogni pack: ingara+pregara+difesa+polizia+esp di quel livello (L5: solo ESP)
 
 /* ============================ UTIL ============================ */
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
@@ -95,7 +95,7 @@ function makeDeck(maxLvl){
   return shuffle(d);
 }
 /* --- mazzo PERSONALE dal deck-builder (nome carta univoco per livello) --- */
-const CARD_INDEX=(function(){ const idx={}; for(const lv of ['1','2','3','4']) for(const c of (DATI.carte[lv]||[])) if(!idx[c.nome]) idx[c.nome]={def:c,lvl:+lv}; return idx; })();
+const CARD_INDEX=(function(){ const idx={}; for(const lv of ['1','2','3','4','5']) for(const c of (DATI.carte[lv]||[])) if(!idx[c.nome]) idx[c.nome]={def:c,lvl:+lv}; return idx; })();
 function sanitizeDeck(deck){
   if(!deck||typeof deck!=='object') return null;
   const qty={}; if(deck.qty&&typeof deck.qty==='object') for(const k in deck.qty){ const v=deck.qty[k]|0; if(v>0 && CARD_INDEX[k]) qty[k]=Math.min(9,v); }
@@ -147,7 +147,7 @@ function startGame(room){
   G.discard=[];
   G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach(p=>{ for(let k=0;k<3;k++){ const card=drawCard(p,1); if(card) p.hand.push(card); } });
-  G.round=0; room.started=true; G.policeUnlocked=true; G.scaleUnlocked={2:false,3:false,4:false}; G.blocks=[]; G.pendPolice=[]; G.bossPending=null;
+  G.round=0; room.started=true; G.policeUnlocked=true; G.scaleUnlocked={2:false,3:false,4:false,5:false}; G.blocks=[]; G.pendPolice=[]; G.bossPending=null;
   G.gameLog=[]; G.gameSeq=0;
   G.phase='reveal'; G.players.forEach(p=>{ p.ready=false; if(p.pilotPool && p.pilotPool.length){ const pid=p.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true; } });   // pilota unico assegnato in automatico: niente pescaggio
 }
@@ -241,6 +241,7 @@ function startReshop(room){
 function buildCount(p,lvl){ return DB.ordine.filter(c=>p.comp[c]===lvl).length; }
 function canHaveAtLevel(p,comp,lvl){
   if(lvl===4 && buildCount(p,4)>=3) return false;                // max 3 pezzi a L4
+  if(lvl===5 && buildCount(p,5)>=2) return false;                // max 2 pezzi a L5
   return true;
 }
 function priceFor(G,p,comp,lvl){
@@ -677,6 +678,8 @@ function computeMove(G,p,die,useNos){
     if(seg.pc && ctrl<seg.pc.lt){ total-=seg.pc.a; lines.push({k:'Pen. Controllo (Ctrl '+ctrl+'<'+seg.pc.lt+')',v:-seg.pc.a,cls:'neg'}); }
     if(seg.pcg && ctrl>seg.pcg.gt){ total-=seg.pcg.a; lines.push({k:'Pen. Rettilineo (Ctrl '+ctrl+'>'+seg.pcg.gt+')',v:-seg.pcg.a,cls:'neg'}); }
   }
+  if(seg.bv && vel>seg.bv.gt){ total+=seg.bv.a; lines.push({k:'Bonus Rettilineo (Vel '+vel+'>'+seg.bv.gt+')',v:seg.bv.a,cls:'pos'}); }   // premio velocità
+  if(seg.al){ const aL=seg.lvl||1; if(p.comp.motore===aL && p.comp.peso===aL){ total+=seg.al.a; lines.push({k:'Allineamento (Mot+Peso L'+aL+')',v:seg.al.a,cls:'pos'}); } }   // premio Motore/Peso/Strada allineati
   if(total<0){ lines.push({k:'Minimo',v:0,info:true}); total=0; }
   return { lines, total, die, db, useNos, segType:seg.t, vel, ctrl };
 }
@@ -930,7 +933,7 @@ function advanceTrack(room){
   change.newLevel=G.trackLevel; change.advanced=advance;
   layoutTrack(G.track);
   G.lastTrackChange=change;
-  for(const lv of [2,3,4]){ if(G.trackLevel>=lv && G.scaleUnlocked && !G.scaleUnlocked[lv]){ G.scaleUnlocked[lv]=true; G.players.forEach(p=>{ const add = p.deckDef ? personalDeckCards(p.deckDef,lv) : addRandomPolice(packCards(lv),lv); p.deck=shuffle((p.deck||[]).concat(add)); }); change.scaleUnlocked=(change.scaleUnlocked||[]).concat(lv); } }   // il pack del nuovo livello (+1 polizia a caso) entra in ogni mazzo
+  for(const lv of [2,3,4,5]){ if(G.trackLevel>=lv && G.scaleUnlocked && !G.scaleUnlocked[lv]){ G.scaleUnlocked[lv]=true; G.players.forEach(p=>{ const add = p.deckDef ? personalDeckCards(p.deckDef,lv) : addRandomPolice(packCards(lv),lv); p.deck=shuffle((p.deck||[]).concat(add)); }); change.scaleUnlocked=(change.scaleUnlocked||[]).concat(lv); } }   // il pack del nuovo livello (+1 polizia a caso) entra in ogni mazzo
 }
 function actNextRound(room,p){
   const G=room.G; if(G.phase!=='results') return 'Non disponibile ora.';
