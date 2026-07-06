@@ -122,12 +122,13 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .presets .pl{font-size:11px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-right:2px}
 .presets button{font-family:inherit;font-size:12px;color:var(--ink);background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
 .presets button:hover{border-color:var(--amber);color:var(--amber)}
-.gohome{position:fixed;top:14px;left:14px;z-index:60;display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:13px;font-weight:600;color:#F4EEFF;background:rgba(11,5,24,.62);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:7px 14px;backdrop-filter:blur(6px);font-family:'Oswald',system-ui,sans-serif}
-.gohome:hover{background:rgba(11,5,24,.9)}
+.topnav{position:fixed;top:14px;left:14px;z-index:60;display:flex;align-items:center;gap:8px}
+.gohome,.goback{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:13px;font-weight:600;color:#F4EEFF;background:rgba(11,5,24,.62);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:7px 14px;backdrop-filter:blur(6px);font-family:'Oswald',system-ui,sans-serif;cursor:pointer}
+.gohome:hover,.goback:hover{background:rgba(11,5,24,.9)}
 </style></head>
 <body>
 <script>(function(){var B=['img/officina-1.jpg','img/officina-2.jpg','img/bg-officina.jpg'],p=B[Math.floor(Math.random()*B.length)];document.addEventListener('DOMContentLoaded',function(){document.body.style.background="linear-gradient(180deg,rgba(11,5,24,.80),rgba(11,5,24,.90)),url('"+p+"') center/cover fixed no-repeat #0B0518";});})();</script>
-<a href="home.html" class="gohome">🏠 Home</a>
+<div class="topnav"><button class="goback" onclick="history.back()">← Indietro</button><a href="home.html" class="gohome">🏠 Home</a></div>
 <div class="wrap">
   <div class="top"><div class="top-row">
     <div class="brand">2<b>FAST</b>4U</div>
@@ -163,7 +164,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 
 <script>
 const NOMI_PEZZO={motore:'Motore',cambio:'Cambio',sterzo:'Sterzo',assetto:'Assetto',peso:'Peso',nos:'NOS'};
-const CAT_DEF=[['ingara','In gara',50],['pregara','Pre-gara',13],['difesa','Difesa',10],['esp','ESP',8]];
+const CAT_DEF=[['ingara','In gara',50],['pregara','Pre-gara',13],['difesa','Difesa',10],['esp','ESP',10]];
 const CAPS={}; CAT_DEF.forEach(c=>CAPS[c[0]]=c[2]); const CAP_PIL=1;
 const ESP_CAP_LV={3:4,4:3,5:3};
 function cardLv(name){ if(!DATA) return null; for(const cat of DATA.cats) for(const lv in cat.lv) for(const fn in cat.lv[lv]) for(const c of cat.lv[lv][fn]) if(c.n===name) return +lv; return null; }

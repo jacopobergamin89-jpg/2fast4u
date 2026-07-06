@@ -5610,6 +5610,243 @@
     "baseVal": -1,
     "cost": 1550,
     "desc": "Potenzia Peso a L5 ESP (valore +0) · serve Peso L5 montato · €1550"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Cuore da corsa",
+    "eff": "vel",
+    "val": 7,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sovralimentazione estrema",
+    "eff": "vel",
+    "val": 7,
+    "dur": 2,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Testata fusa",
+    "eff": "vel",
+    "val": -7,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Distribuzione a pezzi",
+    "eff": "vel",
+    "val": -7,
+    "dur": 2,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Ala posteriore da GP",
+    "eff": "ctrl",
+    "val": 7,
+    "dur": 1,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Aderenza da kart",
+    "eff": "ctrl",
+    "val": 7,
+    "dur": 2,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sterzo impazzito",
+    "eff": "ctrl",
+    "val": -7,
+    "dur": 1,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Sospensioni collassate",
+    "eff": "ctrl",
+    "val": -7,
+    "dur": 2,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Scatto da pole",
+    "eff": "partenza",
+    "val": 6,
+    "dur": 0,
+    "target": "self"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Fumo dal cofano al via",
+    "eff": "partenza",
+    "val": -6,
+    "dur": 0,
+    "target": "rival"
+   },
+   {
+    "cat": "ingara",
+    "nome": "Colpo da campione",
+    "eff": "dadoforza",
+    "set": [
+     1,
+     2
+    ],
+    "stat": "vel",
+    "val": 5,
+    "dur": 1
+   },
+   {
+    "cat": "ingara",
+    "nome": "Traiettoria chirurgica",
+    "eff": "dadoforza",
+    "set": [
+     1,
+     2
+    ],
+    "stat": "ctrl",
+    "val": 5,
+    "dur": 1
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos +6",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": 6,
+      "tgt": "self"
+     }
+    ],
+    "dur": 0
+   },
+   {
+    "cat": "ingara",
+    "nome": "Nos -6",
+    "eff": "multi",
+    "effects": [
+     {
+      "stat": "nosmod",
+      "val": -6,
+      "tgt": "pick"
+     }
+    ],
+    "dur": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "L'affare della vita",
+    "eff": "money",
+    "val": 4000
+   },
+   {
+    "cat": "pregara",
+    "nome": "Jackpot degli sponsor",
+    "eff": "prizeUp",
+    "val": 3
+   },
+   {
+    "cat": "pregara",
+    "nome": "Contratto milionario",
+    "eff": "prizeUp",
+    "val": 3
+   },
+   {
+    "cat": "pregara",
+    "nome": "Affossi il bottino rivale",
+    "eff": "prizeDown",
+    "val": 0.3333
+   },
+   {
+    "cat": "pregara",
+    "nome": "Quota alle stelle",
+    "eff": "betUp",
+    "val": 4
+   },
+   {
+    "cat": "pregara",
+    "nome": "Quaterna sulla gara",
+    "eff": "betUp",
+    "val": 4
+   },
+   {
+    "cat": "pregara",
+    "nome": "Il bookie ti annienta",
+    "eff": "betDown",
+    "val": 0.25
+   },
+   {
+    "cat": "pregara",
+    "nome": "Patto in officina L5",
+    "eff": "reopenDebt",
+    "val": 0
+   },
+   {
+    "cat": "pregara",
+    "nome": "Maxi sconto officina",
+    "eff": "discount",
+    "val": 0.35
+   },
+   {
+    "cat": "pregara",
+    "nome": "Razzia su commissione",
+    "eff": "smonta",
+    "val": 3000,
+    "costPO": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Sangue freddo assoluto",
+    "eff": "defend",
+    "val": "ingara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Talpa in centrale",
+    "eff": "defend",
+    "val": "pregara",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Scudo impenetrabile",
+    "eff": "defend",
+    "val": "both",
+    "dur": 0
+   },
+   {
+    "cat": "difesa",
+    "nome": "Specchio deviante",
+    "eff": "defend",
+    "val": "both",
+    "dur": 1
+   },
+   {
+    "cat": "polizia",
+    "nome": "Metropoli sigillata",
+    "kind": "blocco",
+    "size": 15
+   },
+   {
+    "cat": "polizia",
+    "nome": "Stato d'assedio",
+    "kind": "blocco",
+    "size": 18
+   },
+   {
+    "cat": "polizia",
+    "nome": "Caccia aerea totale",
+    "kind": "inseguimento",
+    "size": 0
    }
   ]
  }

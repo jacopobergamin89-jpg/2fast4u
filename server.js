@@ -86,7 +86,7 @@ function mkCard(c){
   return o;
 }
 // --- POLIZIA AUTOMATICA: 1 carta a caso per livello in ogni mazzo ---
-const POLICE_BY_LEVEL=(function(){ const m={1:[],2:[],3:[],4:[]}; for(const lv of ['1','2','3','4']) (DATI.carte[lv]||[]).forEach(c=>{ if(c.cat==='polizia') m[+lv].push(c); }); return m; })();
+const POLICE_BY_LEVEL=(function(){ const m={1:[],2:[],3:[],4:[],5:[]}; for(const lv of ['1','2','3','4','5']) (DATI.carte[lv]||[]).forEach(c=>{ if(c.cat==='polizia') m[+lv].push(c); }); return m; })();
 function addRandomPolice(arr,lvl){ const pool=POLICE_BY_LEVEL[lvl]||[]; if(pool.length) arr.push(mkCard(pool[Math.floor(Math.random()*pool.length)])); return arr; }
 function packCards(lvl){ return (CARD_PACKS[lvl]||[]).filter(c=>c.cat!=='polizia').map(mkCard); }   // esclude la polizia (entra a parte, 1 a caso per livello)
 function makeDeck(maxLvl){
