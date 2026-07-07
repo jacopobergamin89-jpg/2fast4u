@@ -308,17 +308,17 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .conn{position:fixed;top:8px;left:8px;font-family:var(--mono);font-size:10px;color:var(--danger);background:#0008;padding:2px 6px;border-radius:5px;display:none;z-index:60}
 .conn.show{display:block}
 .flipwrap{perspective:1200px;cursor:pointer;margin:8px 0 14px}
-.flipinner{position:relative;width:100%;min-height:244px;transition:transform .65s cubic-bezier(.2,.75,.2,1);transform-style:preserve-3d}
+.flipinner{position:relative;width:100%;min-height:150px;transition:transform .65s cubic-bezier(.2,.75,.2,1);transform-style:preserve-3d}
 .flipwrap.flipped .flipinner{transform:rotateY(180deg)}
-.flipface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;justify-content:center}
+.flipface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;border:1px solid var(--line);padding:13px 16px;display:flex;flex-direction:column;justify-content:center}
 .flipback{align-items:center;text-align:center;background:linear-gradient(135deg,#1a2031,#0c111b);background-image:repeating-linear-gradient(45deg,#ffffff08 0 10px,transparent 10px 20px)}
 .qmark{font-family:var(--disp);font-weight:700;font-size:74px;color:var(--amber);line-height:1;text-shadow:0 4px 18px #ff9e2c44}
 .ftap{font-family:var(--disp);text-transform:uppercase;letter-spacing:2.5px;font-size:11px;color:var(--muted);margin-top:10px}
 .flipfront{transform:rotateY(180deg);background:linear-gradient(180deg,var(--asphalt-2),#0c111b);border-left:5px solid var(--pc,var(--amber));gap:5px}
-.rp-token{width:46px;height:46px;border-radius:50%;border:3px solid #0006;font-family:var(--disp);font-weight:700;font-size:18px;color:#0009;display:flex;align-items:center;justify-content:center;margin-bottom:5px}
-.rp-name{font-family:var(--disp);text-transform:uppercase;letter-spacing:.5px;font-size:22px;line-height:1.05}
-.rp-gang{color:var(--muted);font-size:13px;margin-bottom:7px}
-.rp-ab{font-size:13px;color:var(--ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rp-token{width:36px;height:36px;border-radius:50%;border:3px solid #0006;font-family:var(--disp);font-weight:700;font-size:15px;color:#0009;display:flex;align-items:center;justify-content:center;margin-bottom:3px}
+.rp-name{font-family:var(--disp);text-transform:uppercase;letter-spacing:.5px;font-size:17px;line-height:1.05}
+.rp-gang{color:var(--muted);font-size:11px;margin-bottom:4px}
+.rp-ab{font-size:11.5px;color:var(--ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .rp-part{font-size:13px;color:var(--muted);margin-top:5px}.rp-part b{color:var(--cyan);font-family:var(--mono)}.rp-part small{color:var(--muted-2)}
 .reveal-info{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted);background:var(--asphalt-1);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:4px}
 .reveal-info b{color:var(--ink)}
@@ -521,13 +521,14 @@ h1.title em{font-style:italic;color:var(--cyan)}
   .rm-act .btn{margin:0}
   .rm-act .nos-btn{flex:0 0 38%}
   .rm-act .btn-dado{flex:1}
-  .rm-crow{display:flex;align-items:stretch;background:var(--asphalt-0);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:9px}
+  .rm-crow{display:flex;align-items:stretch;background:var(--asphalt-0);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:9px;min-height:62px}
   .rm-crow .rm-cbar{flex:0 0 5px}
   .rm-crow.good .rm-cbar{background:var(--good)} .rm-crow.bad .rm-cbar{background:var(--danger)} .rm-crow.off{opacity:.55} .rm-crow.off .rm-cbar{background:var(--muted)}
-  .rm-crow .rm-cmain{flex:1;padding:11px 12px;min-width:0}
+  .rm-crow .rm-cmain{flex:1;padding:9px 12px;min-width:0;display:flex;flex-direction:column;justify-content:center}
   .rm-ct{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.15;margin-bottom:3px}
   .rm-cm{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
   .rm-cgo{flex:none;align-self:center;margin:0 11px 0 6px;font-family:var(--disp);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:9px 15px;border-radius:10px;background:var(--asphalt-3);border:1px solid var(--line);color:var(--ink)}
+  .rm-cgo.wait{white-space:normal;max-width:112px;font-size:10.5px;padding:8px 12px;text-align:center;line-height:1.2;background:none;border-color:transparent;color:var(--muted);text-transform:none;letter-spacing:0}
   .rm-crow.bad .rm-cgo{background:rgba(255,59,107,.16);border-color:rgba(255,59,107,.5);color:#ff8aa6}
   .rm-crow.good .rm-cgo{background:rgba(52,199,89,.16);border-color:rgba(52,199,89,.5);color:#7fe39b}
 }
@@ -1058,7 +1059,7 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 </aside>
 <div class="drawer-bd" id="drawer-bd" onclick="closeDrawer()"></div>
 <aside class="drawer" id="drawer">
-  <div class="dw-head"><span>Giocatori · scommesse</span><button onclick="closeDrawer()">✕</button></div>
+  <div class="dw-head"><span id="drawer-title">Giocatori · scommesse</span><button onclick="closeDrawer()">✕</button></div>
   <div class="dw-list" id="drawer-list"></div>
   <div class="dw-foot" id="drawer-foot"></div>
 </aside>
@@ -1515,7 +1516,7 @@ function prepMobileHTML(v){
   if(v.isYourTurn){
     if(v.handAll&&v.handAll.length){ manoInner+='<div class="o2-handh">'+(v.reshop?'La tua mano \u00b7 giro extra':'La tua mano \u00b7 scarta quelle che non vuoi')+'</div>'; v.handAll.forEach(c=>{
       manoInner+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="o2-pre-d">${handCardDesc(c)}</span></div><div class="o2-hand-act">${ofHandPlay(c,true)}<button class="o2-pre-go scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;}); }
-    if(v.canBet) manoInner+='<div class="o2-note">Apri \ud83d\udc65 <b>Piloti</b> in alto per scommettere e vedere le puntate.</div>';
+    if(v.canBet) manoInner+='<div class="o2-note">Apri \ud83d\udcb0 <b>Scommessa</b> in alto per scommettere e vedere le puntate.</div>';
   }
   if(!manoInner) manoInner='<div class="o2-empty">Nessuna carta da giocare o scartare.</div>';
   let garageChips;
@@ -1615,7 +1616,7 @@ function renderPrep(v){
   const meP=v.players.find(p=>p.id===v.you.id)||{};
   const myCar=v.isYourTurn?ofOwnedChips(m.owned,'Qui compaiono i tuoi ricambi'):ofOwnedChips(meP.car&&meP.car.owned,'\u2014');
 
-  const betNote=(v.isYourTurn&&v.canBet)?'<div class="ofx-bet-note">Apri \ud83d\udc65 <b>Piloti</b> in alto a destra per scommettere.</div>':'';
+  const betNote=(v.isYourTurn&&v.canBet)?'<div class="ofx-bet-note">Apri \ud83d\udcb0 <b>Scommessa</b> in alto a destra per scommettere.</div>':'';
 
   const html=`<div class="ofx">
     <div class="ofx-bg" style="--of-photo:url('${officinaBg(v.round)}')"></div>
@@ -1750,7 +1751,7 @@ function rmCardsHTML(cards,v){
     if(dm[c.idx]){ const d=dm[c.idx]; h+=`<div class="rm-crow good"><div class="rm-cbar"></div><div class="rm-cmain"><div class="rm-ct">\ud83d\udee1\ufe0f ${esc(c.nome)}</div><div class="rm-cm">${d.cardNome?'contro \u00ab'+esc(d.cardNome)+'\u00bb \u00b7 ':''}${d.reflect?'\u21a9 Rimanda a '+esc(d.by):'Annulla il colpo'} \u00b7 ${esc(d.label)}</div></div><button class="rm-cgo" onclick="defend(${c.idx},${d.mid})">${d.reflect?'\u21a9 Rimanda':'Para'}</button></div>`; return; }
     if(!c.playable){                                   // carta in mano, visibile ma non attivabile ora
       const note=c.note||'non ora';
-      h+=`<div class="rm-crow off"><div class="rm-cbar"></div><div class="rm-cmain"><div class="rm-ct">${esc(c.nome)}${gangTag}</div><div class="rm-cm">${desc} \u00b7 <i>${esc(note)}</i></div></div><button class="rm-cgo" disabled style="opacity:.4">${esc(note)}</button></div>`;
+      h+=`<div class="rm-crow off"><div class="rm-cbar"></div><div class="rm-cmain"><div class="rm-ct">${esc(c.nome)}${gangTag}</div><div class="rm-cm">${desc}</div></div><button class="rm-cgo wait" disabled>${esc(note)}</button></div>`;
       return;
     }
     const mode=(c.eff==='multi'||c.eff==='dadoforza')?(c.needsTarget?'rival':'fixed'):c.target;
@@ -2229,7 +2230,9 @@ function shortComp(c){return {motore:'Motore',cambio:'Cambio',sterzo:'Sterzo',as
 function renderDrawer(v){
   const has=(v.phase==='prep'||v.phase==='race'||v.phase==='results'||v.phase==='win')&&Array.isArray(v.players);
   const btn=document.getElementById('drawer-toggle');
-  if(btn)btn.style.display=has?'inline-flex':'none';
+  const inPrep=(v.phase==='prep');
+  if(btn){ btn.style.display=has?'inline-flex':'none'; btn.innerHTML=inPrep?'\ud83d\udcb0 Scommessa':'\ud83d\udc65 Piloti'; }
+  const dtt=document.getElementById('drawer-title'); if(dtt)dtt.textContent=inPrep?'Scommesse':'Piloti \u0026 scommesse';
   if(!has){closeDrawer();return;}
   let h='';
   if(v.phase==='prep' && v.isYourTurn && v.canBet && Array.isArray(v.betTargets)){
