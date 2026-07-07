@@ -577,6 +577,7 @@ function actPrepDone(room,p){
   if(!G.reshop) for(let i=p.hand.length-1;i>=0;i--){ const c=p.hand[i]; if(c.cat==='polizia'&&c.kind==='blocco'&&!blockPlaceable(G,c.size)){ p.discard.push(c); p.hand.splice(i,1); (G.forfeitedBlocks=G.forfeitedBlocks||[]).push({who:p.name,nome:c.nome}); } } // blocco senza spazio: annullato
   if(!G.reshop && p.hand.some(c=>c.cat==='polizia')) return 'Devi prima giocare la carta polizia (gira subito).';
   if(!G.reshop && p.bet){ if(p.bet.amount>p.money){ p.bet=null; } else { p.money-=p.bet.amount; } }
+  if(G.reshop && p.buysLeft>0) glog(G, p.name+' non compra nel giro extra', 'card');
   G.ppIdx++;
   const o=pOrder(G);
   if(G.ppIdx<o.length){ const cp=curPrep(G); cp.buysLeft=1; }
