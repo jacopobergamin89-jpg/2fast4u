@@ -216,7 +216,7 @@ function descEffect(c){
   if(c.eff==='ctrl') return (c.val>=0?'+':'')+c.val+' Controllo · '+c.dur+(c.dur===1?' tiro':' tiri')+r;
   if(c.eff==='partenza') return 'Partenza '+(c.val>=0?'+':'')+c.val+r;
   if(c.eff==='dado') return 'Dado fisso = '+c.val+r;
-  if(c.eff==='dadoforza') return 'Dado forza '+(c.val>=0?'+':'')+c.val+r;
+  if(c.eff==='dadoforza'){ var es=c.set&&c.set.includes(6)?'perfetto':(c.set&&c.set.includes(4)?'quasi':'mancato'); return 'Colpo '+es+' · '+(c.val>=0?'+':'')+c.val+' '+({vel:'Velocità',ctrl:'Controllo'}[c.stat]||'')+r; }
   return '';
 }
 function fnPregara(c){ return {money:'Soldi',prizeUp:'Montepremi',prizeDown:'Montepremi',quota:'Scommessa',betUp:'Scommessa',betDown:'Scommessa',discount:'Officina',reopen:'Officina',reopenAll:'Officina',reopenDebt:'Officina',smonta:'Sabotaggio',tratto:'Strada',sprint:'Gara lampo'}[c.eff]||'Altro'; }

@@ -1546,7 +1546,7 @@
     "stat": "vel",
     "val": 2,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Velocità +2 (te)"
+    "desc": "Colpo QUASI · Velocità +2 (te)"
    },
    {
     "cat": "ingara",
@@ -1559,7 +1559,7 @@
     "stat": "vel",
     "val": 2,
     "dur": 1,
-    "desc": "Dado 1-2 · Velocità +2 (te)"
+    "desc": "Colpo MANCATO · Velocità +2 (te)"
    },
    {
     "cat": "ingara",
@@ -2431,7 +2431,7 @@
    },
    {
     "cat": "ingara",
-    "nome": "Fuoco dell'inferno · 3-4-5",
+    "nome": "Fuoco dell'inferno",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -2442,7 +2442,7 @@
     "stat": "ctrl",
     "val": 2,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Controllo +2 (te)"
+    "desc": "Colpo QUASI · Controllo +2 (te)"
    },
    {
     "cat": "ingara",
@@ -2455,11 +2455,11 @@
     "stat": "vel",
     "val": 3,
     "dur": 1,
-    "desc": "Dado 6 · Velocità +3 (te)"
+    "desc": "Colpo PERFETTO · Velocità +3 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Maledizione · 1-2",
+    "nome": "Maledizione",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -2469,11 +2469,11 @@
     "stat": "ctrl",
     "val": 3,
     "dur": 1,
-    "desc": "Dado 1-2 · Controllo +3 (te)"
+    "desc": "Colpo MANCATO · Controllo +3 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Mano del Demonio · 3-4-5",
+    "nome": "Mano del Demonio",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -2484,11 +2484,11 @@
     "stat": "vel",
     "val": 3,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Velocità +3 (te)"
+    "desc": "Colpo QUASI · Velocità +3 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Marchio del Diavolo · 3-4-5",
+    "nome": "Marchio del Diavolo",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -2499,11 +2499,11 @@
     "stat": "ctrl",
     "val": 3,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Controllo +3 (te)"
+    "desc": "Colpo QUASI · Controllo +3 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Patto col Diavolo · 3-4-5",
+    "nome": "Patto col Diavolo",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -2514,11 +2514,11 @@
     "stat": "vel",
     "val": 2,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Velocità +2 (te)"
+    "desc": "Colpo QUASI · Velocità +2 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Tiro infernale · 6",
+    "nome": "Tiro infernale",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -2527,7 +2527,7 @@
     "stat": "ctrl",
     "val": 3,
     "dur": 1,
-    "desc": "Dado 6 · Controllo +3 (te)"
+    "desc": "Colpo PERFETTO · Controllo +3 (te)"
    },
    {
     "cat": "ingara",
@@ -2541,7 +2541,7 @@
     "stat": "ctrl",
     "val": 2,
     "dur": 1,
-    "desc": "Dado 1-2 · Controllo +2 (te)"
+    "desc": "Colpo MANCATO · Controllo +2 (te)"
    },
    {
     "cat": "ingara",
@@ -2586,7 +2586,7 @@
     "stat": "ctrl",
     "val": 2,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Controllo +2 (te)"
+    "desc": "Colpo QUASI · Controllo +2 (te)"
    },
    {
     "cat": "ingara",
@@ -2818,7 +2818,7 @@
     "stat": "vel",
     "val": 3,
     "dur": 1,
-    "desc": "Dado 1-2 · Velocità +3 (te)"
+    "desc": "Colpo MANCATO · Velocità +3 (te)"
    },
    {
     "cat": "ingara",
@@ -2831,7 +2831,7 @@
     "stat": "ctrl",
     "val": 3,
     "dur": 1,
-    "desc": "Dado 1-2 · Controllo +3 (te)"
+    "desc": "Colpo MANCATO · Controllo +3 (te)"
    },
    {
     "cat": "ingara",
@@ -3703,7 +3703,7 @@
    },
    {
     "cat": "ingara",
-    "nome": "Asso nella manica · 3-4-5",
+    "nome": "Asso nella manica",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -3714,11 +3714,11 @@
     "stat": "vel",
     "val": 5,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Velocità +5 (te)"
+    "desc": "Colpo QUASI · Velocità +5 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Fortuna sfacciata · 3-4-5",
+    "nome": "Fortuna sfacciata",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -3729,11 +3729,11 @@
     "stat": "vel",
     "val": 4,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Velocità +4 (te)"
+    "desc": "Colpo QUASI · Velocità +4 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Malocchio · 1-2",
+    "nome": "Malocchio",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -3743,11 +3743,11 @@
     "stat": "ctrl",
     "val": 5,
     "dur": 1,
-    "desc": "Dado 1-2 · Controllo +5 (te)"
+    "desc": "Colpo MANCATO · Controllo +5 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Mano di Lucifero · 6",
+    "nome": "Mano di Lucifero",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -3756,11 +3756,11 @@
     "stat": "ctrl",
     "val": 4,
     "dur": 1,
-    "desc": "Dado 6 · Controllo +4 (te)"
+    "desc": "Colpo PERFETTO · Controllo +4 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Numero della Bestia · 6",
+    "nome": "Numero della Bestia",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -3769,11 +3769,11 @@
     "stat": "vel",
     "val": 4,
     "dur": 1,
-    "desc": "Dado 6 · Velocità +4 (te)"
+    "desc": "Colpo PERFETTO · Velocità +4 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Sortilegio · 3-4-5",
+    "nome": "Sortilegio",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -3784,11 +3784,11 @@
     "stat": "ctrl",
     "val": 5,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Controllo +5 (te)"
+    "desc": "Colpo QUASI · Controllo +5 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Tridente · 3-4-5",
+    "nome": "Tridente",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -3799,7 +3799,7 @@
     "stat": "ctrl",
     "val": 4,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Controllo +4 (te)"
+    "desc": "Colpo QUASI · Controllo +4 (te)"
    },
    {
     "cat": "ingara",
@@ -3814,7 +3814,7 @@
     "stat": "ctrl",
     "val": 3,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Controllo +3 (te)"
+    "desc": "Colpo QUASI · Controllo +3 (te)"
    },
    {
     "cat": "ingara",
@@ -3859,7 +3859,7 @@
     "stat": "vel",
     "val": 3,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Velocità +3 (te)"
+    "desc": "Colpo QUASI · Velocità +3 (te)"
    },
    {
     "cat": "ingara",
@@ -4194,7 +4194,7 @@
     "stat": "vel",
     "val": 4,
     "dur": 1,
-    "desc": "Dado 1-2 · Velocità +4 (te)"
+    "desc": "Colpo MANCATO · Velocità +4 (te)"
    },
    {
     "cat": "ingara",
@@ -4207,7 +4207,7 @@
     "stat": "ctrl",
     "val": 4,
     "dur": 1,
-    "desc": "Dado 1-2 · Controllo +4 (te)"
+    "desc": "Colpo MANCATO · Controllo +4 (te)"
    },
    {
     "cat": "ingara",
@@ -5079,7 +5079,7 @@
    },
    {
     "cat": "ingara",
-    "nome": "Anima dannata · 3-4-5",
+    "nome": "Anima dannata",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -5090,11 +5090,11 @@
     "stat": "vel",
     "val": 5,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Velocità +5 (te)"
+    "desc": "Colpo QUASI · Velocità +5 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Benedizione nera · 3-4-5",
+    "nome": "Benedizione nera",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -5105,11 +5105,11 @@
     "stat": "ctrl",
     "val": 6,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Controllo +6 (te)"
+    "desc": "Colpo QUASI · Controllo +6 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Carico infernale · 3-4-5",
+    "nome": "Carico infernale",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -5120,11 +5120,11 @@
     "stat": "ctrl",
     "val": 5,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Controllo +5 (te)"
+    "desc": "Colpo QUASI · Controllo +5 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Dannazione · 6",
+    "nome": "Dannazione",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -5133,11 +5133,11 @@
     "stat": "ctrl",
     "val": 5,
     "dur": 1,
-    "desc": "Dado 6 · Controllo +5 (te)"
+    "desc": "Colpo PERFETTO · Controllo +5 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Jella ribaltata · 1-2",
+    "nome": "Jella ribaltata",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -5147,7 +5147,7 @@
     "stat": "ctrl",
     "val": 6,
     "dur": 1,
-    "desc": "Dado 1-2 · Controllo +6 (te)"
+    "desc": "Colpo MANCATO · Controllo +6 (te)"
    },
    {
     "cat": "ingara",
@@ -5160,11 +5160,11 @@
     "stat": "vel",
     "val": 6,
     "dur": 1,
-    "desc": "Dado 6 · Velocità +6 (te)"
+    "desc": "Colpo PERFETTO · Velocità +6 (te)"
    },
    {
     "cat": "ingara",
-    "nome": "Tentazione · 3-4-5",
+    "nome": "Tentazione",
     "gang": "I Diavoli",
     "eff": "dadoforza",
     "set": [
@@ -5175,7 +5175,7 @@
     "stat": "vel",
     "val": 6,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Velocità +6 (te)"
+    "desc": "Colpo QUASI · Velocità +6 (te)"
    },
    {
     "cat": "ingara",
@@ -5190,7 +5190,7 @@
     "stat": "vel",
     "val": 4,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Velocità +4 (te)"
+    "desc": "Colpo QUASI · Velocità +4 (te)"
    },
    {
     "cat": "ingara",
@@ -5205,7 +5205,7 @@
     "stat": "ctrl",
     "val": 4,
     "dur": 1,
-    "desc": "Dado 3-4-5 · Controllo +4 (te)"
+    "desc": "Colpo QUASI · Controllo +4 (te)"
    },
    {
     "cat": "ingara",
@@ -5701,7 +5701,8 @@
     ],
     "stat": "vel",
     "val": 5,
-    "dur": 1
+    "dur": 1,
+    "desc": "Colpo MANCATO · Velocità +5 (te)"
    },
    {
     "cat": "ingara",
@@ -5713,7 +5714,8 @@
     ],
     "stat": "ctrl",
     "val": 5,
-    "dur": 1
+    "dur": 1,
+    "desc": "Colpo MANCATO · Controllo +5 (te)"
    },
    {
     "cat": "ingara",

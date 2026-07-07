@@ -681,7 +681,7 @@ function computeMove(G,p,die,useNos){
   if(first){ const pStart=(hasTratto?(p.pilot.tratto.v||0):0)+(p.pilot.partenza||0); if(pStart){ total+=pStart; lines.push({k:'Partenza pilota',v:pStart,cls:pStart>0?'pos':'neg'}); } }
   if(car.pendPart){ total+=car.pendPart; lines.push({k:'Carta partenza',v:car.pendPart,cls:car.pendPart>0?'pos':'neg'}); }
   if(first && p.pilot.fortuna && p.pilot.fortuna.set.includes(die)){ const fv=p.pilot.fortuna.v; total+=fv; vel+=fv; lines.push({k:'Fortuna 1° tiro',v:fv,cls:'pos'}); }
-  if(car.dadoForza && car.dadoForza.set.includes(die)){ const df=car.dadoForza; total+=df.val; if(df.stat==='vel') vel+=df.val; else if(df.stat==='ctrl') ctrl+=df.val; lines.push({k:'Dado-forza ('+die+')',v:df.val,cls:'pos'}); }
+  if(car.dadoForza && car.dadoForza.set.includes(die)){ const df=car.dadoForza; total+=df.val; if(df.stat==='vel') vel+=df.val; else if(df.stat==='ctrl') ctrl+=df.val; const es=df.set.includes(6)?'perfetto':df.set.includes(4)?'quasi':'mancato'; lines.push({k:'Forza · colpo '+es,v:df.val,cls:'pos'}); }
   if(useNos){ let nv;
     if(p.nosBombs){ const bi=(car.pendBomb!=null)?car.pendBomb:bombPickFire(p); nv=(bi>=0)?p.nosBombs[bi]:0; }
     else { nv=statVal(p,'nos')+(car.nosMod||0); }
