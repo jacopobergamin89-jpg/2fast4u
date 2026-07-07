@@ -1509,7 +1509,7 @@ function prepMobileHTML(v){
   const eventsPane=`<div class="o2-events-c"><div class="o2-events-h">In gara \u00e8 successo</div><div class="o2-events">${evHTML}</div></div>`;
 
   // mercato (senza la mano)
-  const mktShown=v.reshop?(v.market||[]):(v.market||[]).filter(c=>c.delta>0);
+  const mktShown=(v.market||[]);
   const nM=mktShown.length;
   const mhSub = '\u00b7 '+nM+' cart'+(nM===1?'a scoperta':'e scoperte')+(nM>6?' \u00b7 scorri \u2193':' \u00b7 condiviso');
   const mktH=`<div class="o2-mkt-h"><span class="wr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6a4 4 0 0 1-5.2 3.8L7 18.6 5.4 17 14.2 8.2A4 4 0 0 1 18 3l-2.3 2.3 1 2.4 2.4 1L21 6Z"/></svg></span><b>Mercato</b><span>${mhSub}</span></div>`;

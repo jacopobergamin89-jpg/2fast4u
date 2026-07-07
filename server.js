@@ -403,6 +403,7 @@ function actPlayPregara(room,p,handIdx,targetId,comp){
   else if(c.eff==='tratto'){                                             // trasforma 1 tratto della pista nel tipo della carta
     const idx=parseInt(comp,10);
     if(!(idx>=0 && idx<G.track.length)) return 'Scegli il tratto da trasformare.';
+    if(G.round===1 && idx===0) return 'Nella prima gara della partita il primo tratto resta rettilineo.';   // regola assoluta: 1ª gara, tratto 1 = rettilineo
     const seg=G.track[idx];
     if(seg.t===c.val) return 'Quel tratto è già '+(TIPO_LABEL[c.val]||c.val)+'.';
     const pool=(ROADS[seg.lvl||1]||[]).filter(r=>r.t===c.val);
@@ -1130,7 +1131,7 @@ function botPrep(room,bot){
     if(c.eff==='reopen'){ if(bot.money>=(c.val||0)+500) actPlayPregara(room,bot,i); continue; }
     if(c.eff==='reopenAll'){ actPlayPregara(room,bot,i); continue; }
     if(c.eff==='reopenDebt'){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>a.po-b.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); continue; }
-    if(c.eff==='tratto'){ const idxs=G.track.map((s,ix)=>({s,ix})).filter(o=>o.s.t!==c.val); if(idxs.length){ const pick=idxs[Math.floor(Math.random()*idxs.length)]; actPlayPregara(room,bot,i,null,pick.ix); } continue; }
+    if(c.eff==='tratto'){ const idxs=G.track.map((s,ix)=>({s,ix})).filter(o=>o.s.t!==c.val && !(G.round===1 && o.ix===0)); if(idxs.length){ const pick=idxs[Math.floor(Math.random()*idxs.length)]; actPlayPregara(room,bot,i,null,pick.ix); } continue; }
     const self=(c.eff==='money'&&c.val>0)||(c.eff==='po'&&c.val>0)||c.eff==='prizeUp'||c.eff==='betUp'||c.eff==='discount'||(c.eff==='quota'&&c.val>0); const rival=(c.val<0)||c.eff==='prizeDown'||c.eff==='betDown'; if(self) actPlayPregara(room,bot,i); else if(rival){ const tg=[...G.players].filter(x=>x.id!==bot.id).sort((a,b)=>b.po-a.po)[0]; if(tg) actPlayPregara(room,bot,i,tg.id); } }
   // 2) acquisti (solo dalle carte scoperte del mercato)
   let safety=12;
