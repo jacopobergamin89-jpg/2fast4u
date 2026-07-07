@@ -1289,6 +1289,7 @@ function mount(ioInstance){
   socket.on('results:next', handle((room,p)=>actNextRound(room,p)));
   socket.on('results:vote', handle((room,p,d)=>actVote(room,p,d.choice)));
 
+  socket.on('leave', ()=>{ const f=playerBySocket(socket); if(!f) return; const {room,p}=f; if(p._dcTimer){ clearTimeout(p._dcTimer); p._dcTimer=null; } room.G.players=room.G.players.filter(x=>x.id!==p.id); if(room.G.players.length===0 || !room.G.players.some(x=>!x.isBot)){ rooms.delete(room.code); return; } if(p.id===room.hostId){ const h=room.G.players.find(x=>!x.isBot&&x.connected)||room.G.players.find(x=>!x.isBot); if(h) room.hostId=h.id; } broadcast(room); });
   socket.on('disconnect', ()=>{
     const f=playerBySocket(socket); socketToRoom.delete(socket.id);
     if(!f) return; const {room,p}=f;

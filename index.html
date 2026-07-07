@@ -973,7 +973,7 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 <body>
 <div class="wrap">
   <div class="topbar">
-    <div class="topleft"><div class="logo">2<b>FAST</b>4<span>U</span> <small>ONLINE</small></div><button class="pp-toggle" onclick="if(confirm('Uscire dalla partita e tornare alla home?'))location.href='home.html'">🏠 Home</button><button class="pp-toggle" id="log-toggle" onclick="toggleLog()" style="display:none">📋 Log</button></div>
+    <div class="topleft"><div class="logo">2<b>FAST</b>4<span>U</span> <small>ONLINE</small></div><button class="pp-toggle" onclick="if(confirm('Uscire dalla partita e tornare alla home?')){try{socket.emit('leave')}catch(e){}location.href='home.html'}">🏠 Home</button><button class="pp-toggle" id="log-toggle" onclick="toggleLog()" style="display:none">📋 Log</button></div>
     <div class="top-right">
       <button class="pp-toggle" id="drawer-toggle" onclick="toggleDrawer()" style="display:none">👥 Piloti</button>
       <div id="topmeta" class="topmeta"></div>
