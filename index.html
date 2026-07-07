@@ -2215,13 +2215,15 @@ function renderLog(v){
   if(!has){closeLog();return;}
   const list=document.getElementById('log-list');
   if(!v.gameLog.length){list.innerHTML='<div class="log-empty">Ancora nessuna azione.</div>';return;}
+  const groups=[]; let cur=null;
+  v.gameLog.forEach(e=>{ if(e.kind==='round'){ cur={head:e,evs:[]}; groups.push(cur); } else if(cur){ cur.evs.push(e); } else { cur={head:null,evs:[e]}; groups.push(cur); } });
   let h='';
-  v.gameLog.forEach(e=>{
-    if(e.kind==='round'){ h+=`<div class="log-rh">${esc((e.text||'').replace(/^—\s*/,''))}</div>`; }
-    else h+=`<div class="gl-row gl-${e.kind||'info'}">${esc(e.text||'')}</div>`;
+  groups.reverse().forEach(g=>{                                   // round più recente in cima
+    if(g.head) h+=`<div class="log-rh">${esc((g.head.text||'').replace(/^—\s*/,''))}</div>`;
+    g.evs.slice().reverse().forEach(e=>{ h+=`<div class="gl-row gl-${e.kind||'info'}">${esc(e.text||'')}</div>`; });   // evento più recente in cima
   });
   list.innerHTML=h;
-  if(document.getElementById('logdrawer').classList.contains('open')) list.scrollTop=list.scrollHeight;   // diario: scorro all'ultima azione
+  list.scrollTop=0;                                               // il più recente è già in alto
 }
 let _lastToastId=0,_logRound=-1;
 function checkIncoming(v){
@@ -2424,6 +2426,7 @@ function render(v){
   if(v.round!==ui.lastBetRound){ui.lastBetRound=v.round;pendBetTarget=null;pendBetAmount=null;}   // la puntata si azzera solo a nuovo round, non quando cambia il turno
   if(v.phase!=='reveal')ui.pilotRevealed=false;
   ui.lastPhase=v.phase;
+  musForPhase(v.phase);
   if(v.phase==='prep'&&prevPhase!=='prep')playIntroSequence(prevPhase==='reveal'?['video/inizio.mp4','video/officina.mp4']:['video/officina.mp4']);
   const prevReshop=ui.lastReshop; ui.lastReshop=!!v.reshop;
   if(v.phase==='prep'&&v.reshop&&!prevReshop&&prevPhase==='prep')playIntroSequence(['video/officina.mp4']);  // chiudi e riapri l'officina a tutti
@@ -2444,6 +2447,19 @@ function render(v){
 }
 
 socket.on('state',render);
+
+/* ===== MUSICA DI SOTTOFONDO (fuori gara) ===== */
+const MUSIC=['audio/Ita-Intro.mp3','audio/Eng-Base.mp3','audio/Ita-Latin.mp3','audio/Eng-Base5.mp3','audio/Ita-Bombola_Taranta.mp3'];
+let _mus={a:null,i:Math.floor(Math.random()*5),on:true,vol:0.4};
+function musEnsure(){ if(_mus.a)return; const a=new Audio(); a.volume=_mus.vol; a.addEventListener('ended',function(){ let n; do{ n=Math.floor(Math.random()*MUSIC.length); }while(MUSIC.length>1&&n===_mus.i); _mus.i=n; a.src=MUSIC[_mus.i]; a.play().catch(function(){}); }); _mus.a=a; }
+function musStart(){ musEnsure(); if(!_mus.on)return; if(!_mus.a.src)_mus.a.src=MUSIC[_mus.i]; _mus.a.play().catch(function(){}); }
+function musStop(){ if(_mus.a)_mus.a.pause(); }
+function musUI(){ if(document.getElementById('mus-ctrl'))return; const d=document.createElement('div'); d.id='mus-ctrl'; d.style.cssText='position:fixed;bottom:8px;left:8px;z-index:500;display:flex;align-items:center;gap:6px;background:rgba(11,5,24,.72);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:3px 8px;backdrop-filter:blur(4px)'; d.innerHTML='<button id="mus-toggle" onclick="musToggle()" title="Musica" style="background:none;border:none;font-size:15px;cursor:pointer;padding:0;line-height:1">\ud83c\udfb5</button><input id="mus-vol" type="range" min="0" max="100" value="'+Math.round(_mus.vol*100)+'" oninput="musVol(this.value/100)" style="width:56px;accent-color:#2BA8E6" title="Volume">'; document.body.appendChild(d); }
+function musUpd(){ const b=document.getElementById('mus-toggle'); if(b)b.textContent=_mus.on?'\ud83c\udfb5':'\ud83d\udd07'; }
+function musToggle(){ _mus.on=!_mus.on; if(_mus.on){ if(LAST&&LAST.phase!=='race')musStart(); } else musStop(); musUpd(); }
+function musVol(x){ _mus.vol=Math.max(0,Math.min(1,x)); if(_mus.a)_mus.a.volume=_mus.vol; }
+function musForPhase(ph){ musUI(); const c=document.getElementById('mus-ctrl'); if(c)c.style.display=(ph==='race')?'none':'flex'; if(ph==='race')musStop(); else if(_mus.on)musStart(); }
+window.addEventListener('pointerdown',function _mo(){ if(_mus.on&&LAST&&LAST.phase!=='race'){ musStart(); window.removeEventListener('pointerdown',_mo); } });
 socket.on('errorMsg',m=>toast(m));
 socket.on('connect',()=>{
   document.getElementById('conn').classList.remove('show');
