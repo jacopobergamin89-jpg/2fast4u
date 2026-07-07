@@ -1346,7 +1346,16 @@ function trackHTML(v){
 function centerTrackOnMe(v){
   const meCar=(v.cars||[]).find(c=>c.id===v.you.id);
   const focus=meCar?(meCar.pos||0):Math.max(1,...((v.cars||[]).map(c=>c.pos||0)),1);
-  const tr=document.getElementById('track'); if(tr) tr.scrollLeft=Math.max(0,(focus-0.5)*30-(tr.clientWidth||280)/2);  // ognuno vede la propria auto al centro
+  const tr=document.getElementById('track'); if(!tr) return;
+  const cw=tr.clientWidth||280, x=(focus-0.5)*30, cur=tr.scrollLeft, m=cw*0.28;
+  if(x<cur+m || x>cur+cw-m){ tr.scrollTo({left:Math.max(0,x-cw/2), behavior:'smooth'}); }   // scorre solo se l'auto è vicino al bordo → pista ferma il resto del tempo
+}
+function trackSig(v){ return JSON.stringify({t:(v.track||[]).map(s=>[s.from,s.to,s.t,s.lvl]), b:(v.blocks||[]).map(b=>[b.from,b.to,b.size])}); }
+function mountTrack(v){
+  const mount=document.getElementById('track-mount'); if(!mount) return;
+  const sig=trackSig(v);
+  if(ui._trackEl && ui._trackSig===sig){ mount.replaceWith(ui._trackEl); }   // riuso la pista esistente: niente ridisegno, scroll preservato
+  else { const tmp=document.createElement('div'); tmp.innerHTML=trackHTML(v); const el=tmp.firstChild; mount.replaceWith(el); ui._trackEl=el; ui._trackSig=sig; }
 }
 function buildingsSVG(xA,xB,yMid,half,col){
   let s='';const top=yMid-half-7,bot=yMid+half+7;const W=xB-xA;const n=Math.max(2,Math.round(W/52));const slot=W/n;
@@ -1370,6 +1379,7 @@ function standingsHTML(v){
 }
 function startTokens(v){
   const svg=document.getElementById('trackvg'); if(!svg||!v.cars)return;
+  svg.querySelectorAll('.car-tok').forEach(el=>el.remove());   // pista riusata: tolgo i token vecchi prima di ridisegnarli
   const total=v.track&&v.track.length?v.track[v.track.length-1].to:55;
   v.cars.forEach((k,ci)=>{
     let pos=k.pos||0,segIdx,lf;
@@ -1702,8 +1712,8 @@ function renderRaceMobile(v){
   h+=`<span class="rm-chip"><b>TURNO</b> ${v.turn}/5</span>`;
   if(!yt)h+=`<span class="rm-chip" style="color:${actColor(v)}">${esc(v.activeName)} corre</span>`;
   h+='</div>';
-  // pista (sempre visibile)
-  h+=trackHTML(v);
+  // pista (persistente: disegnata una volta, poi si muovono solo le auto)
+  h+='<div id="track-mount"></div>';
   // interruttore Tiro / Carte (solo nel tuo turno, prima del tiro, con carte)
   if(tabs){
     h+=`<div class="rm-seg"><button class="${tab==='tiro'?'on':''}" onclick="rmTab('tiro')">Tiro</button><button class="${tab==='carte'?'on':''}" onclick="rmTab('carte')">Carte <span class="rm-seg-n">${cards.length}</span></button></div>`;
@@ -1731,6 +1741,7 @@ function renderRaceMobile(v){
   }
   h+='</div>';
   host.innerHTML=h;
+  mountTrack(v);
   startTokens(v);
   centerTrackOnMe(v);
   rxSetup();
