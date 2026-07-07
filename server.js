@@ -855,8 +855,8 @@ function endRace(room){
     if(p.bet && p.bet.targetId!=null && p.bet.amount>0){
       if(p._busted){ p._betDelta=-p.bet.amount; }                                    // beccato: niente vincita scommessa (perdi la posta)
       else {
-        const t=G.players.find(x=>x.id===p.bet.targetId); const q=Math.max(1.05, Math.min(6, DB.quoteScommessa[Math.min(7,t.prevRank)]+(p.quotaMod||0)));
-        if(p.bet.targetId===winnerId){ const payout=Math.round(p.bet.amount*q*(p.betMult||1)); p.money+=p.bet.amount+payout; p._betDelta=payout; p._betWin=true; }
+        const t=G.players.find(x=>x.id===p.bet.targetId); const q=Math.max(1.05, Math.min(6, DB.quoteScommessa[Math.min(7,t.prevRank)]+(t.quotaMod||0)));
+        if(p.bet.targetId===winnerId){ const payout=Math.round(p.bet.amount*q*(t.betMult||1)); p.money+=p.bet.amount+payout; p._betDelta=payout; p._betWin=true; }
         else { p._betDelta=-p.bet.amount; }
       }
     }
@@ -1045,7 +1045,7 @@ function buildView(room, player){
       v.handAll = p.hand.map((c,idx)=>{ const o={ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, dur:c.dur, costPO:(c.costPO||0), gang:c.gang, desc:c.desc||cardDesc(c), needsTarget:cardNeedsTarget(c) }; if(c.cat==='pregara') o.target=pregaraTarget(c); if(c.cat==='esp'){ o.comp=c.comp; o.lvl=c.lvl; o.cost=c.cost; o.espVal=c.espVal; } return o; }).filter(c=>c.cat!=='polizia');
       v.canBet = !G.reshop && G.round>=2;
       if(v.canBet){
-        v.betTargets=G.players.map(t=>({ id:t.id, name:t.name, colorH:DB.colori[t.colorIdx].h, quote:Math.round(Math.max(1.05, Math.min(6, DB.quoteScommessa[Math.min(7,t.lastRank)]+(p.quotaMod||0)))*(p.betMult||1)*100)/100, you:t.id===p.id }));
+        v.betTargets=G.players.map(t=>({ id:t.id, name:t.name, colorH:DB.colori[t.colorIdx].h, quote:Math.round(Math.max(1.05, Math.min(6, DB.quoteScommessa[Math.min(7,t.lastRank)]+(t.quotaMod||0)))*(t.betMult||1)*100)/100, you:t.id===p.id }));
         v.myBet=p.bet?{ targetId:p.bet.targetId, amount:p.bet.amount }:null;
       }
     }
