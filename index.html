@@ -240,15 +240,23 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .nos-btn.armed{box-shadow:0 0 0 2px var(--cyan),0 0 18px #1ad6ea66}
 .nos-bombs{display:flex;gap:6px}
 .nos-bombs .nos-btn{flex:1}
-.o2-bar.bombs{display:block}
-.bmb-h{font-size:12px;color:#cfc3e8;margin-bottom:6px;text-align:center}
-.bmb-row{display:flex;gap:16px;justify-content:center}
-.bmb-t{display:flex;align-items:center;gap:6px}
-.bmb-lab{font-weight:700;color:var(--cyan);width:14px}
-.bmb-btn{width:28px;height:28px;border-radius:7px;border:1px solid #9B3BE0;background:rgba(155,59,224,.16);color:#F4EEFF;font-size:16px;font-weight:700;cursor:pointer;line-height:1}
+.bmb-panel{background:rgba(11,5,24,.82);border:1px solid rgba(43,168,230,.45);border-radius:12px;padding:10px 12px;margin:0 0 8px}
+.bmb-h{font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--cyan);margin-bottom:9px}
+.bmb-h span{color:#9C90B4;font-weight:400;letter-spacing:0}
+.bmb-h b{color:#F4EEFF}
+.bmb-row{display:flex;gap:14px}
+.bmb-cell{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px}
+.bmb-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.bmb-lab{font-size:11px;font-weight:600;letter-spacing:.5px;color:#cfc3e8}
+.bmb-num{font-size:18px;font-weight:700;color:#F4EEFF}
+.bmb-num small{font-size:11px;color:#9C90B4;font-weight:400}
+.bmb-bar{height:8px;border-radius:5px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:8px}
+.bmb-bar i{display:block;height:100%;background:linear-gradient(90deg,#2BA8E6,#7FD8FF);border-radius:5px;transition:width .25s}
+.bmb-ctrls{display:flex;gap:8px}
+.bmb-btn{flex:1;height:34px;border-radius:8px;border:1px solid #9B3BE0;background:rgba(155,59,224,.2);color:#F4EEFF;font-size:19px;font-weight:700;line-height:1;cursor:pointer}
+.bmb-btn.plus{border-color:var(--cyan);background:rgba(43,168,230,.2)}
+.bmb-btn:hover{filter:brightness(1.25)}
 .bmb-btn:disabled{opacity:.3;cursor:not-allowed}
-.bmb-val{min-width:46px;text-align:center;font-weight:700;font-size:15px}
-.bmb-val small{color:#9C90B4;font-weight:400;font-size:11px}
 .res-row{display:flex;align-items:center;gap:11px;padding:11px 12px;border:1px solid var(--line);border-radius:11px;margin-bottom:7px;background:var(--asphalt-1)}
 .res-row.p1{border-color:var(--amber);background:linear-gradient(90deg,#ff9e2c18,transparent)}
 .res-pos{font-family:var(--disp);font-weight:700;font-size:22px;width:30px;text-align:center;color:var(--muted)}.res-row.p1 .res-pos{color:var(--amber)}
@@ -808,7 +816,7 @@ body:has(#s-home.active) .topbar{display:none}
 .dw-prow.pol{border:1px solid #ff3b3b55;background:#ff3b3b0e}
 .dw-prow.pol .dw-prpos{background:#10131c;color:#ff5470}
 /* ===== BOSS / MINIBOSS ===== */
-.boss-bar{display:flex;align-items:center;gap:8px;background:linear-gradient(90deg,#ff3b3b,#b8860b);color:#fff;font-size:13px;font-weight:600;padding:9px 12px;border-radius:11px;margin:0 0 8px;box-shadow:0 0 0 1px #ffffff22 inset}
+.boss-bar{display:flex;align-items:center;gap:6px;background:linear-gradient(90deg,#ff3b3b,#b8860b);color:#fff;font-size:10.5px;font-weight:600;line-height:1.25;padding:4px 9px;border-radius:9px;margin:0 0 5px;box-shadow:0 0 0 1px #ffffff22 inset}
 .boss-bar b{font-family:var(--disp,inherit);letter-spacing:.5px}
 .opt-foe{display:inline-block;font-size:9.5px;font-weight:800;color:#fff;background:#ff3b3b;padding:1px 6px;border-radius:8px;margin-left:6px;vertical-align:middle}
 .opt-foe.mini{background:#ffa733;color:#0b0518}
@@ -1189,9 +1197,9 @@ function renderLobby(v){
 }
 function copyCode(){ var c=(document.getElementById('lob-code')||{}).textContent||''; if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(c).then(function(){toast('Codice copiato: '+c);},function(){toast('Codice: '+c);}); } else toast('Codice: '+c); }
 function doAdvance(){ if(ui.autoMoveTimer){ clearTimeout(ui.autoMoveTimer); ui.autoMoveTimer=null; } socket.emit('race:move'); }
-function ensurePrepClock(){ var b=document.getElementById('prepClock'); if(!b){ b=document.createElement('div'); b.id='prepClock'; b.style.cssText='position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:600;background:#1a1030;border:2px solid #FFC91E;color:#FFC91E;font-family:var(--disp,Oswald);font-weight:700;padding:8px 18px;border-radius:22px;font-size:15px;letter-spacing:.5px;box-shadow:0 6px 20px rgba(0,0,0,.6)'; document.body.appendChild(b); } return b; }
+function ensurePrepClock(){ var b=document.getElementById('prepClock'); if(!b){ b=document.createElement('div'); b.id='prepClock'; b.style.cssText='position:fixed;bottom:8px;right:8px;z-index:400;background:rgba(26,16,48,.8);border:1px solid rgba(255,201,30,.6);color:#FFC91E;font-family:var(--disp,Oswald);font-weight:700;padding:3px 9px;border-radius:14px;font-size:11px;letter-spacing:.3px;opacity:.6;pointer-events:none'; document.body.appendChild(b); } return b; }
 function stopPrepTimer(){ if(ui.prepTimer){ clearInterval(ui.prepTimer); ui.prepTimer=null; } var b=document.getElementById('prepClock'); if(b) b.style.display='none'; }
-function startPrepTimer(){ stopPrepTimer(); var left=15; var b=ensurePrepClock(); b.style.display='block'; var upd=function(){ b.textContent='\u23f1 Tocca a te \u00b7 '+left+'s'; var d=left<=3; b.style.borderColor=d?'#ff3b6b':'#FFC91E'; b.style.color=d?'#ff3b6b':'#FFC91E'; }; upd(); ui.prepTimer=setInterval(function(){ left--; if(left<=0){ stopPrepTimer(); socket.emit('prep:done'); } else upd(); }, 1000); }
+function startPrepTimer(){ stopPrepTimer(); var left=15; var b=ensurePrepClock(); b.style.display='block'; var upd=function(){ b.textContent='\u23f1 '+left+'s'; }; upd(); ui.prepTimer=setInterval(function(){ left--; if(left<=0){ left=15; } upd(); }, 1000); }
 function doStart(){socket.emit('startGame');}
 
 /* ---------- REVEAL (pilota segreto + carte iniziali) ---------- */
@@ -1280,7 +1288,7 @@ function renderReveal(v){
     h+=`<div class="pdraw">`;
     for(let i=0;i<n;i++){ h+=`<div class="pdcard" onclick="drawPilot(${i})"><span class="qm">?</span><span class="pdtap">pesca</span></div>`; }
     h+=`</div>`;
-    h+=`<div class="reveal-info"><div class="die" style="width:42px;height:42px;border-radius:9px">${dieFaces(r.roll)}</div><div>Hai tirato <b>${r.roll}</b> · all'officina del 1° round parti <b>${r.startPos}°</b></div></div>`;
+    h+=`<div class="reveal-info"><div class="die" style="width:30px;height:30px;border-radius:7px">${dieFaces(r.roll)}</div><div>Hai tirato <b>${r.roll}</b> · all'officina del 1° round parti <b>${r.startPos}°</b></div></div>`;
     h+=`<div class="hint">Tocca una carta coperta per pescare (${r.deckSize} piloti nel mazzo).</div>`;
     host.innerHTML=h;return;
   }
@@ -1294,7 +1302,7 @@ function renderReveal(v){
       <div class="rp-ab"><span class="badge ${pilotTipoClass(r.pilot)}" ${!pilotTipoClass(r.pilot)?'style="background:#1ad6ea22;color:var(--cyan)"':''}>${r.pilot.tipoLabel}</span> ${esc(r.pilot.ab)}</div>
       ${r.pilot.partenza?`<div class="rp-part">Partenza <b>+${r.pilot.partenza}</b> <small>(solo al 1° tiro di ogni gara)</small></div>`:''}
     </div></div></div>`;
-  h+=`<div class="reveal-info"><div class="die" style="width:42px;height:42px;border-radius:9px">${dieFaces(r.roll)}</div><div>Hai tirato <b>${r.roll}</b> · all'officina del 1° round parti <b>${r.startPos}°</b></div></div>`;
+  h+=`<div class="reveal-info"><div class="die" style="width:30px;height:30px;border-radius:7px">${dieFaces(r.roll)}</div><div>Hai tirato <b>${r.roll}</b> · all'officina del 1° round parti <b>${r.startPos}°</b></div></div>`;
   h+=`<div class="sec-h">Le tue carte iniziali (${r.hand.length})</div><div class="deal">`;
   r.hand.forEach((c,i)=>{h+=`<div class="dealcard" style="--i:${i};--hc:${c.cat==='pregara'?'var(--po)':'var(--cyan)'}"><div class="dc-top">${c.cat==='pregara'?'Pre-gara':'In gara'}</div><div class="dc-name">${esc(c.nome)}</div><div class="dc-desc">${cardDesc(c)}</div></div>`;});
   h+='</div>';
@@ -1445,12 +1453,13 @@ function playDefense(idx,mid){ socket.emit('defense:play',{handIdx:idx,mid}); fl
 function mktVal(c){ const L={vel:'Velocità',ctrl:'Controllo',mov:'Movimento',nos:'NOS'}; const st=L[c.stat]||'Valore'; const d=(c.delta!=null?c.delta:c.val); return st+' '+(d>=0?'+':'\u2212')+Math.abs(d); }
 function bombPanelHTML(me){
   var own=me.nosOwned, b=me.nosBombs, res=own-b[0]-b[1];
-  var h='<div class="o2-bar bombs"><div class="bmb-h">\u26a1 Bombole NOS \u00b7 possiedi <b>'+own+'</b> \u00b7 da distribuire <b>'+res+'</b></div><div class="bmb-row">';
+  var h='<div class="bmb-panel"><div class="bmb-h">\u26a1 BOMBOLE NOS <span>\u2014 riserva <b>'+res+'</b> di '+own+' da distribuire</span></div><div class="bmb-row">';
   b.forEach(function(c,i){
-    h+='<div class="bmb-t"><span class="bmb-lab">'+(i===0?'A':'B')+'</span>'
-      +'<button class="bmb-btn" '+(c<=0?'disabled':'')+' onclick="decBomb('+i+')">\u2212</button>'
-      +'<span class="bmb-val">'+c+'<small>/13</small></span>'
-      +'<button class="bmb-btn" '+((res<=0||c>=13)?'disabled':'')+' onclick="incBomb('+i+')">+</button></div>';
+    var pct=Math.round(c/13*100);
+    h+='<div class="bmb-cell"><div class="bmb-top"><span class="bmb-lab">Bombola '+(i===0?'A':'B')+'</span><span class="bmb-num">'+c+'<small>/13</small></span></div>'
+      +'<div class="bmb-bar"><i style="width:'+pct+'%"></i></div>'
+      +'<div class="bmb-ctrls"><button class="bmb-btn" '+(c<=0?'disabled':'')+' onclick="decBomb('+i+')">\u2212</button>'
+      +'<button class="bmb-btn plus" '+((res<=0||c>=13)?'disabled':'')+' onclick="incBomb('+i+')">+</button></div></div>';
   });
   return h+'</div></div>';
 }
@@ -1489,11 +1498,12 @@ function prepMobileHTML(v){
   const eventsPane=`<div class="o2-events-c"><div class="o2-events-h">In gara \u00e8 successo</div><div class="o2-events">${evHTML}</div></div>`;
 
   // mercato (senza la mano)
-  const nM=(v.market||[]).length;
+  const mktShown=(v.market||[]).filter(c=>c.delta>0);
+  const nM=mktShown.length;
   const mhSub = '\u00b7 '+nM+' cart'+(nM===1?'a scoperta':'e scoperte')+(nM>6?' \u00b7 scorri \u2193':' \u00b7 condiviso');
   const mktH=`<div class="o2-mkt-h"><span class="wr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6a4 4 0 0 1-5.2 3.8L7 18.6 5.4 17 14.2 8.2A4 4 0 0 1 18 3l-2.3 2.3 1 2.4 2.4 1L21 6Z"/></svg></span><b>Mercato</b><span>${mhSub}</span></div>`;
   let cards='';
-  (v.market||[]).forEach(c=>{ const mm=ofMeta(c.comp); const skip=c.skip?'<span class="o2-skip">salto \u00d72</span>':''; const reason=(!c.buyable&&c.reason)?`<span class="o2-reason">${esc(c.reason)}</span>`:''; const oc=c.buyable?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'';
+  mktShown.forEach(c=>{ const mm=ofMeta(c.comp); const skip=c.skip?'<span class="o2-skip">salto \u00d72</span>':''; const reason=(!c.buyable&&c.reason)?`<span class="o2-reason">${esc(c.reason)}</span>`:''; const oc=c.buyable?`onclick="socket.emit('prep:buy',{comp:'${c.comp}',lvl:${c.lvl}})"`:'';
     cards+=`<div class="o2-slot"><button class="o2-card ${c.buyable?'buy':'lock'}" style="--c:${mm.c}" ${oc} ${c.buyable?'':'disabled'}><div class="o2-ctop"><div class="o2-cic">${ofIcon(c.comp)}</div><div><div class="o2-cn">${mm.full}</div><div class="o2-clv">L${c.lvl}</div></div></div><div class="o2-cval">${mktVal(c)}</div>${skip}<div class="o2-cfoot"><span class="o2-price">${eur(c.price)}</span>${reason}</div></button></div>`;
   });
   const few = nM>0 && nM<=2 ? ' few':'';
@@ -1961,7 +1971,7 @@ function sirenHTML(v){
 function bossBannerHTML(v){
   if(!(v.bosses&&v.bosses.length))return '';
   const parts=v.bosses.map(b=>(b.kind==='boss'?'BOSS':'MINIBOSS')+' +\u20ac'+(b.reward||0).toLocaleString('it-IT'));
-  return `<div class="boss-bar"><b>SFIDA</b> · finisci davanti per il bonus: ${parts.join(' \u00b7 ')}</div>`;
+  return `<div class="boss-bar"><b>SFIDA</b> · davanti: ${parts.join(' \u00b7 ')}</div>`;
 }
 function policeBannerHTML(v){
   if(v.mustPlayPolice)return '<div class="pol-lock"><b>\ud83d\udea8 Carta polizia \u2014 gira subito</b><span>Devi giocarla prima di proseguire: scegli dove mettere il blocco o scatena l\'inseguimento.</span></div>';
