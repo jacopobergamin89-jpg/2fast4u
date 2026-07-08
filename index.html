@@ -962,6 +962,12 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 .dr-cta-t{font-family:var(--disp);font-weight:600;font-size:14px;color:#b46bef}
 .dr-cta-btn{margin:10px 0 4px;padding:14px 22px;border-radius:12px;border:1px solid transparent;background:linear-gradient(180deg,#9B3BE0,#6f22b0);color:#fff;font-family:var(--disp);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.6px;cursor:pointer}
 .dr-cta-s{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.ct-ov{position:fixed;inset:0;z-index:80;background:rgba(6,3,14,.93);display:none;flex-direction:column;align-items:center;justify-content:center;padding:8px}
+.ct-ov.on{display:flex}
+.ct-card{width:min(100%,470px);height:100%;max-height:97vh;display:flex;flex-direction:column}
+.ct-h{font-family:var(--disp);font-weight:700;text-transform:uppercase;letter-spacing:.6px;font-size:13px;color:var(--muted);text-align:center;margin:2px 0 6px}
+.ct-frame{flex:1;width:100%;border:0;border-radius:14px;background:#0b0518}
+.ct-skip{margin-top:6px;padding:8px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--muted);font-family:var(--mono);font-size:11px;cursor:pointer}
 .lc-n{font-family:var(--disp);font-weight:700;font-size:100px;line-height:.8;color:#fff7df;text-shadow:0 0 22px rgba(255,201,30,.7),0 0 48px rgba(255,201,30,.35)}
 .lc-n.go{color:#bdf3c8;text-shadow:0 0 24px rgba(69,193,102,.85),0 0 52px rgba(69,193,102,.4);font-size:58px}
 .lc-lab{font-family:var(--disp);text-transform:uppercase;letter-spacing:.18em;font-size:12px;color:var(--muted);margin-top:8px}
@@ -2096,7 +2102,34 @@ function drFinish(){ DR.running=false; cancelAnimationFrame(DR.raf); DR.drifting
   setTimeout(function(){ var ov=document.getElementById('drOv'); if(ov)ov.classList.remove('on');
     socket.emit('race:roll',{useNos:false,reaction:outcome,bombIdx:null}); setTimeout(function(){socket.emit('race:move');},1100); },1000); }
 function driftCtaHTML(v){ return '<div class="rx-panel dr-cta"><div class="dr-cta-t">\ud83c\udfce\ufe0f Curva in DRIFT</div><button class="dr-cta-btn" onclick="drOpen(LAST)">Fai il DRIFT</button><div class="dr-cta-s">tieni la derapata, schiaccia nel verde</div></div>'; }
-function tiroInlineHTML(v){ var st=v&&v.me&&v.me.segType; if(st==='drift') return driftCtaHTML(v); return rxInlineHTML(v); }
+function tiroInlineHTML(v){ var st=v&&v.me&&v.me.segType; if(st==='drift') return driftCtaHTML(v); if(st==='citta') return cittaCtaHTML(v); return rxInlineHTML(v); }
+/* ===== CITTÀ in gara: 4 varianti a rotazione (overlay), esito → reaction ===== */
+var CT={variant:null,last:null,active:false,lvl:1};
+var CT_FILES={slalom:'mockup_citta.html',incrocio:'mockup_citta_incrocio.html',bivi:'mockup_citta_bivi.html',reazioni:'mockup_citta_reazioni.html'};
+var CT_NAMES={slalom:'Slalom',incrocio:'Incrocio',bivi:'Bivi',reazioni:'Reazioni'};
+function ctEnsure(){ if(document.getElementById('ctOv'))return;
+  var d=document.createElement('div'); d.id='ctOv'; d.className='ct-ov';
+  d.innerHTML='<div class="ct-card"><div class="ct-h">CITTÀ · <span id="ctVar"></span></div><iframe id="ctFrame" class="ct-frame" frameborder="0" scrolling="no"></iframe><button class="ct-skip" id="ctSkip" onclick="ctSkip()">salta</button></div>';
+  document.body.appendChild(d);
+}
+function ctOpen(v){
+  CT.lvl=(v&&v.raceLevel)||1;
+  var opts=Object.keys(CT_FILES).filter(function(k){return k!==CT.last;});
+  CT.variant=opts[Math.floor(Math.random()*opts.length)]; CT.last=CT.variant; CT.active=true;
+  ctEnsure(); document.getElementById('ctVar').textContent=CT_NAMES[CT.variant]||'';
+  document.getElementById('ctFrame').src=CT_FILES[CT.variant]+'?embed=1&level='+CT.lvl;
+  document.getElementById('ctOv').classList.add('on');
+}
+function ctResolve(outcome){
+  if(!CT.active)return; CT.active=false;
+  var ov=document.getElementById('ctOv'); if(ov)ov.classList.remove('on');
+  var fr=document.getElementById('ctFrame'); if(fr)fr.src='about:blank';
+  socket.emit('race:roll',{useNos:false,reaction:outcome,bombIdx:null});
+  setTimeout(function(){ socket.emit('race:move'); },1100);
+}
+function ctSkip(){ ctResolve('mancato'); }   // fallback se il mini-gioco non si carica
+window.addEventListener('message',function(e){ if(e.data && e.data.type==='citta'){ ctResolve(e.data.outcome||'mancato'); } });
+function cittaCtaHTML(v){ return '<div class="rx-panel dr-cta"><div class="dr-cta-t">\ud83c\udfd9\ufe0f Tratto in CITT\u00c0</div><button class="dr-cta-btn" onclick="ctOpen(LAST)">Vai in citt\u00e0</button><div class="dr-cta-s">traffico urbano \u00b7 un mini-gioco a caso</div></div>'; }
 function _cardNm(idx){const hh=(LAST&&LAST.me&&LAST.me.hand)||[];const c=hh.find(x=>x.idx===idx);return c?c.nome:'carta';}
 function _rivNm(tid){const r=(LAST&&LAST.me&&LAST.me.rivals)||[];const x=r.find(y=>y.id===tid);return x?x.name:'rivale';}
 function jsTid(id){ return typeof id==='number'?id:("'"+String(id).replace(/'/g,'')+"'"); }
@@ -2675,7 +2708,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-07-08 · drift-in-gara';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-07-08 · citta-in-gara';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 <script>
 /* 2FAST4U — musica di sottofondo condivisa tra tutte le pagine.
