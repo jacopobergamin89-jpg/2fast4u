@@ -377,12 +377,38 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .sr-cas{font-family:var(--mono);font-size:11px;color:var(--muted-2);font-weight:400}
 .sr-line{font-size:11.5px;color:var(--muted);line-height:1.55}
 .sr-nos{font-size:11px;margin-top:4px;font-weight:600}
+.sr-diag{margin-top:8px;padding:7px 9px;border-radius:8px;font-family:var(--mono);font-size:11px;font-weight:700;line-height:1.35}
+.sr-diag b{font-size:12px}
+.sr-diag.ok{background:rgba(37,227,154,.08);color:#25e39a}
+.sr-diag.warn{background:rgba(255,70,110,.10);color:#ff466e}
 .sgr-row{font-size:13px;color:#eef1f8;margin:5px 0}
 @media(max-width:520px){.segrules{flex-direction:column}}
 
 /* --- layout gara: tutto a schermo su desktop --- */
 .race-grid{display:block}
 .track{background:#1c2740}
+.tk-inner{position:relative;min-height:190px}
+.tk-chap{display:flex;height:54px;border-bottom:1px solid rgba(255,255,255,.08)}
+.tk-seg{position:relative;flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:5px 8px;border-right:1px solid rgba(0,0,0,.5);overflow:hidden;cursor:pointer}
+.tk-seg::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:currentColor;box-shadow:0 0 8px currentColor}
+.tk-nm{font-family:var(--disp);font-weight:600;font-size:10.5px;color:#eef1f8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk-specs{display:flex;flex-wrap:wrap;gap:2px 8px;font-family:var(--mono);font-size:8px;font-weight:700;line-height:1}
+.tk-specs .tk-up{color:#25e39a}.tk-specs .tk-dn{color:#ff466e}.tk-specs .tk-nu{color:#9aa3bd}
+.tk-sky{position:relative;height:110px;margin:6px 0}
+.tk-bar{position:absolute;bottom:0;border-radius:3px 3px 0 0;opacity:.8}
+.tk-bar.tk-brk{box-shadow:-2px 0 0 rgba(255,255,255,.35)}
+.tk-cars{position:absolute;inset:0;pointer-events:none}
+.tk-car{position:absolute;pointer-events:auto;transition:left .45s cubic-bezier(.34,1.4,.5,1)}
+.tk-tok{width:22px;height:22px;border-radius:50%;border:2px solid #0d1320;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:700;font-size:10px;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.6)}
+.tk-tok.me{width:26px;height:26px;border-color:#fff;font-size:11px}
+.tk-tok.pol{background:#10131c;color:#e9edf6;font-size:8px;font-weight:800}
+.tk-tok.boss{background:#ff3b3b;font-size:8px;font-weight:800}
+.tk-tok.mini{background:#ffa733;color:#0b0518;font-size:8px;font-weight:800}
+.tk-scale{position:relative;height:16px;border-top:1px solid rgba(255,255,255,.06)}
+.tk-s{position:absolute;top:2px;transform:translateX(-50%);font-family:var(--mono);font-size:8px;color:#3a3f54}
+.tk-s.maj{color:#69708c}
+.tk-block{position:absolute;bottom:0;height:110px;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;background:repeating-linear-gradient(45deg,rgba(255,59,59,.22) 0 8px,rgba(255,255,255,.07) 8px 16px);border-left:2px solid #ff3b3b;border-right:2px solid #ff3b3b;font-size:13px}
+.tk-finish{position:absolute;bottom:0;height:110px;width:0;border-left:2px dashed rgba(255,255,255,.6)}
 @media(min-width:900px){
   body.race-mode .wrap{max-width:1180px}
   #s-race .race-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:16px;align-items:start;margin-top:2px}
@@ -512,6 +538,10 @@ h1.title em{font-style:italic;color:var(--cyan)}
   .rm-sc-list li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan);flex:none;margin-top:5px}
   .rm-sc-list li.warn{color:var(--amber)} .rm-sc-list li.warn::before{background:var(--amber)}
   .rm-sc-next{margin:0 -14px;padding:10px 14px;border-top:1px solid var(--line);background:rgba(255,59,107,.06);font-family:var(--mono);font-size:11.5px;color:#ff8aa6;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .rm-sc-diag{margin:0 -14px;padding:9px 14px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.35}
+  .rm-sc-diag b{font-size:13px}
+  .rm-sc-diag.ok{background:rgba(37,227,154,.08);color:#25e39a}
+  .rm-sc-diag.warn{background:rgba(255,70,110,.10);color:#ff466e}
   .rm-spec{margin-top:12px;text-align:center;color:var(--muted);font-size:13px;padding:8px}
   .rm-seg{flex:none;display:flex;gap:5px;margin:11px 14px 0;padding:4px;background:var(--asphalt-1);border:1px solid var(--line);border-radius:13px}
   .rm-seg button{flex:1;font-family:var(--disp);text-transform:uppercase;letter-spacing:.5px;font-size:13px;font-weight:600;padding:11px;border-radius:9px;color:var(--muted);background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
@@ -1387,34 +1417,28 @@ function drawPilot(i){ socket.emit('setup:drawPilot',{cardIndex:i}); }
 
 /* ---------- helpers comuni ---------- */
 function trackHTML(v){
-  const cellW=30,H=190,yMid=104,half=15;
+  const cellW=30;
   const total=v.track&&v.track.length?v.track[v.track.length-1].to:55;
   const W=total*cellW;
-  let s=`<svg id="trackvg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
-  s+=`<defs><linearGradient id="trkbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3853"/><stop offset="1" stop-color="#1c2740"/></linearGradient><pattern id="hazard" width="14" height="14" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#ff3b3b" opacity="0.30"/><rect width="7" height="14" fill="#ffffff" opacity="0.14"/></pattern></defs>`;
-  s+=`<rect x="0" y="0" width="${W}" height="${H}" fill="url(#trkbg)"/>`;
-  (v.track||[]).forEach((seg,i)=>{
-    const xA=(seg.from-1)*cellW,xB=seg.to*cellW,W2=xB-xA,col=ACCENT[seg.t]||'#2fe6e0';
-    if(seg.t==='citta') s+=buildingsSVG(xA,xB,yMid,half,col);
-    let d;
-    if(seg.t==='drift'){const a=40;d=`M ${xA},${yMid} C ${(xA+W2*0.18).toFixed(1)},${yMid-a} ${(xA+W2*0.30).toFixed(1)},${yMid-a} ${(xA+W2*0.5).toFixed(1)},${yMid} C ${(xA+W2*0.70).toFixed(1)},${yMid+a} ${(xA+W2*0.82).toFixed(1)},${yMid+a} ${xB},${yMid}`;}
-    else d=`M ${xA},${yMid} L ${xB},${yMid}`;
-    s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="${half*2+10}" stroke-linecap="round" opacity="0.12"/>`;
-    s+=`<path id="seg-${i}" d="${d}" fill="none" stroke="#161d2b" stroke-width="${half*2}" stroke-linecap="round"/>`;
-    s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="3" stroke-dasharray="14 16" stroke-linecap="round" opacity="0.85"/>`;
-    s+=`<text class="t-lbl" x="${(xA+W2/2).toFixed(1)}" y="22" text-anchor="middle" fill="${col}">${seg.label} · L${seg.lvl}</text>`;
-    s+=`<rect class="seg-hit" x="${xA}" y="0" width="${W2}" height="${H}" onclick="openSegRules(${i})"/>`;
+  const diffOf=seg=>{ let mx=0; (seg.bonus||[]).concat(seg.pen||[]).forEach(x=>{ if(x.thr>mx)mx=x.thr; }); return mx||12; };
+  const sN=s=>s==='Velocità'?'VEL':'CTRL';
+  let chap='';
+  (v.track||[]).forEach((seg,i)=>{ const wpx=(seg.to-seg.from+1)*cellW; const col=ACCENT[seg.t]||'#2fe6e0'; const sp=[];
+    (seg.bonus||[]).forEach(b=>sp.push(`<span class="tk-up">${sN(b.stat)} ${b.cmp}${b.thr} +${b.amt}</span>`));
+    (seg.pen||[]).forEach(p=>sp.push(`<span class="tk-dn">${sN(p.stat)} ${p.cmp}${p.thr} \u2212${p.amt}</span>`));
+    if(!sp.length)sp.push('<span class="tk-nu">nessun limite</span>');
+    chap+=`<div class="tk-seg" style="width:${wpx}px;color:${col}" onclick="openSegRules(${i})"><div class="tk-nm">${esc(seg.nm||seg.label)} \u00b7 L${seg.lvl}</div><div class="tk-specs">${sp.join('')}</div></div>`;
   });
-  for(let c=1;c<=total;c++){const x=((c-0.5)*cellW).toFixed(1);const maj=(c%5===0)||c===1||c===total;s+=`<text class="t-rul" x="${x}" y="${H-6}" text-anchor="middle" fill="${maj?'#69708c':'#3a3f54'}">${c}</text>`;}
-  (v.blocks||[]).forEach(bl=>{
-    const xa=(bl.from-1)*cellW, xb=bl.to*cellW;
-    s+=`<rect x="${xa}" y="${yMid-half-5}" width="${xb-xa}" height="${half*2+10}" rx="5" fill="url(#hazard)" stroke="#ff3b3b" stroke-width="2"/>`;
-    [xa+6,xb-6].forEach(ex=>{ s+=`<polygon points="${ex},${yMid+half-1} ${ex-5},${yMid+half+9} ${ex+5},${yMid+half+9}" fill="#FFC91E"/>`; });
-    s+=`<text x="${((xa+xb)/2).toFixed(1)}" y="${yMid-half-9}" text-anchor="middle" fill="#ff5470" font-size="10" font-weight="700" font-family="var(--mono)">BLOCCO ${bl.size===4?'PICCOLO':bl.size===6?'MEDIO':'GRANDE'}</text>`;
-  });
-  s+=`<line x1="${W}" y1="${yMid-32}" x2="${W}" y2="${yMid+32}" stroke="#eef1f8" stroke-width="2" stroke-dasharray="4 4" opacity="0.55"/>`;
-  s+='</svg>';
-  return `<div class="track" id="track">${s}</div>`;
+  let bars='';
+  for(let c=1;c<=total;c++){ const seg=(v.track||[]).find(s=>c>=s.from&&c<=s.to)||{t:'rett'}; const col=ACCENT[seg.t]||'#2fe6e0'; const hpc=(38+Math.min(52,(diffOf(seg)-8)*5)).toFixed(0); const brk=(seg.from===c&&c>1);
+    bars+=`<div class="tk-bar${brk?' tk-brk':''}" style="left:${(c-1)*cellW}px;width:${cellW-3}px;height:${hpc}%;background:linear-gradient(180deg,${col},${col}44)"></div>`;
+  }
+  let scale='';
+  for(let c=1;c<=total;c++){ const maj=(c%5===0)||c===1||c===total; scale+=`<div class="tk-s${maj?' maj':''}" style="left:${((c-0.5)*cellW).toFixed(1)}px">${c}</div>`; }
+  let blk='';
+  (v.blocks||[]).forEach(bl=>{ const xa=(bl.from-1)*cellW, wpx=(bl.to-bl.from+1)*cellW; blk+=`<div class="tk-block" style="left:${xa}px;width:${wpx}px">\ud83d\udea7</div>`; });
+  const fin=`<div class="tk-finish" style="left:${(W-2)}px"></div>`;
+  return `<div class="track" id="track"><div class="tk-inner" style="width:${W}px"><div class="tk-chap">${chap}</div><div class="tk-sky">${bars}${blk}${fin}<div class="tk-cars" id="tk-cars"></div></div><div class="tk-scale">${scale}</div></div></div>`;
 }
 function centerTrackOnMe(v){
   const meCar=(v.cars||[]).find(c=>c.id===v.you.id);
@@ -1451,52 +1475,18 @@ function standingsHTML(v){
   return h+'</div>';
 }
 function startTokens(v){
-  const svg=document.getElementById('trackvg'); if(!svg||!v.cars)return;
-  svg.querySelectorAll('.car-tok').forEach(el=>el.remove());   // pista riusata: tolgo i token vecchi prima di ridisegnarli
-  const total=v.track&&v.track.length?v.track[v.track.length-1].to:55;
-  v.cars.forEach((k,ci)=>{
-    let pos=k.pos||0,segIdx,lf;
-    if(pos<1){segIdx=0;lf=0;}
-    else{segIdx=(v.track||[]).findIndex(s=>pos>=s.from&&pos<=s.to);if(segIdx<0)segIdx=v.track.length-1;const s=v.track[segIdx];lf=(pos-s.from+0.5)/(s.to-s.from+1);}
-    const path=document.getElementById('seg-'+segIdx);if(!path)return;
-    let pt;try{const L=path.getTotalLength();pt=path.getPointAtLength(Math.max(0,Math.min(1,lf))*L);}catch(e){return;}
-    const same=v.cars.filter((o,oi)=>(o.pos||0)===(k.pos||0)&&oi<ci).length;
-    const oy=same?((same%2?-1:1)*9*Math.ceil(same/2)):0;
-    const isMe=k.id===v.you.id;
-    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.setAttribute('transform',`translate(${pt.x.toFixed(1)},${(pt.y+oy).toFixed(1)})`);
-    g.setAttribute('class','car-tok'); g.style.cursor='pointer';
-    const casLabel=(k.pos&&k.pos>0)?('casella '+k.pos+'/'+total):'in partenza';
-    g.innerHTML=`<title>${esc(k.name||k.ini)}${k.id===v.you.id?' (tu)':''} · ${casLabel}</title><circle r="${isMe?12:10}" fill="${k.colorH}" stroke="${isMe?'#ffffff':'#0d1320'}" stroke-width="${isMe?3:2.5}"/><text class="t-tok" text-anchor="middle" y="3.5" font-size="${isMe?11:10}" fill="#ffffff">${esc(k.ini)}</text>`;
-    g.addEventListener('click',()=>openInspect(k.id));
-    svg.appendChild(g);
-  });
-  (v.police||[]).forEach(pl=>{
-    let pos=pl.pos||0,segIdx,lf;
-    if(pos<1){segIdx=0;lf=0;}
-    else{segIdx=(v.track||[]).findIndex(s=>pos>=s.from&&pos<=s.to);if(segIdx<0)segIdx=v.track.length-1;const s=v.track[segIdx];lf=(pos-s.from+0.5)/(s.to-s.from+1);}
-    const path=document.getElementById('seg-'+segIdx);if(!path)return;
-    let pt;try{const L=path.getTotalLength();pt=path.getPointAtLength(Math.max(0,Math.min(1,lf))*L);}catch(e){return;}
-    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.setAttribute('transform',`translate(${pt.x.toFixed(1)},${(pt.y-1).toFixed(1)})`);
-    g.setAttribute('class','car-tok');
-    const casLabel=(pl.pos&&pl.pos>0)?('casella '+pl.pos+'/'+total):'in partenza';
-    g.innerHTML=`<title>${esc(pl.name)} · ${casLabel} · si muove per ultima</title><circle r="12" fill="#10131c" stroke="#e9edf6" stroke-width="2.5"/><rect x="-8" y="-11" width="7" height="4.5" rx="1.5" fill="#ff3b3b"/><rect x="1" y="-11" width="7" height="4.5" rx="1.5" fill="#2b6bff"/><text text-anchor="middle" y="4" font-size="8.5" font-weight="800" fill="#e9edf6">POL</text>`;
-    svg.appendChild(g);
-  });
-  (v.bosses||[]).forEach(b=>{
-    let pos=b.pos||0,segIdx,lf;
-    if(pos<1){segIdx=0;lf=0;}
-    else{segIdx=(v.track||[]).findIndex(s=>pos>=s.from&&pos<=s.to);if(segIdx<0)segIdx=v.track.length-1;const s=v.track[segIdx];lf=(pos-s.from+0.5)/(s.to-s.from+1);}
-    const path=document.getElementById('seg-'+segIdx);if(!path)return;
-    let pt;try{const L=path.getTotalLength();pt=path.getPointAtLength(Math.max(0,Math.min(1,lf))*L);}catch(e){return;}
-    const isBoss=b.kind==='boss', col=isBoss?'#ff3b3b':'#ffa733', r=isBoss?14:12, base=-r+2, cc=isBoss?'#FFC91E':'#ffffff', tc=isBoss?'#fff':'#0b0518';
-    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.setAttribute('transform',`translate(${pt.x.toFixed(1)},${(pt.y-1).toFixed(1)})`);
-    g.setAttribute('class','car-tok');
-    g.innerHTML=`<title>${esc(b.name)} · casella ${b.pos}/${total} · battilo per +€${(b.reward||0).toLocaleString('it-IT')}</title><polygon points="-7,${base} -7,${base-5} -3.5,${base-2} 0,${base-7} 3.5,${base-2} 7,${base-5} 7,${base}" fill="${cc}" stroke="#0b0518" stroke-width="0.6"/><circle r="${r}" fill="${col}" stroke="#0b0518" stroke-width="2.5"/><text text-anchor="middle" y="4" font-size="${isBoss?9:8}" font-weight="800" fill="${tc}">${isBoss?'BOSS':'MINI'}</text>`;
-    svg.appendChild(g);
-  });
+  const wrap=document.getElementById('tk-cars'); if(!wrap||!v.cars)return;
+  wrap.innerHTML='';
+  const cellW=30, total=v.track&&v.track.length?v.track[v.track.length-1].to:55;
+  const xOf=pos=>((Math.max(0.5,pos||0)-0.5)*cellW);
+  function tok(html,pos,ci,list,cls,title){ const same=list.filter((o,oi)=>(o.pos||0)===(pos||0)&&oi<ci).length; const oy=same*15;
+    const g=document.createElement('div'); g.className='tk-car'+(cls||''); g.style.left=xOf(pos)+'px'; g.style.bottom=(4+oy)+'px'; g.innerHTML=html; if(title)g.title=title; return g; }
+  v.cars.forEach((k,ci)=>{ const isMe=k.id===v.you.id; const t=(k.name||k.ini)+(isMe?' (tu)':'')+' \u00b7 '+((k.pos>0)?('cas. '+k.pos+'/'+total):'in partenza');
+    const g=tok(`<div class="tk-tok${isMe?' me':''}" style="background:${k.colorH}">${esc(k.ini)}</div>`,k.pos,ci,v.cars,isMe?' me':'',t); g.style.cursor='pointer'; g.addEventListener('click',()=>openInspect(k.id)); wrap.appendChild(g); });
+  (v.police||[]).forEach((pl,ci)=>{ const t=(pl.name||'Polizia')+' \u00b7 cas. '+(pl.pos||0)+' \u00b7 si muove per ultima';
+    wrap.appendChild(tok('<div class="tk-tok pol">POL</div>',pl.pos,ci,v.police,' pol',t)); });
+  (v.bosses||[]).forEach((b,ci)=>{ const isBoss=b.kind==='boss'; const t=(b.name||'Boss')+' \u00b7 cas. '+(b.pos||0)+(b.reward?(' \u00b7 +\u20ac'+(b.reward).toLocaleString('it-IT')):'');
+    wrap.appendChild(tok(`<div class="tk-tok ${isBoss?'boss':'mini'}">${isBoss?'BOSS':'MINI'}</div>`,b.pos,ci,v.bosses,isBoss?' boss':' mini',t)); });
 }
 function dieFaces(n){const P={1:[[50,50]],2:[[28,28],[72,72]],3:[[26,26],[50,50],[74,74]],4:[[28,28],[72,28],[28,72],[72,72]],5:[[28,28],[72,28],[50,50],[28,72],[72,72]],6:[[28,24],[72,24],[28,50],[72,50],[28,76],[72,76]]};return (P[n]||[]).map(([x,y])=>`<span class="pip" style="left:${x}%;top:${y}%;transform:translate(-50%,-50%)"></span>`).join('');}
 
@@ -1794,6 +1784,23 @@ function sendBet(){
 /* ---------- RACE ---------- */
 function isMobileRace(){return window.matchMedia('(max-width:899px)').matches;}
 function rmTab(which){ui.raceTab=(which==='carte')?'carte':'tiro';const t=document.querySelector('.rm-pane-tiro'),c=document.querySelector('.rm-pane-carte');if(t)t.classList.toggle('on',ui.raceTab==='tiro');if(c)c.classList.toggle('on',ui.raceTab==='carte');const bs=document.querySelectorAll('.rm-seg button');bs.forEach(b=>b.classList.remove('on'));const bi=ui.raceTab==='carte'?1:0;if(bs[bi])bs[bi].classList.add('on');}
+function segIssues(cur,mv,mc){
+  const out=[]; const val={'Velocità':mv,'Controllo':mc}; const ab={'Velocità':'VEL','Controllo':'CTRL'};
+  (cur.bonus||[]).forEach(b=>{ const have=val[b.stat]; if(have==null)return; const need=(b.cmp==='>')?(b.thr+1):b.thr; if(have<need)out.push({k:ab[b.stat],have,need,gap:need-have,amt:b.amt,type:'miss'}); });   // bonus non raggiunto
+  (cur.pen||[]).forEach(p=>{ const have=val[p.stat]; if(have==null)return; const hit=(p.cmp==='>')?(have>p.thr):(have<p.thr); if(hit)out.push({k:ab[p.stat],have,thr:p.thr,cmp:p.cmp,amt:p.amt,type:'pen'}); });   // penalità attiva
+  return out;
+}
+function segIssuesHTML(cur,v){
+  const mv=(v.me&&v.me.vel!=null)?v.me.vel:((v.me&&v.me.stats)?v.me.stats.vel:null);
+  const mc=(v.me&&v.me.ctrl!=null)?v.me.ctrl:((v.me&&v.me.stats)?v.me.stats.ctrl:null);
+  if(mv==null||mc==null)return '';
+  const iss=segIssues(cur,mv,mc);
+  if(!iss.length)return '<div class="rm-sc-diag ok">\u2713 la tua auto va bene qui</div>';
+  return '<div class="rm-sc-diag warn">\u26a0 '+iss.map(x=> x.type==='miss'
+    ? (x.k+' '+x.have+' &lt; '+x.need+' \u00b7 ti mancano <b>'+x.gap+'</b> per il +'+x.amt)
+    : (x.k+' '+x.have+' '+x.cmp+x.thr+' \u00b7 penalit\u00e0 <b>\u2212'+x.amt+'</b>')
+  ).join(' \u00b7 ')+'</div>';
+}
 function rmSegCard(v){
   if(!v.track||!v.track.length)return '';
   const ci=curSegIndex(v);const cur=v.track[ci];const nxt=v.track[ci+1]||null;
@@ -1803,6 +1810,7 @@ function rmSegCard(v){
   h+=`<li>${segNosText(cur.t)}</li>`;
   if(v.me&&!v.me.firstDone)h+='<li class="warn">1\u00b0 tiro: +partenza, no NOS</li>';
   h+='</ul>';
+  h+=segIssuesHTML(cur,v);
   if(nxt){const ntc=['rettilineo','citta','drift'].includes(nxt.t)?nxt.t:'';
     h+=`<div class="rm-sc-next"><span class="badge ${ntc}">${nxt.label}</span> prossimo \u00b7 ${segPenList(nxt).join(' \u00b7 ')} \u00b7 ${segNosText(nxt.t)}</div>`;}
   return h+'</div>';
@@ -2296,19 +2304,20 @@ function closeInspect(){document.getElementById('inspect').classList.remove('sho
 function segNosText(t){ return t==='rettilineo'?'NOS libero':(t==='citta'?'NOS -1 in questo tratto':'NOS vietato (drift)'); }
 function segPenList(s){ if(!s.pen||!s.pen.length) return ['Nessuna penalità']; return s.pen.map(p=>`${p.stat} ${p.cmp} ${p.thr} → -${p.amt} mov`); }
 function curSegIndex(v){ const me=(v.cars||[]).find(c=>c.id===v.you.id); let pos=me?(me.pos||0):0; if(pos<1)pos=1; let i=(v.track||[]).findIndex(s=>pos>=s.from&&pos<=s.to); return i<0?(v.track.length-1):i; }
-function segCardHTML(kicker,s,now){
+function segCardHTML(kicker,s,now,v){
   const col=ACCENT[s.t]||'var(--muted)';const tcls=['rettilineo','citta','drift'].includes(s.t)?s.t:'';
   let h=`<div class="sr-card" style="--cl:${col}"><div class="sr-k">${kicker}</div>`;
   h+=`<div class="sr-t"><span class="badge ${tcls}">${s.label}</span><span class="lvchip" style="background:${LV_COLOR[s.lvl]}">L${s.lvl}</span><span class="sr-cas">cas. ${s.from}–${s.to}</span></div>`;
   segPenList(s).forEach(t=>{h+=`<div class="sr-line">• ${t}</div>`;});
   h+=`<div class="sr-nos" style="color:${col}">${segNosText(s.t)}</div>`;
+  if(v){ const d=segIssuesHTML(s,v); if(d)h+=d.replace('rm-sc-diag','sr-diag'); }
   return h+'</div>';
 }
 function segRulesHTML(v){
   if(!v.track||!v.track.length) return '';
   const ci=curSegIndex(v);const cur=v.track[ci];const nxt=v.track[ci+1]||null;
-  let h='<div class="segrules">'+segCardHTML('Dove sei ora',cur,true);
-  if(nxt)h+=segCardHTML('Prossimo tratto',nxt,false);
+  let h='<div class="segrules">'+segCardHTML('Dove sei ora',cur,true,v);
+  if(nxt)h+=segCardHTML('Prossimo tratto',nxt,false,v);
   return h+'</div>';
 }
 function openSegRules(i){
@@ -2318,6 +2327,7 @@ function openSegRules(i){
   h+=`<div class="sgr-row" style="color:${col};font-weight:600">${segNosText(s.t)}</div>`;
   h+=`<div class="sr-k" style="margin-top:10px">Penalità</div>`;
   segPenList(s).forEach(t=>{h+=`<div class="sgr-row">• ${t}</div>`;});
+  { const d=segIssuesHTML(s,v); if(d)h+=d.replace('rm-sc-diag','sr-diag'); }
   document.getElementById('segm-body').innerHTML=h;
   document.getElementById('segm').classList.add('show');
 }
@@ -2734,7 +2744,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-07-08 · nos-in-gara';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-07-08 · pista-avviso';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 <script>
 /* 2FAST4U — musica di sottofondo condivisa tra tutte le pagine.
