@@ -40,6 +40,14 @@ h1{font-weight:600;letter-spacing:.5px;font-size:22px;margin:22px 0 4px}
 .warn code{background:#00000040;padding:1px 5px;border-radius:4px;font-family:ui-monospace,monospace;font-size:12px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--line);color:var(--ink);padding:11px 18px;border-radius:11px;font-size:13px;opacity:0;transition:.25s;z-index:60}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (max-width:640px){
+  .wrap{padding:0 12px 60px}
+  .row{grid-template-columns:1fr auto;column-gap:10px;row-gap:12px;padding:14px}
+  .row.head{display:none}
+  .email{grid-column:1 / -1;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.35}
+  .coininp{width:100%}
+  .save{width:100%;white-space:nowrap}
+}
 </style></head>
 <body>
 <div class="top">
