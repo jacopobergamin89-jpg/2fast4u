@@ -127,7 +127,7 @@ function playerBySocket(socket){ const code=socketToRoom.get(socket.id); if(!cod
 
 /* ============================ MOTORE ============================ */
 const POSW=[0.85,0.85,1.0,1.10,1.20];                                  // peso di posizione: 1ª = 2ª (lancio), poi a salire fino alla 5ª (la più lunga)
-function roadBase(L){ return 10+5*(Math.min(L,DB.maxLevelRoads)-1); }   // lunghezza media a livello L: 10 a L1, +5 per livello
+function roadBase(L){ return 6+3.5*(Math.min(L,DB.maxLevelRoads)-1); }   // tarato per ~70% pista percorsa col movimento base (le carte coprono il resto)
 function layoutTrack(cards){ let from=1; cards.forEach((c,i)=>{ const w=(POSW[i]!==undefined?POSW[i]:1); c.len=Math.max(3,Math.round(roadBase(c.lvl||1)*w)); c.from=from; c.to=from+c.len-1; from+=c.len; }); }
 function newCardOfLevel(lvl){ const L=Math.min(lvl,DB.maxLevelRoads); const pool=ROADS[L]; return { ...pool[Math.floor(Math.random()*pool.length)], lvl:L }; }
 function buildInitialTrack(G){
@@ -367,7 +367,6 @@ function botMaybeDefend(room, bot){
 function actDiscard(room,p,handIdx){
   const G=room.G;
   if(G.phase!=='prep') return 'Si scartano le carte solo in officina.';
-  if(curPrep(G).id!==p.id) return 'Non è il tuo turno.';
   const c=p.hand[handIdx];
   if(!c) return 'Carta non trovata.';
   if(c.cat==='polizia') return 'Le carte polizia non si scartano: vanno giocate.';
@@ -925,13 +924,8 @@ function advanceTrack(room){
   const G=room.G; const L=G.trackLevel;
   G._lvlRaces=(G._lvlRaces||0)+1;                                // gare giocate a QUESTO livello (questa inclusa)
   const crossed=G.players.map(p=>{ const pos=G.R.cars[p.id].pos; return G.track.filter(c=>c.to<=pos).length; });
-  const passedAll=Math.min(...crossed);                          // la finestra scorre di quante strade hanno superato TUTTI
-  const lead=Math.max(...crossed);                               // il vincitore = chi è più avanti
-  const slow=Math.min(...G.players.map(p=>G.R.cars[p.id].pos)); // posizione (casella) dell'ultimo
-  const r2=G.track[1];                                           // seconda strada della finestra
-  const thr=r2?(r2.from+0.30*r2.len):Infinity;                   // soglia: 30% dentro la 2ª strada
-  const winnerOk=lead>=3 && G.track.slice(0,lead).filter(c=>c.lvl>=L).length>=3;   // vincitore: almeno 3 strade INTERE del livello in corso
-  let advance=winnerOk && (slow>=thr);                           // + l'ultimo ha raggiunto il 30% della 2ª strada
+  const passedAll=Math.min(...crossed);                          // strade superate da TUTTI = dalla macchina piu lenta (la finestra scorre di questo)
+  let advance = passedAll>=3;                                    // NUOVO criterio: si sale quando anche l'ULTIMO ha superato 3 strade
   if(L===1){ if(G._lvlRaces<2) advance=false; else if(G._lvlRaces>=4) advance=true; }   // L1: min 2 gare, forzato dopo 4
   else if(L===2){ if(G._lvlRaces>=6) advance=true; }                                     // L2: forzato dopo 6
   else if(L===3){ if(G._lvlRaces>=9) advance=true; }                                     // L3: forzato dopo 9
@@ -1017,6 +1011,7 @@ function buildView(room, player){
 
   if(G.phase==='prep'){
     const active=curPrep(G); v.activeId=active.id; v.activeName=active.name; v.isYourTurn=active.id===player.id;
+    v.handAll = player.hand.map((c,idx)=>{ const o={ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, dur:c.dur, costPO:(c.costPO||0), gang:c.gang, desc:c.desc||cardDesc(c), needsTarget:cardNeedsTarget(c) }; if(c.cat==='pregara') o.target=pregaraTarget(c); if(c.cat==='esp'){ o.comp=c.comp; o.lvl=c.lvl; o.cost=c.cost; o.espVal=c.espVal; } return o; }).filter(c=>c.cat!=='polizia');   // mano inviata sempre in officina, così anche chi aspetta può scartare
     v.reshop=!!G.reshop; v.reshopComing=(!G.reshop && !!G.reshopQueued);
     v.reshopBy=(G.reshopFirst!=null)?((G.players.find(x=>x.id===G.reshopFirst)||{}).name||null):null;
     v.sprintFinish=(G.sprintFinish||null);

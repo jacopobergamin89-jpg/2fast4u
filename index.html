@@ -1528,6 +1528,8 @@ function prepMobileHTML(v){
       manoInner+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="o2-pre-d">${handCardDesc(c)}</span></div><div class="o2-hand-act">${ofHandPlay(c,true)}<button class="o2-pre-go scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;}); }
     if(v.canBet) manoInner+='<div class="o2-note">Apri \ud83d\udcb0 <b>Scommessa</b> in alto per scommettere e vedere le puntate.</div>';
   }
+  else if(v.handAll&&v.handAll.length){ manoInner+='<div class="o2-handh">La tua mano \u00b7 scarta mentre aspetti il tuo turno</div>'; v.handAll.forEach(c=>{
+    manoInner+=`<div class="o2-pre"><div><b>${esc(c.nome)}</b> ${cardTypeTag(c)}<span class="o2-pre-d">${handCardDesc(c)}</span></div><div class="o2-hand-act"><button class="o2-pre-go scarta" onclick="discard(${c.idx})">Scarta</button></div></div>`;}); }
   if(!manoInner) manoInner='<div class="o2-empty">Nessuna carta da giocare o scartare.</div>';
   let garageChips;
   if(v.isYourTurn&&v.me) garageChips=ofOwnedChips(v.me.owned,'Ancora nessun pezzo');
