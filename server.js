@@ -590,7 +590,7 @@ function actPrepDone(room,p){
 function setupRace(room){                                         // crea le auto: durante il semaforo le carte partenza accumulano pendPart
   const G=room.G;
   G.R={ turnOrder:[...G.order], turn:1, ptr:0, phase:'await', cars:{}, lastBreak:null, log:[], logId:0, finish:(G.sprintFinish||trackTotalCells(G)), turnDice:[], police:[], blocks:(G.blocks||[]).slice() };
-  G.players.forEach(p=>{ G.R.cars[p.id]={ pos:0, firstDone:false, nosUsed:false, fx:[], pendDado:null, pendPart:0, pendReach:null, nosMod:0, dadoForza:null }; p.incoming=[]; });  // azzero incoming: finestra difese pre-gara chiusa
+  G.players.forEach(p=>{ G.R.cars[p.id]={ pos:0, partGone:false, firstDone:false, nosUsed:false, fx:[], pendDado:null, pendPart:0, pendReach:null, nosMod:0, dadoForza:null }; p.incoming=[]; });  // azzero incoming: finestra difese pre-gara chiusa
 }
 function beginRace(room){                                         // VERDE: quota, polizia, boss, parte il 1° turno
   const G=room.G;
@@ -610,6 +610,7 @@ function startLaunch(room){                                       // SEMAFORO: f
   setupRace(room);                                              // auto pronte sulla griglia (pendPart accumula)
   G.phase='launch'; G.launchEndsAt=Date.now()+6000; G.launchLog=[];
   botsPlayPartenza(room);                                       // i bot giocano subito le loro carte partenza
+  botsLaunchGo(room);                                           // e "scattano" con un riflesso casuale
   if(room._launchTimer) clearTimeout(room._launchTimer);
   room._launchTimer=setTimeout(()=>{ room._launchTimer=null; try{ beginRace(room); }catch(e){ console.error('launch->race', e); } broadcast(room); scheduleBot(room); }, 6000);
 }
@@ -637,6 +638,34 @@ function botsPlayPartenza(room){
       else actPlayPartenza(room,bot,i);
     }
   });
+}
+/* --- scatto al verde: il riflesso del giocatore (0-3) si somma al pendPart; falsa partenza = 0 --- */
+function actLaunchGo(room,p,bonus){
+  const G=room.G; if(G.phase!=='launch') return 'Non è il momento della partenza.';
+  const car=G.R&&G.R.cars[p.id]; if(!car) return 'Auto non pronta.';
+  if(car.partGone) return null;                                 // già scattato
+  car.partGone=true;
+  const b=Math.max(0,Math.min(3,Math.round(bonus||0)));         // holeshot 3 · buono 2 · lento 1 · bruciata 0
+  car.pendPart+=b; car.partReflex=b;
+  const lbl=b>=3?'holeshot':b>=2?'buono':b>=1?'lento':'bruciata';
+  (G.launchLog=G.launchLog||[]).push({ who:p.name, target:p.name, targetId:p.id, nome:'Scatto '+lbl, val:b, self:true });
+  glog(G,p.name+' scatta al via: '+lbl+(b?(' (+'+b+')'):''),'card');
+  maybeEndLaunch(room);
+  return null;
+}
+function botsLaunchGo(room){
+  const G=room.G;
+  G.players.filter(p=>p.isBot).forEach(bot=>{ const car=G.R.cars[bot.id]; if(car && !car.partGone){ car.partGone=true;
+    const r=Math.random(); const b=r<0.35?3:r<0.75?2:1; car.pendPart+=b; car.partReflex=b; } });   // i bot non bruciano
+}
+function maybeEndLaunch(room){                                    // se tutti gli umani hanno scattato, parte subito (niente attesa inutile)
+  const G=room.G; if(G.phase!=='launch') return;
+  const humans=G.players.filter(p=>!p.isBot && p.connected);
+  if(humans.length && humans.every(p=>{ const c=G.R.cars[p.id]; return c && c.partGone; })){
+    if(room._launchTimer){ clearTimeout(room._launchTimer); room._launchTimer=null; }
+    try{ beginRace(room); }catch(e){ console.error('launch->race', e); }
+    broadcast(room); scheduleBot(room);
+  }
 }
 function activeRace(G){ return G.players.find(p=>p.id===G.R.turnOrder[G.R.ptr]); }
 function dieBonus(d){ return d<=2?1:d<=5?2:3; }
@@ -704,25 +733,31 @@ function raceHandNote(c, gangOK){
   if(c.cat==='pregara'||c.cat==='esp') return 'in officina';
   if(c.cat==='difesa') return 'quando ti colpiscono';
   if(c.cat==='ingara' && c.eff==='partenza') return 'solo al via';
+  if(c.cat==='ingara' && c.eff==='dadoforza') return 'colpo di gas: nel tuo turno';
   if(c.cat==='ingara' && c.gangLock && !gangOK) return 'solo pilota '+c.gang;
   if(c.cat==='polizia') return 'gira in officina';
   return 'non ora';
 }
 function actRacePlayCard(room,p,handIdx,targetId){
   const G=room.G; if(G.phase!=='race') return 'Non in gara.';
-  if(activeRace(G).id!==p.id) return 'Non è il tuo turno.';
-  if(G.R.phase!=='await') return 'Hai già tirato.';
   const c=p.hand[handIdx]; if(!c||c.cat!=='ingara') return 'Carta non valida.';
   if(c.eff==='defend') return 'Le difese si usano solo quando vieni colpito.';
+  if(c.eff==='partenza') return 'La partenza si gioca solo al via.';
   if(c.gangLock && (!p.pilot || p.pilot.gang!==c.gang)) return 'Carta della gang '+c.gang+': la gioca solo un suo pilota.';   // carte a doppio valore = solo pilota della gang
-  /* --- dado-forza: se il prossimo dado esce nel set, bonus stat per il tiro (solo su di sé) --- */
+  const isActive = activeRace(G).id===p.id;
+  /* --- colpo di gas (dado-forza): prepara il TUO prossimo tiro (solo su di sé) → solo nel tuo turno, prima di tirare --- */
   if(c.eff==='dadoforza'){
+    if(!isActive) return 'Il colpo di gas si prepara solo nel tuo turno.';
+    if(G.R.phase!=='await') return 'Hai già tirato.';
     const tc=G.R.cars[p.id]; if(!tc) return 'Auto non pronta.';
     tc.dadoForza={ set:c.set.slice(), stat:c.stat, val:c.val };
     raceLog(G,{kind:'card',who:p.name,target:p.name,targetId:p.id,nome:c.nome,eff:c.eff});
     glog(G,p.name+' gioca «'+c.nome+'» (gara)','card');
     p.discard.push(c); p.hand.splice(handIdx,1); return null;
   }
+  /* --- ogni altra carta: se sei di turno la giochi solo prima di tirare; se NON sei di turno la giochi in qualsiasi
+         momento (aiuti un alleato o ostacoli un rivale al volo; i malus verso i giocatori restano difendibili) --- */
+  if(isActive && G.R.phase!=='await') return 'Hai già tirato.';
   /* --- carta multi-effetto (gang / NOS): ogni componente si applica al suo bersaglio;
          i malus verso i giocatori restano difendibili uno a uno --- */
   if(c.eff==='multi'){
@@ -962,11 +997,13 @@ function publicPlayers(G,duringRace){
 }
 function trackView(G){
   return G.track.map(c=>{
-    const pen=[];
+    const pen=[], bonus=[];
+    if(c.bv) bonus.push({stat:'Velocità', cmp:'>', thr:c.bv.gt, amt:c.bv.a});
     if(c.pv) pen.push({stat:'Velocità', cmp:'>', thr:c.pv.gt, amt:c.pv.a});
     if(c.pc) pen.push({stat:'Controllo', cmp:'<', thr:c.pc.lt, amt:c.pc.a});
     if(c.pcg) pen.push({stat:'Controllo', cmp:'>', thr:c.pcg.gt, amt:c.pcg.a});
-    return { t:c.t, label:TIPO_LABEL[c.t], nm:c.nm, lvl:c.lvl, from:c.from, to:c.to, pen };
+    const nos = c.t==='drift' ? 'no' : (c.t==='citta' ? 'ridotto' : 'pieno');
+    return { t:c.t, label:TIPO_LABEL[c.t], nm:c.nm, lvl:c.lvl, from:c.from, to:c.to, len:(c.to-c.from+1), pen, bonus, nos };
   });
 }
 function statsOf(p){
@@ -1020,6 +1057,7 @@ function buildView(room, player){
     v.policeWaiting=G.players.filter(x=>(x.hand||[]).some(c=>c.cat==='polizia')).map(x=>x.name);
     v.pendBlocks=(G.blocks||[]).map(b=>({from:b.from,to:b.to,size:b.size,byName:b.byName}));
     v.trackTotal=trackTotalCells(G);
+    v.track=trackView(G);   // pista della prossima gara: sempre visibile in officina, anche fuori dal proprio turno
     v.order=[...G.order];
     v.lastRace=(G.round>1 && G.prevResults) ? G.prevResults.map(r=>({ id:r.id, name:r.name, colorH:r.colorH, pos:r.pos, busted:!!r.busted })) : null;
     v.market=(G.market||[]).map(c=>{
@@ -1034,7 +1072,6 @@ function buildView(room, player){
       const p=player;
       v.policeHand=p.hand.map((c,idx)=>({c,idx})).filter(o=>o.c.cat==='polizia').map(o=>({idx:o.idx,nome:o.c.nome,kind:o.c.kind,size:o.c.size}));
       v.mustPlayPolice=p.hand.some(c=>c.cat==='polizia');
-      v.track=trackView(G);
       v.me={ money:p.money, po:p.po, buysLeft:p.buysLeft, stats:statsOf(p), owned:ownedView(p), handCount:p.hand.length, prizeMult:(p.prizeMult||1), betMult:(p.betMult||1), quotaMod:(p.quotaMod||0), discount:(p.discountNext||0), nosBombs:p.nosBombs, nosOwned:nosOwned(p) };
       v.pregara = p.hand.map((c,idx)=>({ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, target:pregaraTarget(c), costPO:(c.costPO||0) })).filter(c=>c.cat==='pregara' && c.eff!=='defend' && !(G.reshop && (c.eff==='reopen'||c.eff==='reopenAll'||c.eff==='reopenDebt')));
       v.handAll = p.hand.map((c,idx)=>{ const o={ idx, cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, dur:c.dur, costPO:(c.costPO||0), gang:c.gang, desc:c.desc||cardDesc(c), needsTarget:cardNeedsTarget(c) }; if(c.cat==='pregara') o.target=pregaraTarget(c); if(c.cat==='esp'){ o.comp=c.comp; o.lvl=c.lvl; o.cost=c.cost; o.espVal=c.espVal; } return o; }).filter(c=>c.cat!=='polizia');
@@ -1055,6 +1092,8 @@ function buildView(room, player){
     v.rivals=G.players.filter(x=>x.id!==player.id).map(x=>({ id:x.id, name:x.name, colorH:DB.colori[x.colorIdx].h }));
     v.partenza=player.hand.map((c,idx)=>({c,idx})).filter(o=>o.c.cat==='ingara'&&o.c.eff==='partenza').map(o=>({ idx:o.idx, nome:o.c.nome, val:o.c.val, target:o.c.target }));
     v.myPart=(G.R&&G.R.cars[player.id])?G.R.cars[player.id].pendPart:0;
+    v.myGone=(G.R&&G.R.cars[player.id])?!!G.R.cars[player.id].partGone:false;
+    v.myReflex=(G.R&&G.R.cars[player.id])?(G.R.cars[player.id].partReflex||0):0;
     return v;
   }
 
@@ -1068,6 +1107,20 @@ function buildView(room, player){
     v.sprintFinish=(R.finish||null);
     v.incoming=incomingFor(player);
     v.log=R.log.slice(-25).map(e=>({...e}));
+    // Mano di gara e bersagli disponibili SEMPRE (anche fuori dal proprio turno): servono per consultare le carte,
+    // difendersi appena colpiti e — fuori turno — giocare le carte con bersaglio (aiuta un alleato / ostacola un
+    // rivale al volo). Il colpo di gas resta giocabile solo nel proprio turno perché prepara il proprio tiro.
+    { const inAwait=R.phase==='await';
+      v.raceHand=player.hand.map((c,idx)=>{
+        const gOK=!c.gangLock||(!!player.pilot&&player.pilot.gang===c.gang);
+        let playable;
+        if(c.cat!=='ingara'||c.eff==='defend'||c.eff==='partenza'||!gOK) playable=false;
+        else if(c.eff==='dadoforza') playable=v.isYourTurn&&inAwait;
+        else playable=v.isYourTurn?inAwait:true;
+        return {idx,cat:c.cat,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur,target:c.target,gang:c.gang,desc:c.desc||cardDesc(c),needsTarget:cardNeedsTarget(c),gangLock:!!c.gangLock,gangOK:gOK,playable,note:playable?'':raceHandNote(c,gOK)};
+      });
+      v.raceRivals=[...G.players.filter(x=>x.id!==player.id).map(x=>({id:x.id,name:x.name,colorH:DB.colori[x.colorIdx].h})), ...(R.bosses||[]).map(b=>({id:b.id,name:b.name,colorH:b.kind==='boss'?'#ff3b3b':'#ffa733',isFoe:true,kind:b.kind}))];
+    }
     if(v.isYourTurn){
       const p=player; const car=R.cars[p.id]; const seg=segOf(G,Math.max(1,car.pos));
       const fxVel=fxSum(R,p,'vel'),fxCtrl=fxSum(R,p,'ctrl');
@@ -1078,8 +1131,8 @@ function buildView(room, player){
         segType:seg.t, segLabel:TIPO_LABEL[seg.t], firstDone:car.firstDone,
         nosOk:nosAllowed(G,p), nosVal:statVal(p,'nos'), nosBombs:p.nosBombs,
         fx:car.fx.map(e=>({stat:e.stat,amt:e.amt,turns:e.turns})), pendPart:car.pendPart, pendDado:car.pendDado,
-        hand:p.hand.map((c,idx)=>{ const gOK=!c.gangLock||(!!p.pilot&&p.pilot.gang===c.gang); const playable=c.cat==='ingara'&&c.eff!=='defend'&&c.eff!=='partenza'&&gOK; return {idx,cat:c.cat,nome:c.nome,eff:c.eff,val:c.val,dur:c.dur,target:c.target,gang:c.gang,desc:c.desc||cardDesc(c),needsTarget:cardNeedsTarget(c),gangLock:!!c.gangLock,gangOK:gOK,playable,note:playable?'':raceHandNote(c,gOK)}; }),
-        rivals:[...G.players.filter(x=>x.id!==p.id).map(x=>({id:x.id,name:x.name,colorH:DB.colori[x.colorIdx].h})), ...(R.bosses||[]).map(b=>({id:b.id,name:b.name,colorH:b.kind==='boss'?'#ff3b3b':'#ffa733',isFoe:true,kind:b.kind}))]
+        hand:v.raceHand,
+        rivals:v.raceRivals
       };
       v.rolled = R.phase==='rolled' ? (function(){ const b=R.lastBreak; return { lines:b.lines, total:b.total, die:b.die, db:b.db, useNos:b.useNos, np:Math.min(R.finish||55,car.pos+b.total), finish:(R.finish||0) }; })() : null;
     }
@@ -1275,6 +1328,7 @@ function mount(ioInstance){
   socket.on('prep:bet', handle((room,p,d)=>actSetBet(room,p,d.targetId,d.amount)));
   socket.on('prep:done', handle((room,p)=>actPrepDone(room,p)));
   socket.on('launch:play', handle((room,p,d)=>actPlayPartenza(room,p,d.handIdx,d.targetId)));
+  socket.on('launch:go', handle((room,p,d)=>actLaunchGo(room,p,d.bonus)));
   socket.on('race:playCard', handle((room,p,d)=>actRacePlayCard(room,p,d.handIdx,d.targetId)));
   socket.on('race:roll', handle((room,p,d)=>actRoll(room,p,d.useNos,d.reaction,d.bombIdx)));
   socket.on('bomb:set', handle((room,p,d)=>{ bombSet(p, d.a, d.b); return null; }));
@@ -1308,7 +1362,7 @@ function mount(ioInstance){
   });
 }
 
-module.exports = { mount, DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actPlayEsp, actPlayPolice, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending, actDefend, incomingFor, stockAvail, compSlots, endRace, startLaunch, beginRace, setupRace, actPlayPartenza };
+module.exports = { mount, DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actPlayEsp, actPlayPolice, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending, actDefend, incomingFor, stockAvail, compSlots, endRace, startLaunch, beginRace, setupRace, actPlayPartenza, actLaunchGo };
 
 if(require.main===module){
   // Avvio STANDALONE (node server.js): crea un server proprio e monta il classico

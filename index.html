@@ -502,6 +502,8 @@ h1.title em{font-style:italic;color:var(--cyan)}
   body.race-mode #s-race .track{flex:none;margin:0;border-top:none}
   body.race-mode #s-race .track svg{height:130px;width:auto}
   .rm-main{flex:1;min-height:0;overflow-y:auto;padding:12px 14px}
+  .rm-offh{font-family:var(--disp);text-transform:uppercase;letter-spacing:.5px;font-size:12px;font-weight:600;color:var(--muted);margin:14px 2px 10px;display:flex;align-items:center;gap:7px}
+  .rm-offh::before{content:"";flex:0 0 3px;height:13px;background:var(--amber,#FFC91E);border-radius:2px}
   .rm-segcard{background:var(--asphalt-1);border:1px solid var(--line);border-radius:14px;padding:13px 14px 0;overflow:hidden}
   .rm-sc-h{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
   .rm-sc-cas{font-family:var(--mono);font-size:12px;color:var(--muted)}
@@ -934,6 +936,32 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 .lc-lamp.amber.on{background:radial-gradient(circle at 38% 32%,#ffe07a,var(--amber) 60%,#b88a00);box-shadow:0 0 18px 4px rgba(255,201,30,.7),inset 0 0 0 2px #ffe9a8}
 .lc-lamp.green.on{background:radial-gradient(circle at 38% 32%,#9af0b0,var(--good) 60%,#1f7a3a);box-shadow:0 0 22px 6px rgba(69,193,102,.75),inset 0 0 0 2px #c7f6d4}
 .lc-count{text-align:center;min-width:130px}
+.lc-scatta{flex:0 0 auto;margin:8px 14px 2px;padding:16px;border-radius:13px;border:1px solid var(--line);background:linear-gradient(180deg,#2a1850,#1c0f38);color:var(--ink);font-family:var(--disp);font-weight:700;font-size:17px;text-transform:uppercase;letter-spacing:.8px;cursor:pointer}
+.lc-scatta.on{background:linear-gradient(180deg,#25e39a,#12b07a);border-color:transparent;box-shadow:0 4px 18px -4px #25e39a;animation:lcpulse .5s infinite}
+.lc-scatta.done{background:#1a1030;color:var(--muted)}
+@keyframes lcpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.lc-n.burn{color:#ff466e}
+.dr-ov{position:fixed;inset:0;z-index:80;background:rgba(6,3,14,.92);display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+.dr-ov.on{display:flex}
+.dr-card{width:min(96%,440px);display:flex;flex-direction:column}
+.dr-h{font-family:var(--disp);font-weight:700;text-transform:uppercase;letter-spacing:.6px;font-size:14px;color:var(--muted);text-align:center;margin-bottom:8px}
+.dr-stage{height:54vh;max-height:440px;position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#160b2e,#0d0620);border:1px solid var(--line);touch-action:none}
+.dr-stage svg{position:absolute;inset:0;width:100%;height:100%}
+.dr-dots{position:absolute;left:10px;top:10px;display:flex;gap:6px;z-index:5}
+.dr-cd{width:12px;height:12px;border-radius:50%;background:#241a3c;border:2px solid rgba(244,238,255,.2)}
+.dr-cd.hit{background:#25e39a;border-color:#25e39a;box-shadow:0 0 9px #25e39a}
+.dr-cd.miss{background:#ff466e;border-color:#ff466e}
+.dr-tag{position:absolute;left:0;right:0;top:14px;text-align:center;font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:1px;opacity:0;transition:opacity .12s;pointer-events:none}
+.dr-tag.on{opacity:1}
+.dr-flash{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-family:var(--disp);font-weight:700;font-size:26px;opacity:0;pointer-events:none;letter-spacing:1px}
+.dr-flash.show{animation:drfl .55s ease-out}
+@keyframes drfl{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.25)}}
+.dr-btn{margin-top:10px;padding:16px;border-radius:13px;border:1px solid transparent;background:linear-gradient(180deg,#9B3BE0,#6f22b0);color:#fff;font-family:var(--disp);font-weight:700;font-size:17px;text-transform:uppercase;letter-spacing:.8px;cursor:pointer}
+.dr-btn:active{transform:translateY(1px)}.dr-btn:disabled{opacity:.5}
+.dr-cta{text-align:center;padding:14px 12px}
+.dr-cta-t{font-family:var(--disp);font-weight:600;font-size:14px;color:#b46bef}
+.dr-cta-btn{margin:10px 0 4px;padding:14px 22px;border-radius:12px;border:1px solid transparent;background:linear-gradient(180deg,#9B3BE0,#6f22b0);color:#fff;font-family:var(--disp);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.6px;cursor:pointer}
+.dr-cta-s{font-family:var(--mono);font-size:10px;color:var(--muted)}
 .lc-n{font-family:var(--disp);font-weight:700;font-size:100px;line-height:.8;color:#fff7df;text-shadow:0 0 22px rgba(255,201,30,.7),0 0 48px rgba(255,201,30,.35)}
 .lc-n.go{color:#bdf3c8;text-shadow:0 0 24px rgba(69,193,102,.85),0 0 52px rgba(69,193,102,.4);font-size:58px}
 .lc-lab{font-family:var(--disp);text-transform:uppercase;letter-spacing:.18em;font-size:12px;color:var(--muted);margin-top:8px}
@@ -968,6 +996,45 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 .po-opt.sel .po-sub{color:var(--po)}
 .po-opt:disabled{cursor:default}
 .po-note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.45}.po-note b{color:var(--po)}
+
+/* === anteprima pista in officina (striscia + drawer + limiti tratto) === */
+:root{ --rd-rett:#2BA8E6; --rd-drift:#9B3BE0; --rd-citta:#FFC91E; }
+.trk-strip{margin:0 0 8px;padding:8px 10px;background:var(--asphalt-1);border:1px solid var(--line);border-radius:12px}
+.trk-h{display:flex;align-items:center;gap:6px;font-family:var(--disp);text-transform:uppercase;letter-spacing:.5px;font-size:10.5px;font-weight:600;color:var(--muted-2);margin-bottom:7px}
+.trk-h .lv{margin-left:auto;color:var(--amber);font-weight:700}
+.trk-row{display:flex;gap:3px}
+.trk-seg{flex:var(--w,1);min-width:0;border-radius:8px;padding:6px 7px;position:relative;overflow:hidden;cursor:pointer;border:1px solid transparent;text-align:left;background:color-mix(in srgb,var(--sc) 15%,var(--asphalt-0))}
+.trk-seg::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--sc);box-shadow:0 0 8px var(--sc)}
+.trk-seg.rett{--sc:var(--rd-rett)} .trk-seg.drift{--sc:var(--rd-drift)} .trk-seg.citta{--sc:var(--rd-citta)}
+.trk-seg:active{transform:translateY(1px)}
+.trk-seg .sn{display:block;font-family:var(--disp);font-weight:600;font-size:11px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trk-seg .sl{display:block;font-size:8.5px;color:var(--muted-2);margin-top:1px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trk-mix{height:14px;border-radius:6px;overflow:hidden;display:flex;margin:9px 0 6px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.3)}
+.trk-mix i{height:100%}
+.trk-mixleg{display:flex;gap:11px;flex-wrap:wrap;font-size:10px;color:var(--muted-2);font-family:var(--disp)}
+.trk-mixleg span{display:flex;align-items:center;gap:4px} .trk-mixleg b{color:var(--ink)}
+.trk-mixleg em{width:8px;height:8px;border-radius:2px;font-style:normal}
+.trk-tip{display:flex;gap:7px;background:color-mix(in srgb,var(--amber) 8%,transparent);border:1px solid color-mix(in srgb,var(--amber) 25%,transparent);border-radius:10px;padding:8px 10px;margin-top:8px;font-size:11.5px;line-height:1.35;color:var(--ink)}
+.trk-tip b{color:var(--amber)}
+.rlm-bd{position:fixed;inset:0;background:rgba(5,3,12,.72);z-index:60;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .18s}
+.rlm-bd.show{opacity:1;pointer-events:auto}
+.rlm{width:min(96%,440px);background:linear-gradient(180deg,var(--asphalt-1),var(--asphalt-0));border:1px solid var(--line);border-radius:16px 16px 0 0;padding:16px 16px 24px;transform:translateY(16px);transition:transform .2s;max-height:82vh;overflow-y:auto}
+.rlm-bd.show .rlm{transform:none}
+.rlm-top{display:flex;align-items:flex-start;gap:9px;margin-bottom:4px}
+.rlm-badge{flex:0 0 auto;width:11px;height:38px;border-radius:5px;background:var(--sc);box-shadow:0 0 10px var(--sc)}
+.rlm-t{font-family:var(--disp);font-weight:700;font-size:18px;line-height:1.05}
+.rlm-ty{font-size:11px;color:var(--sc);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.rlm-x{margin-left:auto;background:var(--asphalt-2);border:1px solid var(--line);color:var(--ink);border-radius:8px;width:30px;height:30px;font-size:15px;cursor:pointer}
+.rlm-sub{font-size:12px;color:var(--muted-2);margin:6px 0 12px;line-height:1.4}
+.rlm-lim{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:10px;background:var(--asphalt-0);border:1px solid var(--line);margin-bottom:7px;font-size:13px}
+.rlm-lim .ic{font-size:15px}
+.rlm-lim.good{border-color:color-mix(in srgb,var(--good,#38d39f) 45%,transparent)}
+.rlm-lim.bad{border-color:color-mix(in srgb,var(--danger,#ff5d73) 45%,transparent)}
+.rlm-lim b{font-family:var(--disp)}
+.rlm-amt{margin-left:auto;font-family:var(--disp);font-weight:700;font-size:15px}
+.rlm-lim.good .rlm-amt{color:var(--good,#38d39f)} .rlm-lim.bad .rlm-amt{color:var(--danger,#ff5d73)}
+.rlm-meta{display:flex;gap:16px;margin-top:11px;font-size:11px;color:var(--muted-2);font-family:var(--disp)}
+.rlm-meta b{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -1546,7 +1613,7 @@ function prepMobileHTML(v){
 
   // schede
   const tab=ui.ofTab||'mercato';
-  return `<div class="o2-app has-photo" style="--of-photo:url('${officinaBg(v.round)}')"><div class="o2-hz"></div>${cassa}${barsHTML}
+  return `<div class="o2-app has-photo" style="--of-photo:url('${officinaBg(v.round)}')"><div class="o2-hz"></div>${cassa}${barsHTML}${trackStripHTML(v)}
     <div class="o2-tabs">
       <button data-t="mercato" class="${tab==='mercato'?'on':''}" onclick="ofTab('mercato')">Mercato</button>
       <button data-t="rivali" class="${tab==='rivali'?'on':''}" onclick="ofTab('rivali')">Avversari</button>
@@ -1563,6 +1630,49 @@ function ofTab(w){ ui.ofTab=w;
   document.querySelectorAll('.o2-tabs button').forEach(b=>b.classList.toggle('on', b.dataset.t===w));
   document.querySelectorAll('.o2-pane').forEach(p=>p.classList.toggle('on', p.dataset.t===w));
 }
+/* ---- anteprima pista in officina (sempre attiva, anche fuori dal proprio turno) ---- */
+const ROAD_COL={rettilineo:'var(--rd-rett)',citta:'var(--rd-citta)',drift:'var(--rd-drift)'};
+const ROAD_CL={rettilineo:'rett',citta:'citta',drift:'drift'};
+function _trkSegs(v){ return v.track.map((s,i)=>`<button class="trk-seg ${ROAD_CL[s.t]}" style="--w:${s.len||1}" onclick="showRoadLimits(${i})"><span class="sn">${esc(s.nm)}</span><span class="sl">${esc(s.label)} \u00b7 ${s.len} cas.</span></button>`).join(''); }
+function trackStripHTML(v){
+  if(!Array.isArray(v.track)||!v.track.length) return '';
+  const lvl=v.track[v.track.length-1].lvl||1;
+  return `<div class="trk-strip"><div class="trk-h">\ud83c\udfc1 Prossima gara \u00b7 tocca un tratto per i limiti <span class="lv">L${lvl}</span></div><div class="trk-row">${_trkSegs(v)}</div></div>`;
+}
+function trackPreviewHTML(v){
+  if(!Array.isArray(v.track)||!v.track.length) return '';
+  const tot=v.track.reduce((s,x)=>s+(x.len||0),0);
+  const by={rettilineo:0,citta:0,drift:0}; v.track.forEach(s=>by[s.t]+=(s.len||0));
+  const mix=['rettilineo','drift','citta'].map(t=>`<i style="width:${tot?by[t]/tot*100:0}%;background:${ROAD_COL[t]}"></i>`).join('');
+  const leg=[['rettilineo','Velocità'],['drift','Controllo'],['citta','Misto']].map(([t,lab])=>`<span><em style="background:${ROAD_COL[t]}"></em>${lab} <b>${by[t]}</b></span>`).join('');
+  const noNos=by.drift, redNos=by.citta;
+  const tip=`Rettilineo <b>${by.rettilineo}</b> cas.: conta la <b>velocità</b>.`+((noNos||redNos)?` Il NOS rende poco \u2014 vietato sui <b>${noNos}</b> di drift, ridotto sui <b>${redNos}</b> di città.`:'');
+  return `<div class="dw-sec">La pista che ti aspetta</div><div class="trk-strip" style="margin:0 0 12px"><div class="trk-row">${_trkSegs(v)}</div><div class="trk-mix">${mix}</div><div class="trk-mixleg">${leg}</div><div class="trk-tip">\ud83d\udca1 <span>${tip} <span style="color:var(--muted-2)">Totale ${tot} caselle.</span></span></div></div>`;
+}
+function roadLimitsHTML(s){
+  const col=ROAD_COL[s.t]; const lim=[];
+  (s.bonus||[]).forEach(b=>lim.push(`<div class="rlm-lim good"><span class="ic">\u2b06\ufe0f</span><span><b>${b.stat}</b> sopra ${b.thr}</span><span class="rlm-amt">+${b.amt}</span></div>`));
+  (s.pen||[]).forEach(p=>{const dir=p.cmp==='>'?'sopra':'sotto';lim.push(`<div class="rlm-lim bad"><span class="ic">\u2b07\ufe0f</span><span><b>${p.stat}</b> ${dir} ${p.thr}</span><span class="rlm-amt">\u2212${p.amt}</span></div>`);});
+  const nosTxt=s.nos==='no'?'NOS vietato su questo tratto':(s.nos==='ridotto'?'NOS ridotto di 1 (città)':'NOS pieno');
+  const nosIc=s.nos==='no'?'\ud83d\udeab':(s.nos==='ridotto'?'\ud83d\udd3b':'\ud83d\udca8');
+  lim.push(`<div class="rlm-lim"><span class="ic">${nosIc}</span><span>${nosTxt}</span></div>`);
+  const noRules=!(s.bonus||[]).length && !(s.pen||[]).length;
+  const premia=s.t==='rettilineo'?'Premia la velocità (motore + cambio).':(s.t==='drift'?'Premia il controllo (sterzo + assetto). Niente NOS.':'Tratto misto: attento al controllo, NOS dimezzato.');
+  return `<div class="rlm" style="--sc:${col}">
+    <div class="rlm-top"><span class="rlm-badge"></span><div><div class="rlm-t">${esc(s.nm)}</div><div class="rlm-ty">${esc(s.label)}</div></div><button class="rlm-x" onclick="closeRoadModal()">\u2715</button></div>
+    <div class="rlm-sub">${premia}${noRules?' Su questo tratto non ci sono soglie di bonus o penalità: conta il movimento base.':''}</div>
+    ${lim.join('')}
+    <div class="rlm-meta"><span>Lunghezza <b>${s.len} caselle</b></span><span>Livello <b>${s.lvl}</b></span></div>
+  </div>`;
+}
+function showRoadLimits(i){
+  const v=LAST; if(!v||!Array.isArray(v.track)||!v.track[i]) return;
+  let bd=document.getElementById('roadmodal');
+  if(!bd){ bd=document.createElement('div'); bd.id='roadmodal'; bd.className='rlm-bd'; bd.onclick=e=>{if(e.target===bd)closeRoadModal();}; document.body.appendChild(bd); }
+  bd.innerHTML=roadLimitsHTML(v.track[i]);
+  requestAnimationFrame(()=>bd.classList.add('show'));
+}
+function closeRoadModal(){ const bd=document.getElementById('roadmodal'); if(bd)bd.classList.remove('show'); }
 const OFFICINA_BGS=['img/officina-1.jpg','img/officina-2.jpg','img/bg-officina.jpg'];   // le 3 foto officina a rotazione
 function officinaBg(round){ if(ui.ofBgRound!==round){ ui.ofBgRound=round; let pool=(OFFICINA_BGS.length>1&&ui.ofBg)?OFFICINA_BGS.filter(x=>x!==ui.ofBg):OFFICINA_BGS; ui.ofBg=pool[Math.floor(Math.random()*pool.length)]; } return ui.ofBg||OFFICINA_BGS[0]; }   // mai due volte di fila la stessa foto
 function renderPrep(v){
@@ -1696,7 +1806,7 @@ function renderRaceMobile(v){
   const meCar=(v.cars||[]).find(c=>c.id===v.you.id);
   const pos=meCar?(meCar.pos||0):0;
   const yt=v.isYourTurn,mm=yt?v.me:null,rolled=v.rolled;
-  const cards=(mm&&mm.hand)?mm.hand:[];
+  const cards=(v.raceHand)||(mm&&mm.hand)||[];
   const tabs=yt&&!rolled&&cards.length>0;
   const tab=ui.raceTab==='carte'?'carte':'tiro';
   let h='<div class="rm">';
@@ -1719,7 +1829,7 @@ function renderRaceMobile(v){
   // interruttore Tiro / Carte (solo nel tuo turno, prima del tiro, con carte)
   if(tabs){
     h+=`<div class="rm-seg"><button class="${tab==='tiro'?'on':''}" onclick="rmTab('tiro')">Tiro</button><button class="${tab==='carte'?'on':''}" onclick="rmTab('carte')">Carte <span class="rm-seg-n">${cards.length}</span></button></div>`;
-    h+=`<div class="rm-pane rm-pane-tiro${tab==='tiro'?' on':''}">`+rmSegCard(v)+((yt&&!rolled)?rxInlineHTML(v):'')+'</div>';
+    h+=`<div class="rm-pane rm-pane-tiro${tab==='tiro'?' on':''}">`+rmSegCard(v)+((yt&&!rolled)?tiroInlineHTML(v):'')+'</div>';
     h+=`<div class="rm-pane rm-pane-carte${tab==='carte'?' on':''}">`+rmCardsHTML(cards,v)+'</div>';
   }else{
     h+='<div class="rm-main">';
@@ -1729,8 +1839,11 @@ function renderRaceMobile(v){
       h+=`<div class="dice-area"><div class="dice-info"><div class="di-big">🎯 Spinta +${b.db}</div>${b.useNos?'<span style="color:var(--cyan)">NOS \u26a1</span>':''}</div></div>`;
       h+=`<div class="breakdown">${ls}<div class="bd-total"><span>Movimento</span><b>${b.total}</b></div></div>`;
     }else{
-      h+=rmSegCard(v); if(yt&&!rolled)h+=rxInlineHTML(v);
-      if(!yt)h+=`<div class="rm-spec">${esc(v.activeName)} sta correndo\u2026 attendi il tuo turno.</div>`;
+      h+=rmSegCard(v); if(yt&&!rolled)h+=tiroInlineHTML(v);
+      if(!yt){
+        h+=`<div class="rm-spec">${esc(v.activeName)} sta correndo\u2026 tocca a te tra poco.</div>`;
+        if(cards.length)h+=`<div class="rm-offh">Le tue carte \u00b7 difenditi o colpisci al volo</div>`+rmCardsHTML(cards,v);
+      }
     }
     h+='</div>';
   }
@@ -1787,7 +1900,7 @@ function renderRace(v){
   if(v.isYourTurn){ h+=dashHTML(v); }
   else{ h+=`<div class="dash" style="--dc:${actColor(v)}"><div class="spectate" style="padding:24px 8px"><div class="sdot" style="background:${actColor(v)}"></div><div class="stitle">${esc(v.activeName)}</div><div class="stext">sta correndo… attendi il tuo turno</div></div></div>`; }
   h+='</div>';
-  h+='<div class="race-col-rules">'+segRulesHTML(v)+((v.isYourTurn&&!v.rolled)?rxInlineHTML(v):'')+'</div>';
+  h+='<div class="race-col-rules">'+segRulesHTML(v)+((v.isYourTurn&&!v.rolled)?tiroInlineHTML(v):'')+'</div>';
   h+='</div>';
   host.innerHTML=h;
   startTokens(v);
@@ -1907,6 +2020,83 @@ function rxLoop(){ if(RX.phase!=='run') return; var left=Math.max(0,RX.REACT-(pe
 function rxHit(){ var nd=rxEl('rxNd'),race=rxEl('rxRace'); if(!nd||!race)return; var carW=nd.offsetWidth/race.offsetWidth*100,cL=RX.pos,cR=RX.pos+carW,gL=RX.gc-RX.GW/2,gR=RX.gc+RX.GW/2; var ov=Math.max(0,Math.min(cR,gR)-Math.max(cL,gL)),pctIn=carW>0?ov/carW:0; var Cc=RX.pos+carW/2,dd=Math.abs(Cc-RX.gc); if(pctIn>=0.94) rxResult('perfetto','PERFETTO','#8affa0',[0,55,35,55]); else if(pctIn>0||dd<=RX.GW/2+7) rxResult('quasi','QUASI','#ffd86a',[40]); else rxResult('mancato','MANCATO','#c9b8ee',[15]); }
 function rxResult(outcome,name,col,vp){ cancelAnimationFrame(RX.raf); RX.phase='done'; rxTl('red'); var fl=rxEl('rxFl'); if(fl){fl.textContent=name;fl.style.color=col;fl.classList.remove('show');void fl.offsetWidth;fl.classList.add('show');} rxBuzz(vp); var cdt=rxEl('rxCdt'); if(cdt)cdt.textContent='spinta +'+(outcome==='perfetto'?3:outcome==='quasi'?2:1); setTimeout(function(){ RX.active=false; socket.emit('race:roll',{useNos:ui.nosArmed,reaction:outcome,bombIdx:ui.nosBomb}); setTimeout(function(){ socket.emit('race:move'); }, 1100); }, 700); }
 function doRoll(){ /* compat: la reazione e' inline, parte dal semaforo */ }
+/* ===== DRIFT in gara (sui tratti drift): overlay, esito perfetto/quasi/mancato → reaction ===== */
+var DR={lvl:1,curves:2,horiz:false,L:0,gates:[],pos:0,prevPos:0,running:false,raf:null,trailL:[],trailR:[],drifting:false,perGate:0,GHALF:0,lastCurves:0};
+var DRNS='http://www.w3.org/2000/svg';
+var DR_CAR='<ellipse cx="0" cy="2" rx="10" ry="16" fill="#000" opacity=".22"/><rect x="-10.5" y="-12" width="4" height="7" rx="1.6" fill="#0a0512"/><rect x="6.5" y="-12" width="4" height="7" rx="1.6" fill="#0a0512"/><rect x="-10.5" y="5" width="4" height="8" rx="1.6" fill="#0a0512"/><rect x="6.5" y="5" width="4" height="8" rx="1.6" fill="#0a0512"/><path d="M0,-17 C5.5,-16 8,-9 8,-1 C8,9 5.5,15.5 0,16.5 C-5.5,15.5 -8,9 -8,-1 C-8,-9 -5.5,-16 0,-17Z" fill="#FFC91E" stroke="#0B0518" stroke-width="1.5"/><rect x="-2.7" y="-15" width="1.8" height="30" rx="0.6" fill="#0B0518" opacity=".82"/><rect x="0.9" y="-15" width="1.8" height="30" rx="0.6" fill="#0B0518" opacity=".82"/><path d="M-5,-5 C-5,-7 5,-7 5,-5 L4.4,5 C4.4,7 -4.4,7 -4.4,5 Z" fill="#160b2e"/><path d="M-4,-4.6 C-4,-5.6 4,-5.6 4,-4.6 L3.3,-1 L-3.3,-1 Z" fill="#5a4a86" opacity=".9"/><rect x="-9" y="13.4" width="18" height="2.6" rx="1" fill="#0B0518"/><rect x="-5.6" y="-15.6" width="3" height="2.4" rx="1" fill="#fff8dd"/><rect x="2.6" y="-15.6" width="3" height="2.4" rx="1" fill="#fff8dd"/>';
+function drGenPath(N,h){ var cross=h?240:300,longSize=h?(150+N*120):(120+N*110),m=30,cc=cross/2,seg=(longSize-2*m)/N,W=h?longSize:cross,H=h?cross:longSize,d=h?('M '+m+','+cc):('M '+cc+','+m);
+  for(var i=0;i<N;i++){var bulge=(i%2===0)?cross-26:26,a=m+seg*i,b=m+seg*(i+1); d+= h?(' C '+(a+seg*.28)+','+bulge+' '+(b-seg*.28)+','+bulge+' '+b+','+cc):(' C '+bulge+','+(a+seg*.28)+' '+bulge+','+(b-seg*.28)+' '+cc+','+b);}
+  return {d:d,vb:'0 0 '+W+' '+H}; }
+function drEnsure(){ if(document.getElementById('drOv'))return;
+  var d=document.createElement('div'); d.id='drOv'; d.className='dr-ov';
+  d.innerHTML='<div class="dr-card"><div class="dr-h" id="drH">DRIFT · schiaccia nel verde</div>'
+   +'<div class="dr-stage" id="drStage"><div class="dr-dots" id="drDots"></div><svg id="drSvg" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid meet">'
+   +'<path id="drRoad" d="" fill="none" stroke="#241a3c" stroke-width="40" stroke-linecap="round"/>'
+   +'<path id="drDash" d="" fill="none" stroke="rgba(244,238,255,.14)" stroke-width="2" stroke-dasharray="2 12" stroke-linecap="round"/>'
+   +'<g id="drZones"></g>'
+   +'<polyline id="drSkidL" fill="none" stroke="rgba(6,3,12,.5)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points=""/>'
+   +'<polyline id="drSkidR" fill="none" stroke="rgba(6,3,12,.5)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points=""/>'
+   +'<g id="drMarks"></g><g id="drCar" style="visibility:hidden">'+DR_CAR+'</g>'
+   +'</svg><div class="dr-tag" id="drTag"></div><div class="dr-flash" id="drFlash"></div></div>'
+   +'<button class="dr-btn" id="drBtn" onclick="drPress()">DRIFT</button></div>';
+  document.body.appendChild(d);
+  document.getElementById('drStage').addEventListener('pointerdown',function(e){ if(DR.running){e.preventDefault();drPress();} });
+}
+function drOpen(v){
+  DR.lvl=(v&&v.raceLevel)||1;
+  var opts=[1,2,3].filter(function(n){return n!==DR.lastCurves;}); DR.curves=opts[Math.floor(Math.random()*opts.length)]; DR.lastCurves=DR.curves;
+  DR.horiz=Math.random()<0.4;
+  drEnsure(); document.getElementById('drOv').classList.add('on'); document.getElementById('drBtn').disabled=false; document.getElementById('drBtn').textContent='DRIFT';
+  drBuild(); drRun();
+}
+function drBuild(){
+  var road=document.getElementById('drRoad'),dash=document.getElementById('drDash'),svg=document.getElementById('drSvg'),zones=document.getElementById('drZones');
+  var P=drGenPath(DR.curves,DR.horiz); svg.setAttribute('viewBox',P.vb); road.setAttribute('d',P.d); dash.setAttribute('d',P.d);
+  DR.L=road.getTotalLength(); DR.perGate=DR.L/DR.curves; DR.GHALF=DR.perGate*(0.20-(DR.lvl-1)*0.03);
+  DR.gates=[]; zones.innerHTML='';
+  for(var i=0;i<DR.curves;i++){ var center=((i+0.5)/DR.curves)*DR.L;
+    var z=document.createElementNS(DRNS,'path'); z.setAttribute('d',P.d); z.setAttribute('fill','none'); z.setAttribute('stroke','#25e39a'); z.setAttribute('stroke-width','28'); z.setAttribute('stroke-linecap','butt');
+    z.setAttribute('stroke-dasharray','0 '+Math.max(0,center-DR.GHALF)+' '+(DR.GHALF*2)+' '+DR.L); z.style.opacity='.5'; zones.appendChild(z);
+    DR.gates.push({center:center,state:'pending',z:z}); }
+  document.getElementById('drDots').innerHTML=DR.gates.map(function(g,i){return '<span class="dr-cd" id="drcd'+i+'"></span>';}).join('');
+  DR.pos=0;DR.prevPos=0;DR.trailL=[];DR.trailR=[];DR.drifting=false;
+  document.getElementById('drSkidL').setAttribute('points','');document.getElementById('drSkidR').setAttribute('points','');document.getElementById('drMarks').innerHTML='';
+  document.getElementById('drTag').className='dr-tag';
+  var car=document.getElementById('drCar'); car.style.visibility='visible'; drPlaceCar();
+}
+function drPlaceCar(){ var road=document.getElementById('drRoad'),car=document.getElementById('drCar'); if(!road.getAttribute('d'))return;
+  var p=road.getPointAtLength(DR.pos),p2=road.getPointAtLength(Math.min(DR.L,DR.pos+1)),dx=p2.x-p.x,dy=p2.y-p.y,len=Math.hypot(dx,dy)||1;
+  var slide=DR.drifting?7:0,ox=-dy/len,oy=dx/len;
+  car.setAttribute('transform','translate('+(p.x+ox*slide*0.3)+','+(p.y+oy*slide*0.3)+') rotate('+(Math.atan2(dy,dx)*180/Math.PI+90+(DR.drifting?12:0))+')');
+  var w=DR.drifting?7:5; DR.trailL.push((p.x+ox*w).toFixed(1)+','+(p.y+oy*w).toFixed(1)); DR.trailR.push((p.x-ox*w).toFixed(1)+','+(p.y-oy*w).toFixed(1));
+  document.getElementById('drSkidL').setAttribute('points',DR.trailL.join(' ')); document.getElementById('drSkidR').setAttribute('points',DR.trailR.join(' ')); }
+function drDur(){ return (DR.lvl===1)?2400:Math.round(2400*Math.pow(0.85,DR.lvl-1)); }
+function drRun(){ DR.running=true; var speed=DR.L/drDur(),last=performance.now();
+  function step(t){ var dt=Math.min(40,t-last);last=t;DR.prevPos=DR.pos;DR.pos+=speed*dt; var anyGreen=false,anyActive=false;
+    DR.gates.forEach(function(g,i){ if(g.state==='pending'&&DR.pos>=g.center-DR.perGate*0.45)g.state='active';
+      if(g.state==='active'){ anyActive=true; var inG=Math.abs(DR.pos-g.center)<=DR.GHALF; g.z.setAttribute('stroke','#25e39a'); if(inG){anyGreen=true;g.z.style.opacity=(0.8+0.2*Math.abs(Math.sin(t/110))).toFixed(2);}else g.z.style.opacity='.55'; if(DR.pos>g.center+DR.GHALF)drResolve(g,i,false); } });
+    DR.drifting=anyActive; var tag=document.getElementById('drTag');
+    if(anyGreen){tag.textContent='PREMI!';tag.style.color='#25e39a';tag.className='dr-tag on';} else if(anyActive){tag.textContent='in curva…';tag.style.color='#9a86c4';tag.className='dr-tag on';} else tag.className='dr-tag';
+    drPlaceCar(); if(DR.pos>=DR.L){drFinish();return;} DR.raf=requestAnimationFrame(step); }
+  DR.raf=requestAnimationFrame(step); }
+function drResolve(g,i,ok){ if(g.state==='hit'||g.state==='miss')return; g.state=ok?'hit':'miss';
+  g.z.setAttribute('stroke',ok?'#25e39a':'#5a4a7a'); g.z.style.opacity=ok?'1':'.35';
+  var cd=document.getElementById('drcd'+i); if(cd)cd.classList.add(ok?'hit':'miss');
+  if(ok){var road=document.getElementById('drRoad'),p=road.getPointAtLength(DR.pos);drPuff(p.x,p.y);drFlash('PERFETTO','#25e39a');} }
+function drPuff(x,y){ var marks=document.getElementById('drMarks'); for(var k=0;k<4;k++){ var c=document.createElementNS(DRNS,'circle'); c.setAttribute('cx',(x+Math.random()*18-9).toFixed(1));c.setAttribute('cy',(y+Math.random()*18-9).toFixed(1));c.setAttribute('r','5');c.setAttribute('fill','rgba(222,222,242,.45)');c.style.transition='r .5s ease-out, opacity .5s ease-out';marks.appendChild(c);(function(cc){requestAnimationFrame(function(){cc.setAttribute('r','20');cc.style.opacity='0';});setTimeout(function(){if(cc.parentNode)cc.parentNode.removeChild(cc);},520);})(c);} }
+function drFlash(txt,col){ var f=document.getElementById('drFlash'); if(!f)return; f.textContent=txt;f.style.color=col;f.classList.remove('show');void f.offsetWidth;f.classList.add('show'); }
+function drPress(){ if(!DR.running)return; var g=null,gi=-1; for(var i=0;i<DR.gates.length;i++){if(DR.gates[i].state==='active'){g=DR.gates[i];gi=i;break;}} if(g)drResolve(g,gi,Math.abs(DR.pos-g.center)<=DR.GHALF); else drFlash('…','#9a86c4'); }
+function drFinish(){ DR.running=false; cancelAnimationFrame(DR.raf); DR.drifting=false;
+  DR.gates.forEach(function(g,i){ if(g.state==='active'||g.state==='pending')drResolve(g,i,false); });
+  var N=DR.gates.length,hits=DR.gates.filter(function(g){return g.state==='hit';}).length;
+  var outcome=hits===N?'perfetto':(hits>=Math.ceil(N/2)?'quasi':'mancato');
+  var big=outcome==='perfetto'?'PERFETTO':outcome==='quasi'?'QUASI':'MANCATO', col=outcome==='perfetto'?'#25e39a':outcome==='quasi'?'#FFC91E':'#ff466e';
+  drFlash(big+' +'+(outcome==='perfetto'?3:outcome==='quasi'?2:1),col);
+  var btn=document.getElementById('drBtn'); if(btn){btn.disabled=true;btn.textContent=big;}
+  setTimeout(function(){ var ov=document.getElementById('drOv'); if(ov)ov.classList.remove('on');
+    socket.emit('race:roll',{useNos:false,reaction:outcome,bombIdx:null}); setTimeout(function(){socket.emit('race:move');},1100); },1000); }
+function driftCtaHTML(v){ return '<div class="rx-panel dr-cta"><div class="dr-cta-t">\ud83c\udfce\ufe0f Curva in DRIFT</div><button class="dr-cta-btn" onclick="drOpen(LAST)">Fai il DRIFT</button><div class="dr-cta-s">tieni la derapata, schiaccia nel verde</div></div>'; }
+function tiroInlineHTML(v){ var st=v&&v.me&&v.me.segType; if(st==='drift') return driftCtaHTML(v); return rxInlineHTML(v); }
 function _cardNm(idx){const hh=(LAST&&LAST.me&&LAST.me.hand)||[];const c=hh.find(x=>x.idx===idx);return c?c.nome:'carta';}
 function _rivNm(tid){const r=(LAST&&LAST.me&&LAST.me.rivals)||[];const x=r.find(y=>y.id===tid);return x?x.name:'rivale';}
 function jsTid(id){ return typeof id==='number'?id:("'"+String(id).replace(/'/g,'')+"'"); }
@@ -1914,7 +2104,7 @@ function foeTag(r){ return r.isFoe?(` <span class="opt-foe${r.kind==='miniboss'?
 function playCard(idx,target){
   const v=LAST;
   if(target==='fixed'){ flash('Hai giocato \u00ab'+_cardNm(idx)+'\u00bb','mine'); socket.emit('race:playCard',{handIdx:idx}); return; }
-  const rivals=(v.me&&v.me.rivals)||[];
+  const rivals=(v.me&&v.me.rivals)||v.raceRivals||[];
   const realRivals=rivals.filter(r=>!r.isFoe);          // i bonus non si danno a boss/miniboss
   if(target==='self'){
     if(realRivals.length>=2){
@@ -2250,6 +2440,7 @@ function renderDrawer(v){
   const dtt=document.getElementById('drawer-title'); if(dtt)dtt.textContent=inPrep?'Scommesse':'Piloti \u0026 scommesse';
   if(!has){closeDrawer();return;}
   let h='';
+  if(inPrep) h+=trackPreviewHTML(v);   // anteprima pista sempre in cima all'officina, anche fuori dal proprio turno
   if(v.phase==='prep' && v.isYourTurn && v.canBet && Array.isArray(v.betTargets)){
     h+='<div class="dw-sec">La tua scommessa</div>';
     h+='<div class="dw-betbox"><div class="dw-betlab">Punta su chi vince \u00b7 quota = posizione nell\'ultima gara</div><div class="dw-chips">';
@@ -2382,9 +2573,7 @@ function renderLaunch(v){
   const wrap=document.querySelector('.wrap');
   if(mob){ wrap.classList.add('locked'); document.body.classList.add('locked'); }
   else { wrap.classList.remove('locked'); document.body.classList.remove('locked'); }
-  ui.launchEndsAt=v.launchEndsAt||0;
-  ui.launchMs=(typeof v.launchMs==='number')?v.launchMs:Math.max(0,ui.launchEndsAt-Date.now());
-  ui.launchAnchor=Date.now();   // ri-ancoro a ogni broadcast: il countdown usa il tempo trascorso, non l'orologio assoluto
+  ui.lLevel=v.raceLevel||1;
   const cars=(v.cars||[]).map(c=>`<div class="lc-car" style="--c:${c.colorH}" title="${esc(c.name)}"></div>`).join('');
   let cards='';
   if(v.partenza&&v.partenza.length){
@@ -2404,20 +2593,42 @@ function renderLaunch(v){
     +`<div class="lc-head"><div class="lc-eb">Round ${v.round}${lvl}</div><div class="lc-ti">Alla griglia</div></div>`
     +`<div class="lc-grid-hint">${cars}</div>`
     +`<div class="lc-tree"><div class="lc-tower"><div class="lc-lamp amber" id="lc-l0"></div><div class="lc-lamp amber" id="lc-l1"></div><div class="lc-lamp amber" id="lc-l2"></div><div class="lc-lamp green" id="lc-lg"></div></div><div class="lc-count"><div class="lc-n" id="lc-count">–</div><div class="lc-lab" id="lc-lab">pronti…</div></div></div>`
-    +`<div class="lc-hint">Ultimo momento per <b>giocare una carta partenza</b>. Al verde si parte e non si gioca più.</div>`
+    +`<button class="lc-scatta" id="lc-scatta" onclick="lPress()">SCATTA</button>`
+    +`<div class="lc-hint">Gioca una <b>carta partenza</b> mentre aspetti. Al <b>verde</b> premi SCATTA il più in fretta possibile — sul rosso è <b>bruciata</b> (0).</div>`
     +`<div class="lc-cards"><div class="lc-cards-h"><b>Le tue carte partenza</b></div>${cards}${feed}</div></div>`;
   document.getElementById('s-launch').innerHTML=html;
-  if(!ui.launchInt){ ui.launchInt=setInterval(tickLaunch,100); }
-  tickLaunch();
+  if(v.myGone){ ui.lPhase='done'; ui.lReflex=v.myReflex||0; clearLTimers(); }
+  else if(!ui.lSeq){ startLReflex(); }
+  paintLaunch();
 }
-function tickLaunch(){
-  const rem=Math.max(0,(ui.launchMs||0)-(Date.now()-(ui.launchAnchor||Date.now())));
-  const nEl=document.getElementById('lc-count'); if(!nEl){ if(ui.launchInt){clearInterval(ui.launchInt);ui.launchInt=null;} return; }
+function lThresh(){ const l=ui.lLevel||1; return { hole:235-l*15, good:430-l*18 }; }
+function clearLTimers(){ (ui.lTimers||[]).forEach(t=>clearTimeout(t)); ui.lTimers=[]; }
+function startLReflex(){
+  clearLTimers(); ui.lSeq=true; ui.lPhase='wait'; ui.lGreenAt=0; ui.lLit=0;
+  ui.lTimers.push(setTimeout(()=>{ ui.lLit=1; paintLaunch(); },600));
+  ui.lTimers.push(setTimeout(()=>{ ui.lLit=2; paintLaunch(); },1200));
+  ui.lTimers.push(setTimeout(()=>{ ui.lLit=3; paintLaunch(); },1800));
+  const l=ui.lLevel||1; const wait=2250+Math.random()*(1500-l*120);   // verde imprevedibile, più corto ai livelli alti
+  ui.lTimers.push(setTimeout(()=>{ ui.lPhase='green'; ui.lGreenAt=performance.now(); ui.lLit=0; paintLaunch(); },wait));
+}
+function paintLaunch(){
+  const nEl=document.getElementById('lc-count'); if(!nEl) return;
   const labEl=document.getElementById('lc-lab');
   const lamps=[document.getElementById('lc-l0'),document.getElementById('lc-l1'),document.getElementById('lc-l2')];
-  const g=document.getElementById('lc-lg');
-  if(rem<=0){ nEl.textContent='VIA!'; nEl.classList.add('go'); if(labEl)labEl.textContent='parti!'; lamps.forEach(l=>l&&l.classList.remove('on')); if(g)g.classList.add('on'); }
-  else { const secs=Math.ceil(rem/1000); nEl.textContent=secs; nEl.classList.remove('go'); if(labEl)labEl.textContent='pronti…'; const lit=secs<=2?3:secs<=4?2:1; lamps.forEach((l,i)=>{ if(l)l.classList.toggle('on',i<lit); }); if(g)g.classList.remove('on'); }
+  const g=document.getElementById('lc-lg'); const btn=document.getElementById('lc-scatta');
+  const ph=ui.lPhase;
+  if(ph==='green'){ lamps.forEach(l=>l&&l.classList.remove('on')); if(g)g.classList.add('on'); nEl.textContent='VIA!'; nEl.className='lc-n go'; if(labEl)labEl.textContent='SCATTA!'; if(btn){btn.className='lc-scatta on';btn.disabled=false;btn.textContent='SCATTA';} }
+  else if(ph==='done'){ lamps.forEach(l=>l&&l.classList.remove('on')); if(g)g.classList.add('on'); const r=ui.lReflex||0; const lbl=r>=3?'HOLESHOT':r>=2?'BUONO':r>=1?'LENTO':'BRUCIATA'; nEl.textContent=(r>=0?'+':'')+r; nEl.className='lc-n go'; if(labEl)labEl.textContent=lbl+' · attendi il via'; if(btn){btn.className='lc-scatta done';btn.disabled=true;btn.textContent='scattato';} }
+  else if(ph==='burn'){ lamps.forEach(l=>l&&l.classList.add('on')); if(g)g.classList.remove('on'); nEl.textContent='0'; nEl.className='lc-n burn'; if(labEl)labEl.textContent='BRUCIATA · attendi il via'; if(btn){btn.className='lc-scatta done';btn.disabled=true;btn.textContent='bruciata';} }
+  else { const lit=ui.lLit||0; lamps.forEach((l,i)=>{ if(l)l.classList.toggle('on',i<lit); }); if(g)g.classList.remove('on'); nEl.textContent='···'; nEl.className='lc-n'; if(labEl)labEl.textContent='pronti…'; if(btn){btn.className='lc-scatta';btn.disabled=false;btn.textContent='SCATTA';} }
+}
+function lPress(){
+  if(ui.lPhase==='done'||ui.lPhase==='burn') return;
+  if(ui.lPhase==='green'){
+    const rt=Math.round(performance.now()-(ui.lGreenAt||performance.now())); const th=lThresh();
+    let b; if(rt<=th.hole)b=3; else if(rt<=th.good)b=2; else b=1;
+    ui.lReflex=b; ui.lPhase='done'; clearLTimers(); socket.emit('launch:go',{bonus:b}); paintLaunch();
+  } else { ui.lReflex=0; ui.lPhase='burn'; clearLTimers(); socket.emit('launch:go',{bonus:0}); paintLaunch(); }
 }
 function render(v){
   if(RX.active){ LAST=v; return; }
@@ -2432,7 +2643,7 @@ function render(v){
   if(v.phase==='prep'&&prevPhase!=='prep')playIntroSequence(prevPhase==='reveal'?['video/inizio.mp4','video/officina.mp4']:['video/officina.mp4']);
   const prevReshop=ui.lastReshop; ui.lastReshop=!!v.reshop;
   if(v.phase==='prep'&&v.reshop&&!prevReshop&&prevPhase==='prep')playIntroSequence(['video/officina.mp4']);  // chiudi e riapri l'officina a tutti
-  if(v.phase!=='launch' && ui.launchInt){ clearInterval(ui.launchInt); ui.launchInt=null; }
+  if(v.phase!=='launch'){ if(ui.launchInt){ clearInterval(ui.launchInt); ui.launchInt=null; } clearLTimers(); if(ui.lSeq){ ui.lSeq=false; ui.lPhase='wait'; ui.lLit=0; } }
   if(v.phase==='lobby')renderLobby(v);
   else if(v.phase==='reveal')renderReveal(v);
   else if(v.phase==='prep')renderPrep(v);
@@ -2464,7 +2675,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-06-26 · scalate-v2';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-07-08 · drift-in-gara';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 <script>
 /* 2FAST4U — musica di sottofondo condivisa tra tutte le pagine.
