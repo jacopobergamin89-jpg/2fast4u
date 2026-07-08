@@ -902,7 +902,7 @@ function endRace(room){
   G.lastTrackInfo={ racedLevels, change:G.lastTrackChange };
   const goalPO=G.targetPO||DB.obiettivo;
   G.winner = G.players.some(p=>p.po>=goalPO) ? [...G.players].sort((a,b)=>b.po-a.po||b.money-a.money)[0] : null;
-  G.lastResults = ranked.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, pos:p._finalPos, cell:G.R.cars[p.id].pos, po:p._gainPO, money:p._gainMoney, betDelta:p._betDelta, busted:!!p._busted, bustReason:p._bustReason||null, bossBonus:p._bossBonus||0, bossList:p._bossList||[] }));
+  G.lastResults = ranked.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, pos:p._finalPos, cell:G.R.cars[p.id].pos, dist:(G.R.cars[p.id].dist||0), po:p._gainPO, money:p._gainMoney, betDelta:p._betDelta, busted:!!p._busted, bustReason:p._bustReason||null, bossBonus:p._bossBonus||0, bossList:p._bossList||[] }));
   glog(G,'🏁 Fine gara liv. '+G.raceLevel,'race');
   ranked.forEach(p=>{ const bits=[]; if(p._gainMoney) bits.push((p._gainMoney>0?'+':'')+'€'+p._gainMoney); if(p._gainPO) bits.push('+'+p._gainPO+' PO'); if(p._betDelta) bits.push('scommessa '+(p._betDelta>0?('vinta +€'+p._betDelta):('persa −€'+Math.abs(p._betDelta)))); if(p._busted) bits.push('beccato'); glog(G,p._finalPos+'° '+p.name+(bits.length?(' · '+bits.join(' · ')):''),'result'); });
   G.lastRaceRecap = {
@@ -991,6 +991,7 @@ function publicPlayers(G,duringRace){
   return G.players.map(p=>({
     id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, po:p.po, money:p.money, connected:p.connected,
     pos: duringRace ? G.R.cars[p.id].pos : null,
+    dist: duringRace ? (G.R.cars[p.id].dist||0) : null,
     pilot: p.pilot?{ nome:p.pilot.nome, gang:p.pilot.gang, tipoLabel:p.pilot.tipoLabel, liv:p.pilot.liv, ab:p.pilot.ab }:null,
     car: p.pilot?{ stats:statsOf(p), owned:ownedView(p) }:null
   }));
@@ -1362,7 +1363,7 @@ function mount(ioInstance){
   });
 }
 
-module.exports = { mount, DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actPlayEsp, actPlayPolice, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending, actDefend, incomingFor, stockAvail, compSlots, endRace, startLaunch, beginRace, setupRace, actPlayPartenza, actLaunchGo };
+module.exports = { mount, DB, startGame, startRound, actReady, curPrep, activeRace, actBuy, actPlayPregara, actPlayEsp, actPlayPolice, actSetBet, actPrepDone, actRacePlayCard, actRoll, actConfirmMove, actNextRound, buildView, botAct, botPending, actDefend, incomingFor, stockAvail, compSlots, endRace, startLaunch, beginRace, setupRace, actPlayPartenza };
 
 if(require.main===module){
   // Avvio STANDALONE (node server.js): crea un server proprio e monta il classico
