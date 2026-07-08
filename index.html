@@ -2024,7 +2024,7 @@ function rxTap(){ if(RX.phase==='ready') rxLaunch(); else if(RX.phase==='run') r
 function rxLaunch(){ RX.active=true; RX.phase='run'; var nd=rxEl('rxNd'); if(nd)nd.classList.add('live'); rxTl('green'); rxBuzz(25); var l=rxEl('rxBtnL'); if(l)l.textContent='Colpisci!'; RX.t0=performance.now(); RX.raf=requestAnimationFrame(rxLoop); }
 function rxLoop(){ if(RX.phase!=='run') return; var left=Math.max(0,RX.REACT-(performance.now()-RX.t0)); var cdi=rxEl('rxCdi'); if(cdi)cdi.style.width=(left/RX.REACT*100)+'%'; var cdt=rxEl('rxCdt'); if(cdt)cdt.innerHTML='colpisci! <b>'+(left/1000).toFixed(1)+'s</b>'; if(left<=0){ rxResult('mancato','TEMPO!','#c9b8ee',[15]); return; } var sp=RX.SP[RX.lvl]||2.85; RX.pos+=RX.dir*sp; if(RX.pos>=100){RX.pos=100;RX.dir=-1;} if(RX.pos<=0){RX.pos=0;RX.dir=1;} var nd=rxEl('rxNd'); if(nd)nd.style.left=RX.pos+'%'; RX.raf=requestAnimationFrame(rxLoop); }
 function rxHit(){ var nd=rxEl('rxNd'),race=rxEl('rxRace'); if(!nd||!race)return; var carW=nd.offsetWidth/race.offsetWidth*100,cL=RX.pos,cR=RX.pos+carW,gL=RX.gc-RX.GW/2,gR=RX.gc+RX.GW/2; var ov=Math.max(0,Math.min(cR,gR)-Math.max(cL,gL)),pctIn=carW>0?ov/carW:0; var Cc=RX.pos+carW/2,dd=Math.abs(Cc-RX.gc); if(pctIn>=0.94) rxResult('perfetto','PERFETTO','#8affa0',[0,55,35,55]); else if(pctIn>0||dd<=RX.GW/2+7) rxResult('quasi','QUASI','#ffd86a',[40]); else rxResult('mancato','MANCATO','#c9b8ee',[15]); }
-function rxResult(outcome,name,col,vp){ cancelAnimationFrame(RX.raf); RX.phase='done'; rxTl('red'); var fl=rxEl('rxFl'); if(fl){fl.textContent=name;fl.style.color=col;fl.classList.remove('show');void fl.offsetWidth;fl.classList.add('show');} rxBuzz(vp); var cdt=rxEl('rxCdt'); if(cdt)cdt.textContent='spinta +'+(outcome==='perfetto'?3:outcome==='quasi'?2:1); setTimeout(function(){ RX.active=false; socket.emit('race:roll',{useNos:ui.nosArmed,reaction:outcome,bombIdx:ui.nosBomb}); setTimeout(function(){ socket.emit('race:move'); }, 1100); }, 700); }
+function rxResult(outcome,name,col,vp){ cancelAnimationFrame(RX.raf); RX.phase='done'; rxTl('red'); var fl=rxEl('rxFl'); if(fl){fl.textContent=name;fl.style.color=col;fl.classList.remove('show');void fl.offsetWidth;fl.classList.add('show');} rxBuzz(vp); var cdt=rxEl('rxCdt'); if(cdt)cdt.textContent='spinta +'+(outcome==='perfetto'?3:outcome==='quasi'?2:1); setTimeout(function(){ RX.active=false; if(ui.nosArmed){ nosOpen(outcome, ui.nosBomb, (LAST&&LAST.raceLevel)||1); return; } socket.emit('race:roll',{useNos:false,reaction:outcome,bombIdx:null}); setTimeout(function(){ socket.emit('race:move'); }, 1100); }, 700); }
 function doRoll(){ /* compat: la reazione e' inline, parte dal semaforo */ }
 /* ===== DRIFT in gara (sui tratti drift): overlay, esito perfetto/quasi/mancato → reaction ===== */
 var DR={lvl:1,curves:2,horiz:false,L:0,gates:[],pos:0,prevPos:0,running:false,raf:null,trailL:[],trailR:[],drifting:false,perGate:0,GHALF:0,lastCurves:0};
@@ -2124,12 +2124,37 @@ function ctResolve(outcome){
   if(!CT.active)return; CT.active=false;
   var ov=document.getElementById('ctOv'); if(ov)ov.classList.remove('on');
   var fr=document.getElementById('ctFrame'); if(fr)fr.src='about:blank';
+  if(ui.nosArmed){ nosOpen(outcome, ui.nosBomb, (LAST&&LAST.raceLevel)||1); return; }
   socket.emit('race:roll',{useNos:false,reaction:outcome,bombIdx:null});
   setTimeout(function(){ socket.emit('race:move'); },1100);
 }
 function ctSkip(){ ctResolve('mancato'); }   // fallback se il mini-gioco non si carica
 window.addEventListener('message',function(e){ if(e.data && e.data.type==='citta'){ ctResolve(e.data.outcome||'mancato'); } });
 function cittaCtaHTML(v){ return '<div class="rx-panel dr-cta"><div class="dr-cta-t">\ud83c\udfd9\ufe0f Tratto in CITT\u00c0</div><button class="dr-cta-btn" onclick="ctOpen(LAST)">Vai in citt\u00e0</button><div class="dr-cta-s">traffico urbano \u00b7 un mini-gioco a caso</div></div>'; }
+/* ===== NOS in gara: 2ª fase dopo il colpo di gas, carica/ritmo a rotazione, esito → nosOutcome ===== */
+var NS={variant:null,last:null,active:false,reaction:null,bombIdx:null,lvl:1};
+var NS_FILES={carica:'mockup_nos_carica.html',ritmo:'mockup_nos_ritmo.html'};
+function nsEnsure(){ if(document.getElementById('nsOv'))return;
+  var d=document.createElement('div'); d.id='nsOv'; d.className='ct-ov';
+  d.innerHTML='<div class="ct-card"><div class="ct-h">NOS \u26a1</div><iframe id="nsFrame" class="ct-frame" frameborder="0" scrolling="no"></iframe><button class="ct-skip" onclick="nosSkip()">salta</button></div>';
+  document.body.appendChild(d);
+}
+function nosOpen(reaction,bombIdx,lvl){
+  NS.reaction=reaction; NS.bombIdx=(bombIdx!=null?bombIdx:null); NS.lvl=lvl||1;
+  var opts=Object.keys(NS_FILES).filter(function(k){return k!==NS.last;});
+  NS.variant=opts[Math.floor(Math.random()*opts.length)]; NS.last=NS.variant; NS.active=true;
+  nsEnsure(); document.getElementById('nsFrame').src=NS_FILES[NS.variant]+'?embed=1&level='+NS.lvl;
+  document.getElementById('nsOv').classList.add('on');
+}
+function nosResolve(nosOutcome){
+  if(!NS.active)return; NS.active=false;
+  var ov=document.getElementById('nsOv'); if(ov)ov.classList.remove('on');
+  var fr=document.getElementById('nsFrame'); if(fr)fr.src='about:blank';
+  socket.emit('race:roll',{useNos:true,reaction:NS.reaction,bombIdx:NS.bombIdx,nosOutcome:nosOutcome});
+  setTimeout(function(){ socket.emit('race:move'); },1100);
+}
+function nosSkip(){ nosResolve('mancato'); }
+window.addEventListener('message',function(e){ if(e.data && e.data.type==='nos'){ nosResolve(e.data.outcome||'mancato'); } });
 function _cardNm(idx){const hh=(LAST&&LAST.me&&LAST.me.hand)||[];const c=hh.find(x=>x.idx===idx);return c?c.nome:'carta';}
 function _rivNm(tid){const r=(LAST&&LAST.me&&LAST.me.rivals)||[];const x=r.find(y=>y.id===tid);return x?x.name:'rivale';}
 function jsTid(id){ return typeof id==='number'?id:("'"+String(id).replace(/'/g,'')+"'"); }
@@ -2709,7 +2734,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-07-08 · photo-finish';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-07-08 · nos-in-gara';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 <script>
 /* 2FAST4U — musica di sottofondo condivisa tra tutte le pagine.

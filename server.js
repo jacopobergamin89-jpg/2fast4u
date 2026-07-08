@@ -713,7 +713,9 @@ function computeMove(G,p,die,useNos){
   if(useNos){ let nv;
     if(p.nosBombs){ const bi=(car.pendBomb!=null)?car.pendBomb:bombPickFire(p); nv=(bi>=0)?p.nosBombs[bi]:0; }
     else { nv=statVal(p,'nos')+(car.nosMod||0); }
-    nv=Math.max(0,nv); if(seg.t==='citta') nv=Math.max(0,nv-1); const add=nv+(onTratto?(pb.nos||0):0); total+=add; lines.push({k:'NOS'+(seg.t==='citta'?' (–1 città)':'')+((onTratto&&pb.nos)?' +pilota':''),v:add,cls:'nos'}); }
+    nv=Math.max(0,nv); if(seg.t==='citta') nv=Math.max(0,nv-1);
+    const nout=car.pendNosOut, pen=(nout==='quasi'?1:nout==='mancato'?2:0); nv=Math.max(0,nv-pen);   // esito mini-gioco NOS: pieno / giallo −1 / rosso −2
+    const add=nv+(onTratto?(pb.nos||0):0); total+=add; lines.push({k:'NOS'+(seg.t==='citta'?' (–1 città)':'')+(pen?(' −'+pen+(nout==='mancato'?' rosso':' giallo')):'')+((onTratto&&pb.nos)?' +pilota':''),v:add,cls:'nos'}); }
   if(!noPen){
     if(seg.pv && vel>seg.pv.gt){ total-=seg.pv.a; lines.push({k:'Pen. Drift (Vel '+vel+'>'+seg.pv.gt+')',v:-seg.pv.a,cls:'neg'}); }
     if(seg.pc && ctrl<seg.pc.lt){ total-=seg.pc.a; lines.push({k:'Pen. Controllo (Ctrl '+ctrl+'<'+seg.pc.lt+')',v:-seg.pc.a,cls:'neg'}); }
@@ -811,7 +813,7 @@ function actRacePlayCard(room,p,handIdx,targetId){
   if(c.target==='rival' && target.id!==p.id && !isFoe) recordMalus(room, p, target, {phase:'ingara', eff:c.eff, val:c.val, dur:c.dur, fxRef:_fx, prevDado:_prevDado, cardNome:c.nome});  // i boss non si difendono
   p.discard.push(c); p.hand.splice(handIdx,1); return null;
 }
-function actRoll(room,p,useNos,reaction,bombIdx){
+function actRoll(room,p,useNos,reaction,bombIdx,nosOutcome){
   const G=room.G; if(G.phase!=='race') return 'Non in gara.';
   if(activeRace(G).id!==p.id) return 'Non è il tuo turno.';
   if(G.R.phase!=='await') return 'Hai già tirato.';
@@ -819,6 +821,7 @@ function actRoll(room,p,useNos,reaction,bombIdx){
   const car=G.R.cars[p.id];
   const realNos = !!useNos && nosAllowed(G,p);
   if(realNos && p.nosBombs){ car.pendBomb=(bombIdx!=null && p.nosBombs[bombIdx]>=1)?bombIdx:bombPickFire(p); } else { car.pendBomb=null; }
+  car.pendNosOut = realNos ? (nosOutcome || 'perfetto') : null;   // esito mini-gioco NOS (bot/retrocompat senza esito → pieno)
   const die = car.pendDado || (reaction && REACT_DIE[reaction]) || d6();   // Reazione del giocatore; dado truccato ha precedenza; bot (no reaction) → d6
   (G.R.turnDice=G.R.turnDice||[]).push(die);
   G.R.lastBreak = computeMove(G,p,die,realNos);
@@ -1331,7 +1334,7 @@ function mount(ioInstance){
   socket.on('launch:play', handle((room,p,d)=>actPlayPartenza(room,p,d.handIdx,d.targetId)));
   socket.on('launch:go', handle((room,p,d)=>actLaunchGo(room,p,d.bonus)));
   socket.on('race:playCard', handle((room,p,d)=>actRacePlayCard(room,p,d.handIdx,d.targetId)));
-  socket.on('race:roll', handle((room,p,d)=>actRoll(room,p,d.useNos,d.reaction,d.bombIdx)));
+  socket.on('race:roll', handle((room,p,d)=>actRoll(room,p,d.useNos,d.reaction,d.bombIdx,d.nosOutcome)));
   socket.on('bomb:set', handle((room,p,d)=>{ bombSet(p, d.a, d.b); return null; }));
   socket.on('race:move', handle((room,p)=>actConfirmMove(room,p)));
   socket.on('defend', handle((room,p,d)=>actDefend(room,p,d.handIdx,d.mid)));
