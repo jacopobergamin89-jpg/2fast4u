@@ -975,7 +975,11 @@ body.locked{overflow:hidden;overscroll-behavior:none}
 .dr-ov.on{display:flex}
 .dr-card{width:min(96%,440px);display:flex;flex-direction:column}
 .dr-h{font-family:var(--disp);font-weight:700;text-transform:uppercase;letter-spacing:.6px;font-size:14px;color:var(--muted);text-align:center;margin-bottom:8px}
-.dr-stage{height:54vh;max-height:440px;position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#160b2e,#0d0620);border:1px solid var(--line);touch-action:none}
+.dr-stage{height:350px;position:relative;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,#160b2e,#0d0620);border:1px solid var(--line);touch-action:none}
+.dr-title{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:8px}.dr-title b{color:var(--ink)}
+.dr-cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:rgba(6,3,14,.55);z-index:9}
+.dr-covbtn{font-family:var(--disp);text-transform:uppercase;letter-spacing:.5px;font-weight:700;font-size:16px;padding:13px 26px;border-radius:12px;border:none;cursor:pointer;color:#fff;background:linear-gradient(180deg,#9B3BE0,#6f22b0)}
+.dr-covs{font-family:var(--mono);font-size:11px;color:var(--muted)}
 .dr-stage svg{position:absolute;inset:0;width:100%;height:100%}
 .dr-dots{position:absolute;left:10px;top:10px;display:flex;gap:6px;z-index:5}
 .dr-cd{width:12px;height:12px;border-radius:50%;background:#241a3c;border:2px solid rgba(244,238,255,.2)}
@@ -1918,7 +1922,7 @@ function renderRace(v){
   if(v.isYourTurn){ h+=dashHTML(v); }
   else{ h+=`<div class="dash" style="--dc:${actColor(v)}"><div class="spectate" style="padding:24px 8px"><div class="sdot" style="background:${actColor(v)}"></div><div class="stitle">${esc(v.activeName)}</div><div class="stext">sta correndo… attendi il tuo turno</div></div></div>`; }
   h+='</div>';
-  h+='<div class="race-col-rules">'+segRulesHTML(v)+((v.isYourTurn&&!v.rolled)?tiroInlineHTML(v):'')+'</div>';
+  h+='<div class="race-col-rules">'+segRulesHTML(v)+'</div>';   // reazione spostata nel cruscotto centrale (spazio del dado)
   h+='</div>';
   host.innerHTML=h;
   startTokens(v);
@@ -1972,8 +1976,9 @@ function dashHTML(v){
     h+='</div>';
   }
   if(!v.rolled){
-    h+='</div>';
-    h+=`<div class="race-act"><div class="car-actions">${nosBtns(m)}</div><div class="rx-cta">🎯 Fai il <b>colpo di gas</b> qui a destra →</div></div>`;
+    h+=`<div class="car-actions" style="margin-top:11px">${nosBtns(m)}</div>`;
+    h+=tiroInlineHTML(v);   // reazione inline al centro, sotto ai valori/NOS
+    h+='</div>';   // chiude dash-scroll DOPO la reazione → scrolla insieme al pilota
   }else{
     const b=v.rolled;
     let ls=b.lines.map(l=>`<div class="bd-line"><span>${l.k}</span><span class="${l.cls||''}">${l.info?'min 0':(l.v>=0?'+':'')+l.v}</span></div>`).join('');
@@ -2038,32 +2043,20 @@ function rxHit(){ var nd=rxEl('rxNd'),race=rxEl('rxRace'); if(!nd||!race)return;
 function rxResult(outcome,name,col,vp){ cancelAnimationFrame(RX.raf); RX.phase='done'; rxTl('red'); var fl=rxEl('rxFl'); if(fl){fl.textContent=name;fl.style.color=col;fl.classList.remove('show');void fl.offsetWidth;fl.classList.add('show');} rxBuzz(vp); var cdt=rxEl('rxCdt'); if(cdt)cdt.textContent='spinta +'+(outcome==='perfetto'?3:outcome==='quasi'?2:1); setTimeout(function(){ RX.active=false; if(ui.nosArmed){ nosOpen(outcome, ui.nosBomb, (LAST&&LAST.raceLevel)||1); return; } socket.emit('race:roll',{useNos:false,reaction:outcome,bombIdx:null}); setTimeout(function(){ socket.emit('race:move'); }, 1100); }, 700); }
 function doRoll(){ /* compat: la reazione e' inline, parte dal semaforo */ }
 /* ===== DRIFT in gara (sui tratti drift): overlay, esito perfetto/quasi/mancato → reaction ===== */
-var DR={lvl:1,curves:2,horiz:false,L:0,gates:[],pos:0,prevPos:0,running:false,raf:null,trailL:[],trailR:[],drifting:false,perGate:0,GHALF:0,lastCurves:0};
+var DR={lvl:1,curves:2,horiz:false,L:0,gates:[],pos:0,prevPos:0,running:false,active:false,raf:null,trailL:[],trailR:[],drifting:false,perGate:0,GHALF:0,lastCurves:0};
 var DRNS='http://www.w3.org/2000/svg';
 var DR_CAR='<ellipse cx="0" cy="2" rx="10" ry="16" fill="#000" opacity=".22"/><rect x="-10.5" y="-12" width="4" height="7" rx="1.6" fill="#0a0512"/><rect x="6.5" y="-12" width="4" height="7" rx="1.6" fill="#0a0512"/><rect x="-10.5" y="5" width="4" height="8" rx="1.6" fill="#0a0512"/><rect x="6.5" y="5" width="4" height="8" rx="1.6" fill="#0a0512"/><path d="M0,-17 C5.5,-16 8,-9 8,-1 C8,9 5.5,15.5 0,16.5 C-5.5,15.5 -8,9 -8,-1 C-8,-9 -5.5,-16 0,-17Z" fill="#FFC91E" stroke="#0B0518" stroke-width="1.5"/><rect x="-2.7" y="-15" width="1.8" height="30" rx="0.6" fill="#0B0518" opacity=".82"/><rect x="0.9" y="-15" width="1.8" height="30" rx="0.6" fill="#0B0518" opacity=".82"/><path d="M-5,-5 C-5,-7 5,-7 5,-5 L4.4,5 C4.4,7 -4.4,7 -4.4,5 Z" fill="#160b2e"/><path d="M-4,-4.6 C-4,-5.6 4,-5.6 4,-4.6 L3.3,-1 L-3.3,-1 Z" fill="#5a4a86" opacity=".9"/><rect x="-9" y="13.4" width="18" height="2.6" rx="1" fill="#0B0518"/><rect x="-5.6" y="-15.6" width="3" height="2.4" rx="1" fill="#fff8dd"/><rect x="2.6" y="-15.6" width="3" height="2.4" rx="1" fill="#fff8dd"/>';
 function drGenPath(N,h){ var cross=h?240:300,longSize=h?(150+N*120):(120+N*110),m=30,cc=cross/2,seg=(longSize-2*m)/N,W=h?longSize:cross,H=h?cross:longSize,d=h?('M '+m+','+cc):('M '+cc+','+m);
   for(var i=0;i<N;i++){var bulge=(i%2===0)?cross-26:26,a=m+seg*i,b=m+seg*(i+1); d+= h?(' C '+(a+seg*.28)+','+bulge+' '+(b-seg*.28)+','+bulge+' '+b+','+cc):(' C '+bulge+','+(a+seg*.28)+' '+bulge+','+(b-seg*.28)+' '+cc+','+b);}
   return {d:d,vb:'0 0 '+W+' '+H}; }
-function drEnsure(){ if(document.getElementById('drOv'))return;
-  var d=document.createElement('div'); d.id='drOv'; d.className='dr-ov';
-  d.innerHTML='<div class="dr-card"><div class="dr-h" id="drH">DRIFT · schiaccia nel verde</div>'
-   +'<div class="dr-stage" id="drStage"><div class="dr-dots" id="drDots"></div><svg id="drSvg" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid meet">'
-   +'<path id="drRoad" d="" fill="none" stroke="#241a3c" stroke-width="40" stroke-linecap="round"/>'
-   +'<path id="drDash" d="" fill="none" stroke="rgba(244,238,255,.14)" stroke-width="2" stroke-dasharray="2 12" stroke-linecap="round"/>'
-   +'<g id="drZones"></g>'
-   +'<polyline id="drSkidL" fill="none" stroke="rgba(6,3,12,.5)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points=""/>'
-   +'<polyline id="drSkidR" fill="none" stroke="rgba(6,3,12,.5)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points=""/>'
-   +'<g id="drMarks"></g><g id="drCar" style="visibility:hidden">'+DR_CAR+'</g>'
-   +'</svg><div class="dr-tag" id="drTag"></div><div class="dr-flash" id="drFlash"></div></div>'
-   +'<button class="dr-btn" id="drBtn" onclick="drPress()">DRIFT</button></div>';
-  document.body.appendChild(d);
-  document.getElementById('drStage').addEventListener('pointerdown',function(e){ if(DR.running){e.preventDefault();drPress();} });
-}
+/* drift ora è inline nel pannello reazione (driftCtaHTML costruisce lo stage) — niente più overlay */
 function drOpen(v){
-  DR.lvl=(v&&v.raceLevel)||1;
+  DR.lvl=(v&&v.raceLevel)||1; DR.active=true;
   var opts=[1,2,3].filter(function(n){return n!==DR.lastCurves;}); DR.curves=opts[Math.floor(Math.random()*opts.length)]; DR.lastCurves=DR.curves;
   DR.horiz=Math.random()<0.4;
-  drEnsure(); document.getElementById('drOv').classList.add('on'); document.getElementById('drBtn').disabled=false; document.getElementById('drBtn').textContent='DRIFT';
+  var cov=document.getElementById('drCover'); if(cov)cov.style.display='none';
+  var btn=document.getElementById('drBtn'); if(btn){btn.disabled=false;btn.textContent='DRIFT';}
+  var st=document.getElementById('drStage'); if(st&&!st._wired){ st._wired=1; st.addEventListener('pointerdown',function(e){ if(DR.running){e.preventDefault();drPress();} }); }
   drBuild(); drRun();
 }
 function drBuild(){
@@ -2109,10 +2102,10 @@ function drFinish(){ DR.running=false; cancelAnimationFrame(DR.raf); DR.drifting
   var outcome=hits===N?'perfetto':(hits>=Math.ceil(N/2)?'quasi':'mancato');
   var big=outcome==='perfetto'?'PERFETTO':outcome==='quasi'?'QUASI':'MANCATO', col=outcome==='perfetto'?'#25e39a':outcome==='quasi'?'#FFC91E':'#ff466e';
   drFlash(big+' +'+(outcome==='perfetto'?3:outcome==='quasi'?2:1),col);
-  var btn=document.getElementById('drBtn'); if(btn){btn.disabled=true;btn.textContent=big;}
-  setTimeout(function(){ var ov=document.getElementById('drOv'); if(ov)ov.classList.remove('on');
+  var btn=document.getElementById('drBtn'); if(btn){btn.disabled=true;btn.textContent=big+' +'+(outcome==='perfetto'?3:outcome==='quasi'?2:1);}
+  setTimeout(function(){ DR.active=false;
     socket.emit('race:roll',{useNos:false,reaction:outcome,bombIdx:null}); setTimeout(function(){socket.emit('race:move');},1100); },1000); }
-function driftCtaHTML(v){ return '<div class="rx-panel dr-cta"><div class="dr-cta-t">\ud83c\udfce\ufe0f Curva in DRIFT</div><button class="dr-cta-btn" onclick="drOpen(LAST)">Fai il DRIFT</button><div class="dr-cta-s">tieni la derapata, schiaccia nel verde</div></div>'; }
+function driftCtaHTML(v){ return '<div class="rx-panel" id="drPanel"><div class="dr-title">\ud83c\udfce\ufe0f DRIFT \u00b7 schiaccia nel verde</div><div class="dr-stage" id="drStage"><div class="dr-dots" id="drDots"></div><svg id="drSvg" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid meet"><path id="drRoad" d="" fill="none" stroke="#241a3c" stroke-width="40" stroke-linecap="round"/><path id="drDash" d="" fill="none" stroke="rgba(244,238,255,.14)" stroke-width="2" stroke-dasharray="2 12" stroke-linecap="round"/><g id="drZones"></g><polyline id="drSkidL" fill="none" stroke="rgba(6,3,12,.5)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points=""/><polyline id="drSkidR" fill="none" stroke="rgba(6,3,12,.5)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points=""/><g id="drMarks"></g><g id="drCar" style="visibility:hidden">'+DR_CAR+'</g></svg><div class="dr-tag" id="drTag"></div><div class="dr-flash" id="drFlash"></div><div class="dr-cover" id="drCover"><button class="dr-covbtn" onclick="drOpen(LAST)">Fai il DRIFT</button><div class="dr-covs">tieni la derapata, schiaccia nel verde</div></div></div><button class="dr-btn" id="drBtn" onclick="drPress()">DRIFT</button></div>'; }
 function tiroInlineHTML(v){ var st=v&&v.me&&v.me.segType; if(st==='drift') return driftCtaHTML(v); if(st==='citta') return cittaCtaHTML(v); return rxInlineHTML(v); }
 /* ===== CITTÀ in gara: 4 mini-giochi reali INLINE (slalom/incrocio/bivi/reazioni), rotazione mai-uguali, esito -> reaction ===== */
 function ctgE(id){ return document.getElementById(id); }
@@ -2816,7 +2809,7 @@ function lPress(){
   } else { ui.lReflex=0; ui.lPhase='burn'; clearLTimers(); socket.emit('launch:go',{bonus:0}); paintLaunch(); }
 }
 function render(v){
-  if(RX.active || CT.active){ LAST=v; return; }
+  if(RX.active || CT.active || DR.active){ LAST=v; return; }
   if(v.phase==='race' && ui.launchHoldUntil){   // partenza: mostra il risultato ~1.4s prima di aprire la gara
     var _rem=ui.launchHoldUntil-performance.now();
     if(_rem>0){ LAST=v; if(!ui.launchHoldTimer){ ui.launchHoldTimer=setTimeout(function(){ ui.launchHoldTimer=null; ui.launchHoldUntil=0; render(LAST); }, _rem); } return; }
@@ -2866,7 +2859,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-07-09 · città-inline';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-07-09 · reazione-centro';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 <script>
 /* 2FAST4U — musica di sottofondo condivisa tra tutte le pagine.
