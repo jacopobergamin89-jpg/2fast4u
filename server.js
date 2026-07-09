@@ -209,14 +209,16 @@ function compSlots(N,lvl){ return Math.max(1, N - Math.max(0, lvl-2)); }   // po
 function stockAvail(G,comp,lvl){ return compSlots(G.players.length,lvl) - G.players.filter(x=>x.comp[comp]===lvl).length; }   // disponibili = posti − chi tiene già quel livello (il pezzo rientra da solo quando uno sale)
 /* ===== MERCATO CONDIVISO a carte scoperte (1° mercato N×2, successivi N; scarsità → contesa; ordine officina dall\'ultimo al primo) ===== */
 function deckCountForLevel(N,lvl){ return ({1:4,2:3,3:3,4:Math.max(0,N-2),5:Math.max(0,N-3)})[lvl]||0; }   // scarsità mazzo per stat/livello
+function buyableSlots(G,comp,lvl){ return G.players.filter(x=> (x.comp[comp]||0) < lvl && canHaveAtLevel(x,comp,lvl)).length; }   // quanti piloti possono ANCORA comprare quel pezzo:livello (regola: 1 per tipo per pilota)
 function revealMarket(G,count){                                  // pesca `count` pezzi e li scopre nel banco condiviso
-  const N=G.players.length; let guard=count*60;
+  const N=G.players.length; let guard=count*120;
   const marketPool = G.round<=1 ? DB.ordine.filter(c=>c!=='nos') : DB.ordine;   // NOS non disponibile al primo mercato (round 1)
   while(count>0 && guard-->0){
     const comp=marketPool[Math.floor(Math.random()*marketPool.length)];
     const lvl=1+Math.floor(Math.random()*G.compMaxLevel);        // 1..livello max pista
     const key=comp+':'+lvl; const used=G.marketUsed[key]||0;
-    if(used>=deckCountForLevel(N,lvl)) continue;                 // esaurita quella carta nel mazzo
+    const cap=Math.min(deckCountForLevel(N,lvl), buyableSlots(G,comp,lvl));   // mai più copie di quante ne servono ai piloti che non l'hanno già
+    if(cap<=0 || used>=cap) continue;                            // esaurita quella carta (nel mazzo o perché già tutti coperti)
     G.marketUsed[key]=used+1; G.market.push({ id:++G.marketSeq, comp, lvl }); count--;
   }
 }
