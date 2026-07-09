@@ -141,25 +141,26 @@ function segOf(G,sq){ const s=Math.max(1,sq); return G.track.find(c=>s>=c.from&&
 
 function startGame(room){
   const G=room.G;
-  G.players.forEach((p,i)=>{ p.roll=d6(); });
-  G.diceOrder=[...G.players].sort((a,b)=>b.roll-a.roll||a.id-b.id).map(p=>p.id);
-  G.players.forEach((p,idx)=>{ p.pilot=null; p.drew=false; p.money=4000; p.po=0; p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0}; p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]}; p.espOwned={}; p.deck = p.deckDef ? makePersonalDeck(p.deckDef,1) : makeDeck(1); p.discard=[]; p.pilotPool=pilotPoolFor(p); p.lastRank=idx; p.prevRank=idx; p.hand=[]; });   // mazzo e piloti PERSONALI (deck-builder); bot e senza-deck usano il mazzo completo
+  G.players.forEach((p,idx)=>{ p.pilot=null; p.drew=false; p.money=4000; p.po=0; p.roll=0; p.gridMs=null; p.gridBurn=false; p.comp={motore:0,cambio:0,sterzo:0,assetto:0,peso:0,nos:0}; p.lvlOwned={motore:[0],cambio:[0],sterzo:[0],assetto:[0],peso:[0],nos:[0]}; p.espOwned={}; p.deck = p.deckDef ? makePersonalDeck(p.deckDef,1) : makeDeck(1); p.discard=[]; p.pilotPool=pilotPoolFor(p); p.lastRank=idx; p.prevRank=idx; p.hand=[]; });   // mazzo e piloti PERSONALI (deck-builder); bot e senza-deck usano il mazzo completo
   G.discard=[];
   G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach(p=>{ for(let k=0;k<3;k++){ const card=drawCard(p,1); if(card) p.hand.push(card); } });
   G.round=0; room.started=true; G.policeUnlocked=true; G.scaleUnlocked={2:false,3:false,4:false,5:false}; G.blocks=[]; G.pendPolice=[]; G.bossPending=null;
   G.gameLog=[]; G.gameSeq=0;
-  G.phase='reveal'; G.players.forEach(p=>{ p.ready=false; if(p.pilotPool && p.pilotPool.length){ const pid=p.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true; } });   // pilota unico assegnato in automatico: niente pescaggio
+  G.players.forEach(p=>{ p.ready=false; if(p.pilotPool && p.pilotPool.length){ const pid=p.pilotPool.pop(); p.pilot=DB.piloti.find(q=>q.id===pid); p.drew=true; } });   // pilota unico assegnato in automatico: niente pescaggio
+  startGrid(room);   // griglia a reazione al posto del dado iniziale (setta phase='grid'; se solo bot risolve subito → 'reveal')
 }
 function restartGame(room){
   const G=room.G;
   if(room._botTimer){ clearTimeout(room._botTimer); room._botTimer=null; }
   if(room._launchTimer){ clearTimeout(room._launchTimer); room._launchTimer=null; }
+  if(room._gridTimer){ clearTimeout(room._gridTimer); room._gridTimer=null; }
   room.started=false;
   G.phase='lobby';
   G.round=0; G.R=null; G.lastResults=null; G.winner=null;
   G.gameLog=[]; G.gameSeq=0;
   G.track=[]; G.discard=[]; G.order=[]; G.diceOrder=[];
+  G.gridReflex={}; G.gridResult=null;
   G.market=[]; G.marketUsed={}; G.marketSeq=0; G.prevResults=null;
   G.players.forEach((p,i)=>{
     p.pilot=null; p.drew=false; p.ready=false;
@@ -169,7 +170,7 @@ function restartGame(room){
     p.espOwned={};
     p.deck=null; p.discard=[];
     p.hand=[]; p.bet=null;
-    p.lastRank=i; p.prevRank=i; p.roll=0;
+    p.lastRank=i; p.prevRank=i; p.roll=0; p.gridMs=null; p.gridBurn=false;
   });
 }
 function actDrawPilot(room,p){
@@ -607,6 +608,52 @@ function beginRace(room){                                         // VERDE: quot
   glog(G,'🟢 Semaforo verde · via alla gara liv. '+G.raceLevel,'race');
 }
 function startRace(room){ setupRace(room); beginRace(room); }    // avvio immediato (compat, non usato col semaforo)
+/* ===== GRIGLIA DI PARTENZA a reazione (solo 1ª gara): semaforo per tutti, ordine dal più veloce; sostituisce il dado ===== */
+function startGrid(room){
+  const G=room.G;
+  G.phase='grid'; G.gridEndsAt=Date.now()+7000; G.gridReflex={};
+  botsGridGo(room);                                             // i bot "reagiscono" subito con un tempo casuale
+  if(room._gridTimer) clearTimeout(room._gridTimer);
+  room._gridTimer=setTimeout(()=>{ room._gridTimer=null; finalizeGrid(room); broadcast(room); scheduleBot(room); }, 7000);
+  maybeEndGrid(room);                                           // se non ci sono umani (o già tutti pronti) risolve subito
+}
+function botsGridGo(room){
+  const G=room.G;
+  G.players.filter(p=>p.isBot).forEach(bot=>{ if(!G.gridReflex[bot.id]){ const r=Math.random();
+    if(r<0.08) G.gridReflex[bot.id]={burn:true};                // ogni tanto un bot brucia
+    else G.gridReflex[bot.id]={ms:Math.round(190+Math.random()*280)}; } });
+}
+function actGridGo(room,p,ms,burn){
+  const G=room.G; if(G.phase!=='grid') return 'Non è il momento della griglia.';
+  if(G.gridReflex[p.id]) return null;                           // già reagito
+  G.gridReflex[p.id]= burn ? {burn:true} : {ms:Math.max(0,Math.round(ms||0))};
+  glog(G, p.name+(burn?' brucia alla griglia':(' scatta alla griglia · '+G.gridReflex[p.id].ms+'ms')),'card');
+  maybeEndGrid(room);
+  return null;
+}
+function maybeEndGrid(room){                                     // se tutti gli umani hanno reagito (o non ce ne sono) → chiudi
+  const G=room.G; if(G.phase!=='grid') return;
+  const humans=G.players.filter(p=>!p.isBot && p.connected);
+  if(humans.every(p=>G.gridReflex[p.id])){
+    if(room._gridTimer){ clearTimeout(room._gridTimer); room._gridTimer=null; }
+    finalizeGrid(room);
+  }
+}
+function finalizeGrid(room){
+  const G=room.G; if(G.phase!=='grid') return;
+  botsGridGo(room);                                             // assicura un tempo a tutti i bot
+  G.players.forEach(p=>{ if(!G.gridReflex[p.id]) G.gridReflex[p.id]={burn:true}; });   // umano che non ha reagito → in fondo
+  const order=[...G.players].sort((a,b)=>{
+    const ra=G.gridReflex[a.id], rb=G.gridReflex[b.id]; const ba=ra.burn?1:0, bb=rb.burn?1:0;
+    if(ba!==bb) return ba-bb;                                   // i bruciati in fondo
+    if(ba) return a.id-b.id;                                    // due bruciati → ordine d'ingresso
+    return (ra.ms-rb.ms) || (a.id-b.id);                        // parità di ms → ordine d'ingresso
+  }).map(p=>p.id);
+  G.diceOrder=order;
+  G.players.forEach(p=>{ const r=G.gridReflex[p.id]; p.gridMs=r.burn?null:r.ms; p.gridBurn=!!r.burn; });
+  G.gridResult=[...G.players].map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, ms:p.gridMs, burn:p.gridBurn, pos:order.indexOf(p.id)+1 })).sort((a,b)=>a.pos-b.pos);
+  G.phase='reveal';
+}
 function startLaunch(room){                                       // SEMAFORO: finestra di 6s per le carte partenza, poi parte la gara
   const G=room.G;
   setupRace(room);                                              // auto pronte sulla griglia (pendPart accumula)
@@ -1030,16 +1077,27 @@ function buildView(room, player){
     v.canAddBot = (player.id===room.hostId) && G.players.length<8;
     return v;
   }
+  if(G.phase==='grid'){
+    v.players=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, connected:p.connected, isBot:!!p.isBot }));
+    v.gridEndsAt=G.gridEndsAt||0;
+    v.gridMs=Math.max(0,(G.gridEndsAt||0)-Date.now());          // ms rimanenti (safety), il client corre il semaforo suo
+    v.myGridDone=!!(G.gridReflex&&G.gridReflex[player.id]);
+    v.gridReacted=G.players.filter(p=>G.gridReflex&&G.gridReflex[p.id]).length;
+    v.gridTotal=G.players.length;
+    return v;
+  }
   if(G.phase==='reveal'){
     v.players=G.players.map(p=>({ id:p.id, name:p.name, colorH:DB.colori[p.colorIdx].h, ready:p.ready, drew:p.drew, connected:p.connected }));
     v.readyCount=G.players.filter(p=>p.ready).length;
     v.total=G.players.length;
+    v.gridResult=(G.gridResult||[]);                            // griglia a reazione (ordine + tempi) da mostrare a tutti
     const p=player;
     v.reveal={
       drawn:p.drew,
       deckSize:(player.pilotPool?player.pilotPool.length:0),
       pilot:p.drew?{ nome:p.pilot.nome, gang:p.pilot.gang, tipoLabel:p.pilot.tipoLabel, liv:p.pilot.liv, ab:p.pilot.ab }:null,
       roll:p.roll,
+      gridMs:p.gridMs, gridBurn:!!p.gridBurn,
       startPos:G.diceOrder.indexOf(p.id)+1,
       ready:p.ready,
       hand:p.hand.map(c=>({ cat:c.cat, nome:c.nome, eff:c.eff, val:c.val, dur:c.dur, target:c.target, costPO:c.costPO, gang:c.gang, desc:c.desc||cardDesc(c), needsTarget:cardNeedsTarget(c) }))
@@ -1333,6 +1391,7 @@ function mount(ioInstance){
   socket.on('prep:playEsp', handle((room,p,d)=>actPlayEsp(room,p,d.handIdx)));
   socket.on('prep:bet', handle((room,p,d)=>actSetBet(room,p,d.targetId,d.amount)));
   socket.on('prep:done', handle((room,p)=>actPrepDone(room,p)));
+  socket.on('grid:go', handle((room,p,d)=>actGridGo(room,p,d.ms,d.burn)));
   socket.on('launch:play', handle((room,p,d)=>actPlayPartenza(room,p,d.handIdx,d.targetId)));
   socket.on('launch:go', handle((room,p,d)=>actLaunchGo(room,p,d.bonus)));
   socket.on('race:playCard', handle((room,p,d)=>actRacePlayCard(room,p,d.handIdx,d.targetId)));

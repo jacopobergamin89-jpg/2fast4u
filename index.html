@@ -322,6 +322,15 @@ h1.title em{font-style:italic;color:var(--cyan)}
 .rp-part{font-size:13px;color:var(--muted);margin-top:5px}.rp-part b{color:var(--cyan);font-family:var(--mono)}.rp-part small{color:var(--muted-2)}
 .reveal-info{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted);background:var(--asphalt-1);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:4px}
 .reveal-info b{color:var(--ink)}
+.gridres{background:var(--asphalt-1);border:1px solid var(--line);border-radius:10px;padding:8px;margin:6px 0 4px}
+.gr-row{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:8px;margin-bottom:4px;background:rgba(255,255,255,.02)}
+.gr-row:last-child{margin-bottom:0}
+.gr-row.me{background:rgba(255,201,30,.10);box-shadow:inset 0 0 0 1px rgba(255,201,30,.35)}
+.gr-pos{font-family:var(--disp);font-weight:700;font-size:14px;width:24px;text-align:center;color:var(--amber)}
+.gr-dot{width:20px;height:20px;border-radius:5px;flex:0 0 auto}
+.gr-who{flex:1;font-family:var(--disp);font-weight:600;font-size:13px;color:var(--ink)}
+.gr-pole{font-family:var(--mono);font-size:9px;color:var(--good);letter-spacing:.1em;margin-left:6px}
+.gr-ms{font-family:var(--mono);font-size:12px;color:var(--muted)}.gr-ms.burn{color:var(--danger)}
 .deal{display:flex;gap:8px;flex-wrap:wrap}
 .dealcard{flex:1;min-width:118px;border:1px solid var(--line);border-left:4px solid var(--hc,var(--cyan));border-radius:11px;padding:10px;background:var(--asphalt-1);opacity:0;transform:translateY(14px) scale(.96);animation:dealin .42s ease forwards;animation-delay:calc(var(--i)*.12s)}
 @keyframes dealin{to{opacity:1;transform:none}}
@@ -1146,6 +1155,7 @@ body.locked{overflow:hidden;overscroll-behavior:none}
   <!-- RACE -->
   <section id="s-race" class="screen"></section>
   <section id="s-launch" class="screen"></section>
+  <section id="s-grid" class="screen"></section>
   <!-- RESULTS -->
   <section id="s-results" class="screen"></section>
   <!-- WIN -->
@@ -1381,6 +1391,21 @@ function pregaraDesc(c){
   if(c.eff==='defend')return 'Difesa'+((c.dur===1||c.costPO===1)?' · rimanda al mittente':'');
   return '';
 }
+function gridRevealHTML(v){
+  const r=v.reveal;
+  const mine = r.gridBurn ? '<b style="color:var(--danger)">bruciata</b> alla griglia' : ('reazione <b>'+r.gridMs+' ms</b>');
+  let h=`<div class="reveal-info"><div style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;font-size:17px;background:var(--asphalt-2)">\u26a1</div><div>${mine} · parti <b>${r.startPos}\u00b0</b></div></div>`;
+  if(v.gridResult && v.gridResult.length){
+    h+='<div class="gridres">';
+    v.gridResult.forEach(g=>{ const me=(g.id===v.you.id);
+      const t = g.burn ? '<span class="gr-ms burn">bruciata</span>' : ('<span class="gr-ms">'+g.ms+' ms</span>');
+      const pole=(g.pos===1&&!g.burn)?'<span class="gr-pole">POLE</span>':'';
+      h+=`<div class="gr-row${me?' me':''}"><span class="gr-pos">${g.pos}\u00b0</span><span class="gr-dot" style="background:${g.colorH}"></span><span class="gr-who">${esc(g.name)}${me?' (tu)':''}${pole}</span>${t}</div>`;
+    });
+    h+='</div>';
+  }
+  return h;
+}
 function renderReveal(v){
   show('s-reveal');topMeta('Sala '+v.code+' · setup');
   const r=v.reveal;const host=document.getElementById('s-reveal');
@@ -1396,7 +1421,7 @@ function renderReveal(v){
     h+=`<div class="pdraw">`;
     for(let i=0;i<n;i++){ h+=`<div class="pdcard" onclick="drawPilot(${i})"><span class="qm">?</span><span class="pdtap">pesca</span></div>`; }
     h+=`</div>`;
-    h+=`<div class="reveal-info"><div class="die" style="width:30px;height:30px;border-radius:7px">${dieFaces(r.roll)}</div><div>Hai tirato <b>${r.roll}</b> · all'officina del 1° round parti <b>${r.startPos}°</b></div></div>`;
+    h+=gridRevealHTML(v);
     h+=`<div class="hint">Tocca una carta coperta per pescare (${r.deckSize} piloti nel mazzo).</div>`;
     host.innerHTML=h;return;
   }
@@ -1410,7 +1435,7 @@ function renderReveal(v){
       <div class="rp-ab"><span class="badge ${pilotTipoClass(r.pilot)}" ${!pilotTipoClass(r.pilot)?'style="background:#1ad6ea22;color:var(--cyan)"':''}>${r.pilot.tipoLabel}</span> ${esc(r.pilot.ab)}</div>
       ${r.pilot.partenza?`<div class="rp-part">Partenza <b>+${r.pilot.partenza}</b> <small>(solo al 1° tiro di ogni gara)</small></div>`:''}
     </div></div></div>`;
-  h+=`<div class="reveal-info"><div class="die" style="width:30px;height:30px;border-radius:7px">${dieFaces(r.roll)}</div><div>Hai tirato <b>${r.roll}</b> · all'officina del 1° round parti <b>${r.startPos}°</b></div></div>`;
+  h+=gridRevealHTML(v);
   h+=`<button class="btn btn-primary" style="margin:2px 0 12px" onclick="socket.emit('setup:ready')">Pronto — vai</button>`;
   h+=`<div class="sec-h">Le tue carte iniziali (${r.hand.length})</div><div class="deal">`;
   r.hand.forEach((c,i)=>{h+=`<div class="dealcard" style="--i:${i};--hc:${c.cat==='pregara'?'var(--po)':'var(--cyan)'}"><div class="dc-top">${c.cat==='pregara'?'Pre-gara':'In gara'}</div><div class="dc-name">${esc(c.nome)}</div><div class="dc-desc">${cardDesc(c)}</div></div>`;});
@@ -1922,7 +1947,7 @@ function renderRace(v){
   if(v.isYourTurn){ h+=dashHTML(v); }
   else{ h+=`<div class="dash" style="--dc:${actColor(v)}"><div class="spectate" style="padding:24px 8px"><div class="sdot" style="background:${actColor(v)}"></div><div class="stitle">${esc(v.activeName)}</div><div class="stext">sta correndo… attendi il tuo turno</div></div></div>`; }
   h+='</div>';
-  h+='<div class="race-col-rules">'+segRulesHTML(v)+'</div>';   // reazione spostata nel cruscotto centrale (spazio del dado)
+  h+='<div class="race-col-rules">'+((v.isYourTurn&&!v.rolled)?tiroInlineHTML(v):'')+'</div>';   // colonna destra dedicata alle reazioni
   h+='</div>';
   host.innerHTML=h;
   startTokens(v);
@@ -1975,10 +2000,10 @@ function dashHTML(v){
     if(m.pendDado)h+=`<span class="e ${m.pendDado===6?'pos':'neg'}">Dado = ${m.pendDado}</span>`;
     h+='</div>';
   }
+  h+=segRulesHTML(v);   // regole del tratto (Dove sei ora / Prossimo tratto) spostate qui al centro
   if(!v.rolled){
-    h+=`<div class="car-actions" style="margin-top:11px">${nosBtns(m)}</div>`;
-    h+=tiroInlineHTML(v);   // reazione inline al centro, sotto ai valori/NOS
-    h+='</div>';   // chiude dash-scroll DOPO la reazione → scrolla insieme al pilota
+    h+='</div>';   // chiude dash-scroll
+    h+=`<div class="race-act"><div class="car-actions">${nosBtns(m)}</div></div>`;
   }else{
     const b=v.rolled;
     let ls=b.lines.map(l=>`<div class="bd-line"><span>${l.k}</span><span class="${l.cls||''}">${l.info?'min 0':(l.v>=0?'+':'')+l.v}</span></div>`).join('');
@@ -2026,7 +2051,7 @@ function rxCss(){ if(document.getElementById('rxCss')) return; var s=document.cr
   document.head.appendChild(s);
 }
 function rxInlineHTML(v){ rxCss(); return '<div class="rx-panel" id="rxPanel">'
- +'<div class="rx-h"><span>\U0001F3AF Colpo di gas</span><span class="rx-hint" id="rxCdt">premi il via</span></div>'
+ +'<div class="rx-h"><span>\uD83C\uDFAF Colpo di gas</span><span class="rx-hint" id="rxCdt">premi il via</span></div>'
  +'<div class="rx-cd"><i id="rxCdi"></i></div>'
  +'<div class="rx-race" id="rxRace"><div class="rx-edge t"></div><div class="rx-edge b"></div><div class="rx-zy" id="rxZy"></div><div class="rx-zg" id="rxZg"></div><div class="rx-nd" id="rxNd"></div><div class="rx-fl" id="rxFl"></div></div>'
  +'<div class="rx-btn" id="rxBtn"><div class="rx-hou"><div class="rx-lite rx-red on" id="rxRed"></div><div class="rx-lite rx-grn" id="rxGrn"></div></div><div class="rx-lbl" id="rxBtnL">Via</div></div>'
@@ -2744,6 +2769,53 @@ function _defMap(v){ const m={}; ((v&&v.incoming)||[]).forEach(inc=>{ (inc.defen
 function defSig(v){ return ((v&&v.incoming)||[]).map(m=>m.mid).sort().join(','); }
 function defDismiss(){ ui.defHidden=true; ui.defSig=defSig(LAST); if(LAST) render(LAST); }
 
+function renderGrid(v){
+  show('s-grid'); topMeta('Griglia di partenza');
+  const mob=window.matchMedia('(max-width:680px)').matches;
+  const wrap=document.querySelector('.wrap');
+  if(mob){ wrap.classList.add('locked'); document.body.classList.add('locked'); }
+  else { wrap.classList.remove('locked'); document.body.classList.remove('locked'); }
+  const cars=(v.players||[]).map(c=>`<div class="lc-car" style="--c:${c.colorH}" title="${esc(c.name)}"></div>`).join('');
+  const waiting=(v.gridReacted||0)+'/'+(v.gridTotal||0)+' pronti';
+  const html=`<div class="lc-app"><div class="lc-hz"></div>`
+    +`<div class="lc-head"><div class="lc-eb">Prima gara · griglia</div><div class="lc-ti">Alla griglia</div></div>`
+    +`<div class="lc-grid-hint">${cars}</div>`
+    +`<div class="lc-tree"><div class="lc-tower"><div class="lc-lamp amber" id="gr-l0"></div><div class="lc-lamp amber" id="gr-l1"></div><div class="lc-lamp amber" id="gr-l2"></div><div class="lc-lamp green" id="gr-lg"></div></div><div class="lc-count"><div class="lc-n" id="gr-count">–</div><div class="lc-lab" id="gr-lab">pronti…</div></div></div>`
+    +`<button class="lc-scatta" id="gr-scatta" onclick="grPress()">SCATTA</button>`
+    +`<div class="lc-hint">Chi scatta più veloce al <b>verde</b> parte in pole · sul <b>rosso</b> è bruciata (vai in fondo). Vale solo per la <b>prima gara</b>.</div>`
+    +`<div class="lc-cards"><div class="lc-cards-h"><b>${waiting}</b></div></div></div>`;
+  document.getElementById('s-grid').innerHTML=html;
+  if(v.myGridDone){ ui.grPhase='done'; clearGrTimers(); }
+  else if(!ui.grSeq){ startGrReflex(); }
+  paintGrid();
+}
+function clearGrTimers(){ (ui.grTimers||[]).forEach(t=>clearTimeout(t)); ui.grTimers=[]; }
+function startGrReflex(){
+  clearGrTimers(); ui.grSeq=true; ui.grPhase='wait'; ui.grGreenAt=0; ui.grLit=0; ui.grMs=null;
+  ui.grTimers.push(setTimeout(()=>{ ui.grLit=1; paintGrid(); },600));
+  ui.grTimers.push(setTimeout(()=>{ ui.grLit=2; paintGrid(); },1200));
+  ui.grTimers.push(setTimeout(()=>{ ui.grLit=3; paintGrid(); },1800));
+  const wait=2250+Math.random()*1300;   // verde imprevedibile
+  ui.grTimers.push(setTimeout(()=>{ ui.grPhase='green'; ui.grGreenAt=performance.now(); ui.grLit=0; paintGrid(); },wait));
+}
+function grPress(){
+  if(ui.grPhase==='done'||ui.grPhase==='burn') return;
+  if(ui.grPhase==='green'){
+    const rt=Math.round(performance.now()-(ui.grGreenAt||performance.now()));
+    ui.grMs=rt; ui.grPhase='done'; clearGrTimers(); socket.emit('grid:go',{ms:rt}); paintGrid();
+  } else { ui.grMs=null; ui.grPhase='burn'; clearGrTimers(); socket.emit('grid:go',{burn:true}); paintGrid(); }
+}
+function paintGrid(){
+  const nEl=document.getElementById('gr-count'); if(!nEl) return;
+  const labEl=document.getElementById('gr-lab');
+  const lamps=[document.getElementById('gr-l0'),document.getElementById('gr-l1'),document.getElementById('gr-l2')];
+  const g=document.getElementById('gr-lg'); const btn=document.getElementById('gr-scatta');
+  const ph=ui.grPhase;
+  if(ph==='green'){ lamps.forEach(l=>l&&l.classList.remove('on')); if(g)g.classList.add('on'); nEl.textContent='VIA!'; nEl.className='lc-n go'; if(labEl)labEl.textContent='SCATTA!'; if(btn){btn.className='lc-scatta on';btn.disabled=false;btn.textContent='SCATTA';} }
+  else if(ph==='done'){ lamps.forEach(l=>l&&l.classList.remove('on')); if(g)g.classList.add('on'); nEl.textContent=(ui.grMs!=null?ui.grMs:'✓')+''; nEl.className='lc-n go'; if(labEl)labEl.textContent=(ui.grMs!=null?'il tuo tempo · '+ui.grMs+' ms':'scattato')+' · attendi gli altri'; if(btn){btn.className='lc-scatta done';btn.disabled=true;btn.textContent='scattato';} }
+  else if(ph==='burn'){ lamps.forEach(l=>l&&l.classList.add('on')); if(g)g.classList.remove('on'); nEl.textContent='STOP'; nEl.className='lc-n burn'; if(labEl)labEl.textContent='BRUCIATA · in fondo alla griglia'; if(btn){btn.className='lc-scatta done';btn.disabled=true;btn.textContent='bruciata';} }
+  else { const lit=ui.grLit||0; lamps.forEach((l,i)=>{ if(l)l.classList.toggle('on',i<lit); }); if(g)g.classList.remove('on'); nEl.textContent='···'; nEl.className='lc-n'; if(labEl)labEl.textContent='pronti…'; if(btn){btn.className='lc-scatta';btn.disabled=false;btn.textContent='SCATTA';} }
+}
 function renderLaunch(v){
   show('s-launch'); topMeta('Round '+v.round);
   const mob=window.matchMedia('(max-width:680px)').matches;
@@ -2795,7 +2867,7 @@ function paintLaunch(){
   const g=document.getElementById('lc-lg'); const btn=document.getElementById('lc-scatta');
   const ph=ui.lPhase;
   if(ph==='green'){ lamps.forEach(l=>l&&l.classList.remove('on')); if(g)g.classList.add('on'); nEl.textContent='VIA!'; nEl.className='lc-n go'; if(labEl)labEl.textContent='SCATTA!'; if(btn){btn.className='lc-scatta on';btn.disabled=false;btn.textContent='SCATTA';} }
-  else if(ph==='done'){ lamps.forEach(l=>l&&l.classList.remove('on')); if(g)g.classList.add('on'); const r=ui.lReflex||0; const lbl=r>=3?'HOLESHOT':r>=2?'BUONO':r>=1?'LENTO':'BRUCIATA'; nEl.textContent=(r>=0?'+':'')+r; nEl.className='lc-n go'; if(labEl)labEl.textContent=lbl+' · attendi il via'; if(btn){btn.className='lc-scatta done';btn.disabled=true;btn.textContent='scattato';} }
+  else if(ph==='done'){ lamps.forEach(l=>l&&l.classList.remove('on')); if(g)g.classList.add('on'); const r=ui.lReflex||0; const lbl=r>=3?'HOLESHOT':r>=2?'BUONO':r>=1?'LENTO':'BRUCIATA'; nEl.textContent=(r>=0?'+':'')+r; nEl.className='lc-n go'; if(labEl)labEl.textContent=lbl+(ui.lReflexMs!=null?' · '+ui.lReflexMs+' ms':'')+' · attendi il via'; if(btn){btn.className='lc-scatta done';btn.disabled=true;btn.textContent='scattato';} }
   else if(ph==='burn'){ lamps.forEach(l=>l&&l.classList.add('on')); if(g)g.classList.remove('on'); nEl.textContent='0'; nEl.className='lc-n burn'; if(labEl)labEl.textContent='BRUCIATA · attendi il via'; if(btn){btn.className='lc-scatta done';btn.disabled=true;btn.textContent='bruciata';} }
   else { const lit=ui.lLit||0; lamps.forEach((l,i)=>{ if(l)l.classList.toggle('on',i<lit); }); if(g)g.classList.remove('on'); nEl.textContent='···'; nEl.className='lc-n'; if(labEl)labEl.textContent='pronti…'; if(btn){btn.className='lc-scatta';btn.disabled=false;btn.textContent='SCATTA';} }
 }
@@ -2805,8 +2877,8 @@ function lPress(){
   if(ui.lPhase==='green'){
     const rt=Math.round(performance.now()-(ui.lGreenAt||performance.now())); const th=lThresh();
     let b; if(rt<=th.hole)b=3; else if(rt<=th.good)b=2; else b=1;
-    ui.lReflex=b; ui.lPhase='done'; clearLTimers(); socket.emit('launch:go',{bonus:b}); paintLaunch();
-  } else { ui.lReflex=0; ui.lPhase='burn'; clearLTimers(); socket.emit('launch:go',{bonus:0}); paintLaunch(); }
+    ui.lReflex=b; ui.lReflexMs=rt; ui.lPhase='done'; clearLTimers(); socket.emit('launch:go',{bonus:b}); paintLaunch();
+  } else { ui.lReflex=0; ui.lReflexMs=null; ui.lPhase='burn'; clearLTimers(); socket.emit('launch:go',{bonus:0}); paintLaunch(); }
 }
 function render(v){
   if(RX.active || CT.active || DR.active){ LAST=v; return; }
@@ -2815,6 +2887,12 @@ function render(v){
     if(_rem>0){ LAST=v; if(!ui.launchHoldTimer){ ui.launchHoldTimer=setTimeout(function(){ ui.launchHoldTimer=null; ui.launchHoldUntil=0; render(LAST); }, _rem); } return; }
     ui.launchHoldUntil=0;
   }
+  if(v.phase==='results' && ui.lastPhase==='race' && !ui.resultsHoldDone){   // fine gara: lascia la pista visibile qualche secondo prima del riepilogo
+    LAST=v;
+    if(!ui.resultsHoldTimer){ ui.resultsHoldTimer=setTimeout(function(){ ui.resultsHoldTimer=null; ui.resultsHoldDone=true; render(LAST); }, 3500); }
+    return;
+  }
+  if(v.phase!=='results') ui.resultsHoldDone=false;
   const prevPhase=ui.lastPhase;
   LAST=v;
   document.body.classList.toggle('race-mode', v.phase==='race');
@@ -2827,8 +2905,10 @@ function render(v){
   const prevReshop=ui.lastReshop; ui.lastReshop=!!v.reshop;
   if(v.phase==='prep'&&v.reshop&&!prevReshop&&prevPhase==='prep')playIntroSequence(['video/officina.mp4']);  // chiudi e riapri l'officina a tutti
   if(v.phase!=='launch'){ if(ui.launchInt){ clearInterval(ui.launchInt); ui.launchInt=null; } clearLTimers(); if(ui.lSeq){ ui.lSeq=false; ui.lPhase='wait'; ui.lLit=0; } }
+  if(v.phase!=='grid'){ clearGrTimers(); if(ui.grSeq){ ui.grSeq=false; ui.grPhase='wait'; ui.grLit=0; ui.grMs=null; } }
   if(v.phase!=='launch'&&v.phase!=='race'&&ui.launchHoldUntil){ ui.launchHoldUntil=0; if(ui.launchHoldTimer){ clearTimeout(ui.launchHoldTimer); ui.launchHoldTimer=null; } }
   if(v.phase==='lobby')renderLobby(v);
+  else if(v.phase==='grid')renderGrid(v);
   else if(v.phase==='reveal')renderReveal(v);
   else if(v.phase==='prep')renderPrep(v);
   else if(v.phase==='launch')renderLaunch(v);
@@ -2859,7 +2939,7 @@ socket.on('disconnect',()=>{document.getElementById('conn').classList.add('show'
 renderHomeColors();
 document.getElementById('home-code').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase();});
 let _rzT;window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(LAST&&LAST.phase==='race')renderRace(LAST);},180);});
-window.BUILD='2026-07-09 · reazione-centro';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
+window.BUILD='2026-07-09 · griglia-reazione';console.log('%c2FAST4U \u00b7 build '+window.BUILD,'color:#1ad6ea;font-weight:bold;font-size:13px');
 </script>
 <script>
 /* 2FAST4U — musica di sottofondo condivisa tra tutte le pagine.
