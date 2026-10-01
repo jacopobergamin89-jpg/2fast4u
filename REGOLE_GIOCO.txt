@@ -1,0 +1,91 @@
+2FAST4U - REGOLE E BILANCIAMENTO
+=================================
+
+STATISTICHE VISIBILI
+--------------------
+Velocita'
+Accelerazione
+Ripresa
+Stabilita'
+Frenata
+Nitro
+
+COMPONENTI BASE
+---------------
+Motore
+Turbo
+Cambio
+Sospensioni
+Freni
+Aerodinamica
+Bombola NOS
+
+Gomme non fanno parte dei componenti o delle statistiche base: sono una
+variabile esterna situazionale, come un boost o una condizione del percorso.
+
+REGOLE DEI COMPONENTI
+---------------------
+- Ogni componente puo' influenzare al massimo 3 statistiche.
+- Nitro e' influenzata esclusivamente dalla Bombola NOS.
+- Ogni componente prevede 2 o 3 varianti al livello 1, con distribuzioni
+  delle statistiche diverse.
+- Una variante mantiene la propria distribuzione e il proprio profilo di
+  crescita ai livelli successivi.
+
+RARITA' E PROGRESSIONE
+----------------------
+Rarita': Comune, Rara ed Epica.
+Ogni rarita' parte al livello 1 da una distribuzione diversa delle statistiche.
+Le statistiche non crescono tutte allo stesso modo: ogni variante definisce
+quali statistiche aumentano. A ogni livello successivo, solo quelle
+statistiche ricevono +1; le altre restano invariate. In questo modo le
+differenze tra rarita' e varianti si mantengono.
+
+Esempio - Motore, livello 1:
+Variante     Rarita'   Velocita'   Accelerazione   Ripresa
+A             Comune      +2             +2           +1
+A             Rara        +3             +1           +2
+A             Epica       +3             +2           +3
+B             Comune      +3             +1           +1
+B             Rara        +2             +3           +1
+B             Epica       +2             +2           +4
+C             Comune      +1             +2           +2
+C             Rara        +2             +2           +3
+C             Epica       +3             +1           +4
+
+Esempio di crescita per la variante A Comune: se il suo profilo fa crescere
+Velocita' e Ripresa, al livello 2 passa da +2 / +2 / +1 a +3 / +2 / +2.
+Accelerazione non aumenta. Lo stesso principio si applica alle varianti degli
+altri componenti.
+
+PERCORSI E STATISTICHE CHIAVE
+-----------------------------
+Ogni categoria usa solo 3 o 4 statistiche rilevanti:
+
+Lago:       Stabilita', Frenata, Ripresa
+Sporca:     Stabilita', Frenata, Accelerazione, Ripresa
+Traffico:   Accelerazione, Frenata, Stabilita', Ripresa
+Autostrada: Velocita', Ripresa, Nitro, Accelerazione
+Montagna:   Stabilita', Frenata, Accelerazione, Ripresa
+
+PUNTEGGIO E MOVIMENTO
+---------------------
+Punteggio percorso = somma delle statistiche chiave per quel percorso
+                     + bonus dei componenti
+                     + bonus gomme/condizione
+                     - penalita' del percorso
+
+Si sommano le statistiche chiave dell'auto e solo i bonus dei componenti
+rilevanti per quel percorso. Gomme e condizioni aggiungono un modificatore
+situazionale; la penalita' rappresenta difficolta' come traffico, fondo
+scivoloso, terreno sconnesso o pendenza.
+
+Esempi:
+
+Traffico/Citta':
+Accelerazione + Frenata + Stabilita' + Ripresa
++ bonus componenti rilevanti + bonus gomme/condizione - penalita' traffico
+
+Autostrada:
+Velocita' + Ripresa + Nitro + Accelerazione
++ bonus componenti rilevanti + bonus gomme/condizione - penalita' strada
