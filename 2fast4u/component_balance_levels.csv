@@ -1,0 +1,246 @@
+Component,Type,Level,Speed,Acceleration,Reprize,Stability,Braking,Nitro
+Motore,Comune A,1,2,2,1,0,0,0
+Motore,Comune A,2,3,3,2,0,0,0
+Motore,Comune A,3,4,4,3,0,0,0
+Motore,Comune A,4,5,5,4,0,0,0
+Motore,Comune A,5,6,6,5,0,0,0
+Motore,Comune B,1,2,1,2,0,0,0
+Motore,Comune B,2,3,2,3,0,0,0
+Motore,Comune B,3,4,3,4,0,0,0
+Motore,Comune B,4,5,4,5,0,0,0
+Motore,Comune B,5,6,5,6,0,0,0
+Motore,Comune C,1,1,2,2,0,0,0
+Motore,Comune C,2,2,3,3,0,0,0
+Motore,Comune C,3,3,4,4,0,0,0
+Motore,Comune C,4,4,5,5,0,0,0
+Motore,Comune C,5,5,6,6,0,0,0
+Motore,Comune D,1,3,1,1,0,0,0
+Motore,Comune D,2,4,2,2,0,0,0
+Motore,Comune D,3,5,3,3,0,0,0
+Motore,Comune D,4,6,4,4,0,0,0
+Motore,Comune D,5,7,5,5,0,0,0
+Motore,Raro A,1,3,2,1,0,0,0
+Motore,Raro A,2,4,3,2,0,0,0
+Motore,Raro A,3,5,4,3,0,0,0
+Motore,Raro A,4,6,5,4,0,0,0
+Motore,Raro A,5,7,6,5,0,0,0
+Motore,Raro B,1,3,1,2,0,0,0
+Motore,Raro B,2,4,2,3,0,0,0
+Motore,Raro B,3,5,3,4,0,0,0
+Motore,Raro B,4,6,4,5,0,0,0
+Motore,Raro B,5,7,5,6,0,0,0
+Motore,Epico,1,3,2,3,0,0,0
+Motore,Epico,2,4,3,4,0,0,0
+Motore,Epico,3,5,4,5,0,0,0
+Motore,Epico,4,6,5,6,0,0,0
+Motore,Epico,5,7,6,7,0,0,0
+Turbo,Comune A,1,2,2,1,0,0,1
+Turbo,Comune A,2,3,3,2,0,0,2
+Turbo,Comune A,3,4,4,3,0,0,3
+Turbo,Comune A,4,5,5,4,0,0,4
+Turbo,Comune A,5,6,6,5,0,0,5
+Turbo,Comune B,1,2,1,2,0,0,1
+Turbo,Comune B,2,3,2,3,0,0,2
+Turbo,Comune B,3,4,3,4,0,0,3
+Turbo,Comune B,4,5,4,5,0,0,4
+Turbo,Comune B,5,6,5,6,0,0,5
+Turbo,Comune C,1,1,2,2,0,0,1
+Turbo,Comune C,2,2,3,3,0,0,2
+Turbo,Comune C,3,3,4,4,0,0,3
+Turbo,Comune C,4,4,5,5,0,0,4
+Turbo,Comune C,5,5,6,6,0,0,5
+Turbo,Comune D,1,3,1,1,0,0,1
+Turbo,Comune D,2,4,2,2,0,0,2
+Turbo,Comune D,3,5,3,3,0,0,3
+Turbo,Comune D,4,6,4,4,0,0,4
+Turbo,Comune D,5,7,5,5,0,0,5
+Turbo,Raro A,1,3,2,1,0,0,1
+Turbo,Raro A,2,4,3,2,0,0,2
+Turbo,Raro A,3,5,4,3,0,0,3
+Turbo,Raro A,4,6,5,4,0,0,4
+Turbo,Raro A,5,7,6,5,0,0,5
+Turbo,Raro B,1,3,1,2,0,0,1
+Turbo,Raro B,2,4,2,3,0,0,2
+Turbo,Raro B,3,5,3,4,0,0,3
+Turbo,Raro B,4,6,4,5,0,0,4
+Turbo,Raro B,5,7,5,6,0,0,5
+Turbo,Epico,1,3,2,3,0,0,1
+Turbo,Epico,2,4,3,4,0,0,2
+Turbo,Epico,3,5,4,5,0,0,3
+Turbo,Epico,4,6,5,6,0,0,4
+Turbo,Epico,5,7,6,7,0,0,5
+Cambio,Comune A,1,1,2,2,0,0,0
+Cambio,Comune A,2,2,3,3,0,0,0
+Cambio,Comune A,3,3,4,4,0,0,0
+Cambio,Comune A,4,4,5,5,0,0,0
+Cambio,Comune A,5,5,6,6,0,0,0
+Cambio,Comune B,1,1,3,1,0,0,0
+Cambio,Comune B,2,2,4,2,0,0,0
+Cambio,Comune B,3,3,5,3,0,0,0
+Cambio,Comune B,4,4,6,4,0,0,0
+Cambio,Comune B,5,5,7,5,0,0,0
+Cambio,Comune C,1,2,1,3,0,0,0
+Cambio,Comune C,2,3,2,4,0,0,0
+Cambio,Comune C,3,4,3,5,0,0,0
+Cambio,Comune C,4,5,4,6,0,0,0
+Cambio,Comune C,5,6,5,7,0,0,0
+Cambio,Comune D,1,2,2,1,0,0,0
+Cambio,Comune D,2,3,3,2,0,0,0
+Cambio,Comune D,3,4,4,3,0,0,0
+Cambio,Comune D,4,5,5,4,0,0,0
+Cambio,Comune D,5,6,6,5,0,0,0
+Cambio,Raro A,1,2,3,1,0,0,0
+Cambio,Raro A,2,3,4,2,0,0,0
+Cambio,Raro A,3,4,5,3,0,0,0
+Cambio,Raro A,4,5,6,4,0,0,0
+Cambio,Raro A,5,6,7,5,0,0,0
+Cambio,Raro B,1,3,2,2,0,0,0
+Cambio,Raro B,2,4,3,3,0,0,0
+Cambio,Raro B,3,5,4,4,0,0,0
+Cambio,Raro B,4,6,5,5,0,0,0
+Cambio,Raro B,5,7,6,6,0,0,0
+Cambio,Epico,1,3,3,2,0,0,0
+Cambio,Epico,2,4,4,3,0,0,0
+Cambio,Epico,3,5,5,4,0,0,0
+Cambio,Epico,4,6,6,5,0,0,0
+Cambio,Epico,5,7,7,6,0,0,0
+Sospensioni,Comune A,1,0,0,0,2,1,0
+Sospensioni,Comune A,2,0,0,0,3,2,0
+Sospensioni,Comune A,3,0,0,0,4,3,0
+Sospensioni,Comune A,4,0,0,0,5,4,0
+Sospensioni,Comune A,5,0,0,0,6,5,0
+Sospensioni,Comune B,1,0,0,0,3,1,0
+Sospensioni,Comune B,2,0,0,0,4,2,0
+Sospensioni,Comune B,3,0,0,0,5,3,0
+Sospensioni,Comune B,4,0,0,0,6,4,0
+Sospensioni,Comune B,5,0,0,0,7,5,0
+Sospensioni,Comune C,1,0,0,0,2,2,0
+Sospensioni,Comune C,2,0,0,0,3,3,0
+Sospensioni,Comune C,3,0,0,0,4,4,0
+Sospensioni,Comune C,4,0,0,0,5,5,0
+Sospensioni,Comune C,5,0,0,0,6,6,0
+Sospensioni,Comune D,1,0,0,0,3,2,0
+Sospensioni,Comune D,2,0,0,0,4,3,0
+Sospensioni,Comune D,3,0,0,0,5,4,0
+Sospensioni,Comune D,4,0,0,0,6,5,0
+Sospensioni,Comune D,5,0,0,0,7,6,0
+Sospensioni,Raro A,1,0,0,0,3,1,0
+Sospensioni,Raro A,2,0,0,0,4,2,0
+Sospensioni,Raro A,3,0,0,0,5,3,0
+Sospensioni,Raro A,4,0,0,0,6,4,0
+Sospensioni,Raro A,5,0,0,0,7,5,0
+Sospensioni,Raro B,1,0,0,0,3,2,0
+Sospensioni,Raro B,2,0,0,0,4,3,0
+Sospensioni,Raro B,3,0,0,0,5,4,0
+Sospensioni,Raro B,4,0,0,0,6,5,0
+Sospensioni,Raro B,5,0,0,0,7,6,0
+Sospensioni,Epico,1,0,0,0,4,2,0
+Sospensioni,Epico,2,0,0,0,5,3,0
+Sospensioni,Epico,3,0,0,0,6,4,0
+Sospensioni,Epico,4,0,0,0,7,5,0
+Sospensioni,Epico,5,0,0,0,8,6,0
+Freni,Comune A,1,0,0,0,1,3,0
+Freni,Comune A,2,0,0,0,2,4,0
+Freni,Comune A,3,0,0,0,3,5,0
+Freni,Comune A,4,0,0,0,4,6,0
+Freni,Comune A,5,0,0,0,5,7,0
+Freni,Comune B,1,0,0,0,2,2,0
+Freni,Comune B,2,0,0,0,3,3,0
+Freni,Comune B,3,0,0,0,4,4,0
+Freni,Comune B,4,0,0,0,5,5,0
+Freni,Comune B,5,0,0,0,6,6,0
+Freni,Comune C,1,0,0,0,1,4,0
+Freni,Comune C,2,0,0,0,2,5,0
+Freni,Comune C,3,0,0,0,3,6,0
+Freni,Comune C,4,0,0,0,4,7,0
+Freni,Comune C,5,0,0,0,5,8,0
+Freni,Comune D,1,0,0,0,2,3,0
+Freni,Comune D,2,0,0,0,3,4,0
+Freni,Comune D,3,0,0,0,4,5,0
+Freni,Comune D,4,0,0,0,5,6,0
+Freni,Comune D,5,0,0,0,6,7,0
+Freni,Raro A,1,0,0,0,2,4,0
+Freni,Raro A,2,0,0,0,3,5,0
+Freni,Raro A,3,0,0,0,4,6,0
+Freni,Raro A,4,0,0,0,5,7,0
+Freni,Raro A,5,0,0,0,6,8,0
+Freni,Raro B,1,0,0,0,3,3,0
+Freni,Raro B,2,0,0,0,4,4,0
+Freni,Raro B,3,0,0,0,5,5,0
+Freni,Raro B,4,0,0,0,6,6,0
+Freni,Raro B,5,0,0,0,7,7,0
+Freni,Epico,1,0,0,0,3,5,0
+Freni,Epico,2,0,0,0,4,6,0
+Freni,Epico,3,0,0,0,5,7,0
+Freni,Epico,4,0,0,0,6,8,0
+Freni,Epico,5,0,0,0,7,9,0
+Aerodinamica,Comune A,1,2,0,1,2,0,0
+Aerodinamica,Comune A,2,3,0,2,3,0,0
+Aerodinamica,Comune A,3,4,0,3,4,0,0
+Aerodinamica,Comune A,4,5,0,4,5,0,0
+Aerodinamica,Comune A,5,6,0,5,6,0,0
+Aerodinamica,Comune B,1,3,0,1,1,0,0
+Aerodinamica,Comune B,2,4,0,2,2,0,0
+Aerodinamica,Comune B,3,5,0,3,3,0,0
+Aerodinamica,Comune B,4,6,0,4,4,0,0
+Aerodinamica,Comune B,5,7,0,5,5,0,0
+Aerodinamica,Comune C,1,2,0,2,2,0,0
+Aerodinamica,Comune C,2,3,0,3,3,0,0
+Aerodinamica,Comune C,3,4,0,4,4,0,0
+Aerodinamica,Comune C,4,5,0,5,5,0,0
+Aerodinamica,Comune C,5,6,0,6,6,0,0
+Aerodinamica,Comune D,1,1,0,2,3,0,0
+Aerodinamica,Comune D,2,2,0,3,4,0,0
+Aerodinamica,Comune D,3,3,0,4,5,0,0
+Aerodinamica,Comune D,4,4,0,5,6,0,0
+Aerodinamica,Comune D,5,5,0,6,7,0,0
+Aerodinamica,Raro A,1,3,0,1,2,0,0
+Aerodinamica,Raro A,2,4,0,2,3,0,0
+Aerodinamica,Raro A,3,5,0,3,4,0,0
+Aerodinamica,Raro A,4,6,0,4,5,0,0
+Aerodinamica,Raro A,5,7,0,5,6,0,0
+Aerodinamica,Raro B,1,2,0,2,3,0,0
+Aerodinamica,Raro B,2,3,0,3,4,0,0
+Aerodinamica,Raro B,3,4,0,4,5,0,0
+Aerodinamica,Raro B,4,5,0,5,6,0,0
+Aerodinamica,Raro B,5,6,0,6,7,0,0
+Aerodinamica,Epico,1,3,0,2,3,0,0
+Aerodinamica,Epico,2,4,0,3,4,0,0
+Aerodinamica,Epico,3,5,0,4,5,0,0
+Aerodinamica,Epico,4,6,0,5,6,0,0
+Aerodinamica,Epico,5,7,0,6,7,0,0
+Bombola NOS,Comune A,1,0,0,0,0,0,3
+Bombola NOS,Comune A,2,0,0,0,0,0,4
+Bombola NOS,Comune A,3,0,0,0,0,0,5
+Bombola NOS,Comune A,4,0,0,0,0,0,6
+Bombola NOS,Comune A,5,0,0,0,0,0,7
+Bombola NOS,Comune B,1,0,0,0,0,0,3
+Bombola NOS,Comune B,2,0,0,0,0,0,4
+Bombola NOS,Comune B,3,0,0,0,0,0,5
+Bombola NOS,Comune B,4,0,0,0,0,0,6
+Bombola NOS,Comune B,5,0,0,0,0,0,7
+Bombola NOS,Comune C,1,0,0,0,0,0,3
+Bombola NOS,Comune C,2,0,0,0,0,0,4
+Bombola NOS,Comune C,3,0,0,0,0,0,5
+Bombola NOS,Comune C,4,0,0,0,0,0,6
+Bombola NOS,Comune C,5,0,0,0,0,0,7
+Bombola NOS,Comune D,1,0,0,0,0,0,3
+Bombola NOS,Comune D,2,0,0,0,0,0,4
+Bombola NOS,Comune D,3,0,0,0,0,0,5
+Bombola NOS,Comune D,4,0,0,0,0,0,6
+Bombola NOS,Comune D,5,0,0,0,0,0,7
+Bombola NOS,Raro A,1,0,0,0,0,0,4
+Bombola NOS,Raro A,2,0,0,0,0,0,5
+Bombola NOS,Raro A,3,0,0,0,0,0,6
+Bombola NOS,Raro A,4,0,0,0,0,0,7
+Bombola NOS,Raro A,5,0,0,0,0,0,8
+Bombola NOS,Raro B,1,0,0,0,0,0,4
+Bombola NOS,Raro B,2,0,0,0,0,0,5
+Bombola NOS,Raro B,3,0,0,0,0,0,6
+Bombola NOS,Raro B,4,0,0,0,0,0,7
+Bombola NOS,Raro B,5,0,0,0,0,0,8
+Bombola NOS,Epico,1,0,0,0,0,0,5
+Bombola NOS,Epico,2,0,0,0,0,0,6
+Bombola NOS,Epico,3,0,0,0,0,0,7
+Bombola NOS,Epico,4,0,0,0,0,0,8
+Bombola NOS,Epico,5,0,0,0,0,0,9
